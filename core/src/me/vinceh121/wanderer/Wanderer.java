@@ -1,0 +1,121 @@
+package me.vinceh121.wanderer;
+
+import java.util.Random;
+
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.Bullet;
+import com.badlogic.gdx.physics.bullet.DebugDrawer;
+import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
+import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
+import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
+import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
+import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
+import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
+public class Wanderer extends ApplicationAdapter {
+	private PerspectiveCamera cam;
+	private Viewport viewport;
+	private ModelBatch batch;
+	private CameraInputController camcon;
+	private Array<Entity> entities;
+	private Environment env;
+
+	private btDefaultCollisionConfiguration btConfig = new btDefaultCollisionConfiguration();
+	private btCollisionDispatcher btDispatch = new btCollisionDispatcher(btConfig);
+	private btBroadphaseInterface btInterface = new btDbvtBroadphase();
+	private btSequentialImpulseConstraintSolver btSolver = new btSequentialImpulseConstraintSolver();
+	private btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver, btConfig);
+
+	@Override
+	public void create() {
+		WandererConstants.ASSET_MANAGER.getLogger().setLevel(Logger.DEBUG);
+		WandererConstants.ASSET_MANAGER.setErrorListener((asset, t) -> {
+			System.err.println("Failed to load asset: " + asset);
+			t.printStackTrace();
+		});
+
+		btWorld.setGravity(new Vector3(0, -10, 0));
+
+		batch = new ModelBatch();
+
+		env = new Environment();
+		env.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+		env.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+
+		cam = new PerspectiveCamera(90, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		cam.position.set(3f, 7f, 10f);
+		cam.lookAt(0, 4f, 0);
+		cam.update();
+
+		viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam);
+
+		camcon = new CameraInputController(cam);
+		Gdx.input.setInputProcessor(camcon);
+
+		entities = new Array<>();
+
+		Entity plane = new Entity();
+		plane.setDisplayModel("orig/j_scout01.n/j_scout01.obj");
+		plane.setCollideModel("orig/j_scout01.n/j_scout01.obj");
+		this.entities.add(plane);
+	}
+
+	Random r = new Random();
+
+	@Override
+	public void render() {
+		camcon.update();
+
+		ScreenUtils.clear(0.1f, 0.1f, 0.1f, 0.1f, true);
+
+		batch.begin(cam);
+		for (Entity e : this.entities) {
+			e.updatePhysics(btWorld);
+			e.render(batch, this.env);
+		}
+		batch.end();
+		WandererConstants.ASSET_MANAGER.update(62);
+
+		this.btWorld.stepSimulation(1f / 60f, 10);
+
+		if (Gdx.graphics.getFrameId() % 60 == 0) {
+			Entity john = new Entity();
+			john.setMass(1);
+			john.setDisplayModel("orig/char_john.n/skin.obj");
+			john.setCollideModel("orig/char_john.n/skin.obj");
+			john.setTranslation(0, 5, 0);
+			john.applyForce(new Vector3(r.nextFloat(), r.nextFloat() * 100, r.nextFloat()), new Vector3(1,0,0));
+			this.entities.add(john);
+		}
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		this.viewport.update(width, height);
+	}
+
+	@Override
+	public void dispose() {
+		batch.dispose();
+		WandererConstants.ASSET_MANAGER.dispose();
+	}
+
+	static {
+		Bullet.init();
+	}
+}
