@@ -2,6 +2,7 @@ package me.vinceh121.wanderer;
 
 import java.util.Objects;
 
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -9,8 +10,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.Bullet;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
+import com.badlogic.gdx.physics.bullet.collision.btConvexHullShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btDefaultMotionState;
@@ -28,7 +28,9 @@ public class Entity {
 
 		if (collideObject != null) {
 			this.transform.set(collideObject.getWorldTransform());
-			System.out.println(transform);
+			if (this.displayModel.contains("john")) {
+				System.out.println(this.transform);
+			}
 		} else {
 			if (WandererConstants.ASSET_MANAGER.isLoaded(collideModel)) {
 				this.loadCollideModel();
@@ -41,9 +43,9 @@ public class Entity {
 
 	public void loadCollideModel() {
 		Model model = WandererConstants.ASSET_MANAGER.get(collideModel, Model.class);
-		btCollisionShape shape = Bullet.obtainStaticNodeShape(model.nodes);
-		this.collideObject = new btRigidBody(mass, new btDefaultMotionState(), shape);
-		this.collideObject.setWorldTransform(transform);
+		Mesh mesh = model.meshes.get(0);
+		this.collideObject = new btRigidBody(mass, new btDefaultMotionState(transform),
+				new btConvexHullShape(mesh.getVerticesBuffer(), mesh.getNumVertices(), mesh.getVertexSize()));
 	}
 
 	public void render(ModelBatch batch, Environment env) {

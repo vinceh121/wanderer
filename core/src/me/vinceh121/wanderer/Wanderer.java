@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
@@ -41,6 +40,8 @@ public class Wanderer extends ApplicationAdapter {
 	private btSequentialImpulseConstraintSolver btSolver = new btSequentialImpulseConstraintSolver();
 	private btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver, btConfig);
 
+	private DebugDrawer debugDrawer;
+
 	@Override
 	public void create() {
 		WandererConstants.ASSET_MANAGER.getLogger().setLevel(Logger.DEBUG);
@@ -48,6 +49,10 @@ public class Wanderer extends ApplicationAdapter {
 			System.err.println("Failed to load asset: " + asset);
 			t.printStackTrace();
 		});
+
+		this.debugDrawer = new DebugDrawer();
+		this.debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_DrawWireframe);
+		this.btWorld.setDebugDrawer(debugDrawer);
 
 		btWorld.setGravity(new Vector3(0, -10, 0));
 
@@ -60,6 +65,7 @@ public class Wanderer extends ApplicationAdapter {
 		cam = new PerspectiveCamera(90, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		cam.position.set(3f, 7f, 10f);
 		cam.lookAt(0, 4f, 0);
+		cam.far = 1000f;
 		cam.update();
 
 		viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam);
@@ -84,14 +90,18 @@ public class Wanderer extends ApplicationAdapter {
 		ScreenUtils.clear(0.1f, 0.1f, 0.1f, 0.1f, true);
 
 		batch.begin(cam);
-		for (Entity e : this.entities) {
+		for (int i = 0; i < this.entities.size; i++) {
+			Entity e = this.entities.get(i);
 			e.updatePhysics(btWorld);
 			e.render(batch, this.env);
 		}
 		batch.end();
 		WandererConstants.ASSET_MANAGER.update(62);
 
+		this.debugDrawer.begin(cam);
 		this.btWorld.stepSimulation(1f / 60f, 10);
+		this.btWorld.performDiscreteCollisionDetection();
+		this.debugDrawer.end();
 
 		if (Gdx.graphics.getFrameId() % 60 == 0) {
 			Entity john = new Entity();
@@ -99,7 +109,7 @@ public class Wanderer extends ApplicationAdapter {
 			john.setDisplayModel("orig/char_john.n/skin.obj");
 			john.setCollideModel("orig/char_john.n/skin.obj");
 			john.setTranslation(0, 5, 0);
-			john.applyForce(new Vector3(r.nextFloat(), r.nextFloat() * 100, r.nextFloat()), new Vector3(1,0,0));
+			john.applyForce(new Vector3(r.nextFloat(), r.nextFloat() * 100, r.nextFloat()), new Vector3(1, 0, 0));
 			this.entities.add(john);
 		}
 	}
