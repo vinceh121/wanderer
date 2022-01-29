@@ -1,4 +1,4 @@
-package me.vinceh121.wanderer;
+package me.vinceh121.wanderer.entity;
 
 import java.util.Objects;
 
@@ -22,24 +22,35 @@ import com.badlogic.gdx.physics.bullet.linearmath.btDefaultMotionState;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.Disposable;
 
-public class Entity implements Disposable {
+import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.WandererConstants;
+
+public abstract class AbstractEntity implements Disposable {
+	protected final Wanderer game;
 	private Matrix4 transform = new Matrix4();
+	private Vector3 collideObjectOffset = new Vector3();
 	private String displayModel, collideModel, displayTexture;
 	private ModelInstance cacheDisplayModel;
 	private btRigidBody collideObject;
 	private float mass;
 	private boolean exactCollideModel;
 
-	public void updatePhysics(btDiscreteDynamicsWorld world) {
-		if (this.collideModel == null)
-			return;
+	public AbstractEntity(Wanderer game) {
+		this.game = game;
+	}
 
-		if (collideObject != null) {
-			this.transform.set(collideObject.getWorldTransform());
-		} else {
+	public void updatePhysics(btDiscreteDynamicsWorld world) {
+		if (collideObject != null) { // if we have a (manually-)defined body, copy transform
+			// subtract collision offset from bullet's transform
+			Matrix4 colTransform = collideObject.getWorldTransform();
+			Vector3 colTranslation = new Vector3();
+			colTransform.getTranslation(colTranslation);
+			colTranslation.sub(collideObjectOffset);
+			colTransform.setTranslation(colTranslation);
+			this.transform.set(colTransform);
+		} else if (this.collideModel != null) { // else, try to load it the collision model if present
 			if (WandererConstants.ASSET_MANAGER.isLoaded(collideModel)) {
 				this.loadCollideModel();
-				world.addRigidBody(collideObject);
 			} else {
 				WandererConstants.ASSET_MANAGER.load(collideModel, Model.class);
 			}
@@ -47,10 +58,11 @@ public class Entity implements Disposable {
 	}
 
 	public void loadCollideModel() {
-		if (this.exactCollideModel)
+		if (this.exactCollideModel) {
 			this.loadCollideModelMesh();
-		else
+		} else {
 			this.loadCollideModelConvex();
+		}
 	}
 
 	private void loadCollideModelMesh() {
@@ -70,14 +82,14 @@ public class Entity implements Disposable {
 									mesh.getVerticesBuffer().get(i + 8))));
 		}
 
-		this.collideObject = new btRigidBody(mass, createMotionState(), new btBvhTriangleMeshShape(model.meshParts));
+		this.setCollideObject(new btRigidBody(mass, createMotionState(), new btBvhTriangleMeshShape(model.meshParts)));
 	}
 
 	private void loadCollideModelConvex() {
 		Model model = WandererConstants.ASSET_MANAGER.get(collideModel, Model.class);
 		Mesh mesh = model.meshes.get(0);
-		this.collideObject = new btRigidBody(mass, createMotionState(),
-				new btConvexHullShape(mesh.getVerticesBuffer(), mesh.getNumVertices(), mesh.getVertexSize()));
+		this.setCollideObject(new btRigidBody(mass, createMotionState(),
+				new btConvexHullShape(mesh.getVerticesBuffer(), mesh.getNumVertices(), mesh.getVertexSize())));
 	}
 
 	protected btMotionState createMotionState() {
@@ -127,6 +139,7 @@ public class Entity implements Disposable {
 
 	public void setCollideModel(String collideModel) {
 		this.collideModel = collideModel;
+		this.collideObject = null; // trigger collide model reload
 	}
 
 	public ModelInstance getCacheDisplayModel() {
@@ -141,8 +154,17 @@ public class Entity implements Disposable {
 		return collideObject;
 	}
 
+	/**
+	 * Sets this entity's collision model, removing the previous one from the Bullet
+	 * world, and adding the new one.
+	 *
+	 * @param collideObject
+	 */
 	public void setCollideObject(btRigidBody collideObject) {
+		if (this.collideObject != null)
+			this.game.getBtWorld().removeRigidBody(this.collideObject);
 		this.collideObject = collideObject;
+		this.game.getBtWorld().addRigidBody(collideObject);
 	}
 
 	public float getMass() {
@@ -151,11 +173,12 @@ public class Entity implements Disposable {
 
 	public void setMass(float mass) {
 		this.mass = mass;
+		this.collideObject.setMassProps(mass, new Vector3()); // inertia doesn't change if vector is (0,0,0)
 	}
 
 	private void updateTransform() {
 		if (this.collideObject != null)
-			this.collideObject.getWorldTransform(transform);
+			this.collideObject.setWorldTransform(this.transform);
 		if (this.cacheDisplayModel != null)
 			this.cacheDisplayModel.transform = this.transform;
 	}
@@ -296,6 +319,20 @@ public class Entity implements Disposable {
 	 */
 	public void setDisplayTexture(String displayTexture) {
 		this.displayTexture = displayTexture;
+	}
+
+	/**
+	 * @return the collideObjectOffset
+	 */
+	public Vector3 getCollideObjectOffset() {
+		return collideObjectOffset;
+	}
+
+	/**
+	 * @param collideObjectOffset the collideObjectOffset to set
+	 */
+	public void setCollideObjectOffset(Vector3 collideObjectOffset) {
+		this.collideObjectOffset = collideObjectOffset;
 	}
 
 	@Override

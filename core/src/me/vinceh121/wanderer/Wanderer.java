@@ -26,12 +26,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import me.vinceh121.wanderer.entity.AbstractEntity;
+import me.vinceh121.wanderer.entity.CharacterW;
+import me.vinceh121.wanderer.entity.Prop;
+
 public class Wanderer extends ApplicationAdapter {
 	private PerspectiveCamera cam;
 	private Viewport viewport;
 	private ModelBatch batch;
 	private CameraInputController camcon;
-	private Array<Entity> entities;
+	private Array<AbstractEntity> entities;
 	private Environment env;
 
 	private btDefaultCollisionConfiguration btConfig = new btDefaultCollisionConfiguration();
@@ -41,7 +45,7 @@ public class Wanderer extends ApplicationAdapter {
 	private btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver, btConfig);
 
 	private DebugDrawer debugDrawer;
-	private boolean debugBullet;
+	private boolean debugBullet = true;
 
 	@Override
 	public void create() {
@@ -52,7 +56,8 @@ public class Wanderer extends ApplicationAdapter {
 		});
 
 		this.debugDrawer = new DebugDrawer();
-		this.debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_DrawWireframe);
+		this.debugDrawer
+				.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_DrawWireframe | btIDebugDraw.DebugDrawModes.DBG_DrawText);
 		btWorld.setDebugDrawer(debugDrawer);
 
 		btWorld.setGravity(new Vector3(0, -9, 0));
@@ -79,7 +84,7 @@ public class Wanderer extends ApplicationAdapter {
 		WandererConstants.ASSET_MANAGER.load("orig/first_island.n/texturenone.png", Texture.class);
 		WandererConstants.ASSET_MANAGER.finishLoading();
 
-		Entity e = new Entity();
+		Prop e = new Prop(this);
 		e.setCollideModel("orig/first_island.n/collide.obj");
 		e.setDisplayModel("orig/first_island.n/terrain.obj");
 		e.setDisplayTexture("orig/first_island.n/texturenone.png");
@@ -97,7 +102,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		batch.begin(cam);
 		for (int i = 0; i < this.entities.size; i++) {
-			Entity e = this.entities.get(i);
+			AbstractEntity e = this.entities.get(i);
 			e.updatePhysics(btWorld);
 			e.render(batch, this.env);
 		}
@@ -113,16 +118,27 @@ public class Wanderer extends ApplicationAdapter {
 			this.debugDrawer.end();
 		}
 
-		if (Gdx.graphics.getFrameId() % 60 == 0) {
-			Entity john = new Entity();
+		if (Gdx.graphics.getFrameId() % 20 == 0) {
+			CharacterW john = new CharacterW(this);
 			john.setMass(1);
 			String ch = CHARACTERS[MathUtils.random(2)];
 			john.setDisplayModel("orig/char_" + ch + ".n/skin.obj");
-			john.setCollideModel("orig/char_" + ch + ".n/collide.obj");
 			john.setDisplayTexture("orig/char_" + ch + ".n/texturenone.png");
 			john.setTranslation(0, 50, 0);
+			john.rotate(new Vector3(MathUtils.random(), MathUtils.random(), MathUtils.random()).scl(10), MathUtils.random());
 			this.entities.add(john);
 		}
+	}
+
+	public void addEntity(AbstractEntity e) {
+		this.entities.add(e);
+		if (e.getCollideObject() != null) {
+			this.btWorld.addRigidBody(e.getCollideObject());
+		}
+	}
+
+	public btDiscreteDynamicsWorld getBtWorld() {
+		return btWorld;
 	}
 
 	@Override
