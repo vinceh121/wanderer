@@ -1,15 +1,15 @@
 package me.vinceh121.wanderer;
 
-import java.util.Random;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
@@ -41,6 +41,7 @@ public class Wanderer extends ApplicationAdapter {
 	private btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver, btConfig);
 
 	private DebugDrawer debugDrawer;
+	private boolean debugBullet;
 
 	@Override
 	public void create() {
@@ -52,9 +53,9 @@ public class Wanderer extends ApplicationAdapter {
 
 		this.debugDrawer = new DebugDrawer();
 		this.debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_DrawWireframe);
-		this.btWorld.setDebugDrawer(debugDrawer);
+		btWorld.setDebugDrawer(debugDrawer);
 
-		btWorld.setGravity(new Vector3(0, -10, 0));
+		btWorld.setGravity(new Vector3(0, -9, 0));
 
 		batch = new ModelBatch();
 
@@ -75,13 +76,18 @@ public class Wanderer extends ApplicationAdapter {
 
 		entities = new Array<>();
 
-		Entity plane = new Entity();
-		plane.setDisplayModel("orig/j_scout01.n/j_scout01.obj");
-		plane.setCollideModel("orig/j_scout01.n/j_scout01.obj");
-		this.entities.add(plane);
+		WandererConstants.ASSET_MANAGER.load("orig/first_island.n/texturenone.png", Texture.class);
+		WandererConstants.ASSET_MANAGER.finishLoading();
+
+		Entity e = new Entity();
+		e.setCollideModel("orig/first_island.n/collide.obj");
+		e.setDisplayModel("orig/first_island.n/terrain.obj");
+		e.setDisplayTexture("orig/first_island.n/texturenone.png");
+		e.setExactCollideModel(true);
+		this.entities.add(e);
 	}
 
-	Random r = new Random();
+	private static final String[] CHARACTERS = { "john", "goliath", "susie" };
 
 	@Override
 	public void render() {
@@ -98,18 +104,23 @@ public class Wanderer extends ApplicationAdapter {
 		batch.end();
 		WandererConstants.ASSET_MANAGER.update(62);
 
-		this.debugDrawer.begin(cam);
 		this.btWorld.stepSimulation(1f / 60f, 10);
 		this.btWorld.performDiscreteCollisionDetection();
-		this.debugDrawer.end();
+
+		if (this.debugBullet) {
+			this.debugDrawer.begin(viewport);
+			this.btWorld.debugDrawWorld();
+			this.debugDrawer.end();
+		}
 
 		if (Gdx.graphics.getFrameId() % 60 == 0) {
 			Entity john = new Entity();
 			john.setMass(1);
-			john.setDisplayModel("orig/char_john.n/skin.obj");
-			john.setCollideModel("orig/char_john.n/skin.obj");
-			john.setTranslation(0, 5, 0);
-			john.applyForce(new Vector3(r.nextFloat(), r.nextFloat() * 100, r.nextFloat()), new Vector3(1, 0, 0));
+			String ch = CHARACTERS[MathUtils.random(2)];
+			john.setDisplayModel("orig/char_" + ch + ".n/skin.obj");
+			john.setCollideModel("orig/char_" + ch + ".n/collide.obj");
+			john.setDisplayTexture("orig/char_" + ch + ".n/texturenone.png");
+			john.setTranslation(0, 50, 0);
 			this.entities.add(john);
 		}
 	}

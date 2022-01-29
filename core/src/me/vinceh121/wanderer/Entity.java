@@ -3,24 +3,32 @@ package me.vinceh121.wanderer;
 import java.util.Objects;
 
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
+import com.badlogic.gdx.physics.bullet.collision.btCompoundShape;
 import com.badlogic.gdx.physics.bullet.collision.btConvexHullShape;
+import com.badlogic.gdx.physics.bullet.collision.btTriangleShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btDefaultMotionState;
+import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Entity {
+public class Entity implements Disposable {
 	private Matrix4 transform = new Matrix4();
-	private String displayModel, collideModel;
+	private String displayModel, collideModel, displayTexture;
 	private ModelInstance cacheDisplayModel;
 	private btRigidBody collideObject;
 	private float mass;
+	private boolean exactCollideModel;
 
 	public void updatePhysics(btDiscreteDynamicsWorld world) {
 		if (this.collideModel == null)
@@ -28,9 +36,6 @@ public class Entity {
 
 		if (collideObject != null) {
 			this.transform.set(collideObject.getWorldTransform());
-			if (this.displayModel.contains("john")) {
-				System.out.println(this.transform);
-			}
 		} else {
 			if (WandererConstants.ASSET_MANAGER.isLoaded(collideModel)) {
 				this.loadCollideModel();
@@ -42,10 +47,41 @@ public class Entity {
 	}
 
 	public void loadCollideModel() {
+		if (this.exactCollideModel)
+			this.loadCollideModelMesh();
+		else
+			this.loadCollideModelConvex();
+	}
+
+	private void loadCollideModelMesh() {
 		Model model = WandererConstants.ASSET_MANAGER.get(collideModel, Model.class);
 		Mesh mesh = model.meshes.get(0);
-		this.collideObject = new btRigidBody(mass, new btDefaultMotionState(transform),
+
+		btCompoundShape shape = new btCompoundShape();
+
+		for (int i = 0; i < mesh.getNumVertices(); i += 9) {
+			shape.addChildShape(new Matrix4(),
+					new btTriangleShape(
+							new Vector3(mesh.getVerticesBuffer().get(i), mesh.getVerticesBuffer().get(i + 1),
+									mesh.getVerticesBuffer().get(i + 2)),
+							new Vector3(mesh.getVerticesBuffer().get(i + 3), mesh.getVerticesBuffer().get(i + 4),
+									mesh.getVerticesBuffer().get(i + 5)),
+							new Vector3(mesh.getVerticesBuffer().get(i + 6), mesh.getVerticesBuffer().get(i + 7),
+									mesh.getVerticesBuffer().get(i + 8))));
+		}
+
+		this.collideObject = new btRigidBody(mass, createMotionState(), new btBvhTriangleMeshShape(model.meshParts));
+	}
+
+	private void loadCollideModelConvex() {
+		Model model = WandererConstants.ASSET_MANAGER.get(collideModel, Model.class);
+		Mesh mesh = model.meshes.get(0);
+		this.collideObject = new btRigidBody(mass, createMotionState(),
 				new btConvexHullShape(mesh.getVerticesBuffer(), mesh.getNumVertices(), mesh.getVertexSize()));
+	}
+
+	protected btMotionState createMotionState() {
+		return new btDefaultMotionState(transform);
 	}
 
 	public void render(ModelBatch batch, Environment env) {
@@ -55,17 +91,25 @@ public class Entity {
 		if (getCacheDisplayModel() != null) {
 			batch.render(getCacheDisplayModel(), env);
 		} else {
-			if (WandererConstants.ASSET_MANAGER.isLoaded(getDisplayModel())) {
+			if (WandererConstants.ASSET_MANAGER.isLoaded(getDisplayModel())
+					&& (this.displayTexture == null || WandererConstants.ASSET_MANAGER.isLoaded(displayTexture))) {
 				this.loadDisplayModel();
 				batch.render(getCacheDisplayModel(), env);
 			} else {
 				WandererConstants.ASSET_MANAGER.load(getDisplayModel(), Model.class);
+				if (displayTexture != null)
+					WandererConstants.ASSET_MANAGER.load(displayTexture, Texture.class);
 			}
 		}
 	}
 
 	public void loadDisplayModel() {
-		setCacheDisplayModel(new ModelInstance(WandererConstants.ASSET_MANAGER.get(getDisplayModel(), Model.class)));
+		Model model = WandererConstants.ASSET_MANAGER.get(getDisplayModel(), Model.class);
+		Texture texture = WandererConstants.ASSET_MANAGER.get(displayTexture, Texture.class);
+		ModelInstance instance = new ModelInstance(model);
+		if (this.displayTexture != null)
+			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
+		setCacheDisplayModel(instance);
 		getCacheDisplayModel().transform = transform;
 	}
 
@@ -95,6 +139,10 @@ public class Entity {
 
 	public btRigidBody getCollideObject() {
 		return collideObject;
+	}
+
+	public void setCollideObject(btRigidBody collideObject) {
+		this.collideObject = collideObject;
 	}
 
 	public float getMass() {
@@ -220,5 +268,39 @@ public class Entity {
 		if (collideObject == null)
 			return;
 		collideObject.applyForce(force, rel_pos);
+	}
+
+	/**
+	 * @return the exactCollideModel
+	 */
+	public boolean isExactCollideModel() {
+		return exactCollideModel;
+	}
+
+	/**
+	 * @param exactCollideModel the exactCollideModel to set
+	 */
+	public void setExactCollideModel(boolean exactCollideModel) {
+		this.exactCollideModel = exactCollideModel;
+	}
+
+	/**
+	 * @return the displayTexture
+	 */
+	public String getDisplayTexture() {
+		return displayTexture;
+	}
+
+	/**
+	 * @param displayTexture the displayTexture to set
+	 */
+	public void setDisplayTexture(String displayTexture) {
+		this.displayTexture = displayTexture;
+	}
+
+	@Override
+	public void dispose() {
+		if (this.collideObject != null)
+			this.collideObject.dispose();
 	}
 }
