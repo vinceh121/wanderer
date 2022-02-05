@@ -13,9 +13,8 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
-import com.badlogic.gdx.physics.bullet.collision.btCompoundShape;
 import com.badlogic.gdx.physics.bullet.collision.btConvexHullShape;
-import com.badlogic.gdx.physics.bullet.collision.btTriangleShape;
+import com.badlogic.gdx.physics.bullet.collision.btTriangleMesh;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btDefaultMotionState;
@@ -67,20 +66,9 @@ public abstract class AbstractEntity implements Disposable {
 
 	private void loadCollideModelMesh() {
 		Model model = WandererConstants.ASSET_MANAGER.get(collideModel, Model.class);
-		Mesh mesh = model.meshes.get(0);
 
-		btCompoundShape shape = new btCompoundShape();
-
-		for (int i = 0; i < mesh.getNumVertices(); i += 9) {
-			shape.addChildShape(new Matrix4(),
-					new btTriangleShape(
-							new Vector3(mesh.getVerticesBuffer().get(i), mesh.getVerticesBuffer().get(i + 1),
-									mesh.getVerticesBuffer().get(i + 2)),
-							new Vector3(mesh.getVerticesBuffer().get(i + 3), mesh.getVerticesBuffer().get(i + 4),
-									mesh.getVerticesBuffer().get(i + 5)),
-							new Vector3(mesh.getVerticesBuffer().get(i + 6), mesh.getVerticesBuffer().get(i + 7),
-									mesh.getVerticesBuffer().get(i + 8))));
-		}
+		btTriangleMesh btmesh = new btTriangleMesh();
+		btmesh.addMeshParts(model.meshParts);
 
 		this.setCollideObject(new btRigidBody(mass, createMotionState(), new btBvhTriangleMeshShape(model.meshParts)));
 	}
@@ -176,7 +164,7 @@ public abstract class AbstractEntity implements Disposable {
 		this.collideObject.setMassProps(mass, new Vector3()); // inertia doesn't change if vector is (0,0,0)
 	}
 
-	private void updateTransform() {
+	protected void updateTransform() {
 		if (this.collideObject != null)
 			this.collideObject.setWorldTransform(this.transform);
 		if (this.cacheDisplayModel != null)

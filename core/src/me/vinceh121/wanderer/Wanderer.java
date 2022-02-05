@@ -2,8 +2,10 @@ package me.vinceh121.wanderer;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
+import com.badlogic.gdx.physics.bullet.collision.btGhostPairCallback;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
@@ -28,6 +31,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.CharacterW;
+import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.entity.Prop;
 
 public class Wanderer extends ApplicationAdapter {
@@ -42,10 +46,15 @@ public class Wanderer extends ApplicationAdapter {
 	private btCollisionDispatcher btDispatch = new btCollisionDispatcher(btConfig);
 	private btBroadphaseInterface btInterface = new btDbvtBroadphase();
 	private btSequentialImpulseConstraintSolver btSolver = new btSequentialImpulseConstraintSolver();
+	private btGhostPairCallback ghostPairCallback = new btGhostPairCallback();
 	private btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver, btConfig);
 
 	private DebugDrawer debugDrawer;
 	private boolean debugBullet = true;
+
+	private InputMultiplexer inputMultiplexer = new InputMultiplexer();
+
+	private IControllableEntity controlledEntity;
 
 	@Override
 	public void create() {
@@ -60,6 +69,8 @@ public class Wanderer extends ApplicationAdapter {
 				.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_DrawWireframe | btIDebugDraw.DebugDrawModes.DBG_DrawText);
 		btWorld.setDebugDrawer(debugDrawer);
 
+		this.btInterface.getOverlappingPairCache().setInternalGhostPairCallback(ghostPairCallback);
+		
 		btWorld.setGravity(new Vector3(0, -9, 0));
 
 		batch = new ModelBatch();
@@ -69,20 +80,43 @@ public class Wanderer extends ApplicationAdapter {
 		env.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
 		cam = new PerspectiveCamera(90, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.set(3f, 7f, 10f);
-		cam.lookAt(0, 4f, 0);
+		cam.position.set(3f, 50f, 0f);
+		cam.lookAt(5f, 4f, 0);
 		cam.far = 1000f;
+		cam.near = 0.1f;
 		cam.update();
 
 		viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam);
 
 		camcon = new CameraInputController(cam);
-		Gdx.input.setInputProcessor(camcon);
+		this.inputMultiplexer.addProcessor(camcon);
+		this.inputMultiplexer.addProcessor(new InputAdapter() {
+			@Override
+			public boolean keyDown(int keycode) {
+				if (keycode == Keys.F7) {
+					Wanderer.this.debugBullet = !Wanderer.this.debugBullet;
+					return true;
+				} else if (keycode == Keys.TAB) {
+					if (controlledEntity == null) {
+						for (AbstractEntity e : entities) {
+							if (e instanceof IControllableEntity) {
+								System.out.println("Controlling " + e);
+								controlEntity((IControllableEntity) e);
+								return true;
+							}
+						}
+					} else {
+						System.out.println("Remove control");
+						removeEntityControl(controlledEntity);
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+		Gdx.input.setInputProcessor(this.inputMultiplexer);
 
 		entities = new Array<>();
-
-		WandererConstants.ASSET_MANAGER.load("orig/first_island.n/texturenone.png", Texture.class);
-		WandererConstants.ASSET_MANAGER.finishLoading();
 
 		Prop e = new Prop(this);
 		e.setCollideModel("orig/first_island.n/collide.obj");
@@ -90,9 +124,17 @@ public class Wanderer extends ApplicationAdapter {
 		e.setDisplayTexture("orig/first_island.n/texturenone.png");
 		e.setExactCollideModel(true);
 		this.entities.add(e);
+
+		CharacterW john = new CharacterW(this);
+//		john.setMass(1);
+		String ch = CHARACTERS[MathUtils.random(CHARACTERS.length - 1)];
+		john.setDisplayModel("orig/char_" + ch + ".n/skin.obj");
+		john.setDisplayTexture("orig/char_" + ch + ".n/texturenone.png");
+		john.setTranslation(0, 50, 0);
+		this.entities.add(john);
 	}
 
-	private static final String[] CHARACTERS = { "john", "goliath", "susie" };
+	private static final String[] CHARACTERS = { "john", "goliath", "susie", "nomade", "dusty", "preston", "seraphim" };
 
 	@Override
 	public void render() {
@@ -119,14 +161,7 @@ public class Wanderer extends ApplicationAdapter {
 		}
 
 		if (Gdx.graphics.getFrameId() % 20 == 0) {
-			CharacterW john = new CharacterW(this);
-			john.setMass(1);
-			String ch = CHARACTERS[MathUtils.random(2)];
-			john.setDisplayModel("orig/char_" + ch + ".n/skin.obj");
-			john.setDisplayTexture("orig/char_" + ch + ".n/texturenone.png");
-			john.setTranslation(0, 50, 0);
-			john.rotate(new Vector3(MathUtils.random(), MathUtils.random(), MathUtils.random()).scl(10), MathUtils.random());
-			this.entities.add(john);
+
 		}
 	}
 
@@ -139,6 +174,24 @@ public class Wanderer extends ApplicationAdapter {
 
 	public btDiscreteDynamicsWorld getBtWorld() {
 		return btWorld;
+	}
+
+	public PerspectiveCamera getCamera() {
+		return cam;
+	}
+
+	public void controlEntity(IControllableEntity e) {
+		if (this.controlledEntity != null)
+			this.controlledEntity.onRemoveControl();
+		this.controlledEntity = e;
+		this.inputMultiplexer.getProcessors().set(0, e.getInputProcessor());
+		e.onTakeControl();
+	}
+
+	public void removeEntityControl(IControllableEntity e) {
+		this.inputMultiplexer.getProcessors().set(0, camcon);
+		e.onRemoveControl();
+		this.controlledEntity = null;
 	}
 
 	@Override
