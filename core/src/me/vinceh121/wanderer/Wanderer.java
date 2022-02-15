@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
@@ -50,7 +49,7 @@ public class Wanderer extends ApplicationAdapter {
 	private btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver, btConfig);
 
 	private DebugDrawer debugDrawer;
-	private boolean debugBullet = true;
+	private boolean debugBullet;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
@@ -70,7 +69,7 @@ public class Wanderer extends ApplicationAdapter {
 		btWorld.setDebugDrawer(debugDrawer);
 
 		this.btInterface.getOverlappingPairCache().setInternalGhostPairCallback(ghostPairCallback);
-		
+
 		btWorld.setGravity(new Vector3(0, -9, 0));
 
 		batch = new ModelBatch();
@@ -126,15 +125,11 @@ public class Wanderer extends ApplicationAdapter {
 		this.entities.add(e);
 
 		CharacterW john = new CharacterW(this);
-//		john.setMass(1);
-		String ch = CHARACTERS[MathUtils.random(CHARACTERS.length - 1)];
-		john.setDisplayModel("orig/char_" + ch + ".n/skin.obj");
-		john.setDisplayTexture("orig/char_" + ch + ".n/texturenone.png");
-		john.setTranslation(0, 50, 0);
+		john.setDisplayModel("orig/char_john.n/skin.obj");
+		john.setDisplayTexture("orig/char_john.n/texturenone.png");
+		john.setTranslation(0.1f, 50f, 0.1f);
 		this.entities.add(john);
 	}
-
-	private static final String[] CHARACTERS = { "john", "goliath", "susie", "nomade", "dusty", "preston", "seraphim" };
 
 	@Override
 	public void render() {
@@ -158,10 +153,6 @@ public class Wanderer extends ApplicationAdapter {
 			this.debugDrawer.begin(viewport);
 			this.btWorld.debugDrawWorld();
 			this.debugDrawer.end();
-		}
-
-		if (Gdx.graphics.getFrameId() % 20 == 0) {
-
 		}
 	}
 
