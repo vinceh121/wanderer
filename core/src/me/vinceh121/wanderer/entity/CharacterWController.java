@@ -3,6 +3,7 @@ package me.vinceh121.wanderer.entity;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
@@ -25,6 +26,7 @@ public class CharacterWController extends CustomActionInterface {
 	};
 	private final btKinematicCharacterController delegateController;
 	private final btPairCachingGhostObject ghostObj;
+	private final Vector3 walkDirection = new Vector3();
 	private CharacterW character;
 	private boolean jumping;
 	private float jumpProgress;
@@ -52,9 +54,14 @@ public class CharacterWController extends CustomActionInterface {
 		if (this.jumping)
 			return;
 		final Array<Vector3> points = new Array<>(3);
-		points.add(this.character.getTransform().getTranslation(new Vector3()));
-		points.add(points.peek().cpy().add(0, 2, 0));
-		points.add(points.first().cpy().add(0, 0, 2));
+		// starting point, add half the height of the capsule to compensate for offset
+		points.add(this.character.getTransform().getTranslation(new Vector3()).add(0,
+				((btCapsuleShape) this.ghostObj.getCollisionShape()).getHalfHeight(), 0));
+		// high point, start with relative direction, rotate by global transform, add
+		// position offset
+		points.add(new Vector3(0, 2, 1).rot(getWorldTransform()).add(points.peek().cpy()));
+		// down fall, like this entire codebase
+		points.add(new Vector3(0, 0, 2).rot(getWorldTransform()).add(points.first().cpy()));
 		this.jumpCurve = new Bezier<>(points, 0, points.size);
 		this.jumping = true;
 	}
@@ -88,6 +95,23 @@ public class CharacterWController extends CustomActionInterface {
 	public void setWalkDirection(Vector3 walkDirection) {
 		System.out.println(walkDirection);
 		delegateController.setWalkDirection(walkDirection);
+		this.walkDirection.set(walkDirection);
+	}
+
+	/**
+	 * @return
+	 * @see com.badlogic.gdx.physics.bullet.collision.btCollisionObject#getWorldTransform()
+	 */
+	public Matrix4 getWorldTransform() {
+		return ghostObj.getWorldTransform();
+	}
+
+	/**
+	 * @param worldTrans
+	 * @see com.badlogic.gdx.physics.bullet.collision.btCollisionObject#setWorldTransform(com.badlogic.gdx.math.Matrix4)
+	 */
+	public void setWorldTransform(Matrix4 worldTrans) {
+		ghostObj.setWorldTransform(worldTrans);
 	}
 
 	@Override

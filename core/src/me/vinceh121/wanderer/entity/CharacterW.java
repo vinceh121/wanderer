@@ -48,7 +48,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		colTranslation.sub(getCollideObjectOffset());
 		colTransform.setTranslation(colTranslation);
 
-		// do not call setTransform as not to cause update
+		// do not call setTransform as not to cause update to ghostobject
 		this.getTransform().set(colTransform);
 	}
 
@@ -69,12 +69,12 @@ public class CharacterW extends AbstractLivingControllableEntity {
 			return;
 
 		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			getTransform().rotate(0, 1, 0, 5f);
+			controller.setWorldTransform(controller.getWorldTransform().rotate(0, 1, 0, 5f));
 		}
 		if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			getTransform().rotate(0, 1, 0, -5f);
+			controller.setWorldTransform(controller.getWorldTransform().rotate(0, 1, 0, -5f));
 		}
-		characterDirection.set(-1, 0, 0).rot(getTransform()).nor();
+		characterDirection.set(0, 0, 1).rot(getTransform()).nor();
 		walkDirection.set(0, 0, 0);
 
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
@@ -114,7 +114,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	public void setMass(float mass) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public void dispose() {
 		this.game.getBtWorld().removeAction(controller);

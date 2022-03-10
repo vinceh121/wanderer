@@ -49,7 +49,7 @@ public class Wanderer extends ApplicationAdapter {
 	private btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver, btConfig);
 
 	private DebugDrawer debugDrawer;
-	private boolean debugBullet = true;
+	private boolean debugBullet = false;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
