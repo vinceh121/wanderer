@@ -49,7 +49,7 @@ public class Wanderer extends ApplicationAdapter {
 	private btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver, btConfig);
 
 	private DebugDrawer debugDrawer;
-	private boolean debugBullet;
+	private boolean debugBullet = true;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
@@ -127,7 +127,7 @@ public class Wanderer extends ApplicationAdapter {
 		CharacterW john = new CharacterW(this);
 		john.setDisplayModel("orig/char_john.n/skin.obj");
 		john.setDisplayTexture("orig/char_john.n/texturenone.png");
-		john.setTranslation(0.1f, 50f, 0.1f);
+		john.setTranslation(0.1f, 100f, 0.1f);
 		this.entities.add(john);
 	}
 
@@ -158,9 +158,7 @@ public class Wanderer extends ApplicationAdapter {
 
 	public void addEntity(AbstractEntity e) {
 		this.entities.add(e);
-		if (e.getCollideObject() != null) {
-			this.btWorld.addRigidBody(e.getCollideObject());
-		}
+		e.enterBtWorld(btWorld);
 	}
 
 	public btDiscreteDynamicsWorld getBtWorld() {

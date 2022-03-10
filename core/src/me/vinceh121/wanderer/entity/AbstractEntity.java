@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btConvexHullShape;
 import com.badlogic.gdx.physics.bullet.collision.btTriangleMesh;
@@ -80,6 +82,11 @@ public abstract class AbstractEntity implements Disposable {
 				new btConvexHullShape(mesh.getVerticesBuffer(), mesh.getNumVertices(), mesh.getVertexSize())));
 	}
 
+	public void enterBtWorld(btDiscreteDynamicsWorld world) {
+		if (this.getCollideObject() != null)
+			world.addRigidBody(this.getCollideObject());
+	}
+
 	protected btMotionState createMotionState() {
 		return new btDefaultMotionState(transform);
 	}
@@ -107,8 +114,10 @@ public abstract class AbstractEntity implements Disposable {
 		Model model = WandererConstants.ASSET_MANAGER.get(getDisplayModel(), Model.class);
 		Texture texture = WandererConstants.ASSET_MANAGER.get(displayTexture, Texture.class);
 		ModelInstance instance = new ModelInstance(model);
-		if (this.displayTexture != null)
+		if (this.displayTexture != null) {
+			texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
+		}
 		setCacheDisplayModel(instance);
 		getCacheDisplayModel().transform = transform;
 	}
@@ -142,17 +151,28 @@ public abstract class AbstractEntity implements Disposable {
 		return collideObject;
 	}
 
+	public void setCollideObject(btRigidBody collideObject) {
+		// https://pybullet.org/Bullet/BulletFull/btDiscreteDynamicsWorld_8cpp_source.html#l00579
+		boolean isDynamic = !(collideObject.isStaticObject() || collideObject.isKinematicObject());
+		int collisionFilterGroup = isDynamic ? btBroadphaseProxy.CollisionFilterGroups.DefaultFilter
+				: btBroadphaseProxy.CollisionFilterGroups.StaticFilter;
+		int collisionFilterMask = isDynamic ? btBroadphaseProxy.CollisionFilterGroups.AllFilter
+				: btBroadphaseProxy.CollisionFilterGroups.AllFilter
+						^ btBroadphaseProxy.CollisionFilterGroups.StaticFilter;
+		this.setCollideObject(collideObject, collisionFilterGroup, collisionFilterMask);
+	}
+
 	/**
 	 * Sets this entity's collision model, removing the previous one from the Bullet
 	 * world, and adding the new one.
 	 *
 	 * @param collideObject
 	 */
-	public void setCollideObject(btRigidBody collideObject) {
+	public void setCollideObject(btRigidBody collideObject, int collisionGroup, int collisionMask) {
 		if (this.collideObject != null)
 			this.game.getBtWorld().removeRigidBody(this.collideObject);
 		this.collideObject = collideObject;
-		this.game.getBtWorld().addRigidBody(collideObject);
+		this.game.getBtWorld().addRigidBody(collideObject, collisionGroup, collisionMask);
 	}
 
 	public float getMass() {
@@ -327,5 +347,10 @@ public abstract class AbstractEntity implements Disposable {
 	public void dispose() {
 		if (this.collideObject != null)
 			this.collideObject.dispose();
+	}
+	
+	@Override
+	public String toString() {
+		return "E:" + super.toString();
 	}
 }

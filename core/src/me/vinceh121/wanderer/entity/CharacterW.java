@@ -6,9 +6,9 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
+import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
 import me.vinceh121.wanderer.Wanderer;
 
@@ -28,13 +28,28 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 	public CharacterW(Wanderer game, float capsuleRadius, float capsuleHeight) {
 		super(game);
-		this.setCollideObject(
-				new btRigidBody(1, createMotionState(), new btCapsuleShape(capsuleRadius, capsuleHeight)));
-		this.getCollideObject().setAngularFactor(1);
+//		this.setCollideObject(new btRigidBody(1, createMotionState(), new btCapsuleShape(capsuleRadius, capsuleHeight)),
+//				btBroadphaseProxy.CollisionFilterGroups.DefaultFilter,
+//				btBroadphaseProxy.CollisionFilterGroups.StaticFilter);
+//		this.getCollideObject().setAngularFactor(1);
+//		this.getCollideObject().setFriction(100);
 		this.setCollideObjectOffset(new Vector3(0, 0.8f, 0));
-		this.getCollideObject().setFriction(100);
 		this.controller = new CharacterWController(this);
 		game.getBtWorld().addAction(this.controller);
+	}
+
+	@Override
+	public void updatePhysics(btDiscreteDynamicsWorld world) {
+		super.updatePhysics(world);
+
+		Matrix4 colTransform = this.controller.getGhostObject().getWorldTransform();
+		Vector3 colTranslation = new Vector3();
+		colTransform.getTranslation(colTranslation);
+		colTranslation.sub(getCollideObjectOffset());
+		colTransform.setTranslation(colTranslation);
+
+		// do not call setTransform as not to cause update
+		this.getTransform().set(colTransform);
 	}
 
 	@Override
@@ -55,12 +70,9 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
 			getTransform().rotate(0, 1, 0, 5f);
-			this.getCollideObject().setWorldTransform(getTransform());
 		}
 		if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			getTransform().rotate(0, 1, 0, -5f);
-			this.getCollideObject().setWorldTransform(getTransform());
-			this.getCollideObject().activate();
 		}
 		characterDirection.set(-1, 0, 0).rot(getTransform()).nor();
 		walkDirection.set(0, 0, 0);
@@ -72,7 +84,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 			walkDirection.add(-characterDirection.x, -characterDirection.y, -characterDirection.z);
 		}
 		walkDirection.scl(4f * Gdx.graphics.getDeltaTime());
-//		controller.setWalkDirection(walkDirection);
+		controller.setWalkDirection(walkDirection);
 	}
 
 	@Override
@@ -83,6 +95,9 @@ public class CharacterW extends AbstractLivingControllableEntity {
 				if (keycode == Keys.SPACE) {
 					controller.jump();
 					return true;
+				} else if (keycode == Keys.H) {
+					getTransform().setTranslation(0, 50, 0);
+					updateTransform();
 				}
 				return false;
 			}
@@ -90,7 +105,19 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	}
 
 	@Override
+	protected void updateTransform() {
+		super.updateTransform();
+		this.controller.getGhostObject().setWorldTransform(getTransform());
+	}
+
+	@Override
 	public void setMass(float mass) {
 		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void dispose() {
+		this.game.getBtWorld().removeAction(controller);
+		super.dispose();
 	}
 }
