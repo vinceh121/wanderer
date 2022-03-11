@@ -92,7 +92,11 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		return new InputAdapter() {
 			@Override
 			public boolean keyDown(int keycode) {
-				if (keycode == Keys.SPACE) {
+				if (keycode == Keys.SPACE && Gdx.input.isKeyPressed(Keys.UP)) {
+					controller.bigJump();
+					System.out.println("bigjump");
+					return true;
+				} else if (keycode == Keys.SPACE) {
 					controller.jump();
 					return true;
 				} else if (keycode == Keys.H) {

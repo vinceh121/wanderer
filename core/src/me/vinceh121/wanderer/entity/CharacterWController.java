@@ -3,7 +3,6 @@ package me.vinceh121.wanderer.entity;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
@@ -50,7 +49,15 @@ public class CharacterWController extends CustomActionInterface {
 		this.contactListener.enable();
 	}
 
+	public void bigJump() {
+		this.jump(4, 8);
+	}
+	
 	public void jump() {
+		this.jump(2, 2);
+	}
+
+	public void jump(int height, int distance) {
 		if (this.jumping)
 			return;
 		final Array<Vector3> points = new Array<>(3);
@@ -59,9 +66,9 @@ public class CharacterWController extends CustomActionInterface {
 				((btCapsuleShape) this.ghostObj.getCollisionShape()).getHalfHeight(), 0));
 		// high point, start with relative direction, rotate by global transform, add
 		// position offset
-		points.add(new Vector3(0, 2, 1).rot(getWorldTransform()).add(points.peek().cpy()));
+		points.add(new Vector3(0, height, 1).rot(getWorldTransform()).add(points.peek()));
 		// down fall, like this entire codebase
-		points.add(new Vector3(0, 0, 2).rot(getWorldTransform()).add(points.first().cpy()));
+		points.add(new Vector3(0, 0, distance).rot(getWorldTransform()).add(points.first()));
 		this.jumpCurve = new Bezier<>(points, 0, points.size);
 		this.jumping = true;
 	}
@@ -77,7 +84,6 @@ public class CharacterWController extends CustomActionInterface {
 	@Override
 	public void updateAction(float deltaTimeStep) {
 		if (this.jumping) {
-			System.out.println("jumping");
 			Matrix4 trans = this.character.getTransform();
 			trans.setTranslation(this.jumpCurve.valueAt(new Vector3(), jumpProgress));
 			this.ghostObj.setWorldTransform(trans);
@@ -93,7 +99,6 @@ public class CharacterWController extends CustomActionInterface {
 	 * @see com.badlogic.gdx.physics.bullet.dynamics.btCharacterControllerInterface#setWalkDirection(com.badlogic.gdx.math.Vector3)
 	 */
 	public void setWalkDirection(Vector3 walkDirection) {
-		System.out.println(walkDirection);
 		delegateController.setWalkDirection(walkDirection);
 		this.walkDirection.set(walkDirection);
 	}
