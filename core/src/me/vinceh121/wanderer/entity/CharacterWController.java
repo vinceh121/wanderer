@@ -27,9 +27,11 @@ public class CharacterWController extends CustomActionInterface {
 	private final btPairCachingGhostObject ghostObj;
 	private final Vector3 walkDirection = new Vector3();
 	private CharacterW character;
-	private boolean jumping;
+	private boolean jumping, bigJump;
 	private float jumpProgress;
 	private Bezier<Vector3> jumpCurve;
+	private FallListener fallListener = (a) -> {
+	};
 
 	public CharacterWController(CharacterW character) {
 		this.character = character;
@@ -51,17 +53,18 @@ public class CharacterWController extends CustomActionInterface {
 
 	public void bigJump() {
 		this.jump(4, 8);
+		this.bigJump = true;
 	}
-	
+
 	public void jump() {
 		this.jump(2, 2);
 	}
 
 	public void jump(int height, int distance) {
-		if (this.jumping)
+		if (this.jumping || !this.delegateController.canJump())
 			return;
 		final Array<Vector3> points = new Array<>(3);
-		// starting point, add half the height of the capsule to compensate for offset
+		// starting point, character's translation, add half the height of the capsule to compensate for offset
 		points.add(this.character.getTransform().getTranslation(new Vector3()).add(0,
 				((btCapsuleShape) this.ghostObj.getCollisionShape()).getHalfHeight(), 0));
 		// high point, start with relative direction, rotate by global transform, add
@@ -77,8 +80,9 @@ public class CharacterWController extends CustomActionInterface {
 		if (!this.jumping)
 			return;
 		this.jumping = false;
+		this.bigJump = false;
 		this.jumpProgress = 0;
-		WandererConstants.ASSET_MANAGER.get("orig/lib/sound/step_bigland_john.wav", Sound.class).play();
+		this.fallListener.onFall(this.bigJump);
 	}
 
 	@Override
@@ -119,6 +123,28 @@ public class CharacterWController extends CustomActionInterface {
 		ghostObj.setWorldTransform(worldTrans);
 	}
 
+	public boolean isJumping() {
+		return jumping;
+	}
+
+	public boolean isBigJump() {
+		return bigJump;
+	}
+
+	/**
+	 * @return the fallListener
+	 */
+	public FallListener getFallListener() {
+		return fallListener;
+	}
+
+	/**
+	 * @param fallListener the fallListener to set
+	 */
+	public void setFallListener(FallListener fallListener) {
+		this.fallListener = fallListener;
+	}
+
 	@Override
 	public void debugDraw() {
 	}
@@ -136,6 +162,10 @@ public class CharacterWController extends CustomActionInterface {
 		this.contactListener.dispose();
 		this.delegateController.dispose();
 		super.dispose();
+	}
+
+	public static interface FallListener {
+		void onFall(boolean bigJump);
 	}
 
 	static {
