@@ -159,6 +159,11 @@ public class Wanderer extends ApplicationAdapter {
 		this.viewport3d.apply();
 		camcon.update();
 
+		WandererConstants.ASSET_MANAGER.update(62);
+
+		this.btWorld.stepSimulation(1f / 60f, 10);
+		this.btWorld.performDiscreteCollisionDetection();
+
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT
 				| (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
@@ -179,11 +184,6 @@ public class Wanderer extends ApplicationAdapter {
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
-
-		WandererConstants.ASSET_MANAGER.update(62);
-
-		this.btWorld.stepSimulation(1f / 60f, 10);
-		this.btWorld.performDiscreteCollisionDetection();
 	}
 
 	public void addEntity(AbstractEntity e) {
