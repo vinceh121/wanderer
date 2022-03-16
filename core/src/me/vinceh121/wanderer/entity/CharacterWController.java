@@ -1,6 +1,5 @@
 package me.vinceh121.wanderer.entity;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -12,8 +11,6 @@ import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.CustomActionInterface;
 import com.badlogic.gdx.physics.bullet.dynamics.btKinematicCharacterController;
 import com.badlogic.gdx.utils.Array;
-
-import me.vinceh121.wanderer.WandererConstants;
 
 public class CharacterWController extends CustomActionInterface {
 	private final ContactListener contactListener = new ContactListener() {
@@ -166,9 +163,5 @@ public class CharacterWController extends CustomActionInterface {
 
 	public static interface FallListener {
 		void onFall(boolean bigJump);
-	}
-
-	static {
-		WandererConstants.ASSET_MANAGER.load("orig/lib/sound/step_bigland_john.wav", Sound.class);
 	}
 }

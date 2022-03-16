@@ -143,4 +143,8 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		this.game.getBtWorld().removeAction(controller);
 		super.dispose();
 	}
+
+	static {
+		WandererConstants.ASSET_MANAGER.load("orig/lib/sound/step_bigland_john.wav", Sound.class);
+	}
 }

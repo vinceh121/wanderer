@@ -23,11 +23,14 @@ import com.badlogic.gdx.physics.bullet.collision.btGhostPairCallback;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import me.vinceh121.wanderer.character.ui.DebugOverlay;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.CharacterW;
 import me.vinceh121.wanderer.entity.IControllableEntity;
@@ -35,8 +38,14 @@ import me.vinceh121.wanderer.entity.Prop;
 
 public class Wanderer extends ApplicationAdapter {
 	private PerspectiveCamera cam;
-	private Viewport viewport;
-	private ModelBatch batch;
+	private Viewport viewport3d;
+	/**
+	 * do NOT call update as to not stretch UI
+	 */
+	private ScreenViewport viewportUi;
+	private ModelBatch modelBatch;
+	private Stage stage;
+	private DebugOverlay debugOverlay;
 	private CameraInputController camcon;
 	private Array<AbstractEntity> entities;
 	private Environment env;
@@ -49,7 +58,7 @@ public class Wanderer extends ApplicationAdapter {
 	private btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver, btConfig);
 
 	private DebugDrawer debugDrawer;
-	private boolean debugBullet = false;
+	private boolean debugBullet = false, glxDebug = false;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
@@ -72,7 +81,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		btWorld.setGravity(new Vector3(0, -9, 0));
 
-		batch = new ModelBatch();
+		modelBatch = new ModelBatch();
 
 		env = new Environment();
 		env.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
@@ -85,7 +94,11 @@ public class Wanderer extends ApplicationAdapter {
 		cam.near = 0.1f;
 		cam.update();
 
-		viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam);
+		this.viewport3d = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam);
+		this.viewportUi = new ScreenViewport();
+
+		this.stage = new Stage(this.viewportUi);
+		this.debugOverlay = new DebugOverlay(this);
 
 		camcon = new CameraInputController(cam);
 		this.inputMultiplexer.addProcessor(camcon);
@@ -94,6 +107,14 @@ public class Wanderer extends ApplicationAdapter {
 			public boolean keyDown(int keycode) {
 				if (keycode == Keys.F7) {
 					Wanderer.this.debugBullet = !Wanderer.this.debugBullet;
+					return true;
+				} else if (keycode == Keys.F3) {
+					Wanderer.this.glxDebug = !Wanderer.this.glxDebug;
+					if (Wanderer.this.glxDebug) {
+						Wanderer.this.stage.addActor(debugOverlay);
+					} else {
+						Wanderer.this.stage.getRoot().removeActor(debugOverlay);
+					}
 					return true;
 				} else if (keycode == Keys.TAB) {
 					if (controlledEntity == null) {
@@ -106,7 +127,7 @@ public class Wanderer extends ApplicationAdapter {
 						}
 					} else {
 						System.out.println("Remove control");
-						removeEntityControl(controlledEntity);
+						removeEntityControl();
 					}
 					return true;
 				}
@@ -129,33 +150,40 @@ public class Wanderer extends ApplicationAdapter {
 		john.setDisplayTexture("orig/char_john.n/texturenone.png");
 		john.setTranslation(0.1f, 100f, 0.1f);
 		this.entities.add(john);
+
+		this.controlEntity(john);
 	}
 
 	@Override
 	public void render() {
+		this.viewport3d.apply();
 		camcon.update();
 
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT
 				| (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
-		batch.begin(cam);
+		modelBatch.begin(cam);
 		for (int i = 0; i < this.entities.size; i++) {
 			AbstractEntity e = this.entities.get(i);
 			e.updatePhysics(btWorld);
-			e.render(batch, this.env);
+			e.render(modelBatch, this.env);
 		}
-		batch.end();
+		modelBatch.end();
+
+		if (this.debugBullet) {
+			this.debugDrawer.begin(viewport3d);
+			this.btWorld.debugDrawWorld();
+			this.debugDrawer.end();
+		}
+
+		stage.act(Gdx.graphics.getDeltaTime());
+		stage.draw();
+
 		WandererConstants.ASSET_MANAGER.update(62);
 
 		this.btWorld.stepSimulation(1f / 60f, 10);
 		this.btWorld.performDiscreteCollisionDetection();
-
-		if (this.debugBullet) {
-			this.debugDrawer.begin(viewport);
-			this.btWorld.debugDrawWorld();
-			this.debugDrawer.end();
-		}
 	}
 
 	public void addEntity(AbstractEntity e) {
@@ -171,6 +199,10 @@ public class Wanderer extends ApplicationAdapter {
 		return cam;
 	}
 
+	public Array<AbstractEntity> getEntities() {
+		return entities;
+	}
+
 	public void controlEntity(IControllableEntity e) {
 		if (this.controlledEntity != null)
 			this.controlledEntity.onRemoveControl();
@@ -179,20 +211,22 @@ public class Wanderer extends ApplicationAdapter {
 		e.onTakeControl();
 	}
 
-	public void removeEntityControl(IControllableEntity e) {
+	public void removeEntityControl() {
 		this.inputMultiplexer.getProcessors().set(0, camcon);
-		e.onRemoveControl();
+		this.controlledEntity.onRemoveControl();
 		this.controlledEntity = null;
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		this.viewport.update(width, height);
+		this.viewport3d.update(width, height);
+		this.viewportUi.update(width, height, true);
 	}
 
 	@Override
 	public void dispose() {
-		batch.dispose();
+		modelBatch.dispose();
+		stage.dispose();
 		WandererConstants.ASSET_MANAGER.dispose();
 	}
 
