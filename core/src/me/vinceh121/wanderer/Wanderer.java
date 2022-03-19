@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -31,6 +32,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import me.vinceh121.wanderer.character.ui.DebugOverlay;
+import me.vinceh121.wanderer.clan.Clan;
+import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.CharacterW;
 import me.vinceh121.wanderer.entity.IControllableEntity;
@@ -59,6 +62,8 @@ public class Wanderer extends ApplicationAdapter {
 
 	private DebugDrawer debugDrawer;
 	private boolean debugBullet = false, glxDebug = false;
+
+	private Array<Clan> clans;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
@@ -137,6 +142,7 @@ public class Wanderer extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(this.inputMultiplexer);
 
 		entities = new Array<>();
+		this.clans = new Array<>();
 
 		Prop e = new Prop(this);
 		e.setCollideModel("orig/first_island.n/collide.obj");
@@ -145,10 +151,14 @@ public class Wanderer extends ApplicationAdapter {
 		e.setExactCollideModel(true);
 		this.entities.add(e);
 
-		CharacterW john = new CharacterW(this);
+		Clan playerClan = new Clan();
+		playerClan.setColor(Color.BLUE);
+		playerClan.setName("player clan");
+		
+		CharacterW john = new CharacterW(this, playerClan);
 		john.setDisplayModel("orig/char_john.n/skin.obj");
 		john.setDisplayTexture("orig/char_john.n/texturenone.png");
-		john.setTranslation(0.1f, 100f, 0.1f);
+		john.setTranslation(0.1f, 50f, 0.1f);
 		this.entities.add(john);
 
 		this.controlEntity(john);
@@ -189,6 +199,16 @@ public class Wanderer extends ApplicationAdapter {
 	public void addEntity(AbstractEntity e) {
 		this.entities.add(e);
 		e.enterBtWorld(btWorld);
+	}
+
+	public void removeEntity(AbstractEntity e) {
+		this.entities.removeValue(e, true);
+		e.leaveBtWorld(btWorld);
+		if (e instanceof IClanMember) {
+			for (Clan c : this.clans) {
+				c.removeMember((IClanMember) e);
+			}
+		}
 	}
 
 	public btDiscreteDynamicsWorld getBtWorld() {

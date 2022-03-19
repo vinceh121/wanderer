@@ -86,6 +86,11 @@ public abstract class AbstractEntity implements Disposable {
 		if (this.getCollideObject() != null)
 			world.addRigidBody(this.getCollideObject());
 	}
+	
+	public void leaveBtWorld(btDiscreteDynamicsWorld world) {
+		if (this.getCollideObject() != null)
+			world.removeRigidBody(this.getCollideObject());
+	}
 
 	protected btMotionState createMotionState() {
 		return new btDefaultMotionState(transform);

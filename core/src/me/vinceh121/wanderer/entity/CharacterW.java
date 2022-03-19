@@ -15,28 +15,27 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.clan.Clan;
+import me.vinceh121.wanderer.clan.IClanMember;
 
 /**
  * An entity of a character, a person.
  *
  * Named like that to differentiate with java.lang.Character
  */
-public class CharacterW extends AbstractLivingControllableEntity {
+public class CharacterW extends AbstractLivingControllableEntity implements IClanMember {
 	private final CharacterWController controller;
 	private final Vector3 characterDirection = new Vector3();
 	private final Vector3 walkDirection = new Vector3();
+	private final Clan clan;
 
-	public CharacterW(Wanderer game) {
-		this(game, 0.3f, 1.5f);
+	public CharacterW(Wanderer game, Clan clan) {
+		this(game, clan, 0.3f, 1.5f);
 	}
 
-	public CharacterW(Wanderer game, float capsuleRadius, float capsuleHeight) {
+	public CharacterW(Wanderer game, Clan clan, float capsuleRadius, float capsuleHeight) {
 		super(game);
-//		this.setCollideObject(new btRigidBody(1, createMotionState(), new btCapsuleShape(capsuleRadius, capsuleHeight)),
-//				btBroadphaseProxy.CollisionFilterGroups.DefaultFilter,
-//				btBroadphaseProxy.CollisionFilterGroups.StaticFilter);
-//		this.getCollideObject().setAngularFactor(1);
-//		this.getCollideObject().setFriction(100);
+		this.clan = clan;
 		this.setCollideObjectOffset(new Vector3(0, 0.8f, 0));
 		this.controller = new CharacterWController(this);
 		this.controller.setFallListener(this::onFall);
@@ -146,5 +145,15 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 	static {
 		WandererConstants.ASSET_MANAGER.load("orig/lib/sound/step_bigland_john.wav", Sound.class);
+	}
+
+	@Override
+	public Clan getClan() {
+		return this.clan;
+	}
+
+	@Override
+	public void onJoinClan(Clan clan) {
+		// TODO change light decals colors
 	}
 }
