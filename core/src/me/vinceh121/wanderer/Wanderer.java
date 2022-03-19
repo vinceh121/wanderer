@@ -6,30 +6,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.Bullet;
-import com.badlogic.gdx.physics.bullet.DebugDrawer;
-import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
-import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
-import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
-import com.badlogic.gdx.physics.bullet.collision.btGhostPairCallback;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
-import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
-import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import me.vinceh121.wanderer.character.ui.DebugOverlay;
 import me.vinceh121.wanderer.clan.Clan;
@@ -40,32 +21,17 @@ import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.entity.Prop;
 
 public class Wanderer extends ApplicationAdapter {
-	private PerspectiveCamera cam;
-	private Viewport viewport3d;
-	/**
-	 * do NOT call update as to not stretch UI
-	 */
-	private ScreenViewport viewportUi;
-	private ModelBatch modelBatch;
-	private Stage stage;
-	private DebugOverlay debugOverlay;
-	private CameraInputController camcon;
+	private final PhysicsManager physicsManager = new PhysicsManager();
+	private final GraphicsManager graphicsManager = new GraphicsManager();
+
 	private Array<AbstractEntity> entities;
-	private Environment env;
-
-	private btDefaultCollisionConfiguration btConfig = new btDefaultCollisionConfiguration();
-	private btCollisionDispatcher btDispatch = new btCollisionDispatcher(btConfig);
-	private btBroadphaseInterface btInterface = new btDbvtBroadphase();
-	private btSequentialImpulseConstraintSolver btSolver = new btSequentialImpulseConstraintSolver();
-	private btGhostPairCallback ghostPairCallback = new btGhostPairCallback();
-	private btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver, btConfig);
-
-	private DebugDrawer debugDrawer;
-	private boolean debugBullet = false, glxDebug = false;
-
 	private Array<Clan> clans;
 
+	private CameraInputController camcon;
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer();
+
+	private DebugOverlay debugOverlay;
+	private boolean debugBullet = false, glxDebug = false;
 
 	private IControllableEntity controlledEntity;
 
@@ -77,35 +43,10 @@ public class Wanderer extends ApplicationAdapter {
 			t.printStackTrace();
 		});
 
-		this.debugDrawer = new DebugDrawer();
-		this.debugDrawer
-				.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_DrawWireframe | btIDebugDraw.DebugDrawModes.DBG_DrawText);
-		btWorld.setDebugDrawer(debugDrawer);
+		this.physicsManager.create();
+		this.graphicsManager.create();
 
-		this.btInterface.getOverlappingPairCache().setInternalGhostPairCallback(ghostPairCallback);
-
-		btWorld.setGravity(new Vector3(0, -9, 0));
-
-		modelBatch = new ModelBatch();
-
-		env = new Environment();
-		env.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-		env.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
-
-		cam = new PerspectiveCamera(90, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.set(3f, 50f, 0f);
-		cam.lookAt(5f, 4f, 0);
-		cam.far = 1000f;
-		cam.near = 0.1f;
-		cam.update();
-
-		this.viewport3d = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam);
-		this.viewportUi = new ScreenViewport();
-
-		this.stage = new Stage(this.viewportUi);
-		this.debugOverlay = new DebugOverlay(this);
-
-		camcon = new CameraInputController(cam);
+		this.camcon = new CameraInputController(this.getCamera());
 		this.inputMultiplexer.addProcessor(camcon);
 		this.inputMultiplexer.addProcessor(new InputAdapter() {
 			@Override
@@ -116,9 +57,9 @@ public class Wanderer extends ApplicationAdapter {
 				} else if (keycode == Keys.F3) {
 					Wanderer.this.glxDebug = !Wanderer.this.glxDebug;
 					if (Wanderer.this.glxDebug) {
-						Wanderer.this.stage.addActor(debugOverlay);
+						Wanderer.this.graphicsManager.getStage().addActor(debugOverlay);
 					} else {
-						Wanderer.this.stage.getRoot().removeActor(debugOverlay);
+						Wanderer.this.graphicsManager.getStage().getRoot().removeActor(debugOverlay);
 					}
 					return true;
 				} else if (keycode == Keys.TAB) {
@@ -141,7 +82,9 @@ public class Wanderer extends ApplicationAdapter {
 		});
 		Gdx.input.setInputProcessor(this.inputMultiplexer);
 
-		entities = new Array<>();
+		this.debugOverlay = new DebugOverlay(this);
+
+		this.entities = new Array<>();
 		this.clans = new Array<>();
 
 		Prop e = new Prop(this);
@@ -154,7 +97,7 @@ public class Wanderer extends ApplicationAdapter {
 		Clan playerClan = new Clan();
 		playerClan.setColor(Color.BLUE);
 		playerClan.setName("player clan");
-		
+
 		CharacterW john = new CharacterW(this, playerClan);
 		john.setDisplayModel("orig/char_john.n/skin.obj");
 		john.setDisplayTexture("orig/char_john.n/texturenone.png");
@@ -166,44 +109,38 @@ public class Wanderer extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		this.viewport3d.apply();
-		camcon.update();
+		this.graphicsManager.apply();
+		this.camcon.update();
 
 		WandererConstants.ASSET_MANAGER.update(62);
 
-		this.btWorld.stepSimulation(1f / 60f, 10);
-		this.btWorld.performDiscreteCollisionDetection();
-
-		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT
-				| (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
-
-		modelBatch.begin(cam);
+		this.physicsManager.render();
+		
+		this.graphicsManager.begin();
 		for (int i = 0; i < this.entities.size; i++) {
-			AbstractEntity e = this.entities.get(i);
-			e.updatePhysics(btWorld);
-			e.render(modelBatch, this.env);
+			AbstractEntity entity = this.entities.get(i);
+			entity.updatePhysics(this.physicsManager.getBtWorld());
+			entity.render(this.graphicsManager.getModelBatch(), this.graphicsManager.getEnv());
 		}
-		modelBatch.end();
+		this.graphicsManager.end();
 
 		if (this.debugBullet) {
-			this.debugDrawer.begin(viewport3d);
-			this.btWorld.debugDrawWorld();
-			this.debugDrawer.end();
+			this.physicsManager.getDebugDrawer().begin(this.graphicsManager.getViewport3d());
+			this.physicsManager.getBtWorld().debugDrawWorld();
+			this.physicsManager.getDebugDrawer().end();
 		}
 
-		stage.act(Gdx.graphics.getDeltaTime());
-		stage.draw();
+		this.graphicsManager.renderUI();
 	}
 
 	public void addEntity(AbstractEntity e) {
 		this.entities.add(e);
-		e.enterBtWorld(btWorld);
+		e.enterBtWorld(this.physicsManager.getBtWorld());
 	}
 
 	public void removeEntity(AbstractEntity e) {
 		this.entities.removeValue(e, true);
-		e.leaveBtWorld(btWorld);
+		e.leaveBtWorld(this.physicsManager.getBtWorld());
 		if (e instanceof IClanMember) {
 			for (Clan c : this.clans) {
 				c.removeMember((IClanMember) e);
@@ -211,16 +148,12 @@ public class Wanderer extends ApplicationAdapter {
 		}
 	}
 
-	public btDiscreteDynamicsWorld getBtWorld() {
-		return btWorld;
-	}
-
-	public PerspectiveCamera getCamera() {
-		return cam;
-	}
-
 	public Array<AbstractEntity> getEntities() {
 		return entities;
+	}
+
+	public PhysicsManager getPhysicsManager() {
+		return physicsManager;
 	}
 
 	public void controlEntity(IControllableEntity e) {
@@ -239,18 +172,19 @@ public class Wanderer extends ApplicationAdapter {
 
 	@Override
 	public void resize(int width, int height) {
-		this.viewport3d.update(width, height);
-		this.viewportUi.update(width, height, true);
+		this.graphicsManager.resize(width, height);
 	}
 
 	@Override
 	public void dispose() {
-		modelBatch.dispose();
-		stage.dispose();
 		WandererConstants.ASSET_MANAGER.dispose();
 	}
 
-	static {
-		Bullet.init();
+	public btDiscreteDynamicsWorld getBtWorld() {
+		return this.physicsManager.getBtWorld();
+	}
+
+	public PerspectiveCamera getCamera() {
+		return this.graphicsManager.getCamera();
 	}
 }
