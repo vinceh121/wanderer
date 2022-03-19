@@ -9,11 +9,10 @@ import me.vinceh121.wanderer.entity.AbstractLivingEntity;
 
 public class Island extends AbstractLivingEntity implements IClanMember {
 	private final Array<Slot> slots = new Array<>();
-	private final Clan clan;
+	private Clan clan;
 
-	public Island(Wanderer game, Clan clan) {
+	public Island(Wanderer game) {
 		super(game);
-		this.clan = clan;
 	}
 
 	@Override
@@ -49,6 +48,7 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 
 	@Override
 	public void onJoinClan(Clan clan) {
+		this.clan = clan;
 		// TODO probably nothing?
 	}
 }

@@ -98,10 +98,11 @@ public class Wanderer extends ApplicationAdapter {
 		playerClan.setColor(Color.BLUE);
 		playerClan.setName("player clan");
 
-		CharacterW john = new CharacterW(this, playerClan);
+		CharacterW john = new CharacterW(this);
 		john.setDisplayModel("orig/char_john.n/skin.obj");
 		john.setDisplayTexture("orig/char_john.n/texturenone.png");
 		john.setTranslation(0.1f, 50f, 0.1f);
+		playerClan.addMember(john);
 		this.entities.add(john);
 
 		this.controlEntity(john);

@@ -27,15 +27,14 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	private final CharacterWController controller;
 	private final Vector3 characterDirection = new Vector3();
 	private final Vector3 walkDirection = new Vector3();
-	private final Clan clan;
+	private Clan clan;
 
-	public CharacterW(Wanderer game, Clan clan) {
-		this(game, clan, 0.3f, 1.5f);
+	public CharacterW(Wanderer game) {
+		this(game, 0.3f, 1.5f);
 	}
 
-	public CharacterW(Wanderer game, Clan clan, float capsuleRadius, float capsuleHeight) {
+	public CharacterW(Wanderer game, float capsuleRadius, float capsuleHeight) {
 		super(game);
-		this.clan = clan;
 		this.setCollideObjectOffset(new Vector3(0, 0.8f, 0));
 		this.controller = new CharacterWController(this);
 		this.controller.setFallListener(this::onFall);
@@ -154,6 +153,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 	@Override
 	public void onJoinClan(Clan clan) {
+		this.clan = clan;
 		// TODO change light decals colors
 	}
 }

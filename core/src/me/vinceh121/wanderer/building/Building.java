@@ -6,13 +6,12 @@ import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractLivingEntity;
 
 public class Building extends AbstractLivingEntity implements IClanMember {
-	private final Clan clan;
+	private Clan clan;
 	private Island island;
 	private Slot slot;
 
-	public Building(Wanderer game, Clan clan) {
+	public Building(Wanderer game) {
 		super(game);
-		this.clan = clan;
 	}
 
 	/**
@@ -55,6 +54,7 @@ public class Building extends AbstractLivingEntity implements IClanMember {
 
 	@Override
 	public void onJoinClan(Clan clan) {
+		this.clan = clan;
 		// TODO change light decal's color
 	}
 }
