@@ -12,7 +12,7 @@ public class Slot {
 	public Slot() {
 	}
 
-	public Slot(SlotType type, Vector3 location) {
+	public Slot(final SlotType type, final Vector3 location) {
 		this.type = type;
 		this.location = location;
 	}
@@ -21,13 +21,13 @@ public class Slot {
 	 * @return the type
 	 */
 	public SlotType getType() {
-		return type;
+		return this.type;
 	}
 
 	/**
 	 * @param type the type to set
 	 */
-	public void setType(SlotType type) {
+	public void setType(final SlotType type) {
 		this.type = type;
 	}
 
@@ -37,7 +37,7 @@ public class Slot {
 	 * @return the location
 	 */
 	public Vector3 getLocation() {
-		return location;
+		return this.location;
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class Slot {
 	 *
 	 * @param location the location to set
 	 */
-	public void setLocation(Vector3 location) {
+	public void setLocation(final Vector3 location) {
 		this.location = location;
 	}
 }

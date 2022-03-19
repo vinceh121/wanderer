@@ -11,7 +11,7 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	private final Array<Slot> slots = new Array<>();
 	private Clan clan;
 
-	public Island(Wanderer game) {
+	public Island(final Wanderer game) {
 		super(game);
 	}
 
@@ -24,8 +24,8 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	 * @param value
 	 * @see com.badlogic.gdx.utils.Array#add(java.lang.Object)
 	 */
-	public void addSlot(Slot value) {
-		slots.add(value);
+	public void addSlot(final Slot value) {
+		this.slots.add(value);
 	}
 
 	/**
@@ -33,12 +33,12 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	 * @return
 	 * @see com.badlogic.gdx.utils.Array#get(int)
 	 */
-	public Slot getSlot(int index) {
-		return slots.get(index);
+	public Slot getSlot(final int index) {
+		return this.slots.get(index);
 	}
 
 	public Array<Slot> getSlots() {
-		return slots;
+		return this.slots;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	}
 
 	@Override
-	public void onJoinClan(Clan clan) {
+	public void onJoinClan(final Clan clan) {
 		this.clan = clan;
 		// TODO probably nothing?
 	}

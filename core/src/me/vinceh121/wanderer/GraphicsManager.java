@@ -40,7 +40,7 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.cam.update();
 
 		this.viewportUi = new ScreenViewport();
-		this.viewport3d = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam);
+		this.viewport3d = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.cam);
 
 		this.stage = new Stage(this.viewportUi);
 	}
@@ -54,20 +54,20 @@ public class GraphicsManager extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT
 				| (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
-		modelBatch.begin(this.cam);
+		this.modelBatch.begin(this.cam);
 	}
 
 	public void end() {
-		modelBatch.end();
+		this.modelBatch.end();
 	}
 
 	public void renderUI() {
-		stage.act(Gdx.graphics.getDeltaTime());
-		stage.draw();
+		this.stage.act(Gdx.graphics.getDeltaTime());
+		this.stage.draw();
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void resize(final int width, final int height) {
 		this.viewport3d.update(width, height);
 		this.viewportUi.update(width, height, true);
 	}
@@ -82,13 +82,13 @@ public class GraphicsManager extends ApplicationAdapter {
 	 * @return the cam
 	 */
 	public PerspectiveCamera getCamera() {
-		return cam;
+		return this.cam;
 	}
 
 	/**
 	 * @param cam the cam to set
 	 */
-	public void setCam(PerspectiveCamera cam) {
+	public void setCam(final PerspectiveCamera cam) {
 		this.cam = cam;
 	}
 
@@ -96,13 +96,13 @@ public class GraphicsManager extends ApplicationAdapter {
 	 * @return the viewport3d
 	 */
 	public Viewport getViewport3d() {
-		return viewport3d;
+		return this.viewport3d;
 	}
 
 	/**
 	 * @param viewport3d the viewport3d to set
 	 */
-	public void setViewport3d(Viewport viewport3d) {
+	public void setViewport3d(final Viewport viewport3d) {
 		this.viewport3d = viewport3d;
 	}
 
@@ -110,27 +110,27 @@ public class GraphicsManager extends ApplicationAdapter {
 	 * @return the viewportUi
 	 */
 	public ScreenViewport getViewportUi() {
-		return viewportUi;
+		return this.viewportUi;
 	}
 
 	/**
 	 * @return the modelBatch
 	 */
 	public ModelBatch getModelBatch() {
-		return modelBatch;
+		return this.modelBatch;
 	}
 
 	/**
 	 * @return the stage
 	 */
 	public Stage getStage() {
-		return stage;
+		return this.stage;
 	}
 
 	/**
 	 * @param stage the stage to set
 	 */
-	public void setStage(Stage stage) {
+	public void setStage(final Stage stage) {
 		this.stage = stage;
 	}
 
@@ -138,6 +138,6 @@ public class GraphicsManager extends ApplicationAdapter {
 	 * @return the env
 	 */
 	public Environment getEnv() {
-		return env;
+		return this.env;
 	}
 }

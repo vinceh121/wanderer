@@ -8,7 +8,7 @@ import me.vinceh121.wanderer.Wanderer;
 public abstract class AbstractLivingControllableEntity extends AbstractLivingEntity implements IControllableEntity {
 	private boolean isControlled;
 
-	public AbstractLivingControllableEntity(Wanderer game) {
+	public AbstractLivingControllableEntity(final Wanderer game) {
 		super(game);
 	}
 
@@ -28,6 +28,6 @@ public abstract class AbstractLivingControllableEntity extends AbstractLivingEnt
 	}
 
 	public boolean isControlled() {
-		return isControlled;
+		return this.isControlled;
 	}
 }

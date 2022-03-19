@@ -2,9 +2,9 @@ package me.vinceh121.wanderer.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -29,11 +29,11 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	private final Vector3 walkDirection = new Vector3();
 	private Clan clan;
 
-	public CharacterW(Wanderer game) {
+	public CharacterW(final Wanderer game) {
 		this(game, 0.3f, 1.5f);
 	}
 
-	public CharacterW(Wanderer game, float capsuleRadius, float capsuleHeight) {
+	public CharacterW(final Wanderer game, final float capsuleRadius, final float capsuleHeight) {
 		super(game);
 		this.setCollideObjectOffset(new Vector3(0, 0.8f, 0));
 		this.controller = new CharacterWController(this);
@@ -41,18 +41,18 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		game.getBtWorld().addAction(this.controller);
 	}
 
-	private void onFall(boolean bigJump) {
+	private void onFall(final boolean bigJump) {
 		WandererConstants.ASSET_MANAGER.get("orig/lib/sound/step_bigland_john.wav", Sound.class).play();
 	}
 
 	@Override
-	public void updatePhysics(btDiscreteDynamicsWorld world) {
+	public void updatePhysics(final btDiscreteDynamicsWorld world) {
 		super.updatePhysics(world);
 
-		Matrix4 colTransform = this.controller.getGhostObject().getWorldTransform();
-		Vector3 colTranslation = new Vector3();
+		final Matrix4 colTransform = this.controller.getGhostObject().getWorldTransform();
+		final Vector3 colTranslation = new Vector3();
 		colTransform.getTranslation(colTranslation);
-		colTranslation.sub(getCollideObjectOffset());
+		colTranslation.sub(this.getCollideObjectOffset());
 		colTransform.setTranslation(colTranslation);
 
 		// do not call setTransform as not to cause update to ghostobject
@@ -60,7 +60,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	@Override
-	public void render(ModelBatch batch, Environment env) {
+	public void render(final ModelBatch batch, final Environment env) {
 		super.render(batch, env);
 		if (this.isControlled()) {
 			this.processInput();
@@ -69,12 +69,12 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	private void moveCamera() {
-		PerspectiveCamera cam = this.game.getCamera();
-		Vector3 characterTransform = new Vector3();
-		getTransform().getTranslation(characterTransform);
+		final PerspectiveCamera cam = this.game.getCamera();
+		final Vector3 characterTransform = new Vector3();
+		this.getTransform().getTranslation(characterTransform);
 
-		Quaternion characterRotation = new Quaternion();
-		getTransform().getRotation(characterRotation);
+		final Quaternion characterRotation = new Quaternion();
+		this.getTransform().getRotation(characterRotation);
 
 		cam.position.set(characterRotation.transform(new Vector3(0, 3, -4)).add(characterTransform));
 		cam.lookAt(characterTransform.cpy().add(0, 1, 0));
@@ -90,34 +90,34 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 	public void processInput() {
 		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			controller.setWorldTransform(controller.getWorldTransform().rotate(0, 1, 0, 5f));
+			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, 5f));
 		}
 		if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			controller.setWorldTransform(controller.getWorldTransform().rotate(0, 1, 0, -5f));
+			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, -5f));
 		}
-		characterDirection.set(0, 0, 1).rot(getTransform()).nor();
-		walkDirection.set(0, 0, 0);
+		this.characterDirection.set(0, 0, 1).rot(this.getTransform()).nor();
+		this.walkDirection.set(0, 0, 0);
 
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
-			walkDirection.add(characterDirection);
+			this.walkDirection.add(this.characterDirection);
 		}
 		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			walkDirection.add(-characterDirection.x, -characterDirection.y, -characterDirection.z);
+			this.walkDirection.add(-this.characterDirection.x, -this.characterDirection.y, -this.characterDirection.z);
 		}
-		walkDirection.scl(8f * Gdx.graphics.getDeltaTime());
-		controller.setWalkDirection(walkDirection);
+		this.walkDirection.scl(8f * Gdx.graphics.getDeltaTime());
+		this.controller.setWalkDirection(this.walkDirection);
 	}
 
 	@Override
 	public InputProcessor getInputProcessor() {
 		return new InputAdapter() {
 			@Override
-			public boolean keyDown(int keycode) {
+			public boolean keyDown(final int keycode) {
 				if (keycode == Keys.SPACE && Gdx.input.isKeyPressed(Keys.UP)) {
-					controller.bigJump();
+					CharacterW.this.controller.bigJump();
 					return true;
 				} else if (keycode == Keys.SPACE) {
-					controller.jump();
+					CharacterW.this.controller.jump();
 					return true;
 				}
 				return false;
@@ -128,17 +128,17 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	@Override
 	protected void updateTransform() {
 		super.updateTransform();
-		this.controller.getGhostObject().setWorldTransform(getTransform());
+		this.controller.getGhostObject().setWorldTransform(this.getTransform());
 	}
 
 	@Override
-	public void setMass(float mass) {
+	public void setMass(final float mass) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void dispose() {
-		this.game.getBtWorld().removeAction(controller);
+		this.game.getBtWorld().removeAction(this.controller);
 		super.dispose();
 	}
 
@@ -152,7 +152,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	@Override
-	public void onJoinClan(Clan clan) {
+	public void onJoinClan(final Clan clan) {
 		this.clan = clan;
 		// TODO change light decals colors
 	}

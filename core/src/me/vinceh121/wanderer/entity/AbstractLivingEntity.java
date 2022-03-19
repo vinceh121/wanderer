@@ -6,17 +6,17 @@ public abstract class AbstractLivingEntity extends AbstractEntity implements ILi
 	private float health = 1;
 	private boolean invincible;
 
-	public AbstractLivingEntity(Wanderer game) {
+	public AbstractLivingEntity(final Wanderer game) {
 		super(game);
 	}
 
 	@Override
 	public boolean isInvincible() {
-		return invincible;
+		return this.invincible;
 	}
 
 	@Override
-	public void setInvincible(boolean invincible) {
+	public void setInvincible(final boolean invincible) {
 		this.invincible = invincible;
 		this.checkDeath();
 	}
@@ -27,13 +27,13 @@ public abstract class AbstractLivingEntity extends AbstractEntity implements ILi
 	}
 
 	@Override
-	public void setHealth(float health) {
+	public void setHealth(final float health) {
 		this.health = health;
 		this.checkDeath();
 	}
 
 	@Override
-	public void damage(float health) {
+	public void damage(final float health) {
 		this.health += health;
 		this.checkDeath();
 	}

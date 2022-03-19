@@ -16,12 +16,12 @@ import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 public class PhysicsManager extends ApplicationAdapter {
 
 	private final btDefaultCollisionConfiguration btConfig = new btDefaultCollisionConfiguration();
-	private final btCollisionDispatcher btDispatch = new btCollisionDispatcher(btConfig);
+	private final btCollisionDispatcher btDispatch = new btCollisionDispatcher(this.btConfig);
 	private final btBroadphaseInterface btInterface = new btDbvtBroadphase();
 	private final btSequentialImpulseConstraintSolver btSolver = new btSequentialImpulseConstraintSolver();
 	private final btGhostPairCallback ghostPairCallback = new btGhostPairCallback();
-	private final btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(btDispatch, btInterface, btSolver,
-			btConfig);
+	private final btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(this.btDispatch, this.btInterface,
+			this.btSolver, this.btConfig);
 	private DebugDrawer debugDrawer;
 
 	@Override
@@ -29,11 +29,11 @@ public class PhysicsManager extends ApplicationAdapter {
 		this.debugDrawer = new DebugDrawer(); // do not init in place
 		this.debugDrawer
 				.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_DrawWireframe | btIDebugDraw.DebugDrawModes.DBG_DrawText);
-		btWorld.setDebugDrawer(debugDrawer);
+		this.btWorld.setDebugDrawer(this.debugDrawer);
 
-		this.btInterface.getOverlappingPairCache().setInternalGhostPairCallback(ghostPairCallback);
+		this.btInterface.getOverlappingPairCache().setInternalGhostPairCallback(this.ghostPairCallback);
 
-		btWorld.setGravity(new Vector3(0, -9, 0));
+		this.btWorld.setGravity(new Vector3(0, -9, 0));
 	}
 
 	@Override
@@ -46,49 +46,49 @@ public class PhysicsManager extends ApplicationAdapter {
 	 * @return the btConfig
 	 */
 	public btDefaultCollisionConfiguration getBtConfig() {
-		return btConfig;
+		return this.btConfig;
 	}
 
 	/**
 	 * @return the btDispatch
 	 */
 	public btCollisionDispatcher getBtDispatch() {
-		return btDispatch;
+		return this.btDispatch;
 	}
 
 	/**
 	 * @return the btInterface
 	 */
 	public btBroadphaseInterface getBtInterface() {
-		return btInterface;
+		return this.btInterface;
 	}
 
 	/**
 	 * @return the btSolver
 	 */
 	public btSequentialImpulseConstraintSolver getBtSolver() {
-		return btSolver;
+		return this.btSolver;
 	}
 
 	/**
 	 * @return the ghostPairCallback
 	 */
 	public btGhostPairCallback getGhostPairCallback() {
-		return ghostPairCallback;
+		return this.ghostPairCallback;
 	}
 
 	/**
 	 * @return the btWorld
 	 */
 	public btDiscreteDynamicsWorld getBtWorld() {
-		return btWorld;
+		return this.btWorld;
 	}
 
 	/**
 	 * @return the debugDrawer
 	 */
 	public DebugDrawer getDebugDrawer() {
-		return debugDrawer;
+		return this.debugDrawer;
 	}
 
 	static {

@@ -10,7 +10,7 @@ public class Building extends AbstractLivingEntity implements IClanMember {
 	private Island island;
 	private Slot slot;
 
-	public Building(Wanderer game) {
+	public Building(final Wanderer game) {
 		super(game);
 	}
 
@@ -18,13 +18,13 @@ public class Building extends AbstractLivingEntity implements IClanMember {
 	 * @return the island
 	 */
 	public Island getIsland() {
-		return island;
+		return this.island;
 	}
 
 	/**
 	 * @param island the island to set
 	 */
-	public void setIsland(Island island) {
+	public void setIsland(final Island island) {
 		this.island = island;
 	}
 
@@ -32,13 +32,13 @@ public class Building extends AbstractLivingEntity implements IClanMember {
 	 * @return the slot
 	 */
 	public Slot getSlot() {
-		return slot;
+		return this.slot;
 	}
 
 	/**
 	 * @param slot the slot to set
 	 */
-	public void setSlot(Slot slot) {
+	public void setSlot(final Slot slot) {
 		this.slot = slot;
 	}
 
@@ -53,7 +53,7 @@ public class Building extends AbstractLivingEntity implements IClanMember {
 	}
 
 	@Override
-	public void onJoinClan(Clan clan) {
+	public void onJoinClan(final Clan clan) {
 		this.clan = clan;
 		// TODO change light decal's color
 	}

@@ -10,26 +10,26 @@ import me.vinceh121.wanderer.WandererConstants;
 
 public class DebugOverlay extends Table {
 	private final Wanderer game;
-	private final Label lblFps = new Label("FPS", getSkin()), lblEntities = new Label("Entities", getSkin());
+	private final Label lblFps = new Label("FPS", this.getSkin()), lblEntities = new Label("Entities", this.getSkin());
 
-	public DebugOverlay(Wanderer game) {
+	public DebugOverlay(final Wanderer game) {
 		super(WandererConstants.getDevSkin());
 		this.game = game;
-		this.add(lblFps).align(Align.left);
+		this.add(this.lblFps).align(Align.left);
 		this.row();
-		this.add(lblEntities).align(Align.left);
+		this.add(this.lblEntities).align(Align.left);
 		this.align(Align.topLeft);
 	}
 
 	@Override
-	public void act(float delta) {
+	public void act(final float delta) {
 		this.lblFps.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
 		this.lblEntities.setText("Entities: " + this.game.getEntities().size);
-		
+
 		// pin to the top left
 		this.setX(0, Align.topLeft);
-		this.setY(getStage().getHeight(), Align.topLeft);
-		
+		this.setY(this.getStage().getHeight(), Align.topLeft);
+
 		super.act(delta);
 	}
 }

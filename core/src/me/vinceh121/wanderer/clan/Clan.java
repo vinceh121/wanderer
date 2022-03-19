@@ -9,19 +9,19 @@ public class Clan {
 	/**
 	 * Contains player, buildings and island
 	 */
-	private Array<IClanMember> members = new Array<>();
+	private final Array<IClanMember> members = new Array<>();
 
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -29,13 +29,13 @@ public class Clan {
 	 * @return the color
 	 */
 	public Color getColor() {
-		return color;
+		return this.color;
 	}
 
 	/**
 	 * @param color the color to set
 	 */
-	public void setColor(Color color) {
+	public void setColor(final Color color) {
 		this.color = color;
 	}
 
@@ -43,11 +43,11 @@ public class Clan {
 	 * @return the members
 	 */
 	public Array<IClanMember> getMembers() {
-		return members;
+		return this.members;
 	}
 
-	public void addMember(IClanMember value) {
-		members.add(value);
+	public void addMember(final IClanMember value) {
+		this.members.add(value);
 		value.onJoinClan(this);
 	}
 
@@ -57,7 +57,7 @@ public class Clan {
 	 * @return
 	 * @see com.badlogic.gdx.utils.Array#removeValue(java.lang.Object, boolean)
 	 */
-	public boolean removeMember(IClanMember value) {
-		return members.removeValue(value, true); // compare pointers, not equality
+	public boolean removeMember(final IClanMember value) {
+		return this.members.removeValue(value, true); // compare pointers, not equality
 	}
 }
