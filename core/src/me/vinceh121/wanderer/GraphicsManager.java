@@ -14,9 +14,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GraphicsManager extends ApplicationAdapter {
-	/**
-	 * do NOT call update as to not stretch UI
-	 */
 	private ScreenViewport viewportUi;
 	private Environment env;
 	private ModelBatch modelBatch;

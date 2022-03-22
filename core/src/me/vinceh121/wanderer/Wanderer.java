@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 
+import me.vinceh121.wanderer.character.CharacterMeta;
 import me.vinceh121.wanderer.character.ui.DebugOverlay;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
@@ -98,10 +99,13 @@ public class Wanderer extends ApplicationAdapter {
 		playerClan.setColor(Color.BLUE);
 		playerClan.setName("player clan");
 
+		final CharacterMeta johnMeta = WandererConstants.CHARACTER_METAS.get(1);
+		johnMeta.ensureLoading();
+
 		final CharacterW john = new CharacterW(this);
-		john.setDisplayModel("orig/char_john.n/skin.obj");
-		john.setDisplayTexture("orig/char_john.n/texturenone.png");
+		john.setMeta(johnMeta);
 		john.setTranslation(0.1f, 50f, 0.1f);
+
 		playerClan.addMember(john);
 		this.entities.add(john);
 

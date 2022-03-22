@@ -1,0 +1,9 @@
+{
+  "name" : "Goliath",
+  "model" : "orig/char_goliath.n/skin.obj",
+  "texture" : "orig/char_goliath.n/texturenone.png",
+  "fallSound" : "orig/lib/sound/step_bigland_goliath.wav",
+  "steps" : [ "orig/lib/sound/step_goliath01.wav", "orig/lib/sound/step_goliath02.wav", "orig/lib/sound/step_goliath03.wav" ],
+  "stepsSide" : [ "orig/lib/sound/step_side_goliath01.wav", "orig/lib/sound/step_side_goliath02.wav", "orig/lib/sound/step_side_goliath03.wav" ],
+  "storyMode": true
+}

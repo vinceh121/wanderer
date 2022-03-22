@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.character.CharacterMeta;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 
@@ -27,6 +28,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	private final CharacterWController controller;
 	private final Vector3 characterDirection = new Vector3();
 	private final Vector3 walkDirection = new Vector3();
+	private CharacterMeta meta;
 	private Clan clan;
 
 	public CharacterW(final Wanderer game) {
@@ -42,7 +44,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	private void onFall(final boolean bigJump) {
-		WandererConstants.ASSET_MANAGER.get("orig/lib/sound/step_bigland_john.wav", Sound.class).play();
+		WandererConstants.ASSET_MANAGER.get(this.meta.getFallSound(), Sound.class).play();
 	}
 
 	@Override
@@ -142,10 +144,6 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		super.dispose();
 	}
 
-	static {
-		WandererConstants.ASSET_MANAGER.load("orig/lib/sound/step_bigland_john.wav", Sound.class);
-	}
-
 	@Override
 	public Clan getClan() {
 		return this.clan;
@@ -155,5 +153,23 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	public void onJoinClan(final Clan clan) {
 		this.clan = clan;
 		// TODO change light decals colors
+	}
+
+	/**
+	 * @return the meta
+	 */
+	public CharacterMeta getMeta() {
+		return meta;
+	}
+
+	/**
+	 * Sets the {@link CharacterMeta} objet, and applies its model and texture
+	 *
+	 * @param meta the meta to set
+	 */
+	public void setMeta(CharacterMeta meta) {
+		this.meta = meta;
+		this.setDisplayModel(meta.getModel());
+		this.setDisplayTexture(meta.getTexture());
 	}
 }
