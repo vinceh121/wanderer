@@ -3,7 +3,6 @@ package me.vinceh121.wanderer.entity;
 import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
 import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
@@ -12,10 +11,13 @@ import com.badlogic.gdx.physics.bullet.dynamics.CustomActionInterface;
 import com.badlogic.gdx.physics.bullet.dynamics.btKinematicCharacterController;
 import com.badlogic.gdx.utils.Array;
 
+import me.vinceh121.wanderer.phys.ContactListenerAdapter;
+import me.vinceh121.wanderer.phys.IContactListener;
+
 public class CharacterWController extends CustomActionInterface {
-	private final ContactListener contactListener = new ContactListener() {
+	private final IContactListener contactListener = new ContactListenerAdapter() {
 		@Override
-		public void onContactStarted(final btCollisionObject colObj0, final btCollisionObject colObj1) {
+		public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
 			if (colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer()
 					|| colObj1.getCPointer() == CharacterWController.this.ghostObj.getCPointer()) {
 				CharacterWController.this.stopJump();
@@ -47,7 +49,7 @@ public class CharacterWController extends CustomActionInterface {
 				(short) btBroadphaseProxy.CollisionFilterGroups.CharacterFilter,
 				(short) (btBroadphaseProxy.CollisionFilterGroups.StaticFilter
 						| btBroadphaseProxy.CollisionFilterGroups.DefaultFilter));
-		this.contactListener.enable();
+		this.character.game.getPhysicsManager().addContactListener(contactListener);
 	}
 
 	public void bigJump() {
@@ -161,7 +163,7 @@ public class CharacterWController extends CustomActionInterface {
 
 	@Override
 	public void dispose() {
-		this.contactListener.dispose();
+		this.character.game.getPhysicsManager().removeContactListener(contactListener);
 		this.delegateController.dispose();
 		super.dispose();
 	}

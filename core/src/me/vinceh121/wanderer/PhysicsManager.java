@@ -13,8 +13,10 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 
-public class PhysicsManager extends ApplicationAdapter {
+import me.vinceh121.wanderer.phys.ContactDispatcher;
+import me.vinceh121.wanderer.phys.IContactListener;
 
+public class PhysicsManager extends ApplicationAdapter {
 	private final btDefaultCollisionConfiguration btConfig = new btDefaultCollisionConfiguration();
 	private final btCollisionDispatcher btDispatch = new btCollisionDispatcher(this.btConfig);
 	private final btBroadphaseInterface btInterface = new btDbvtBroadphase();
@@ -22,18 +24,22 @@ public class PhysicsManager extends ApplicationAdapter {
 	private final btGhostPairCallback ghostPairCallback = new btGhostPairCallback();
 	private final btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(this.btDispatch, this.btInterface,
 			this.btSolver, this.btConfig);
+	private ContactDispatcher contactDispatcher;
 	private DebugDrawer debugDrawer;
 
 	@Override
 	public void create() {
 		this.debugDrawer = new DebugDrawer(); // do not init in place
-		this.debugDrawer
-				.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_DrawWireframe | btIDebugDraw.DebugDrawModes.DBG_DrawText);
+		this.debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_DrawWireframe
+				| btIDebugDraw.DebugDrawModes.DBG_DrawText | btIDebugDraw.DebugDrawModes.DBG_DrawContactPoints);
 		this.btWorld.setDebugDrawer(this.debugDrawer);
 
 		this.btInterface.getOverlappingPairCache().setInternalGhostPairCallback(this.ghostPairCallback);
 
 		this.btWorld.setGravity(new Vector3(0, -9, 0));
+
+		this.contactDispatcher = new ContactDispatcher();
+		this.contactDispatcher.enableOnStarted();
 	}
 
 	@Override
@@ -89,6 +95,18 @@ public class PhysicsManager extends ApplicationAdapter {
 	 */
 	public DebugDrawer getDebugDrawer() {
 		return this.debugDrawer;
+	}
+
+	public ContactDispatcher getContactDispatcher() {
+		return contactDispatcher;
+	}
+
+	public void addContactListener(IContactListener value) {
+		contactDispatcher.addContactListener(value);
+	}
+
+	public boolean removeContactListener(IContactListener value) {
+		return contactDispatcher.removeContactListener(value);
 	}
 
 	static {

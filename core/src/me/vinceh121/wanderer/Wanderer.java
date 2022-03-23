@@ -8,10 +8,15 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 
+import me.vinceh121.wanderer.building.Building;
+import me.vinceh121.wanderer.building.Island;
+import me.vinceh121.wanderer.building.Slot;
+import me.vinceh121.wanderer.building.SlotType;
 import me.vinceh121.wanderer.character.CharacterMeta;
 import me.vinceh121.wanderer.character.ui.DebugOverlay;
 import me.vinceh121.wanderer.clan.Clan;
@@ -19,7 +24,6 @@ import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.CharacterW;
 import me.vinceh121.wanderer.entity.IControllableEntity;
-import me.vinceh121.wanderer.entity.Prop;
 
 public class Wanderer extends ApplicationAdapter {
 	private final PhysicsManager physicsManager = new PhysicsManager();
@@ -35,6 +39,7 @@ public class Wanderer extends ApplicationAdapter {
 	private boolean debugBullet = false, glxDebug = false;
 
 	private IControllableEntity controlledEntity;
+	private Building interactingBuilding;
 
 	@Override
 	public void create() {
@@ -88,16 +93,30 @@ public class Wanderer extends ApplicationAdapter {
 		this.entities = new Array<>();
 		this.clans = new Array<>();
 
-		final Prop e = new Prop(this);
-		e.setCollideModel("orig/first_island.n/collide.obj");
-		e.setDisplayModel("orig/first_island.n/terrain.obj");
-		e.setDisplayTexture("orig/first_island.n/texturenone.png");
-		e.setExactCollideModel(true);
-		this.entities.add(e);
+		///// GAMEPLAY
 
 		final Clan playerClan = new Clan();
 		playerClan.setColor(Color.BLUE);
 		playerClan.setName("player clan");
+
+		final Island island = new Island(this);
+		island.setCollideModel("orig/first_island.n/collide.obj");
+		island.setDisplayModel("orig/first_island.n/terrain.obj");
+		island.setDisplayTexture("orig/first_island.n/texturenone.png");
+		island.setExactCollideModel(true);
+		island.addSlot(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8)));
+		this.addEntity(island);
+		playerClan.addMember(island);
+
+		final Building lighthouse = new Building(this);
+		lighthouse.setDisplayModel("orig/j_lighthouse01.n/j_lighthouse01.obj");
+		lighthouse.setCollideModel("orig/j_lighthouse01.n/collide.obj");
+		lighthouse.setDisplayTexture("orig/j_lighthouse01.n/texturenone.png");
+		lighthouse.setExactCollideModel(true);
+		lighthouse.setSlot(island.getSlot(0));
+		lighthouse.setIsland(island);
+		this.addEntity(lighthouse);
+		playerClan.addMember(lighthouse);
 
 		final CharacterMeta johnMeta = WandererConstants.CHARACTER_METAS.get(1);
 		johnMeta.ensureLoading();
@@ -107,7 +126,7 @@ public class Wanderer extends ApplicationAdapter {
 		john.setTranslation(0.1f, 50f, 0.1f);
 
 		playerClan.addMember(john);
-		this.entities.add(john);
+		this.addEntity(john);
 
 		this.controlEntity(john);
 	}
@@ -174,6 +193,24 @@ public class Wanderer extends ApplicationAdapter {
 		this.inputMultiplexer.getProcessors().set(0, this.camcon);
 		this.controlledEntity.onRemoveControl();
 		this.controlledEntity = null;
+	}
+
+	public IControllableEntity getControlledEntity() {
+		return controlledEntity;
+	}
+
+	public void enterInteractBuilding(final Building building) {
+		this.interactingBuilding = building;
+		System.out.println("interacting");
+	}
+
+	public void removeInteractBuilding() {
+		this.interactingBuilding = null;
+		System.out.println("remove interact");
+	}
+
+	public Building getInteractingBuilding() {
+		return interactingBuilding;
 	}
 
 	@Override

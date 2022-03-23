@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
 import me.vinceh121.wanderer.Wanderer;
@@ -171,5 +172,13 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		this.meta = meta;
 		this.setDisplayModel(meta.getModel());
 		this.setDisplayTexture(meta.getTexture());
+	}
+
+	/**
+	 * @return
+	 * @see me.vinceh121.wanderer.entity.CharacterWController#getGhostObject()
+	 */
+	public btPairCachingGhostObject getGhostObject() {
+		return controller.getGhostObject();
 	}
 }
