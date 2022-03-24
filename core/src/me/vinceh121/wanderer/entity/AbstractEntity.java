@@ -34,7 +34,7 @@ public abstract class AbstractEntity implements Disposable {
 	private ModelInstance cacheDisplayModel;
 	private btRigidBody collideObject;
 	private float mass;
-	private boolean exactCollideModel;
+	private boolean exactCollideModel = true;
 
 	public AbstractEntity(final Wanderer game) {
 		this.game = game;

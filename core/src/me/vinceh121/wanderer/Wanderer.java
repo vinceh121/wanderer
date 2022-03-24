@@ -3,6 +3,7 @@ package me.vinceh121.wanderer;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.utils.Logger;
 
 import me.vinceh121.wanderer.building.Building;
 import me.vinceh121.wanderer.building.Island;
+import me.vinceh121.wanderer.building.Lighthouse;
 import me.vinceh121.wanderer.building.Slot;
 import me.vinceh121.wanderer.building.SlotType;
 import me.vinceh121.wanderer.character.CharacterMeta;
@@ -103,16 +105,14 @@ public class Wanderer extends ApplicationAdapter {
 		island.setCollideModel("orig/first_island.n/collide.obj");
 		island.setDisplayModel("orig/first_island.n/terrain.obj");
 		island.setDisplayTexture("orig/first_island.n/texturenone.png");
-		island.setExactCollideModel(true);
 		island.addSlot(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8)));
 		this.addEntity(island);
 		playerClan.addMember(island);
 
-		final Building lighthouse = new Building(this);
+		final Lighthouse lighthouse = new Lighthouse(this);
 		lighthouse.setDisplayModel("orig/j_lighthouse01.n/j_lighthouse01.obj");
 		lighthouse.setCollideModel("orig/j_lighthouse01.n/collide.obj");
 		lighthouse.setDisplayTexture("orig/j_lighthouse01.n/texturenone.png");
-		lighthouse.setExactCollideModel(true);
 		lighthouse.setSlot(island.getSlot(0));
 		lighthouse.setIsland(island);
 		this.addEntity(lighthouse);
@@ -200,7 +200,11 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public void enterInteractBuilding(final Building building) {
+		if (this.interactingBuilding == building) {
+			return;
+		}
 		this.interactingBuilding = building;
+		WandererConstants.ASSET_MANAGER.get("orig/feedback/use_ok.wav", Sound.class).play();
 		System.out.println("interacting");
 	}
 

@@ -3,7 +3,7 @@ package me.vinceh121.wanderer.entity;
 import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
+import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy.CollisionFilterGroups;
 import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
@@ -45,10 +45,9 @@ public class CharacterWController extends CustomActionInterface {
 		this.ghostObj.setWorldTransform(character.getTransform().cpy().rotate(Vector3.X, 90));
 		// do NOT add this action to the world
 		this.delegateController = new btKinematicCharacterController(this.ghostObj, shape, 0.35f, Vector3.Y);
-		this.character.game.getBtWorld().addCollisionObject(this.ghostObj,
-				(short) btBroadphaseProxy.CollisionFilterGroups.CharacterFilter,
-				(short) (btBroadphaseProxy.CollisionFilterGroups.StaticFilter
-						| btBroadphaseProxy.CollisionFilterGroups.DefaultFilter));
+		this.character.game.getBtWorld().addCollisionObject(this.ghostObj, CollisionFilterGroups.CharacterFilter,
+				CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter
+						| CollisionFilterGroups.SensorTrigger);
 		this.character.game.getPhysicsManager().addContactListener(contactListener);
 	}
 

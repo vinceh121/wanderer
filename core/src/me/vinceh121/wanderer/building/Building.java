@@ -3,8 +3,9 @@ package me.vinceh121.wanderer.building;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
+import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy.CollisionFilterGroups;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
 import com.badlogic.gdx.physics.bullet.collision.btGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
@@ -16,9 +17,10 @@ import me.vinceh121.wanderer.entity.CharacterW;
 import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
-public class Building extends AbstractLivingEntity implements IClanMember {
+public abstract class Building extends AbstractLivingEntity implements IClanMember {
 	private final btGhostObject interactZone;
 	private final IContactListener interactListener;
+	private String name;
 	private Clan clan;
 	private Island island;
 	private Slot slot;
@@ -27,7 +29,7 @@ public class Building extends AbstractLivingEntity implements IClanMember {
 		super(game);
 
 		this.interactZone = new btGhostObject();
-		this.interactZone.setCollisionShape(new btCapsuleShape(10f, 20f));
+		this.interactZone.setCollisionFlags(CollisionFlags.CF_NO_CONTACT_RESPONSE);
 		this.interactListener = new ContactListenerAdapter() {
 			@Override
 			public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
@@ -45,8 +47,33 @@ public class Building extends AbstractLivingEntity implements IClanMember {
 					game.enterInteractBuilding(Building.this);
 				}
 			}
+
+			@Override
+			public void onContactEnded(btCollisionObject colObj0, btCollisionObject colObj1) {
+				// do not interact if we aren't controlling a character
+				if (!(game.getControlledEntity() instanceof CharacterW)) {
+					return;
+				}
+				CharacterW chara = (CharacterW) game.getControlledEntity();
+
+				// if collided objects are interaction zone and player character
+				if ((colObj0.getCPointer() == interactZone.getCPointer()
+						&& colObj1.getCPointer() == chara.getGhostObject().getCPointer())
+						|| (colObj1.getCPointer() == interactZone.getCPointer()
+								&& colObj0.getCPointer() == chara.getGhostObject().getCPointer())) {
+					game.removeInteractBuilding();
+				}
+			}
 		};
 		this.game.getPhysicsManager().addContactListener(interactListener);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -77,6 +104,14 @@ public class Building extends AbstractLivingEntity implements IClanMember {
 		this.slot = slot;
 	}
 
+	public btGhostObject getInteractZone() {
+		return interactZone;
+	}
+
+	public IContactListener getInteractListener() {
+		return interactListener;
+	}
+
 	@Override
 	public void onDeath() {
 		// TODO explode
@@ -103,7 +138,8 @@ public class Building extends AbstractLivingEntity implements IClanMember {
 	@Override
 	public void enterBtWorld(btDiscreteDynamicsWorld world) {
 		super.enterBtWorld(world);
-		world.addCollisionObject(this.interactZone);
+		world.addCollisionObject(this.interactZone, CollisionFilterGroups.SensorTrigger,
+				CollisionFilterGroups.CharacterFilter);
 	}
 
 	@Override
