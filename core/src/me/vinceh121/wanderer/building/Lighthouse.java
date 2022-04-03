@@ -15,4 +15,9 @@ public class Lighthouse extends Building {
 		super.onDeath();
 		this.getIsland().damage(Float.MAX_VALUE);
 	}
+	
+	@Override
+	public String getName() {
+		return "Lighthouse";
+	}
 }

@@ -1,4 +1,4 @@
-package me.vinceh121.wanderer.character.ui;
+package me.vinceh121.wanderer.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;

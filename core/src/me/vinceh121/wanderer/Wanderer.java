@@ -3,14 +3,15 @@ package me.vinceh121.wanderer;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 
@@ -20,12 +21,13 @@ import me.vinceh121.wanderer.building.Lighthouse;
 import me.vinceh121.wanderer.building.Slot;
 import me.vinceh121.wanderer.building.SlotType;
 import me.vinceh121.wanderer.character.CharacterMeta;
-import me.vinceh121.wanderer.character.ui.DebugOverlay;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.CharacterW;
 import me.vinceh121.wanderer.entity.IControllableEntity;
+import me.vinceh121.wanderer.ui.BlinkLabel;
+import me.vinceh121.wanderer.ui.DebugOverlay;
 
 public class Wanderer extends ApplicationAdapter {
 	private final PhysicsManager physicsManager = new PhysicsManager();
@@ -42,6 +44,8 @@ public class Wanderer extends ApplicationAdapter {
 
 	private IControllableEntity controlledEntity;
 	private Building interactingBuilding;
+
+	private BlinkLabel messageLabel;
 
 	@Override
 	public void create() {
@@ -94,6 +98,10 @@ public class Wanderer extends ApplicationAdapter {
 
 		this.entities = new Array<>();
 		this.clans = new Array<>();
+
+		this.messageLabel = new BlinkLabel("", WandererConstants.getDevSkin());
+		this.messageLabel.setAlignment(Align.center);
+		this.graphicsManager.getStage().addActor(this.messageLabel);
 
 		///// GAMEPLAY
 
@@ -204,22 +212,29 @@ public class Wanderer extends ApplicationAdapter {
 			return;
 		}
 		this.interactingBuilding = building;
+		this.showMessage("Control " + building.getName());
 		WandererConstants.ASSET_MANAGER.get("orig/feedback/use_ok.wav", Sound.class).play();
-		System.out.println("interacting");
 	}
 
 	public void removeInteractBuilding() {
 		this.interactingBuilding = null;
-		System.out.println("remove interact");
 	}
 
 	public Building getInteractingBuilding() {
 		return interactingBuilding;
 	}
 
+	public void showMessage(final String message) {
+		this.messageLabel.setColor(1f, 1f, 1f, 0f);
+		this.messageLabel.setText(message);
+		this.messageLabel.blink();
+	}
+
 	@Override
 	public void resize(final int width, final int height) {
 		this.graphicsManager.resize(width, height);
+		this.messageLabel.setX(width / 2);
+		this.messageLabel.setY(height - 30);
 	}
 
 	@Override

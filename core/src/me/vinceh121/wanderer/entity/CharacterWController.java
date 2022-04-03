@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy.CollisionFilterGroups;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
 import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
@@ -18,8 +19,11 @@ public class CharacterWController extends CustomActionInterface {
 	private final IContactListener contactListener = new ContactListenerAdapter() {
 		@Override
 		public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
-			if (colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer()
-					|| colObj1.getCPointer() == CharacterWController.this.ghostObj.getCPointer()) {
+			// if either obj is this character and the other isn't a sensor
+			if ((colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer()
+					&& ((colObj1.getCollisionFlags() & CollisionFlags.CF_NO_CONTACT_RESPONSE) == 0))
+					|| colObj1.getCPointer() == CharacterWController.this.ghostObj.getCPointer()
+							&& ((colObj0.getCollisionFlags() & CollisionFlags.CF_NO_CONTACT_RESPONSE) == 0)) {
 				CharacterWController.this.stopJump();
 			}
 		};
