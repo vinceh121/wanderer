@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
@@ -129,15 +130,14 @@ public abstract class AbstractEntity implements Disposable {
 		if (this.displayTexture != null) {
 			texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
-//			final String sandName = "orig/lib/textures/detailmap_sandnone.png";
-			final String sandName = "orig/bomber03_garage.n/texture2none.png";
+			final String sandName = "orig/lib/textures/detailmap_sandnone.png";
 			WandererConstants.ASSET_MANAGER.load(sandName, Texture.class);
 			WandererConstants.ASSET_MANAGER.finishLoadingAsset(sandName);
 			Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
 			sand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 
-			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture), TiledMaterialAttribute.create(sand, 0.2f));
+			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture), TiledMaterialAttribute.create(sand, 0.7f, new Vector2(100f, 100f)));
 		}
 		this.setCacheDisplayModel(instance);
 		this.getCacheDisplayModel().transform = this.transform;
