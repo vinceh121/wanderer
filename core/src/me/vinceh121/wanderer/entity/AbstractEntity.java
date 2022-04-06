@@ -71,8 +71,8 @@ public abstract class AbstractEntity implements Disposable {
 	private void loadCollideModelMesh() {
 		final Model model = WandererConstants.ASSET_MANAGER.get(this.collideModel, Model.class);
 
-		this.setCollideObject(new btRigidBody(this.mass, this.createMotionState(),
-				new btBvhTriangleMeshShape(model.meshParts)));
+		this.setCollideObject(
+				new btRigidBody(this.mass, this.createMotionState(), new btBvhTriangleMeshShape(model.meshParts)));
 	}
 
 	private void loadCollideModelConvex() {
@@ -121,9 +121,9 @@ public abstract class AbstractEntity implements Disposable {
 
 	public void loadDisplayModel() {
 		final Model model = WandererConstants.ASSET_MANAGER.get(this.getDisplayModel(), Model.class);
-		final Texture texture = WandererConstants.ASSET_MANAGER.get(this.displayTexture, Texture.class);
 		final ModelInstance instance = new ModelInstance(model);
 		if (this.displayTexture != null) {
+			final Texture texture = WandererConstants.ASSET_MANAGER.get(this.displayTexture, Texture.class);
 			texture.setFilter(TextureFilter.MipMapNearestLinear, TextureFilter.Linear);
 
 			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
@@ -193,7 +193,9 @@ public abstract class AbstractEntity implements Disposable {
 
 	public void setMass(final float mass) {
 		this.mass = mass;
-		this.collideObject.setMassProps(mass, new Vector3()); // inertia doesn't change if vector is (0,0,0)
+		if (this.collideObject != null) {
+			this.collideObject.setMassProps(mass, new Vector3()); // inertia doesn't change if vector is (0,0,0)
+		}
 	}
 
 	protected void updateTransform() {
