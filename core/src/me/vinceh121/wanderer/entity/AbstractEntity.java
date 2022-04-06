@@ -117,7 +117,7 @@ public abstract class AbstractEntity implements Disposable {
 			} else {
 				WandererConstants.ASSET_MANAGER.load(this.getDisplayModel(), Model.class);
 				if (this.displayTexture != null) {
-					WandererConstants.ASSET_MANAGER.load(this.displayTexture, Texture.class);
+					WandererConstants.ASSET_MANAGER.load(this.displayTexture, Texture.class, WandererConstants.MIPMAPS);
 				}
 			}
 		}
@@ -128,7 +128,7 @@ public abstract class AbstractEntity implements Disposable {
 		final Texture texture = WandererConstants.ASSET_MANAGER.get(this.displayTexture, Texture.class);
 		final ModelInstance instance = new ModelInstance(model);
 		if (this.displayTexture != null) {
-			texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			texture.setFilter(TextureFilter.MipMapNearestLinear, TextureFilter.Linear);
 
 			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
 			instance.materials.get(0).set(this.textureAttributes); // this is called set but it's more like add

@@ -120,12 +120,12 @@ public class Wanderer extends ApplicationAdapter {
 		island.setDisplayTexture("orig/first_island.n/texturenone.png");
 
 		final String sandName = "orig/lib/textures/detailmap_sandnone.png";
-		WandererConstants.ASSET_MANAGER.load(sandName, Texture.class);
+		WandererConstants.ASSET_MANAGER.load(sandName, Texture.class, WandererConstants.MIPMAPS);
 		WandererConstants.ASSET_MANAGER.finishLoadingAsset(sandName);
 		Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
 		sand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
-		island.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(90f, 90f)));
+		island.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(50f, 50f)));
 
 		island.addSlot(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8)));
 		this.addEntity(island);

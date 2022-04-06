@@ -2,6 +2,7 @@ package me.vinceh121.wanderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
@@ -15,12 +16,14 @@ import me.vinceh121.wanderer.character.CharacterMeta;
 public final class WandererConstants {
 	public static final AssetManager ASSET_MANAGER = new AssetManager();
 	public static final Array<CharacterMeta> CHARACTER_METAS = new Array<>();
+	public static final TextureParameter MIPMAPS = new TextureParameter();
 
 	public static Skin getDevSkin() {
 		return WandererConstants.ASSET_MANAGER.get("skins/default/uiskin.json", Skin.class);
 	}
 
 	static {
+		MIPMAPS.genMipMaps = true;
 		WandererConstants.ASSET_MANAGER.load("skins/default/uiskin.json", Skin.class);
 		WandererConstants.ASSET_MANAGER.finishLoading();
 

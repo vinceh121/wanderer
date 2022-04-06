@@ -116,7 +116,7 @@ public class CharacterMeta {
 	 */
 	public void ensureLoading() {
 		WandererConstants.ASSET_MANAGER.load(this.model, Model.class);
-		WandererConstants.ASSET_MANAGER.load(this.texture, Texture.class);
+		WandererConstants.ASSET_MANAGER.load(this.texture, Texture.class, WandererConstants.MIPMAPS);
 		WandererConstants.ASSET_MANAGER.load(this.fallSound, Sound.class);
 
 		for (String s : this.steps) {
