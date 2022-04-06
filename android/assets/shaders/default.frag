@@ -131,10 +131,13 @@ void main() {
 	#endif // normalFlag
 
 	#if defined(diffuseTextureFlag) && defined(tiledMaterialFlag)
-		vec4 diffuse = mix(
-				texture2D(u_diffuseTexture, v_diffuseUV),
-				texture2D(u_tiledMaterialTexture, u_tiledMaterialRatio * v_diffuseUV),
-				u_tiledMaterialOpacity);
+		// vec4 diffuse = mix(texture2D(u_diffuseTexture, v_diffuseUV),
+		// texture2D(u_tiledMaterialTexture, u_tiledMaterialRatio * v_diffuseUV), u_tiledMaterialOpacity)
+		vec4 diffuse =
+				(
+					texture2D(u_diffuseTexture, v_diffuseUV) *
+					texture2D(u_tiledMaterialTexture, u_tiledMaterialRatio * v_diffuseUV)
+				) * u_tiledMaterialOpacity;
 	#elif defined(diffuseTextureFlag) && defined(diffuseColorFlag) && defined(colorFlag)
 		vec4 diffuse = texture2D(u_diffuseTexture, v_diffuseUV) * u_diffuseColor * v_color;
 	#elif defined(diffuseTextureFlag) && defined(diffuseColorFlag)

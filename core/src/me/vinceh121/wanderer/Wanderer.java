@@ -8,7 +8,11 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Align;
@@ -26,6 +30,7 @@ import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.CharacterW;
 import me.vinceh121.wanderer.entity.IControllableEntity;
+import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
 import me.vinceh121.wanderer.ui.BlinkLabel;
 import me.vinceh121.wanderer.ui.DebugOverlay;
 
@@ -113,6 +118,15 @@ public class Wanderer extends ApplicationAdapter {
 		island.setCollideModel("orig/first_island.n/collide.obj");
 		island.setDisplayModel("orig/first_island.n/terrain.obj");
 		island.setDisplayTexture("orig/first_island.n/texturenone.png");
+
+		final String sandName = "orig/lib/textures/detailmap_sandnone.png";
+		WandererConstants.ASSET_MANAGER.load(sandName, Texture.class);
+		WandererConstants.ASSET_MANAGER.finishLoadingAsset(sandName);
+		Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
+		sand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
+		island.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(90f, 90f)));
+
 		island.addSlot(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8)));
 		this.addEntity(island);
 		playerClan.addMember(island);

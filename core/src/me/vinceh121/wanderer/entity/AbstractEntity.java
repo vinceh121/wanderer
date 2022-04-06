@@ -5,7 +5,7 @@ import java.util.Objects;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.Texture.TextureWrap;
+import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
@@ -23,14 +22,15 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btDefaultMotionState;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
-import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
 
 public abstract class AbstractEntity implements Disposable {
 	protected final Wanderer game;
+	private final Array<Attribute> textureAttributes = new Array<>();
 	private Matrix4 transform = new Matrix4();
 	private Vector3 collideObjectOffset = new Vector3();
 	private String displayModel, collideModel, displayTexture;
@@ -130,14 +130,8 @@ public abstract class AbstractEntity implements Disposable {
 		if (this.displayTexture != null) {
 			texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
-			final String sandName = "orig/lib/textures/detailmap_sandnone.png";
-			WandererConstants.ASSET_MANAGER.load(sandName, Texture.class);
-			WandererConstants.ASSET_MANAGER.finishLoadingAsset(sandName);
-			Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
-			sand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
-
-			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture), TiledMaterialAttribute.create(sand, 0.7f, new Vector2(100f, 100f)));
+			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
+			instance.materials.get(0).set(this.textureAttributes); // this is called set but it's more like add
 		}
 		this.setCacheDisplayModel(instance);
 		this.getCacheDisplayModel().transform = this.transform;
@@ -367,6 +361,22 @@ public abstract class AbstractEntity implements Disposable {
 	 */
 	public void setCollideObjectOffset(final Vector3 collideObjectOffset) {
 		this.collideObjectOffset = collideObjectOffset;
+	}
+
+	public Array<Attribute> getTextureAttributes() {
+		return textureAttributes;
+	}
+
+	public void addTextureAttribute(Attribute value) {
+		textureAttributes.add(value);
+	}
+
+	public boolean removeTextureAttribute(Attribute value) {
+		return textureAttributes.removeValue(value, false);
+	}
+
+	public Attribute removeTextureAttribute(int index) {
+		return textureAttributes.removeIndex(index);
 	}
 
 	@Override
