@@ -1,4 +1,4 @@
-package me.vinceh121.wanderer.entity;
+package me.vinceh121.wanderer.character;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -16,9 +16,9 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
-import me.vinceh121.wanderer.character.CharacterMeta;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
+import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
 
 /**
  * An entity of a character, a person.
@@ -39,7 +39,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	public CharacterW(final Wanderer game, final float capsuleRadius, final float capsuleHeight) {
 		super(game);
 		this.setCollideObjectOffset(new Vector3(0, 0.8f, 0));
-		this.controller = new CharacterWController(this);
+		this.controller = new CharacterWController(this.game, this);
 		this.controller.setFallListener(this::onFall);
 		game.getBtWorld().addAction(this.controller);
 	}
@@ -176,7 +176,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 	/**
 	 * @return
-	 * @see me.vinceh121.wanderer.entity.CharacterWController#getGhostObject()
+	 * @see me.vinceh121.wanderer.character.CharacterWController#getGhostObject()
 	 */
 	public btPairCachingGhostObject getGhostObject() {
 		return controller.getGhostObject();

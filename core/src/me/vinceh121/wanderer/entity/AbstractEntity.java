@@ -17,7 +17,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btConvexHullShape;
-import com.badlogic.gdx.physics.bullet.collision.btTriangleMesh;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btDefaultMotionState;
@@ -72,11 +71,8 @@ public abstract class AbstractEntity implements Disposable {
 	private void loadCollideModelMesh() {
 		final Model model = WandererConstants.ASSET_MANAGER.get(this.collideModel, Model.class);
 
-		final btTriangleMesh btmesh = new btTriangleMesh();
-		btmesh.addMeshParts(model.meshParts);
-
-		this.setCollideObject(
-				new btRigidBody(this.mass, this.createMotionState(), new btBvhTriangleMeshShape(model.meshParts)));
+		this.setCollideObject(new btRigidBody(this.mass, this.createMotionState(),
+				new btBvhTriangleMeshShape(model.meshParts)));
 	}
 
 	private void loadCollideModelConvex() {

@@ -10,10 +10,10 @@ import com.badlogic.gdx.physics.bullet.collision.btGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractLivingEntity;
-import me.vinceh121.wanderer.entity.CharacterW;
 import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
