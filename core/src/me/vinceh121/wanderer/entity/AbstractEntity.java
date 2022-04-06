@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
 
 public abstract class AbstractEntity implements Disposable {
 	protected final Wanderer game;
@@ -126,7 +128,16 @@ public abstract class AbstractEntity implements Disposable {
 		final ModelInstance instance = new ModelInstance(model);
 		if (this.displayTexture != null) {
 			texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
+
+//			final String sandName = "orig/lib/textures/detailmap_sandnone.png";
+			final String sandName = "orig/bomber03_garage.n/texture2none.png";
+			WandererConstants.ASSET_MANAGER.load(sandName, Texture.class);
+			WandererConstants.ASSET_MANAGER.finishLoadingAsset(sandName);
+			Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
+			sand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
+
+			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture), TiledMaterialAttribute.create(sand, 0.2f));
 		}
 		this.setCacheDisplayModel(instance);
 		this.getCacheDisplayModel().transform = this.transform;

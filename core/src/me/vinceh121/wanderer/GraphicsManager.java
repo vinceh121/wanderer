@@ -6,12 +6,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import me.vinceh121.wanderer.glx.WandererShader;
 
 public class GraphicsManager extends ApplicationAdapter {
 	private ScreenViewport viewportUi;
@@ -23,7 +28,13 @@ public class GraphicsManager extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		this.modelBatch = new ModelBatch();
+		this.modelBatch = new ModelBatch(new DefaultShaderProvider(Gdx.files.internal("shaders/default.vert"),
+				Gdx.files.internal("shaders/default.frag")) {
+			@Override
+			protected Shader createShader(Renderable renderable) {
+				return new WandererShader(renderable, config);
+			}
+		});
 
 		this.env = new Environment();
 		this.env.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
