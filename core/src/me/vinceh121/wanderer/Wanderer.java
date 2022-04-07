@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
+import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -30,6 +31,7 @@ import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.IControllableEntity;
+import me.vinceh121.wanderer.entity.Prop;
 import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
 import me.vinceh121.wanderer.ui.BlinkLabel;
 import me.vinceh121.wanderer.ui.DebugOverlay;
@@ -122,14 +124,21 @@ public class Wanderer extends ApplicationAdapter {
 		final String sandName = "orig/lib/textures/detailmap_sandnone.png";
 		WandererConstants.ASSET_MANAGER.load(sandName, Texture.class, WandererConstants.MIPMAPS);
 		WandererConstants.ASSET_MANAGER.finishLoadingAsset(sandName);
-		Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
+		final Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
 		sand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 		island.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(50f, 50f)));
+		island.addTextureAttribute(IntAttribute.createCullFace(0));
 
 		island.addSlot(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8)));
 		this.addEntity(island);
 		playerClan.addMember(island);
+		
+		final Prop grass = new Prop(this);
+		grass.setDisplayModel("orig/first_island.n/grass.obj");
+		grass.setDisplayTexture("orig/lib/detailobjects01/pflanzen_rasteralpha.png");
+		grass.addTextureAttribute(IntAttribute.createCullFace(0));
+		this.addEntity(grass);
 
 		final Lighthouse lighthouse = new Lighthouse(this);
 		lighthouse.setDisplayModel("orig/j_lighthouse01.n/j_lighthouse01.obj");
