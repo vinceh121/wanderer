@@ -66,6 +66,7 @@ public abstract class AbstractEntity implements Disposable {
 		} else {
 			this.loadCollideModelConvex();
 		}
+		this.updateTransform();
 	}
 
 	private void loadCollideModelMesh() {

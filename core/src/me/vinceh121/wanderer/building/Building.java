@@ -1,8 +1,5 @@
 package me.vinceh121.wanderer.building;
 
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy.CollisionFilterGroups;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
@@ -84,6 +81,8 @@ public abstract class Building extends AbstractLivingEntity implements IClanMemb
 	}
 
 	/**
+	 * Do not call direct, use {@link Island#addBuilding(Building, Slot)}
+	 *
 	 * @param island the island to set
 	 */
 	public void setIsland(final Island island) {
@@ -98,6 +97,8 @@ public abstract class Building extends AbstractLivingEntity implements IClanMemb
 	}
 
 	/**
+	 * Do not call direct, use {@link Island#addBuilding(Building, Slot)}
+	 *
 	 * @param slot the slot to set
 	 */
 	public void setSlot(final Slot slot) {
@@ -126,13 +127,6 @@ public abstract class Building extends AbstractLivingEntity implements IClanMemb
 	public void onJoinClan(final Clan clan) {
 		this.clan = clan;
 		// TODO change light decal's color
-	}
-
-	@Override
-	public void render(ModelBatch batch, Environment env) {
-		// TODO move into Island code, run only on island move
-		this.setTranslation(this.island.getTransform().getTranslation(new Vector3()).add(this.slot.getLocation()));
-		super.render(batch, env);
 	}
 
 	@Override

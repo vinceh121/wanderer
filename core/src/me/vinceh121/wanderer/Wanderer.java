@@ -133,7 +133,7 @@ public class Wanderer extends ApplicationAdapter {
 		island.addSlot(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8)));
 		this.addEntity(island);
 		playerClan.addMember(island);
-		
+
 		final Prop grass = new Prop(this);
 		grass.setDisplayModel("orig/first_island.n/grass.obj");
 		grass.setDisplayTexture("orig/lib/detailobjects01/pflanzen_rasteralpha.png");
@@ -144,9 +144,8 @@ public class Wanderer extends ApplicationAdapter {
 		lighthouse.setDisplayModel("orig/j_lighthouse01.n/j_lighthouse01.obj");
 		lighthouse.setCollideModel("orig/j_lighthouse01.n/collide.obj");
 		lighthouse.setDisplayTexture("orig/j_lighthouse01.n/texturenone.png");
-		lighthouse.setSlot(island.getSlot(0));
-		lighthouse.setIsland(island);
 		this.addEntity(lighthouse);
+		island.addBuilding(lighthouse, island.getSlot(0));
 		playerClan.addMember(lighthouse);
 
 		final CharacterMeta johnMeta = WandererConstants.CHARACTER_METAS.get(1);
