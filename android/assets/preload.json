@@ -1,3 +1,4 @@
 {
-  "sounds" : [ "orig/feedback/use_ok.wav" ]
+  "sounds" : [ "orig/feedback/use_ok.wav" ],
+  "skins" : [ "skins/default/uiskin.json" ]
 }

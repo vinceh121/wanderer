@@ -201,7 +201,11 @@ public abstract class AbstractEntity implements Disposable {
 
 	protected void updateTransform() {
 		if (this.collideObject != null) {
-			this.collideObject.setWorldTransform(this.transform);
+			if (this.collideObject.isStaticObject()) {
+				this.collideObject.setWorldTransform(transform);
+			} else {
+				this.collideObject.getMotionState().setWorldTransform(this.transform);
+			}
 		}
 		if (this.cacheDisplayModel != null) {
 			this.cacheDisplayModel.transform = this.transform;

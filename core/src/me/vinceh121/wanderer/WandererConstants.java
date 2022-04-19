@@ -24,8 +24,6 @@ public final class WandererConstants {
 
 	static {
 		MIPMAPS.genMipMaps = true;
-		WandererConstants.ASSET_MANAGER.load("skins/default/uiskin.json", Skin.class);
-		WandererConstants.ASSET_MANAGER.finishLoading();
 
 		final Json json = new Json(OutputType.json);
 		final JsonReader jsonReader = new JsonReader();
@@ -39,5 +37,9 @@ public final class WandererConstants {
 		for (final String sound : preload.get("sounds").asStringArray()) {
 			WandererConstants.ASSET_MANAGER.load(sound, Sound.class);
 		}
+		for (final String skin : preload.get("skins").asStringArray()) {
+			WandererConstants.ASSET_MANAGER.load(skin, Skin.class);
+		}
+		WandererConstants.ASSET_MANAGER.finishLoading();
 	}
 }
