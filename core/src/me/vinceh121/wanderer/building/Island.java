@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ContactResultCallback;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObjectWrapper;
 import com.badlogic.gdx.physics.bullet.collision.btManifoldPoint;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.linearmath.btTransformUtil;
 import com.badlogic.gdx.utils.Array;
@@ -21,7 +21,7 @@ import me.vinceh121.wanderer.entity.AbstractLivingEntity;
 public class Island extends AbstractLivingEntity implements IClanMember {
 	private final Array<Slot> slots = new Array<>();
 	private final Array<Building> buildings = new Array<>();
-	private final Vector3 velocity = new Vector3(0, 0.5f, -2f);
+	private final Vector3 velocity = new Vector3();
 	private Clan clan;
 
 	public Island(final Wanderer game) {
@@ -84,12 +84,12 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	public void updatePhysics(btDiscreteDynamicsWorld world) {
 		super.updatePhysics(world);
 		if (!this.velocity.equals(Vector3.Zero)) {
-			this.updateBuildings();
 			Vector3 transOrig = getTransform().getTranslation(new Vector3());
 			Matrix4 toTrans = new Matrix4();
 			btTransformUtil.integrateTransform(getTransform(), velocity, Vector3.Zero, Gdx.graphics.getDeltaTime(),
 					toTrans);
 			setTransform(toTrans);
+			this.updateBuildings();
 			Vector3 transDelta = getTransform().getTranslation(new Vector3()).sub(transOrig);
 			if (getCollideObject() != null && !this.velocity.equals(Vector3.Zero)) {
 				Array<CharacterW> done = new Array<>();
@@ -140,5 +140,9 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	public void onJoinClan(final Clan clan) {
 		this.clan = clan;
 		// TODO probably nothing?
+	}
+
+	public Vector3 getVelocity() {
+		return velocity;
 	}
 }

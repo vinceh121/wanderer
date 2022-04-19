@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btConvexHullShape;
+import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy.CollisionFilterGroups;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btDefaultMotionState;
@@ -37,21 +38,25 @@ public abstract class AbstractEntity implements Disposable {
 	private btRigidBody collideObject;
 	private float mass;
 	private boolean exactCollideModel = true;
+	private int collisionGroup = CollisionFilterGroups.DefaultFilter, collisionMask = CollisionFilterGroups.AllFilter;
 
 	public AbstractEntity(final Wanderer game) {
 		this.game = game;
 	}
 
 	public void updatePhysics(final btDiscreteDynamicsWorld world) {
-		if (this.collideObject != null) { // if we have a (manually-)defined body, copy transform
-			// subtract collision offset from bullet's transform
+		// if we have a (manually-)defined body, copy transform subtract collision
+		// offset from bullet's transform
+		if (this.collideObject != null && !this.collideObject.isStaticOrKinematicObject()) {
 			final Matrix4 colTransform = this.collideObject.getWorldTransform();
 			final Vector3 colTranslation = new Vector3();
 			colTransform.getTranslation(colTranslation);
 			colTranslation.sub(this.collideObjectOffset);
 			colTransform.setTranslation(colTranslation);
 			this.transform.set(colTransform);
-		} else if (this.collideModel != null) { // else, try to load it the collision model if present
+		} else if (this.collideModel != null && this.collideObject == null) {
+			// else, try to load it the collision model if present and we don't already have
+			// a collision defined
 			if (WandererConstants.ASSET_MANAGER.isLoaded(this.collideModel)) {
 				this.loadCollideModel();
 			} else {
@@ -85,7 +90,7 @@ public abstract class AbstractEntity implements Disposable {
 
 	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
 		if (this.getCollideObject() != null) {
-			world.addRigidBody(this.getCollideObject());
+			world.addRigidBody(this.getCollideObject(), this.collisionGroup, this.collisionMask);
 		}
 	}
 
@@ -181,11 +186,11 @@ public abstract class AbstractEntity implements Disposable {
 	 * @param collideObject
 	 */
 	public void setCollideObject(final btRigidBody collideObject, final int collisionGroup, final int collisionMask) {
+		this.collideObject = collideObject;
 		if (this.collideObject != null) {
 			this.game.getBtWorld().removeRigidBody(this.collideObject);
+			this.game.getBtWorld().addRigidBody(collideObject, collisionGroup, collisionMask);
 		}
-		this.collideObject = collideObject;
-		this.game.getBtWorld().addRigidBody(collideObject, collisionGroup, collisionMask);
 	}
 
 	public float getMass() {
@@ -380,6 +385,22 @@ public abstract class AbstractEntity implements Disposable {
 
 	public Attribute removeTextureAttribute(int index) {
 		return textureAttributes.removeIndex(index);
+	}
+
+	public int getCollisionGroup() {
+		return collisionGroup;
+	}
+
+	public void setCollisionGroup(int collisionGroup) {
+		this.collisionGroup = collisionGroup;
+	}
+
+	public int getCollisionMask() {
+		return collisionMask;
+	}
+
+	public void setCollisionMask(int collisionMask) {
+		this.collisionMask = collisionMask;
 	}
 
 	@Override

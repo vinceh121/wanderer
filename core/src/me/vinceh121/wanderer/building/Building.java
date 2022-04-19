@@ -130,6 +130,13 @@ public abstract class Building extends AbstractLivingEntity implements IClanMemb
 	}
 
 	@Override
+	public void loadCollideModel() {
+		super.loadCollideModel();
+		this.getCollideObject().setCollisionFlags(CollisionFlags.CF_KINEMATIC_OBJECT);
+		this.getCollideObject().forceActivationState(4); // DISABLE_DEACTIVATION
+	}
+
+	@Override
 	public void enterBtWorld(btDiscreteDynamicsWorld world) {
 		super.enterBtWorld(world);
 		world.addCollisionObject(this.interactZone, CollisionFilterGroups.SensorTrigger,
