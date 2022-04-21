@@ -7,10 +7,13 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector2;
@@ -119,9 +122,9 @@ public class Wanderer extends ApplicationAdapter {
 		final Island island = new Island(this);
 		island.setCollideModel("orig/first_island.n/collide.obj");
 		island.setDisplayModel("orig/first_island.n/terrain.obj");
-		island.setDisplayTexture("orig/first_island.n/texturenone.png");
+		island.setDisplayTexture("orig/first_island.n/texturenone.ktx");
 
-		final String sandName = "orig/lib/textures/detailmap_sandnone.png";
+		final String sandName = "orig/lib/textures/detailmap_sandnone.ktx";
 		WandererConstants.ASSET_MANAGER.load(sandName, Texture.class, WandererConstants.MIPMAPS);
 		WandererConstants.ASSET_MANAGER.finishLoadingAsset(sandName);
 		final Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
@@ -136,14 +139,16 @@ public class Wanderer extends ApplicationAdapter {
 
 		final Prop grass = new Prop(this);
 		grass.setDisplayModel("orig/first_island.n/grass.obj");
-		grass.setDisplayTexture("orig/lib/detailobjects01/pflanzen_rasteralpha.png");
+		grass.setDisplayTexture("orig/lib/detailobjects01/pflanzen_rasteralpha.ktx");
 		grass.addTextureAttribute(IntAttribute.createCullFace(0));
+		grass.addTextureAttribute(FloatAttribute.createAlphaTest(0.5f));
+		grass.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f));
 		this.addEntity(grass);
 
 		final Lighthouse lighthouse = new Lighthouse(this);
 		lighthouse.setDisplayModel("orig/j_lighthouse01.n/j_lighthouse01.obj");
 		lighthouse.setCollideModel("orig/j_lighthouse01.n/collide.obj");
-		lighthouse.setDisplayTexture("orig/j_lighthouse01.n/texturenone.png");
+		lighthouse.setDisplayTexture("orig/j_lighthouse01.n/texturenone.ktx");
 		this.addEntity(lighthouse);
 		island.addBuilding(lighthouse, island.getSlot(0));
 		playerClan.addMember(lighthouse);
