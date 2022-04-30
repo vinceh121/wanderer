@@ -23,6 +23,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 
+import me.vinceh121.wanderer.artifact.ArtifactEntity;
+import me.vinceh121.wanderer.artifact.ArtifactMeta;
 import me.vinceh121.wanderer.building.Building;
 import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.building.Lighthouse;
@@ -115,6 +117,13 @@ public class Wanderer extends ApplicationAdapter {
 
 		///// GAMEPLAY
 
+		final ArtifactMeta lighthouseArtifactMeta = new ArtifactMeta(10, false,
+				"orig/j_lighthouse01.n/j_lighthouse01.obj", "orig/j_lighthouse01.n/base32_2none.ktx") {
+		};
+		final ArtifactEntity artifactEntity = new ArtifactEntity(this, lighthouseArtifactMeta);
+		artifactEntity.setTranslation(10, 34, 0);
+		this.addEntity(artifactEntity);
+
 		final Clan playerClan = new Clan();
 		playerClan.setColor(Color.BLUE);
 		playerClan.setName("player clan");
@@ -148,7 +157,7 @@ public class Wanderer extends ApplicationAdapter {
 		final Lighthouse lighthouse = new Lighthouse(this);
 		lighthouse.setDisplayModel("orig/j_lighthouse01.n/j_lighthouse01.obj");
 		lighthouse.setCollideModel("orig/j_lighthouse01.n/collide.obj");
-		lighthouse.setDisplayTexture("orig/j_lighthouse01.n/texturenone.ktx");
+		lighthouse.setDisplayTexture("orig/j_lighthouse01.n/base32_2none.ktx");
 		this.addEntity(lighthouse);
 		island.addBuilding(lighthouse, island.getSlot(0));
 		playerClan.addMember(lighthouse);

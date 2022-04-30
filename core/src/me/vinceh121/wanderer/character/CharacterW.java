@@ -13,9 +13,11 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
+import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.artifact.ArtifactMeta;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
@@ -29,6 +31,8 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	private final CharacterWController controller;
 	private final Vector3 characterDirection = new Vector3();
 	private final Vector3 walkDirection = new Vector3();
+	private final Array<ArtifactMeta> belt = new Array<>();
+	private int beltSize = 3;
 	private CharacterMeta meta;
 	private Clan clan;
 
@@ -180,5 +184,28 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	 */
 	public btPairCachingGhostObject getGhostObject() {
 		return controller.getGhostObject();
+	}
+
+	public int getBeltSize() {
+		return beltSize;
+	}
+
+	public void setBeltSize(int beltSize) {
+		this.beltSize = beltSize;
+	}
+
+	public Array<ArtifactMeta> getBelt() {
+		return belt;
+	}
+
+	public boolean canPickUpArtifact() {
+		return this.beltSize >= this.belt.size;
+	}
+
+	public void pickUpArtifact(ArtifactMeta artifact) {
+		if (!this.canPickUpArtifact()) {
+			throw new IllegalStateException("Can't pickup items");
+		}
+		this.belt.add(artifact);
 	}
 }

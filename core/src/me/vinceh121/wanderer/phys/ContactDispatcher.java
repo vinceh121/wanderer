@@ -20,7 +20,8 @@ public class ContactDispatcher extends ContactListener {
 	public boolean onContactAdded(btManifoldPoint cp, btCollisionObject colObj0, int partId0, int index0,
 			btCollisionObject colObj1, int partId1, int index1) {
 		boolean contact = false;
-		for (IContactListener l : this.listeners) {
+		for (int i = 0; i < this.listeners.size; i++) {
+			IContactListener l = this.listeners.get(i);
 			if (l.onContactAdded(cp, colObj0, partId0, index0, colObj1, partId1, index1)) {
 				contact = true;
 			}
@@ -30,27 +31,33 @@ public class ContactDispatcher extends ContactListener {
 
 	@Override
 	public void onContactProcessed(btManifoldPoint cp, btCollisionObject colObj0, btCollisionObject colObj1) {
-		for (IContactListener l : this.listeners) {
+		for (int i = 0; i < this.listeners.size; i++) {
+			IContactListener l = this.listeners.get(i);
 			l.onContactProcessed(cp, colObj0, colObj1);
 		}
 	}
 
 	@Override
 	public void onContactDestroyed(int manifoldPointUserValue) {
-		for (IContactListener l : this.listeners) {
+		for (int i = 0; i < this.listeners.size; i++) {
+			IContactListener l = this.listeners.get(i);
 			l.onContactDestroyed(manifoldPointUserValue);
 		}
 	}
 
 	@Override
 	public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
-		for (IContactListener l : this.listeners)
+		for (int i = 0; i < this.listeners.size; i++) {
+			IContactListener l = this.listeners.get(i);
 			l.onContactStarted(colObj0, colObj1);
+		}
 	}
 
 	@Override
 	public void onContactEnded(btCollisionObject colObj0, btCollisionObject colObj1) {
-		for (IContactListener l : this.listeners)
+		for (int i = 0; i < this.listeners.size; i++) {
+			IContactListener l = this.listeners.get(i);
 			l.onContactEnded(colObj0, colObj1);
+		}
 	}
 }

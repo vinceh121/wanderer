@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 public class Clan {
 	private String name;
 	private Color color = Color.WHITE;
+	private int energy;
 	/**
 	 * Contains player, buildings and island
 	 */
@@ -37,6 +38,14 @@ public class Clan {
 	 */
 	public void setColor(final Color color) {
 		this.color = color;
+	}
+
+	public int getEnergy() {
+		return energy;
+	}
+
+	public void setEnergy(int energy) {
+		this.energy = energy;
 	}
 
 	/**
