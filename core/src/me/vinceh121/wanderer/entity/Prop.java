@@ -13,9 +13,8 @@ public class Prop extends AbstractEntity {
 	public Prop(final Wanderer game, final String displayModel, final String collideModel, final String texture,
 			final float mass) {
 		this(game);
-		this.setDisplayModel(displayModel);
+		this.addModel(new DisplayModel(displayModel, texture));
 		this.setCollideModel(collideModel);
-		this.setDisplayTexture(texture);
 		this.setMass(mass);
 	}
 }

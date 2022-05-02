@@ -21,6 +21,7 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractEntity;
+import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
@@ -32,14 +33,14 @@ public class ArtifactEntity extends AbstractEntity {
 	public ArtifactEntity(Wanderer game, ArtifactMeta artifact) {
 		super(game);
 		this.artifact = artifact;
-		this.setDisplayTexture(artifact.getArtifactTexture());
-		this.setDisplayModel(artifact.getArtifactModel());
+		DisplayModel model = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
 		if (this.artifact.isRed()) {
-			this.addTextureAttribute(ColorAttribute.createEmissive(0f, 0.7f, 1f, 0f));// TODO find red color
+			model.addTextureAttribute(ColorAttribute.createEmissive(1f, 0.1f, 0f, 0f));
 		} else {
-			this.addTextureAttribute(ColorAttribute.createEmissive(0f, 0.7f, 1f, 0f));
+			model.addTextureAttribute(ColorAttribute.createEmissive(0f, 0.8f, 1f, 0f));
 		}
-		this.addTextureAttribute(new BlendingAttribute(GL20.GL_ALPHA, GL20.GL_ONE, 0.5f));
+		model.addTextureAttribute(new BlendingAttribute(GL20.GL_ALPHA, GL20.GL_ONE, 0.5f));
+		this.addModel(model);
 
 		this.interactZone = new btGhostObject();
 		this.interactZone.setCollisionFlags(CollisionFlags.CF_NO_CONTACT_RESPONSE);

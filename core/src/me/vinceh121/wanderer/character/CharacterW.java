@@ -21,6 +21,7 @@ import me.vinceh121.wanderer.artifact.ArtifactMeta;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
+import me.vinceh121.wanderer.entity.DisplayModel;
 
 /**
  * An entity of a character, a person.
@@ -64,6 +65,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 		// do not call setTransform as not to cause update to ghostobject
 		this.getTransform().set(colTransform);
+		super.updateTransform();
 	}
 
 	@Override
@@ -174,8 +176,8 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	 */
 	public void setMeta(CharacterMeta meta) {
 		this.meta = meta;
-		this.setDisplayModel(meta.getModel());
-		this.setDisplayTexture(meta.getTexture());
+		this.clearModels();
+		this.addModel(new DisplayModel(meta.getModel(), meta.getTexture()));
 	}
 
 	/**

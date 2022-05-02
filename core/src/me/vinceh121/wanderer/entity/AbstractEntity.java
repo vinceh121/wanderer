@@ -3,21 +3,16 @@ package me.vinceh121.wanderer.entity;
 import java.util.Objects;
 
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
+import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy.CollisionFilterGroups;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btConvexHullShape;
-import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy.CollisionFilterGroups;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btDefaultMotionState;
@@ -30,11 +25,10 @@ import me.vinceh121.wanderer.WandererConstants;
 
 public abstract class AbstractEntity implements Disposable {
 	protected final Wanderer game;
-	private final Array<Attribute> textureAttributes = new Array<>();
 	private Matrix4 transform = new Matrix4();
-	private Vector3 collideObjectOffset = new Vector3();
-	private String displayModel, collideModel, displayTexture;
-	private ModelInstance cacheDisplayModel;
+	private final Vector3 collideObjectOffset = new Vector3();
+	private final Array<DisplayModel> models = new Array<>();
+	private String collideModel;
 	private btRigidBody collideObject;
 	private float mass;
 	private boolean exactCollideModel = true;
@@ -105,46 +99,9 @@ public abstract class AbstractEntity implements Disposable {
 	}
 
 	public void render(final ModelBatch batch, final Environment env) {
-		if (this.displayModel == null) {
-			return;
+		for (DisplayModel m : this.models) {
+			m.render(batch, env);
 		}
-
-		if (this.getCacheDisplayModel() != null) {
-			batch.render(this.getCacheDisplayModel(), env);
-		} else {
-			if (WandererConstants.ASSET_MANAGER.isLoaded(this.getDisplayModel())
-					&& (this.displayTexture == null || WandererConstants.ASSET_MANAGER.isLoaded(this.displayTexture))) {
-				this.loadDisplayModel();
-				batch.render(this.getCacheDisplayModel(), env);
-			} else {
-				WandererConstants.ASSET_MANAGER.load(this.getDisplayModel(), Model.class);
-				if (this.displayTexture != null) {
-					WandererConstants.ASSET_MANAGER.load(this.displayTexture, Texture.class, WandererConstants.MIPMAPS);
-				}
-			}
-		}
-	}
-
-	public void loadDisplayModel() {
-		final Model model = WandererConstants.ASSET_MANAGER.get(this.getDisplayModel(), Model.class);
-		final ModelInstance instance = new ModelInstance(model);
-		if (this.displayTexture != null) {
-			final Texture texture = WandererConstants.ASSET_MANAGER.get(this.displayTexture, Texture.class);
-			texture.setFilter(TextureFilter.MipMapNearestLinear, TextureFilter.Linear);
-
-			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
-			instance.materials.get(0).set(this.textureAttributes); // this is called set but it's more like add
-		}
-		this.setCacheDisplayModel(instance);
-		this.getCacheDisplayModel().transform = this.transform;
-	}
-
-	public String getDisplayModel() {
-		return this.displayModel;
-	}
-
-	public void setDisplayModel(final String displayModel) {
-		this.displayModel = displayModel;
 	}
 
 	public String getCollideModel() {
@@ -154,14 +111,6 @@ public abstract class AbstractEntity implements Disposable {
 	public void setCollideModel(final String collideModel) {
 		this.collideModel = collideModel;
 		this.collideObject = null; // trigger collide model reload
-	}
-
-	public ModelInstance getCacheDisplayModel() {
-		return this.cacheDisplayModel;
-	}
-
-	public void setCacheDisplayModel(final ModelInstance cacheDisplayModel) {
-		this.cacheDisplayModel = cacheDisplayModel;
 	}
 
 	public btRigidBody getCollideObject() {
@@ -212,9 +161,30 @@ public abstract class AbstractEntity implements Disposable {
 				this.collideObject.getMotionState().setWorldTransform(this.transform);
 			}
 		}
-		if (this.cacheDisplayModel != null) {
-			this.cacheDisplayModel.transform = this.transform;
+
+		for (DisplayModel m : this.models) {
+			m.updateTransform(transform);
 		}
+	}
+
+	public void addModel(DisplayModel value) {
+		models.add(value);
+	}
+
+	public boolean removeModel(DisplayModel value) {
+		return models.removeValue(value, true);
+	}
+
+	public DisplayModel removeModel(int index) {
+		return models.removeIndex(index);
+	}
+
+	public void clearModels() {
+		this.models.clear();
+	}
+
+	public Array<DisplayModel> getModels() {
+		return models;
 	}
 
 	public Matrix4 getTransform() {
@@ -344,20 +314,6 @@ public abstract class AbstractEntity implements Disposable {
 	}
 
 	/**
-	 * @return the displayTexture
-	 */
-	public String getDisplayTexture() {
-		return this.displayTexture;
-	}
-
-	/**
-	 * @param displayTexture the displayTexture to set
-	 */
-	public void setDisplayTexture(final String displayTexture) {
-		this.displayTexture = displayTexture;
-	}
-
-	/**
 	 * @return the collideObjectOffset
 	 */
 	public Vector3 getCollideObjectOffset() {
@@ -368,23 +324,7 @@ public abstract class AbstractEntity implements Disposable {
 	 * @param collideObjectOffset the collideObjectOffset to set
 	 */
 	public void setCollideObjectOffset(final Vector3 collideObjectOffset) {
-		this.collideObjectOffset = collideObjectOffset;
-	}
-
-	public Array<Attribute> getTextureAttributes() {
-		return textureAttributes;
-	}
-
-	public void addTextureAttribute(Attribute value) {
-		textureAttributes.add(value);
-	}
-
-	public boolean removeTextureAttribute(Attribute value) {
-		return textureAttributes.removeValue(value, false);
-	}
-
-	public Attribute removeTextureAttribute(int index) {
-		return textureAttributes.removeIndex(index);
+		this.collideObjectOffset.set(collideObjectOffset);
 	}
 
 	public int getCollisionGroup() {

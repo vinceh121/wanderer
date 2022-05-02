@@ -35,8 +35,8 @@ import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
+import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.entity.IControllableEntity;
-import me.vinceh121.wanderer.entity.Prop;
 import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
 import me.vinceh121.wanderer.ui.BlinkLabel;
 import me.vinceh121.wanderer.ui.DebugOverlay;
@@ -117,7 +117,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		///// GAMEPLAY
 
-		final ArtifactMeta lighthouseArtifactMeta = new ArtifactMeta(10, false,
+		final ArtifactMeta lighthouseArtifactMeta = new ArtifactMeta(10, true,
 				"orig/j_lighthouse01.n/j_lighthouse01.obj", "orig/j_lighthouse01.n/base32_2none.ktx") {
 		};
 		final ArtifactEntity artifactEntity = new ArtifactEntity(this, lighthouseArtifactMeta);
@@ -130,8 +130,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		final Island island = new Island(this);
 		island.setCollideModel("orig/first_island.n/collide.obj");
-		island.setDisplayModel("orig/first_island.n/terrain.obj");
-		island.setDisplayTexture("orig/first_island.n/texturenone.ktx");
+		island.addModel(new DisplayModel("orig/first_island.n/terrain.obj", "orig/first_island.n/texturenone.ktx"));
 
 		final String sandName = "orig/lib/textures/detailmap_sandnone.ktx";
 		WandererConstants.ASSET_MANAGER.load(sandName, Texture.class, WandererConstants.MIPMAPS);
@@ -139,25 +138,28 @@ public class Wanderer extends ApplicationAdapter {
 		final Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
 		sand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
-		island.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(50f, 50f)));
-		island.addTextureAttribute(IntAttribute.createCullFace(0));
+		island.getModels().get(0)
+				.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(50f, 50f)));
+		island.getModels().get(0).addTextureAttribute(IntAttribute.createCullFace(0));
 
 		island.addSlot(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8)));
 		this.addEntity(island);
 		playerClan.addMember(island);
 
-		final Prop grass = new Prop(this);
+		final DisplayModel grass = new DisplayModel();
 		grass.setDisplayModel("orig/first_island.n/grass.obj");
 		grass.setDisplayTexture("orig/lib/detailobjects01/pflanzen_rasteralpha.ktx");
 		grass.addTextureAttribute(IntAttribute.createCullFace(0));
 		grass.addTextureAttribute(FloatAttribute.createAlphaTest(0.5f));
 		grass.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f));
-		this.addEntity(grass);
+		island.addModel(grass);
 
 		final Lighthouse lighthouse = new Lighthouse(this);
-		lighthouse.setDisplayModel("orig/j_lighthouse01.n/j_lighthouse01.obj");
+		lighthouse.addModel(
+				new DisplayModel("orig/j_lighthouse01.n/base32_1.obj", "orig/j_lighthouse01.n/base32_1none.ktx"));
+		lighthouse.addModel(
+				new DisplayModel("orig/j_lighthouse01.n/base32_2.obj", "orig/j_lighthouse01.n/base32_2none.ktx"));
 		lighthouse.setCollideModel("orig/j_lighthouse01.n/collide.obj");
-		lighthouse.setDisplayTexture("orig/j_lighthouse01.n/base32_2none.ktx");
 		this.addEntity(lighthouse);
 		island.addBuilding(lighthouse, island.getSlot(0));
 		playerClan.addMember(lighthouse);
