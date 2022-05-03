@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.Logger;
 
 import me.vinceh121.wanderer.artifact.ArtifactEntity;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
+import me.vinceh121.wanderer.artifact.BackpackArtifact;
 import me.vinceh121.wanderer.building.Building;
 import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.building.Lighthouse;
@@ -117,11 +118,15 @@ public class Wanderer extends ApplicationAdapter {
 
 		///// GAMEPLAY
 
+		final ArtifactEntity backpack = new ArtifactEntity(this, new BackpackArtifact());
+		backpack.setTranslation(-5, 34, 10);
+		this.addEntity(backpack);
+		
 		final ArtifactMeta lighthouseArtifactMeta = new ArtifactMeta(10, true,
 				"orig/j_lighthouse01.n/j_lighthouse01.obj", "orig/j_lighthouse01.n/base32_2none.ktx") {
 		};
 		final ArtifactEntity artifactEntity = new ArtifactEntity(this, lighthouseArtifactMeta);
-		artifactEntity.setTranslation(10, 34, 0);
+		artifactEntity.setTranslation(5, 34, 10);
 		this.addEntity(artifactEntity);
 
 		final Clan playerClan = new Clan();

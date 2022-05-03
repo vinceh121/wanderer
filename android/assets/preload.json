@@ -1,4 +1,4 @@
 {
-  "sounds" : [ "orig/feedback/use_ok.wav", "orig/feedback/beltfull.wav", "orig/feedback/artefactcollected.wav" ],
+  "sounds" : [ "orig/feedback/use_ok.wav", "orig/feedback/beltfull.wav", "orig/feedback/artefactcollected.wav", "orig/feedback/backpack_active.wav" ],
   "skins" : [ "skins/default/uiskin.json" ]
 }

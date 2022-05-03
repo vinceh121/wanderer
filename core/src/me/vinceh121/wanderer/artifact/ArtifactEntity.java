@@ -1,7 +1,6 @@
 package me.vinceh121.wanderer.artifact;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -18,7 +17,6 @@ import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
 import me.vinceh121.wanderer.Wanderer;
-import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
@@ -60,21 +58,18 @@ public class ArtifactEntity extends AbstractEntity {
 						&& colObj1.getCPointer() == chara.getGhostObject().getCPointer())
 						|| (colObj1.getCPointer() == interactZone.getCPointer()
 								&& colObj0.getCPointer() == chara.getGhostObject().getCPointer())) {
-					if (chara.canPickUpArtifact()) {
-						WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound.class).play();
-						chara.pickUpArtifact(artifact);
+					if (ArtifactEntity.this.artifact.onPickUp(game, chara)) {
 						game.removeEntity(ArtifactEntity.this);
 						dispose();
-					} else {
-						WandererConstants.ASSET_MANAGER.get("orig/feedback/beltfull.wav", Sound.class).play();
-						game.showMessage("Belt full!");
 					}
 				}
 			}
 		};
 		this.game.getPhysicsManager().addContactListener(interactListener);
 
-		this.scale(0.05f, 0.05f, 0.05f);
+		if (artifact.isShrink()) {
+			this.scale(0.05f, 0.05f, 0.05f);
+		}
 	}
 
 	public ArtifactMeta getArtifact() {
