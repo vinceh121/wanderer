@@ -1,4 +1,20 @@
 {
-  "sounds" : [ "orig/feedback/use_ok.wav", "orig/feedback/beltfull.wav", "orig/feedback/artefactcollected.wav", "orig/feedback/backpack_active.wav" ],
-  "skins" : [ "skins/default/uiskin.json" ]
+	"sounds": [
+		"orig/feedback/use_ok.wav",
+		"orig/feedback/beltfull.wav",
+		"orig/feedback/artefactcollected.wav",
+		"orig/feedback/backpack_active.wav"
+	],
+	"textures": [
+		"orig/if_emptyslot.n/endend_alpha.ktx",
+		"orig/if_emptyslot.n/gapgap_alpha.ktx",
+		"orig/if_emptyslot.n/slotslot_alpha.ktx",
+		"orig/if_ebar.n/clan_energy_leftclan_energy_left_alpha.ktx",
+		"orig/if_ebar.n/clan_energy_middleclan_energy_middle_alpha.ktx",
+		"orig/if_ebar.n/clan_energy_rightclan_energy_right_alpha.ktx",
+		"orig/if_ebar.n/texturenone.ktx"
+	],
+	"skins": [
+		"skins/default/uiskin.json"
+	]
 }

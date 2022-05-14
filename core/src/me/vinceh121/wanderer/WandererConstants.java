@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -36,6 +37,9 @@ public final class WandererConstants {
 		final JsonValue preload = jsonReader.parse(Gdx.files.internal("preload.json"));
 		for (final String sound : preload.get("sounds").asStringArray()) {
 			WandererConstants.ASSET_MANAGER.load(sound, Sound.class);
+		}
+		for (final String texture : preload.get("textures").asStringArray()) {
+			WandererConstants.ASSET_MANAGER.load(texture, Texture.class);
 		}
 		for (final String skin : preload.get("skins").asStringArray()) {
 			WandererConstants.ASSET_MANAGER.load(skin, Skin.class);

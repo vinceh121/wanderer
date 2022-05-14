@@ -41,6 +41,8 @@ import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
 import me.vinceh121.wanderer.ui.BlinkLabel;
 import me.vinceh121.wanderer.ui.DebugOverlay;
+import me.vinceh121.wanderer.ui.EnergyBar;
+import me.vinceh121.wanderer.ui.ItemBar;
 
 public class Wanderer extends ApplicationAdapter {
 	private final PhysicsManager physicsManager = new PhysicsManager();
@@ -59,6 +61,8 @@ public class Wanderer extends ApplicationAdapter {
 	private Building interactingBuilding;
 
 	private BlinkLabel messageLabel;
+	private ItemBar itemBar;
+	private EnergyBar energyBar;
 
 	@Override
 	public void create() {
@@ -116,13 +120,28 @@ public class Wanderer extends ApplicationAdapter {
 		this.messageLabel.setAlignment(Align.center);
 		this.graphicsManager.getStage().addActor(this.messageLabel);
 
+		this.itemBar = new ItemBar();
+		this.itemBar.setCount(10);
+		this.itemBar.setWidth(1);
+		this.itemBar.setHeight(32);
+		this.itemBar.setX(256 - 70);
+		this.itemBar.setY(32);
+		this.graphicsManager.getStage().addActor(this.itemBar);
+
+		this.energyBar = new EnergyBar();
+		this.energyBar.setWidth(256);
+		this.energyBar.setHeight(128);
+		this.energyBar.setX(-70);
+		this.energyBar.setY(10);
+		this.graphicsManager.getStage().addActor(this.energyBar);
+
 		///// GAMEPLAY
 
 		final ArtifactEntity backpack = new ArtifactEntity(this, new BackpackArtifact());
 		backpack.setTranslation(-5, 34, 10);
 		this.addEntity(backpack);
-		
-		final ArtifactMeta lighthouseArtifactMeta = new ArtifactMeta(10, true,
+
+		final ArtifactMeta lighthouseArtifactMeta = new ArtifactMeta(10, false,
 				"orig/j_lighthouse01.n/j_lighthouse01.obj", "orig/j_lighthouse01.n/base32_2none.ktx") {
 		};
 		final ArtifactEntity artifactEntity = new ArtifactEntity(this, lighthouseArtifactMeta);
@@ -145,7 +164,6 @@ public class Wanderer extends ApplicationAdapter {
 		sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 		island.getModels().get(0)
 				.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(50f, 50f)));
-		island.getModels().get(0).addTextureAttribute(IntAttribute.createCullFace(0));
 
 		island.addSlot(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8)));
 		this.addEntity(island);
