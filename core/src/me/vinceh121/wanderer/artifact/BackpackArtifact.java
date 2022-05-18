@@ -6,11 +6,11 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.character.CharacterW;
 
-public class BackpackArtifact extends ArtifactMeta {
+public class BackpackArtifact extends AbstractArtifactEntity {
+	private static final ArtifactMeta BACKPACK_META = new ArtifactMeta();
 
-	public BackpackArtifact() {
-		super(0, false, "orig/boosterartefact.n/kugel.obj", "orig/boosterartefact.n/texturenone.ktx");
-		this.setShrink(false);
+	public BackpackArtifact(Wanderer game) {
+		super(game, BACKPACK_META);
 	}
 
 	@Override
@@ -19,5 +19,10 @@ public class BackpackArtifact extends ArtifactMeta {
 		game.showMessage("Backpack activated!");
 		// TODO enable backpack for player
 		return true;
+	}
+	
+	static {
+		BACKPACK_META.setArtifactModel("orig/boosterartefact.n/kugel.obj");
+		BACKPACK_META.setArtifactTexture("orig/boosterartefact.n/texturenone.ktx");
 	}
 }

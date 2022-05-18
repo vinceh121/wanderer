@@ -23,26 +23,17 @@ import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
-public class ArtifactEntity extends AbstractEntity {
-	private final ArtifactMeta artifact;
+public abstract class AbstractArtifactEntity extends AbstractEntity {
+	private final ArtifactMeta meta;
 	private final btGhostObject interactZone;
 	private final IContactListener interactListener;
 
-	public ArtifactEntity(Wanderer game, ArtifactMeta artifact) {
+	public AbstractArtifactEntity(Wanderer game, ArtifactMeta meta) {
 		super(game);
-		this.artifact = artifact;
-		DisplayModel model = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
-		if (this.artifact.isRed()) {
-			model.addTextureAttribute(ColorAttribute.createEmissive(1f, 0.1f, 0f, 0f));
-		} else {
-			model.addTextureAttribute(ColorAttribute.createEmissive(0f, 0.8f, 1f, 0f));
-		}
-		model.addTextureAttribute(new BlendingAttribute(GL20.GL_ALPHA, GL20.GL_ONE, 0.5f));
-		this.addModel(model);
-
+		this.meta = meta;
 		this.interactZone = new btGhostObject();
 		this.interactZone.setCollisionFlags(CollisionFlags.CF_NO_CONTACT_RESPONSE);
-		this.interactZone.setCollisionShape(new btSphereShape(2f));
+		this.interactZone.setCollisionShape(new btSphereShape(meta.getInteractZoneRadius()));
 		this.interactListener = new ContactListenerAdapter() {
 			@Override
 			public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
@@ -58,8 +49,8 @@ public class ArtifactEntity extends AbstractEntity {
 						&& colObj1.getCPointer() == chara.getGhostObject().getCPointer())
 						|| (colObj1.getCPointer() == interactZone.getCPointer()
 								&& colObj0.getCPointer() == chara.getGhostObject().getCPointer())) {
-					if (ArtifactEntity.this.artifact.onPickUp(game, chara)) {
-						game.removeEntity(ArtifactEntity.this);
+					if (AbstractArtifactEntity.this.onPickUp(game, chara)) {
+						game.removeEntity(AbstractArtifactEntity.this);
 						dispose();
 					}
 				}
@@ -67,14 +58,22 @@ public class ArtifactEntity extends AbstractEntity {
 		};
 		this.game.getPhysicsManager().addContactListener(interactListener);
 
-		if (artifact.isShrink()) {
-			this.scale(0.05f, 0.05f, 0.05f);
+		if (meta.getArtifactModel() != null && meta.getArtifactTexture() != null) {
+			DisplayModel model = new DisplayModel(meta.getArtifactModel(), meta.getArtifactTexture());
+			if (meta.getArtifactColor() != null) {
+				model.addTextureAttribute(ColorAttribute.createEmissive(meta.getArtifactColor()));
+			}
+			model.addTextureAttribute(new BlendingAttribute(GL20.GL_ALPHA, GL20.GL_ONE, 0.5f));
+			this.addModel(model);
 		}
 	}
 
-	public ArtifactMeta getArtifact() {
-		return artifact;
-	}
+	/**
+	 * Tries to pickup the artifact for the player.
+	 * 
+	 * @return true if the artifact is to be picked up, false otherwise
+	 */
+	public abstract boolean onPickUp(Wanderer game, CharacterW chara);
 
 	@Override
 	public void enterBtWorld(btDiscreteDynamicsWorld world) {
@@ -98,9 +97,23 @@ public class ArtifactEntity extends AbstractEntity {
 	@Override
 	protected void updateTransform() {
 		super.updateTransform();
-		Matrix4 noScaleRotation = new Matrix4(getTransform().getTranslation(new Vector3()).add(0, 1, 0),
-				new Quaternion(), new Vector3(1, 1, 1));
-		this.interactZone.setWorldTransform(noScaleRotation);
+		if (this.meta.isRotate()) {
+			Matrix4 noScaleRotation = new Matrix4(getTransform().getTranslation(new Vector3()).add(0, 1, 0),
+					new Quaternion(), new Vector3(1, 1, 1));
+			this.interactZone.setWorldTransform(noScaleRotation);
+		}
+	}
+
+	public ArtifactMeta getMeta() {
+		return meta;
+	}
+
+	public btGhostObject getInteractZone() {
+		return interactZone;
+	}
+
+	public IContactListener getInteractListener() {
+		return interactListener;
 	}
 
 	@Override

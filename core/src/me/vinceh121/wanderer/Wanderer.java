@@ -23,11 +23,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 
-import me.vinceh121.wanderer.artifact.ArtifactEntity;
-import me.vinceh121.wanderer.artifact.ArtifactMeta;
+import me.vinceh121.wanderer.artifact.AbstractArtifactEntity;
 import me.vinceh121.wanderer.artifact.BackpackArtifact;
 import me.vinceh121.wanderer.artifact.EnergyArtefact;
 import me.vinceh121.wanderer.building.Building;
+import me.vinceh121.wanderer.building.BuildingArtifactEntity;
+import me.vinceh121.wanderer.building.BuildingArtifactMeta;
 import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.building.Lighthouse;
 import me.vinceh121.wanderer.building.Slot;
@@ -138,20 +139,18 @@ public class Wanderer extends ApplicationAdapter {
 
 		///// GAMEPLAY
 
-		final ArtifactEntity backpack = new ArtifactEntity(this, new BackpackArtifact());
+		final BackpackArtifact backpack = new BackpackArtifact(this);
 		backpack.setTranslation(-5, 34, 10);
 		this.addEntity(backpack);
 
-		final ArtifactMeta lighthouseArtifactMeta = new ArtifactMeta(10, false,
-				"orig/j_lighthouse01.n/j_lighthouse01.obj", "orig/j_lighthouse01.n/base32_2none.ktx") {
-		};
-		final ArtifactEntity artifactEntity = new ArtifactEntity(this, lighthouseArtifactMeta);
+		final BuildingArtifactMeta lighthouseArtifactMeta = new BuildingArtifactMeta(10, true,
+				"orig/j_lighthouse01.n/j_lighthouse01.obj", "orig/j_lighthouse01.n/base32_2none.ktx");
+		final AbstractArtifactEntity artifactEntity = new BuildingArtifactEntity(this, lighthouseArtifactMeta);
 		artifactEntity.setTranslation(5, 34, 10);
 		this.addEntity(artifactEntity);
-		
-		final EnergyArtefact energyArtifactMeta = new EnergyArtefact();
-		final ArtifactEntity energyEntity = new ArtifactEntity(this, energyArtifactMeta);
-		energyEntity.setTranslation(3, 34, 10);
+
+		final EnergyArtefact energyEntity = new EnergyArtefact(this);
+		energyEntity.setTranslation(2, 34, 10);
 		this.addEntity(energyEntity);
 
 		final Clan playerClan = new Clan();
@@ -248,7 +247,7 @@ public class Wanderer extends ApplicationAdapter {
 			}
 		}
 	}
-	
+
 	public Clan getClanForMember(IClanMember member) {
 		for (Clan c : this.clans) {
 			if (c.getMembers().contains(member, true)) {

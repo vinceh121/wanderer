@@ -1,55 +1,12 @@
 package me.vinceh121.wanderer.artifact;
 
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 
-import me.vinceh121.wanderer.Wanderer;
-import me.vinceh121.wanderer.WandererConstants;
-import me.vinceh121.wanderer.character.CharacterW;
-
-public abstract class ArtifactMeta {
-	private int energyRequired;
-	private boolean red, shrink = true;
+public class ArtifactMeta {
 	private String artifactModel, artifactTexture;
-
-	public ArtifactMeta(int energyRequired, boolean red, String artifactModel, String artifactTexture) {
-		this.energyRequired = energyRequired;
-		this.red = red;
-		this.artifactModel = artifactModel;
-		this.artifactTexture = artifactTexture;
-	}
-
-	/**
-	 * Tries to pickup the artifact for the player.
-	 * 
-	 * @return true if the artifact is to be picked up, false otherwise
-	 */
-	public boolean onPickUp(Wanderer game, CharacterW chara) {
-		if (chara.canPickUpArtifact()) {
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound.class).play();
-			chara.pickUpArtifact(this);
-			return true;
-		} else {
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/beltfull.wav", Sound.class).play();
-			game.showMessage("Belt full!");
-			return false;
-		}
-	}
-
-	public int getEnergyRequired() {
-		return energyRequired;
-	}
-
-	public void setEnergyRequired(int energyRequired) {
-		this.energyRequired = energyRequired;
-	}
-
-	public boolean isRed() {
-		return red;
-	}
-
-	public void setRed(boolean red) {
-		this.red = red;
-	}
+	private Color artifactColor = new Color(0f, 0.8f, 1f, 0f);
+	private boolean rotate = true;
+	private float interactZoneRadius = 2f;
 
 	public String getArtifactModel() {
 		return artifactModel;
@@ -67,11 +24,27 @@ public abstract class ArtifactMeta {
 		this.artifactTexture = artifactTexture;
 	}
 
-	public boolean isShrink() {
-		return shrink;
+	public Color getArtifactColor() {
+		return artifactColor;
 	}
 
-	public void setShrink(boolean shrink) {
-		this.shrink = shrink;
+	public void setArtifactColor(Color artifactColor) {
+		this.artifactColor = artifactColor;
+	}
+
+	public boolean isRotate() {
+		return rotate;
+	}
+
+	public void setRotate(boolean rotate) {
+		this.rotate = rotate;
+	}
+
+	public float getInteractZoneRadius() {
+		return interactZoneRadius;
+	}
+
+	public void setInteractZoneRadius(float interactZoneRadius) {
+		this.interactZoneRadius = interactZoneRadius;
 	}
 }
