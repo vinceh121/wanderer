@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Logger;
 import me.vinceh121.wanderer.artifact.ArtifactEntity;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
 import me.vinceh121.wanderer.artifact.BackpackArtifact;
+import me.vinceh121.wanderer.artifact.EnergyArtefact;
 import me.vinceh121.wanderer.building.Building;
 import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.building.Lighthouse;
@@ -147,10 +148,17 @@ public class Wanderer extends ApplicationAdapter {
 		final ArtifactEntity artifactEntity = new ArtifactEntity(this, lighthouseArtifactMeta);
 		artifactEntity.setTranslation(5, 34, 10);
 		this.addEntity(artifactEntity);
+		
+		final EnergyArtefact energyArtifactMeta = new EnergyArtefact();
+		final ArtifactEntity energyEntity = new ArtifactEntity(this, energyArtifactMeta);
+		energyEntity.setTranslation(3, 34, 10);
+		this.addEntity(energyEntity);
 
 		final Clan playerClan = new Clan();
 		playerClan.setColor(Color.BLUE);
 		playerClan.setName("player clan");
+		playerClan.setMaxEnergy(100);
+		this.clans.add(playerClan);
 
 		final Island island = new Island(this);
 		island.setCollideModel("orig/first_island.n/collide.obj");
@@ -239,6 +247,15 @@ public class Wanderer extends ApplicationAdapter {
 				c.removeMember((IClanMember) e);
 			}
 		}
+	}
+	
+	public Clan getClanForMember(IClanMember member) {
+		for (Clan c : this.clans) {
+			if (c.getMembers().contains(member, true)) {
+				return c;
+			}
+		}
+		return null;
 	}
 
 	public Array<AbstractEntity> getEntities() {
