@@ -122,7 +122,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.messageLabel.setAlignment(Align.center);
 		this.graphicsManager.getStage().addActor(this.messageLabel);
 
-		this.itemBar = new ItemBar();
+		this.itemBar = new ItemBar(this);
 		this.itemBar.setCount(10);
 		this.itemBar.setWidth(1);
 		this.itemBar.setHeight(32);
@@ -200,6 +200,8 @@ public class Wanderer extends ApplicationAdapter {
 		final CharacterW john = new CharacterW(this);
 		john.setMeta(johnMeta);
 		john.setTranslation(0.1f, 50f, 0.1f);
+		
+		this.itemBar.setBelt(john.getBelt());
 
 		playerClan.addMember(john);
 		this.addEntity(john);
@@ -325,5 +327,9 @@ public class Wanderer extends ApplicationAdapter {
 
 	public PerspectiveCamera getCamera() {
 		return this.graphicsManager.getCamera();
+	}
+
+	public GraphicsManager getGraphicsManager() {
+		return graphicsManager;
 	}
 }

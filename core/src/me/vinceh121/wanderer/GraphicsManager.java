@@ -70,8 +70,10 @@ public class GraphicsManager extends ApplicationAdapter {
 	}
 
 	public void renderUI() {
+		this.modelBatch.begin(this.viewportUi.getCamera()); // allows the rendering of 3D objects in the UI viewport
 		this.stage.act(Gdx.graphics.getDeltaTime());
 		this.stage.draw();
+		this.modelBatch.end();
 	}
 
 	@Override
