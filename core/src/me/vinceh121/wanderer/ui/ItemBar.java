@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Array;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
-import me.vinceh121.wanderer.building.BuildingArtifactMeta;
 import me.vinceh121.wanderer.entity.DisplayModel;
 
 public class ItemBar extends WandererWidget {
@@ -54,11 +53,7 @@ public class ItemBar extends WandererWidget {
 				m.setAbsoluteTransform(new Matrix4(new Vector3(32 * i + sX + TEX_SLOT.getWidth() / 2, getY() + 15, -10),
 						this.rotation, new Vector3(1, 1, 1)));
 
-				if (artifact instanceof BuildingArtifactMeta && ((BuildingArtifactMeta) artifact).isRed()) {
-					m.addTextureAttribute(ColorAttribute.createEmissive(1f, 0.1f, 0f, 0f));
-				} else {
-					m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
-				}
+				m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
 				m.render(this.game.getGraphicsManager().getModelBatch(), this.game.getGraphicsManager().getEnv());
 			}
 

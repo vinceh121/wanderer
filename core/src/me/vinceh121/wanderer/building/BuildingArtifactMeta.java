@@ -1,5 +1,7 @@
 package me.vinceh121.wanderer.building;
 
+import com.badlogic.gdx.graphics.Color;
+
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
 
 public class BuildingArtifactMeta extends ArtifactMeta {
@@ -11,7 +13,7 @@ public class BuildingArtifactMeta extends ArtifactMeta {
 
 	public BuildingArtifactMeta(int energyRequired, boolean red, String artifactModel, String artifactTexture) {
 		this.energyRequired = energyRequired;
-		this.red = red;
+		this.setRed(red);
 		this.setArtifactModel(artifactModel);
 		this.setArtifactTexture(artifactTexture);
 	}
@@ -28,8 +30,17 @@ public class BuildingArtifactMeta extends ArtifactMeta {
 		return red;
 	}
 
+	/**
+	 * Automatically sets color
+	 * @param red
+	 */
 	public void setRed(boolean red) {
 		this.red = red;
+		if (red) {
+			this.setArtifactColor(new Color(1f, 0.1f, 0f, 0f));
+		} else {
+			this.setArtifactColor(new Color(0f, 0.8f, 1f, 0f));
+		}
 	}
 
 	public boolean isShrink() {
