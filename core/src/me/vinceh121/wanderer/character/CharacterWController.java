@@ -105,7 +105,7 @@ public class CharacterWController extends CustomActionInterface {
 				((btCapsuleShape) this.ghostObj.getCollisionShape()).getHalfHeight(), 0));
 		// high point, start with relative direction, rotate by global transform, add
 		// position offset
-		points.add(new Vector3(0, height, 1).rot(this.getWorldTransform()).add(points.peek()));
+		points.add(new Vector3(0, height, distance / 2).rot(this.getWorldTransform()).add(points.peek()));
 		// down fall, like this entire codebase
 		points.add(new Vector3(0, 0, distance).rot(this.getWorldTransform()).add(points.first()));
 		this.jumpCurve = new Bezier<>(points, 0, points.size);
@@ -131,7 +131,7 @@ public class CharacterWController extends CustomActionInterface {
 			this.character.setTransform(trans);
 			this.jumpProgress += deltaTimeStep;
 
-			if ((this.bigJump && this.jumpProgress > 3f) || (!this.bigJump && this.jumpProgress > 1.2)) {
+			if ((this.bigJump && this.jumpProgress > 3f) || (!this.bigJump && this.jumpProgress > 1.2f)) {
 				// do no call #stopJump() as to not trigger onFall
 				this.jumping = false;
 				this.bigJump = false;
@@ -177,6 +177,10 @@ public class CharacterWController extends CustomActionInterface {
 
 	public boolean isBigJump() {
 		return this.bigJump;
+	}
+
+	public boolean isFalling() {
+		return falling;
 	}
 
 	/**

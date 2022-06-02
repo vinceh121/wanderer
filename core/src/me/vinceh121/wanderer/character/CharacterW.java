@@ -98,6 +98,10 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	public void processInput() {
+		if (this.controller.isJumping() || this.controller.isFalling()) {
+			return;
+		}
+		
 		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
 			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, 3f));
 		}
