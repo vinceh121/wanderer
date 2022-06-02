@@ -9,20 +9,20 @@ import me.vinceh121.wanderer.character.CharacterW;
 public class BackpackArtifact extends AbstractArtifactEntity {
 	private static final ArtifactMeta BACKPACK_META = new ArtifactMeta();
 
-	public BackpackArtifact(Wanderer game) {
-		super(game, BACKPACK_META);
+	public BackpackArtifact(final Wanderer game) {
+		super(game, BackpackArtifact.BACKPACK_META);
 	}
 
 	@Override
-	public boolean onPickUp(Wanderer game, CharacterW chara) {
+	public boolean onPickUp(final Wanderer game, final CharacterW chara) {
 		WandererConstants.ASSET_MANAGER.get("orig/feedback/backpack_active.wav", Sound.class).play();
 		game.showMessage("Backpack activated!");
 		// TODO enable backpack for player
 		return true;
 	}
-	
+
 	static {
-		BACKPACK_META.setArtifactModel("orig/boosterartefact.n/kugel.obj");
-		BACKPACK_META.setArtifactTexture("orig/boosterartefact.n/texturenone.ktx");
+		BackpackArtifact.BACKPACK_META.setArtifactModel("orig/boosterartefact.n/kugel.obj");
+		BackpackArtifact.BACKPACK_META.setArtifactTexture("orig/boosterartefact.n/texturenone.ktx");
 	}
 }

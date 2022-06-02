@@ -8,20 +8,20 @@ import com.badlogic.gdx.utils.Array;
 public class ContactDispatcher extends ContactListener {
 	private final Array<IContactListener> listeners = new Array<>();
 
-	public void addContactListener(IContactListener value) {
-		listeners.add(value);
+	public void addContactListener(final IContactListener value) {
+		this.listeners.add(value);
 	}
 
-	public boolean removeContactListener(IContactListener value) {
-		return listeners.removeValue(value, true);
+	public boolean removeContactListener(final IContactListener value) {
+		return this.listeners.removeValue(value, true);
 	}
 
 	@Override
-	public boolean onContactAdded(btManifoldPoint cp, btCollisionObject colObj0, int partId0, int index0,
-			btCollisionObject colObj1, int partId1, int index1) {
+	public boolean onContactAdded(final btManifoldPoint cp, final btCollisionObject colObj0, final int partId0,
+			final int index0, final btCollisionObject colObj1, final int partId1, final int index1) {
 		boolean contact = false;
 		for (int i = 0; i < this.listeners.size; i++) {
-			IContactListener l = this.listeners.get(i);
+			final IContactListener l = this.listeners.get(i);
 			if (l.onContactAdded(cp, colObj0, partId0, index0, colObj1, partId1, index1)) {
 				contact = true;
 			}
@@ -30,33 +30,34 @@ public class ContactDispatcher extends ContactListener {
 	}
 
 	@Override
-	public void onContactProcessed(btManifoldPoint cp, btCollisionObject colObj0, btCollisionObject colObj1) {
+	public void onContactProcessed(final btManifoldPoint cp, final btCollisionObject colObj0,
+			final btCollisionObject colObj1) {
 		for (int i = 0; i < this.listeners.size; i++) {
-			IContactListener l = this.listeners.get(i);
+			final IContactListener l = this.listeners.get(i);
 			l.onContactProcessed(cp, colObj0, colObj1);
 		}
 	}
 
 	@Override
-	public void onContactDestroyed(int manifoldPointUserValue) {
+	public void onContactDestroyed(final int manifoldPointUserValue) {
 		for (int i = 0; i < this.listeners.size; i++) {
-			IContactListener l = this.listeners.get(i);
+			final IContactListener l = this.listeners.get(i);
 			l.onContactDestroyed(manifoldPointUserValue);
 		}
 	}
 
 	@Override
-	public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
+	public void onContactStarted(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 		for (int i = 0; i < this.listeners.size; i++) {
-			IContactListener l = this.listeners.get(i);
+			final IContactListener l = this.listeners.get(i);
 			l.onContactStarted(colObj0, colObj1);
 		}
 	}
 
 	@Override
-	public void onContactEnded(btCollisionObject colObj0, btCollisionObject colObj1) {
+	public void onContactEnded(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 		for (int i = 0; i < this.listeners.size; i++) {
-			IContactListener l = this.listeners.get(i);
+			final IContactListener l = this.listeners.get(i);
 			l.onContactEnded(colObj0, colObj1);
 		}
 	}

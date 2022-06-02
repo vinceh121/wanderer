@@ -17,7 +17,8 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	public AbstractBuildingMeta() {
 	}
 
-	public AbstractBuildingMeta(int energyRequired, boolean red, String artifactModel, String artifactTexture) {
+	public AbstractBuildingMeta(final int energyRequired, final boolean red, final String artifactModel,
+			final String artifactTexture) {
 		this.energyRequired = energyRequired;
 		this.setRed(red);
 		this.setArtifactModel(artifactModel);
@@ -25,38 +26,38 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	}
 
 	public Array<DisplayModel> getDisplayModels() {
-		return displayModels;
+		return this.displayModels;
 	}
 
-	public void setDisplayModels(Array<DisplayModel> displayModels) {
+	public void setDisplayModels(final Array<DisplayModel> displayModels) {
 		this.displayModels = displayModels;
 	}
-	
-	public void addModel(DisplayModel value) {
+
+	public void addModel(final DisplayModel value) {
 		this.displayModels.add(value);
 	}
 
-	public boolean removeModel(DisplayModel value) {
+	public boolean removeModel(final DisplayModel value) {
 		return this.displayModels.removeValue(value, true);
 	}
 
-	public DisplayModel removeModel(int index) {
+	public DisplayModel removeModel(final int index) {
 		return this.displayModels.removeIndex(index);
 	}
 
 	public String getCollisionModel() {
-		return collisionModel;
+		return this.collisionModel;
 	}
 
-	public void setCollisionModel(String collisionModel) {
+	public void setCollisionModel(final String collisionModel) {
 		this.collisionModel = collisionModel;
 	}
 
 	public int getEnergyRequired() {
-		return energyRequired;
+		return this.energyRequired;
 	}
 
-	public void setEnergyRequired(int energyRequired) {
+	public void setEnergyRequired(final int energyRequired) {
 		this.energyRequired = energyRequired;
 	}
 
@@ -64,26 +65,26 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	 * @return Build time in seconds
 	 */
 	public int getBuildTime() {
-		return buildTime;
+		return this.buildTime;
 	}
 
 	/**
 	 * @param buildTime Build time in seconds
 	 */
-	public void setBuildTime(int buildTime) {
+	public void setBuildTime(final int buildTime) {
 		this.buildTime = buildTime;
 	}
 
 	public boolean isRed() {
-		return red;
+		return this.red;
 	}
 
 	/**
 	 * Automatically sets color
-	 * 
+	 *
 	 * @param red
 	 */
-	public void setRed(boolean red) {
+	public void setRed(final boolean red) {
 		this.red = red;
 		if (red) {
 			this.setArtifactColor(new Color(1f, 0.1f, 0f, 0f));
@@ -93,26 +94,26 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	}
 
 	public boolean isShrink() {
-		return shrink;
+		return this.shrink;
 	}
 
-	public void setShrink(boolean shrink) {
+	public void setShrink(final boolean shrink) {
 		this.shrink = shrink;
 	}
 
 	public float getInteractZoneRadius() {
-		return interactZoneRadius;
+		return this.interactZoneRadius;
 	}
 
-	public void setInteractZoneRadius(float interactZoneRadius) {
+	public void setInteractZoneRadius(final float interactZoneRadius) {
 		this.interactZoneRadius = interactZoneRadius;
 	}
 
 	public float getInteractZoneHeight() {
-		return interactZoneHeight;
+		return this.interactZoneHeight;
 	}
 
-	public void setInteractZoneHeight(float interactZoneHeight) {
+	public void setInteractZoneHeight(final float interactZoneHeight) {
 		this.interactZoneHeight = interactZoneHeight;
 	}
 

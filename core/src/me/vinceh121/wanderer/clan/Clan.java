@@ -41,18 +41,18 @@ public class Clan {
 	}
 
 	public int getEnergy() {
-		return energy;
+		return this.energy;
 	}
 
-	public void setEnergy(int energy) {
+	public void setEnergy(final int energy) {
 		this.energy = energy;
 	}
 
 	public int getMaxEnergy() {
-		return maxEnergy;
+		return this.maxEnergy;
 	}
 
-	public void setMaxEnergy(int maxEnergy) {
+	public void setMaxEnergy(final int maxEnergy) {
 		this.maxEnergy = maxEnergy;
 	}
 

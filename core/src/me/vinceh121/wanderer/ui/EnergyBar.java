@@ -1,7 +1,5 @@
 package me.vinceh121.wanderer.ui;
 
-import static me.vinceh121.wanderer.ui.UiUtils.drawFlip;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -21,51 +19,52 @@ public class EnergyBar extends Widget {
 	private int segmentCount = 5, value = 0, maxValue = 100;
 
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
+	public void draw(final Batch batch, final float parentAlpha) {
 		super.draw(batch, parentAlpha);
 
 		final float maxHeight = /* base */116 + /* tip */2 + /* segments */32 * this.segmentCount;
-		final float barHeight = this.value * maxHeight / maxValue;
+		final float barHeight = this.value * maxHeight / this.maxValue;
 
 		batch.setColor(0.3f, 0.5f, 0.8f, 1f);
 
 		UiUtils.beginBlend(batch);
 //		batch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_ONE_MINUS_SRC_COLOR);
 		// width and height are swapped because of flip
-		batch.draw(TEX_BAR, 103, 23, 0, 0, barHeight, 18, 1, 1, 90, 0, 0, TEX_BAR.getWidth(), TEX_BAR.getHeight(),
-				false, true);
+		batch.draw(EnergyBar.TEX_BAR, 103, 23, 0, 0, barHeight, 18, 1, 1, 90, 0, 0, EnergyBar.TEX_BAR.getWidth(),
+				EnergyBar.TEX_BAR.getHeight(), false, true);
 		UiUtils.endBlend(batch);
 		batch.setColor(Color.WHITE);
 
-		drawFlip(batch, TEX_BASE, getX(), getY());
+		UiUtils.drawFlip(batch, EnergyBar.TEX_BASE, this.getX(), this.getY());
 		int i;
 		for (i = 0; i < this.segmentCount; i++) {
-			drawFlip(batch, TEX_SEGMENT, getX(), 32 * i + getY() + TEX_BASE.getHeight());
+			UiUtils.drawFlip(batch, EnergyBar.TEX_SEGMENT, this.getX(),
+					32 * i + this.getY() + EnergyBar.TEX_BASE.getHeight());
 		}
-		drawFlip(batch, TEX_TIP, getX(), 32 * i + getY() + TEX_BASE.getHeight());
+		UiUtils.drawFlip(batch, EnergyBar.TEX_TIP, this.getX(), 32 * i + this.getY() + EnergyBar.TEX_BASE.getHeight());
 	}
 
 	public int getSegmentCount() {
-		return segmentCount;
+		return this.segmentCount;
 	}
 
-	public void setSegmentCount(int segmentCount) {
+	public void setSegmentCount(final int segmentCount) {
 		this.segmentCount = segmentCount;
 	}
 
 	public int getValue() {
-		return value;
+		return this.value;
 	}
 
-	public void setValue(int value) {
+	public void setValue(final int value) {
 		this.value = value;
 	}
 
 	public int getMaxValue() {
-		return maxValue;
+		return this.maxValue;
 	}
 
-	public void setMaxValue(int maxValue) {
+	public void setMaxValue(final int maxValue) {
 		this.maxValue = maxValue;
 	}
 

@@ -29,65 +29,65 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 		super(game);
 
 		this.setCollideModel(meta.getCollisionModel());
-		for (DisplayModel m : meta.getDisplayModels()) {
+		for (final DisplayModel m : meta.getDisplayModels()) {
 			this.getModels().add(new DisplayModel(m)); // need to clone display models
 		}
-		
+
 		this.interactZone = new btGhostObject();
 		this.interactZone
 				.setCollisionShape(new btCapsuleShape(meta.getInteractZoneRadius(), meta.getInteractZoneHeight()));
 		this.interactZone.setCollisionFlags(CollisionFlags.CF_NO_CONTACT_RESPONSE);
 		this.interactListener = new ContactListenerAdapter() {
 			@Override
-			public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
-				onInteractContact(colObj0, colObj1);
+			public void onContactStarted(final btCollisionObject colObj0, final btCollisionObject colObj1) {
+				AbstractBuilding.this.onInteractContact(colObj0, colObj1);
 			}
 
 			@Override
-			public void onContactEnded(btCollisionObject colObj0, btCollisionObject colObj1) {
-				onInteractStop(colObj0, colObj1);
+			public void onContactEnded(final btCollisionObject colObj0, final btCollisionObject colObj1) {
+				AbstractBuilding.this.onInteractStop(colObj0, colObj1);
 			}
 		};
-		this.game.getPhysicsManager().addContactListener(interactListener);
+		this.game.getPhysicsManager().addContactListener(this.interactListener);
 	}
 
-	protected void onInteractContact(btCollisionObject colObj0, btCollisionObject colObj1) {
+	protected void onInteractContact(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 		// do not interact if we aren't controlling a character
-		if (!(game.getControlledEntity() instanceof CharacterW)) {
+		if (!(this.game.getControlledEntity() instanceof CharacterW)) {
 			return;
 		}
-		CharacterW chara = (CharacterW) game.getControlledEntity();
+		final CharacterW chara = (CharacterW) this.game.getControlledEntity();
 
 		// if collided objects are interaction zone and player character
-		if ((colObj0.getCPointer() == interactZone.getCPointer()
-				&& colObj1.getCPointer() == chara.getGhostObject().getCPointer())
-				|| (colObj1.getCPointer() == interactZone.getCPointer()
-						&& colObj0.getCPointer() == chara.getGhostObject().getCPointer())) {
-			game.enterInteractBuilding(AbstractBuilding.this);
+		if (colObj0.getCPointer() == this.interactZone.getCPointer()
+				&& colObj1.getCPointer() == chara.getGhostObject().getCPointer()
+				|| colObj1.getCPointer() == this.interactZone.getCPointer()
+						&& colObj0.getCPointer() == chara.getGhostObject().getCPointer()) {
+			this.game.enterInteractBuilding(AbstractBuilding.this);
 		}
 	}
 
-	protected void onInteractStop(btCollisionObject colObj0, btCollisionObject colObj1) {
+	protected void onInteractStop(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 		// do not interact if we aren't controlling a character
-		if (!(game.getControlledEntity() instanceof CharacterW)) {
+		if (!(this.game.getControlledEntity() instanceof CharacterW)) {
 			return;
 		}
-		CharacterW chara = (CharacterW) game.getControlledEntity();
+		final CharacterW chara = (CharacterW) this.game.getControlledEntity();
 
 		// if collided objects are interaction zone and player character
-		if ((colObj0.getCPointer() == interactZone.getCPointer()
-				&& colObj1.getCPointer() == chara.getGhostObject().getCPointer())
-				|| (colObj1.getCPointer() == interactZone.getCPointer()
-						&& colObj0.getCPointer() == chara.getGhostObject().getCPointer())) {
-			game.removeInteractBuilding();
+		if (colObj0.getCPointer() == this.interactZone.getCPointer()
+				&& colObj1.getCPointer() == chara.getGhostObject().getCPointer()
+				|| colObj1.getCPointer() == this.interactZone.getCPointer()
+						&& colObj0.getCPointer() == chara.getGhostObject().getCPointer()) {
+			this.game.removeInteractBuilding();
 		}
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -124,11 +124,11 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 	}
 
 	public btGhostObject getInteractZone() {
-		return interactZone;
+		return this.interactZone;
 	}
 
 	public IContactListener getInteractListener() {
-		return interactListener;
+		return this.interactListener;
 	}
 
 	@Override
@@ -155,14 +155,14 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 	}
 
 	@Override
-	public void enterBtWorld(btDiscreteDynamicsWorld world) {
+	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
 		super.enterBtWorld(world);
 		world.addCollisionObject(this.interactZone, CollisionFilterGroups.SensorTrigger,
 				CollisionFilterGroups.CharacterFilter);
 	}
 
 	@Override
-	public void leaveBtWorld(btDiscreteDynamicsWorld world) {
+	public void leaveBtWorld(final btDiscreteDynamicsWorld world) {
 		super.leaveBtWorld(world);
 		world.removeCollisionObject(this.interactZone);
 	}
@@ -170,7 +170,7 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 	@Override
 	protected void updateTransform() {
 		super.updateTransform();
-		this.interactZone.setWorldTransform(getTransform());
+		this.interactZone.setWorldTransform(this.getTransform());
 	}
 
 	@Override
@@ -178,7 +178,7 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 		if (this.island != null) {
 			this.island.removeBuilding(this);
 		}
-		this.game.getPhysicsManager().removeContactListener(interactListener);
+		this.game.getPhysicsManager().removeContactListener(this.interactListener);
 		Gdx.app.postRunnable(() -> this.interactZone.dispose());
 		super.dispose();
 	}

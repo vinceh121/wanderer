@@ -5,7 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class BlinkLabel extends Label {
-	private long attackTime = 50, sustainTime = 2000, releaseTime = 100, blinkStart;
+	private final long attackTime = 50, sustainTime = 2000, releaseTime = 100;
+	private long blinkStart;
 	/**
 	 * -1 not blinking, 0 attacking, 1 sustaining, 2 releasing
 	 *
@@ -13,23 +14,23 @@ public class BlinkLabel extends Label {
 	 */
 	private int state;
 
-	public BlinkLabel(CharSequence text, LabelStyle style) {
+	public BlinkLabel(final CharSequence text, final LabelStyle style) {
 		super(text, style);
 	}
 
-	public BlinkLabel(CharSequence text, Skin skin, String fontName, Color color) {
+	public BlinkLabel(final CharSequence text, final Skin skin, final String fontName, final Color color) {
 		super(text, skin, fontName, color);
 	}
 
-	public BlinkLabel(CharSequence text, Skin skin, String fontName, String colorName) {
+	public BlinkLabel(final CharSequence text, final Skin skin, final String fontName, final String colorName) {
 		super(text, skin, fontName, colorName);
 	}
 
-	public BlinkLabel(CharSequence text, Skin skin, String styleName) {
+	public BlinkLabel(final CharSequence text, final Skin skin, final String styleName) {
 		super(text, skin, styleName);
 	}
 
-	public BlinkLabel(CharSequence text, Skin skin) {
+	public BlinkLabel(final CharSequence text, final Skin skin) {
 		super(text, skin);
 	}
 
@@ -39,7 +40,7 @@ public class BlinkLabel extends Label {
 	}
 
 	@Override
-	public void act(float delta) {
+	public void act(final float delta) {
 		final float elapsed = System.currentTimeMillis() - this.blinkStart;
 		if (this.state == 0) {
 			this.setAlpha(elapsed / this.attackTime);
@@ -52,7 +53,7 @@ public class BlinkLabel extends Label {
 				this.state++;
 			}
 		} else if (this.state == 2) {
-			this.setAlpha(1 - (elapsed / (this.releaseTime)));
+			this.setAlpha(1 - elapsed / this.releaseTime);
 			if (elapsed > this.releaseTime) {
 				this.state++;
 			}
@@ -61,7 +62,7 @@ public class BlinkLabel extends Label {
 		super.act(delta);
 	}
 
-	public void setAlpha(float a) {
+	public void setAlpha(final float a) {
 		this.getColor().a = a;
 	}
 

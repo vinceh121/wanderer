@@ -31,17 +31,17 @@ public class DisplayModel {
 	public DisplayModel() {
 	}
 
-	public DisplayModel(String displayModel, String displayTexture) {
+	public DisplayModel(final String displayModel, final String displayTexture) {
 		this.displayModel = displayModel;
 		this.displayTexture = displayTexture;
 	}
-	
-	public DisplayModel(String displayModel, String displayTexture, Matrix4 relativeTransform) {
+
+	public DisplayModel(final String displayModel, final String displayTexture, final Matrix4 relativeTransform) {
 		this(displayModel, displayTexture);
 		this.relativeTransform.set(relativeTransform);
 	}
-	
-	public DisplayModel(DisplayModel from) {
+
+	public DisplayModel(final DisplayModel from) {
 		this.setRelativeTransform(from.getRelativeTransform());
 		this.setAbsoluteTransform(from.getAbsoluteTransform());
 		this.textureAttributes.addAll(from.textureAttributes);
@@ -85,14 +85,14 @@ public class DisplayModel {
 		this.getCacheDisplayModel().transform = this.absoluteTransform;
 	}
 
-	public void updateTransform(Matrix4 entityTrans) {
+	public void updateTransform(final Matrix4 entityTrans) {
 		this.absoluteTransform.set(entityTrans);
 
-		this.absoluteTransform.translate(relativeTransform.getTranslation(new Vector3()));
+		this.absoluteTransform.translate(this.relativeTransform.getTranslation(new Vector3()));
 
-		this.absoluteTransform.rotate(relativeTransform.getRotation(new Quaternion()));
+		this.absoluteTransform.rotate(this.relativeTransform.getRotation(new Quaternion()));
 
-		this.absoluteTransform.scl(relativeTransform.getScale(new Vector3()));
+		this.absoluteTransform.scl(this.relativeTransform.getScale(new Vector3()));
 
 		if (this.cacheDisplayModel != null) {
 			this.cacheDisplayModel.transform = this.absoluteTransform;
@@ -100,58 +100,58 @@ public class DisplayModel {
 	}
 
 	public String getDisplayModel() {
-		return displayModel;
+		return this.displayModel;
 	}
 
-	public void setDisplayModel(String displayModel) {
+	public void setDisplayModel(final String displayModel) {
 		this.displayModel = displayModel;
 	}
 
 	public String getDisplayTexture() {
-		return displayTexture;
+		return this.displayTexture;
 	}
 
-	public void setDisplayTexture(String displayTexture) {
+	public void setDisplayTexture(final String displayTexture) {
 		this.displayTexture = displayTexture;
 	}
 
 	public ModelInstance getCacheDisplayModel() {
-		return cacheDisplayModel;
+		return this.cacheDisplayModel;
 	}
 
-	public void setCacheDisplayModel(ModelInstance cacheDisplayModel) {
+	public void setCacheDisplayModel(final ModelInstance cacheDisplayModel) {
 		this.cacheDisplayModel = cacheDisplayModel;
 	}
 
 	public Matrix4 getAbsoluteTransform() {
-		return absoluteTransform;
+		return this.absoluteTransform;
 	}
 
-	public void setAbsoluteTransform(Matrix4 trans) {
+	public void setAbsoluteTransform(final Matrix4 trans) {
 		this.absoluteTransform.set(trans);
 	}
 
 	public Matrix4 getRelativeTransform() {
-		return relativeTransform;
+		return this.relativeTransform;
 	}
 
-	public void setRelativeTransform(Matrix4 trans) {
+	public void setRelativeTransform(final Matrix4 trans) {
 		this.relativeTransform.set(trans);
 	}
 
 	public Array<Attribute> getTextureAttributes() {
-		return textureAttributes;
+		return this.textureAttributes;
 	}
 
-	public void addTextureAttribute(Attribute value) {
-		textureAttributes.add(value);
+	public void addTextureAttribute(final Attribute value) {
+		this.textureAttributes.add(value);
 	}
 
-	public boolean removeTextureAttribute(Attribute value) {
-		return textureAttributes.removeValue(value, false);
+	public boolean removeTextureAttribute(final Attribute value) {
+		return this.textureAttributes.removeValue(value, false);
 	}
 
-	public Attribute removeTextureAttribute(int index) {
-		return textureAttributes.removeIndex(index);
+	public Attribute removeTextureAttribute(final int index) {
+		return this.textureAttributes.removeIndex(index);
 	}
 }

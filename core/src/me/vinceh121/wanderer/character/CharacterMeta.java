@@ -17,13 +17,13 @@ public class CharacterMeta {
 	 * @return the model
 	 */
 	public String getModel() {
-		return model;
+		return this.model;
 	}
 
 	/**
 	 * @param model the model to set
 	 */
-	public void setModel(String model) {
+	public void setModel(final String model) {
 		this.model = model;
 	}
 
@@ -31,13 +31,13 @@ public class CharacterMeta {
 	 * @return the texture
 	 */
 	public String getTexture() {
-		return texture;
+		return this.texture;
 	}
 
 	/**
 	 * @param texture the texture to set
 	 */
-	public void setTexture(String texture) {
+	public void setTexture(final String texture) {
 		this.texture = texture;
 	}
 
@@ -45,13 +45,13 @@ public class CharacterMeta {
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -59,13 +59,13 @@ public class CharacterMeta {
 	 * @return the fallSound
 	 */
 	public String getFallSound() {
-		return fallSound;
+		return this.fallSound;
 	}
 
 	/**
 	 * @param fallSound the fallSound to set
 	 */
-	public void setFallSound(String fallSound) {
+	public void setFallSound(final String fallSound) {
 		this.fallSound = fallSound;
 	}
 
@@ -73,13 +73,13 @@ public class CharacterMeta {
 	 * @return the steps
 	 */
 	public String[] getSteps() {
-		return steps;
+		return this.steps;
 	}
 
 	/**
 	 * @param steps the steps to set
 	 */
-	public void setSteps(String[] steps) {
+	public void setSteps(final String[] steps) {
 		this.steps = steps;
 	}
 
@@ -87,13 +87,13 @@ public class CharacterMeta {
 	 * @return the stepsSide
 	 */
 	public String[] getStepsSide() {
-		return stepsSide;
+		return this.stepsSide;
 	}
 
 	/**
 	 * @param stepsSide the stepsSide to set
 	 */
-	public void setStepsSide(String[] stepsSide) {
+	public void setStepsSide(final String[] stepsSide) {
 		this.stepsSide = stepsSide;
 	}
 
@@ -101,13 +101,13 @@ public class CharacterMeta {
 	 * @return the storyMode
 	 */
 	public boolean isStoryMode() {
-		return storyMode;
+		return this.storyMode;
 	}
 
 	/**
 	 * @param storyMode the storyMode to set
 	 */
-	public void setStoryMode(boolean storyMode) {
+	public void setStoryMode(final boolean storyMode) {
 		this.storyMode = storyMode;
 	}
 
@@ -119,19 +119,19 @@ public class CharacterMeta {
 		WandererConstants.ASSET_MANAGER.load(this.texture, Texture.class, WandererConstants.MIPMAPS);
 		WandererConstants.ASSET_MANAGER.load(this.fallSound, Sound.class);
 
-		for (String s : this.steps) {
+		for (final String s : this.steps) {
 			WandererConstants.ASSET_MANAGER.load(s, Sound.class);
 		}
 
-		for (String s : this.stepsSide) {
+		for (final String s : this.stepsSide) {
 			WandererConstants.ASSET_MANAGER.load(s, Sound.class);
 		}
 	}
 
 	@Override
 	public String toString() {
-		return "CharacterMeta [name=" + name + ", model=" + model + ", texture=" + texture + ", fallSound=" + fallSound
-				+ ", steps=" + Arrays.toString(steps) + ", stepsSide=" + Arrays.toString(stepsSide) + ", storyMode="
-				+ storyMode + "]";
+		return "CharacterMeta [name=" + this.name + ", model=" + this.model + ", texture=" + this.texture
+				+ ", fallSound=" + this.fallSound + ", steps=" + Arrays.toString(this.steps) + ", stepsSide="
+				+ Arrays.toString(this.stepsSide) + ", storyMode=" + this.storyMode + "]";
 	}
 }

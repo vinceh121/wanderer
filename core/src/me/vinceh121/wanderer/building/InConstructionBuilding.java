@@ -27,7 +27,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 	private long soundId;
 	private float aliveTime;
 
-	public InConstructionBuilding(Wanderer game, AbstractBuildingMeta meta) {
+	public InConstructionBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
 		super(game, meta);
 		this.meta = meta;
 
@@ -45,19 +45,19 @@ public class InConstructionBuilding extends AbstractBuilding {
 	}
 
 	@Override
-	protected void onInteractContact(btCollisionObject colObj0, btCollisionObject colObj1) {
+	protected void onInteractContact(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 		// disable interactivity
 	}
 
 	@Override
-	public void render(ModelBatch batch, Environment env) {
+	public void render(final ModelBatch batch, final Environment env) {
 		super.render(batch, env);
 
 		for (int i = 0; i < this.curves.size; i++) {
-			Bezier<Vector3> bezier = this.curves.get(i);
-			DisplayModel model = this.getModels().get(i);
+			final Bezier<Vector3> bezier = this.curves.get(i);
+			final DisplayModel model = this.getModels().get(i);
 
-			Vector3 v = bezier.valueAt(new Vector3(), (this.aliveTime / 5) % 1);
+			final Vector3 v = bezier.valueAt(new Vector3(), this.aliveTime / 5 % 1);
 			v.add(model.getRelativeTransform().getTranslation(new Vector3()));
 			v.add(this.getTransform().getTranslation(new Vector3()));
 			model.getAbsoluteTransform().setTranslation(v);
@@ -76,26 +76,26 @@ public class InConstructionBuilding extends AbstractBuilding {
 		this.constructionDone = true;
 		if (this.getIsland() != null) {
 			this.getIsland().removeBuilding(this);
-			AbstractBuilding newBuilding = this.meta.createBuilding(this.game);
+			final AbstractBuilding newBuilding = this.meta.createBuilding(this.game);
 			this.game.addEntity(newBuilding);
-			this.getIsland().addBuilding(newBuilding, getSlot());
+			this.getIsland().addBuilding(newBuilding, this.getSlot());
 		}
 
-		this.sound.stop(soundId);
+		this.sound.stop(this.soundId);
 		this.game.removeEntity(this);
 		this.dispose();
 	}
 
 	public boolean isConstructionDone() {
-		return constructionDone;
+		return this.constructionDone;
 	}
 
 	@Override
-	public void enterBtWorld(btDiscreteDynamicsWorld world) {
+	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
 		super.enterBtWorld(world);
 		this.sound = WandererConstants.ASSET_MANAGER.get("orig/lib/sound/healingspell.wav", Sound.class);
 		this.soundId = this.sound.play();
-		this.sound.setLooping(soundId, true);
+		this.sound.setLooping(this.soundId, true);
 	}
 
 	@Override

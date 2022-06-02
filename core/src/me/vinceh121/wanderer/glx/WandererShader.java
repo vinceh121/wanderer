@@ -10,9 +10,10 @@ public class WandererShader extends DefaultShader {
 	public static final Uniform tiledMaterialUniform = new Uniform("u_tiledMaterialTexture");
 	public static final Setter tiledMaterialTextureSetter = new LocalSetter() {
 		@Override
-		public void set(BaseShader shader, int inputID, Renderable renderable, Attributes combinedAttributes) {
+		public void set(final BaseShader shader, final int inputID, final Renderable renderable,
+				final Attributes combinedAttributes) {
 			final int unit = shader.context.textureBinder
-					.bind(((TiledMaterialAttribute) (combinedAttributes.get(TiledMaterialAttribute.TiledMaterial)))
+					.bind(((TiledMaterialAttribute) combinedAttributes.get(TiledMaterialAttribute.TiledMaterial))
 							.getTextureDescriptor());
 			shader.set(inputID, unit);
 		}
@@ -22,21 +23,22 @@ public class WandererShader extends DefaultShader {
 
 	public final int u_tiledMaterialTexture, u_tiledMaterialOpacity, u_tiledMaterialRatio;
 
-	public WandererShader(Renderable renderable, Config config) {
+	public WandererShader(final Renderable renderable, final Config config) {
 		super(renderable, config, WandererShader.createPrefix(renderable, config));
 
-		this.u_tiledMaterialTexture = register(tiledMaterialUniform, tiledMaterialTextureSetter);
-		this.u_tiledMaterialOpacity = register(tiledMaterialOpacityUniform);
-		this.u_tiledMaterialRatio = register(tiledMaterialRatioUniform);
+		this.u_tiledMaterialTexture = this.register(WandererShader.tiledMaterialUniform,
+				WandererShader.tiledMaterialTextureSetter);
+		this.u_tiledMaterialOpacity = this.register(WandererShader.tiledMaterialOpacityUniform);
+		this.u_tiledMaterialRatio = this.register(WandererShader.tiledMaterialRatioUniform);
 	}
 
 	@Override
-	protected void bindMaterial(Attributes attributes) {
+	protected void bindMaterial(final Attributes attributes) {
 		super.bindMaterial(attributes);
-		for (Attribute a : attributes) {
+		for (final Attribute a : attributes) {
 			if (a.type == TiledMaterialAttribute.TiledMaterial) {
-				set(this.u_tiledMaterialOpacity, ((TiledMaterialAttribute) a).getOpacity());
-				set(this.u_tiledMaterialRatio, ((TiledMaterialAttribute) a).getRatio());
+				this.set(this.u_tiledMaterialOpacity, ((TiledMaterialAttribute) a).getOpacity());
+				this.set(this.u_tiledMaterialRatio, ((TiledMaterialAttribute) a).getRatio());
 				break;
 			}
 		}
@@ -44,7 +46,7 @@ public class WandererShader extends DefaultShader {
 
 	public static String createPrefix(final Renderable renderable, final Config config) {
 		String prefix = DefaultShader.createPrefix(renderable, config); // sigh should've been local
-		for (Attribute a : renderable.material) {
+		for (final Attribute a : renderable.material) {
 			if (a.type == TiledMaterialAttribute.TiledMaterial) {
 				prefix += "#define tiledMaterialFlag\n";
 				break;

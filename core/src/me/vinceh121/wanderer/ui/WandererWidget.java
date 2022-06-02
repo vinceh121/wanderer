@@ -7,11 +7,11 @@ import me.vinceh121.wanderer.Wanderer;
 public abstract class WandererWidget extends Widget {
 	protected final Wanderer game;
 
-	public WandererWidget(Wanderer game) {
+	public WandererWidget(final Wanderer game) {
 		this.game = game;
 	}
 
 	public Wanderer getGame() {
-		return game;
+		return this.game;
 	}
 }

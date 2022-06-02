@@ -20,7 +20,7 @@ import me.vinceh121.wanderer.phys.IContactListener;
 public class CharacterWController extends CustomActionInterface {
 	private final IContactListener contactListener = new ContactListenerAdapter() {
 		@Override
-		public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
+		public void onContactStarted(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 			if (this.validInteract(colObj0, colObj1)) {
 				CharacterWController.this.stopJump();
 				CharacterWController.this.falling = false;
@@ -28,7 +28,8 @@ public class CharacterWController extends CustomActionInterface {
 		};
 
 		@Override
-		public void onContactProcessed(btManifoldPoint cp, btCollisionObject colObj0, btCollisionObject colObj1) {
+		public void onContactProcessed(final btManifoldPoint cp, final btCollisionObject colObj0,
+				final btCollisionObject colObj1) {
 			final float dist = cp.getDistance();
 			if (this.validInteract(colObj0, colObj1) && dist < -0.3) {
 				CharacterWController.this.stopJump();
@@ -38,7 +39,8 @@ public class CharacterWController extends CustomActionInterface {
 						.getTranslation(new Vector3());
 				final Vector3 normalWorldB = new Vector3();
 				cp.getNormalWorldOnB(normalWorldB);
-				pos.add(normalWorldB.scl(colObj0.getCPointer() == ghostObj.getCPointer() ? -1 : 1)
+				pos.add(normalWorldB
+						.scl(colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer() ? -1 : 1)
 						.scl(dist)/* .scl(0.3f) */);
 			}
 		};
@@ -48,11 +50,11 @@ public class CharacterWController extends CustomActionInterface {
 		 * @param colObj1
 		 * @return if either obj is this character and the other isn't a sensor
 		 */
-		private boolean validInteract(btCollisionObject colObj0, btCollisionObject colObj1) {
-			return (colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer()
-					&& ((colObj1.getCollisionFlags() & CollisionFlags.CF_NO_CONTACT_RESPONSE) == 0))
+		private boolean validInteract(final btCollisionObject colObj0, final btCollisionObject colObj1) {
+			return colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer()
+					&& (colObj1.getCollisionFlags() & CollisionFlags.CF_NO_CONTACT_RESPONSE) == 0
 					|| colObj1.getCPointer() == CharacterWController.this.ghostObj.getCPointer()
-							&& ((colObj0.getCollisionFlags() & CollisionFlags.CF_NO_CONTACT_RESPONSE) == 0);
+							&& (colObj0.getCollisionFlags() & CollisionFlags.CF_NO_CONTACT_RESPONSE) == 0;
 		}
 	};
 	private final btKinematicCharacterController delegateController;
@@ -82,7 +84,7 @@ public class CharacterWController extends CustomActionInterface {
 		this.game.getBtWorld().addCollisionObject(this.ghostObj, CollisionFilterGroups.CharacterFilter,
 				CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter
 						| CollisionFilterGroups.SensorTrigger);
-		this.game.getPhysicsManager().addContactListener(contactListener);
+		this.game.getPhysicsManager().addContactListener(this.contactListener);
 	}
 
 	public void bigJump() {
@@ -131,7 +133,7 @@ public class CharacterWController extends CustomActionInterface {
 			this.character.setTransform(trans);
 			this.jumpProgress += deltaTimeStep;
 
-			if ((this.bigJump && this.jumpProgress > 3f) || (!this.bigJump && this.jumpProgress > 1.2f)) {
+			if (this.bigJump && this.jumpProgress > 3f || !this.bigJump && this.jumpProgress > 1.2f) {
 				// do no call #stopJump() as to not trigger onFall
 				this.jumping = false;
 				this.bigJump = false;
@@ -180,7 +182,7 @@ public class CharacterWController extends CustomActionInterface {
 	}
 
 	public boolean isFalling() {
-		return falling;
+		return this.falling;
 	}
 
 	/**
@@ -211,7 +213,7 @@ public class CharacterWController extends CustomActionInterface {
 
 	@Override
 	public void dispose() {
-		this.game.getPhysicsManager().removeContactListener(contactListener);
+		this.game.getPhysicsManager().removeContactListener(this.contactListener);
 		this.delegateController.dispose();
 		super.dispose();
 	}

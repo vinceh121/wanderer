@@ -101,7 +101,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		if (this.controller.isJumping() || this.controller.isFalling()) {
 			return;
 		}
-		
+
 		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
 			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, 3f));
 		}
@@ -170,7 +170,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	 * @return the meta
 	 */
 	public CharacterMeta getMeta() {
-		return meta;
+		return this.meta;
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	 *
 	 * @param meta the meta to set
 	 */
-	public void setMeta(CharacterMeta meta) {
+	public void setMeta(final CharacterMeta meta) {
 		this.meta = meta;
 		this.clearModels();
 		this.addModel(new DisplayModel(meta.getModel(), meta.getTexture()));
@@ -189,26 +189,26 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	 * @see me.vinceh121.wanderer.character.CharacterWController#getGhostObject()
 	 */
 	public btPairCachingGhostObject getGhostObject() {
-		return controller.getGhostObject();
+		return this.controller.getGhostObject();
 	}
 
 	public int getBeltSize() {
-		return beltSize;
+		return this.beltSize;
 	}
 
-	public void setBeltSize(int beltSize) {
+	public void setBeltSize(final int beltSize) {
 		this.beltSize = beltSize;
 	}
 
 	public Array<ArtifactMeta> getBelt() {
-		return belt;
+		return this.belt;
 	}
 
 	public boolean canPickUpArtifact() {
 		return this.beltSize >= this.belt.size;
 	}
 
-	public void pickUpArtifact(ArtifactMeta artifact) {
+	public void pickUpArtifact(final ArtifactMeta artifact) {
 		if (!this.canPickUpArtifact()) {
 			throw new IllegalStateException("Can't pickup items");
 		}

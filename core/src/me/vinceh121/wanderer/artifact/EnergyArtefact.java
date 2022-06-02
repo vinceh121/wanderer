@@ -10,13 +10,13 @@ import me.vinceh121.wanderer.clan.Clan;
 public class EnergyArtefact extends AbstractArtifactEntity {
 	private static final ArtifactMeta ENERGY_META = new ArtifactMeta();
 
-	public EnergyArtefact(Wanderer game) {
-		super(game, ENERGY_META);
+	public EnergyArtefact(final Wanderer game) {
+		super(game, EnergyArtefact.ENERGY_META);
 	}
 
 	@Override
-	public boolean onPickUp(Wanderer game, CharacterW chara) {
-		Clan c = game.getClanForMember(chara);
+	public boolean onPickUp(final Wanderer game, final CharacterW chara) {
+		final Clan c = game.getClanForMember(chara);
 		if (c != null) {
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound.class).play();
 			// TODO find proper value
@@ -26,9 +26,9 @@ public class EnergyArtefact extends AbstractArtifactEntity {
 			return false;
 		}
 	}
-	
+
 	static {
-		ENERGY_META.setArtifactModel("orig/energyclot.n/kugel2.obj");
-		ENERGY_META.setArtifactModel("orig/lib/eff_glitter/texturenone.ktx");
+		EnergyArtefact.ENERGY_META.setArtifactModel("orig/energyclot.n/kugel2.obj");
+		EnergyArtefact.ENERGY_META.setArtifactModel("orig/lib/eff_glitter/texturenone.ktx");
 	}
 }

@@ -100,7 +100,7 @@ public abstract class AbstractEntity implements Disposable {
 	}
 
 	public void render(final ModelBatch batch, final Environment env) {
-		for (DisplayModel m : this.models) {
+		for (final DisplayModel m : this.models) {
 			m.render(batch, env);
 		}
 	}
@@ -120,7 +120,7 @@ public abstract class AbstractEntity implements Disposable {
 
 	public void setCollideObject(final btRigidBody collideObject) {
 		// https://pybullet.org/Bullet/BulletFull/btDiscreteDynamicsWorld_8cpp_source.html#l00579
-		final boolean isDynamic = (!collideObject.isStaticObject() && !collideObject.isKinematicObject());
+		final boolean isDynamic = !collideObject.isStaticObject() && !collideObject.isKinematicObject();
 		final int collisionFilterGroup = isDynamic ? btBroadphaseProxy.CollisionFilterGroups.DefaultFilter
 				: btBroadphaseProxy.CollisionFilterGroups.StaticFilter;
 		final int collisionFilterMask = isDynamic ? btBroadphaseProxy.CollisionFilterGroups.AllFilter
@@ -157,27 +157,27 @@ public abstract class AbstractEntity implements Disposable {
 	protected void updateTransform() {
 		if (this.collideObject != null) {
 			if (this.collideObject.isStaticObject()) {
-				this.collideObject.setWorldTransform(transform);
+				this.collideObject.setWorldTransform(this.transform);
 			} else {
 				this.collideObject.getMotionState().setWorldTransform(this.transform);
 			}
 		}
 
-		for (DisplayModel m : this.models) {
-			m.updateTransform(transform);
+		for (final DisplayModel m : this.models) {
+			m.updateTransform(this.transform);
 		}
 	}
 
-	public void addModel(DisplayModel value) {
-		models.add(value);
+	public void addModel(final DisplayModel value) {
+		this.models.add(value);
 	}
 
-	public boolean removeModel(DisplayModel value) {
-		return models.removeValue(value, true);
+	public boolean removeModel(final DisplayModel value) {
+		return this.models.removeValue(value, true);
 	}
 
-	public DisplayModel removeModel(int index) {
-		return models.removeIndex(index);
+	public DisplayModel removeModel(final int index) {
+		return this.models.removeIndex(index);
 	}
 
 	public void clearModels() {
@@ -185,7 +185,7 @@ public abstract class AbstractEntity implements Disposable {
 	}
 
 	public Array<DisplayModel> getModels() {
-		return models;
+		return this.models;
 	}
 
 	public Matrix4 getTransform() {
@@ -329,18 +329,18 @@ public abstract class AbstractEntity implements Disposable {
 	}
 
 	public int getCollisionGroup() {
-		return collisionGroup;
+		return this.collisionGroup;
 	}
 
-	public void setCollisionGroup(int collisionGroup) {
+	public void setCollisionGroup(final int collisionGroup) {
 		this.collisionGroup = collisionGroup;
 	}
 
 	public int getCollisionMask() {
-		return collisionMask;
+		return this.collisionMask;
 	}
 
-	public void setCollisionMask(int collisionMask) {
+	public void setCollisionMask(final int collisionMask) {
 		this.collisionMask = collisionMask;
 	}
 

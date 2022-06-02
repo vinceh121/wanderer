@@ -9,42 +9,42 @@ public class ArtifactMeta {
 	private float pickupZoneRadius = 2f;
 
 	public String getArtifactModel() {
-		return artifactModel;
+		return this.artifactModel;
 	}
 
-	public void setArtifactModel(String artifactModel) {
+	public void setArtifactModel(final String artifactModel) {
 		this.artifactModel = artifactModel;
 	}
 
 	public String getArtifactTexture() {
-		return artifactTexture;
+		return this.artifactTexture;
 	}
 
-	public void setArtifactTexture(String artifactTexture) {
+	public void setArtifactTexture(final String artifactTexture) {
 		this.artifactTexture = artifactTexture;
 	}
 
 	public Color getArtifactColor() {
-		return artifactColor;
+		return this.artifactColor;
 	}
 
-	public void setArtifactColor(Color artifactColor) {
+	public void setArtifactColor(final Color artifactColor) {
 		this.artifactColor = artifactColor;
 	}
 
 	public boolean isRotate() {
-		return rotate;
+		return this.rotate;
 	}
 
-	public void setRotate(boolean rotate) {
+	public void setRotate(final boolean rotate) {
 		this.rotate = rotate;
 	}
 
 	public float getPickupZoneRadius() {
-		return pickupZoneRadius;
+		return this.pickupZoneRadius;
 	}
 
-	public void setPickupZoneRadius(float pickupZoneRadius) {
+	public void setPickupZoneRadius(final float pickupZoneRadius) {
 		this.pickupZoneRadius = pickupZoneRadius;
 	}
 }

@@ -251,8 +251,8 @@ public class Wanderer extends ApplicationAdapter {
 		}
 	}
 
-	public Clan getClanForMember(IClanMember member) {
-		for (Clan c : this.clans) {
+	public Clan getClanForMember(final IClanMember member) {
+		for (final Clan c : this.clans) {
 			if (c.getMembers().contains(member, true)) {
 				return c;
 			}
@@ -284,7 +284,7 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public IControllableEntity getControlledEntity() {
-		return controlledEntity;
+		return this.controlledEntity;
 	}
 
 	public void enterInteractBuilding(final AbstractBuilding building) {
@@ -301,7 +301,7 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public AbstractBuilding getInteractingBuilding() {
-		return interactingBuilding;
+		return this.interactingBuilding;
 	}
 
 	public void showMessage(final String message) {
@@ -331,6 +331,6 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public GraphicsManager getGraphicsManager() {
-		return graphicsManager;
+		return this.graphicsManager;
 	}
 }

@@ -8,19 +8,19 @@ public class IslandMeta {
 	public IslandMeta() {
 	}
 
-	public IslandMeta(Array<Slot> slots) {
+	public IslandMeta(final Array<Slot> slots) {
 		this.slots = slots;
 	}
 
-	public IslandMeta(Slot... slots) {
+	public IslandMeta(final Slot... slots) {
 		this.slots = new Array<>(slots);
 	}
 
 	public Array<Slot> getSlots() {
-		return slots;
+		return this.slots;
 	}
 
-	public void setSlots(Array<Slot> slots) {
+	public void setSlots(final Array<Slot> slots) {
 		this.slots = slots;
 	}
 }

@@ -24,14 +24,15 @@ public final class WandererConstants {
 	}
 
 	static {
-		MIPMAPS.genMipMaps = true;
+		WandererConstants.MIPMAPS.genMipMaps = true;
 
 		final Json json = new Json(OutputType.json);
 		final JsonReader jsonReader = new JsonReader();
 
 		final String[] metas = { "goliath", "john", "susie" };
-		for (String m : metas) {
-			CHARACTER_METAS.add(json.fromJson(CharacterMeta.class, Gdx.files.internal("characters/" + m + ".json")));
+		for (final String m : metas) {
+			WandererConstants.CHARACTER_METAS
+					.add(json.fromJson(CharacterMeta.class, Gdx.files.internal("characters/" + m + ".json")));
 		}
 
 		final JsonValue preload = jsonReader.parse(Gdx.files.internal("preload.json"));

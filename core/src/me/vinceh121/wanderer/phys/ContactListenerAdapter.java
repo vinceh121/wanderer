@@ -6,24 +6,25 @@ import com.badlogic.gdx.physics.bullet.collision.btManifoldPoint;
 public class ContactListenerAdapter implements IContactListener {
 
 	@Override
-	public void onContactEnded(btCollisionObject colObj0, btCollisionObject colObj1) {
+	public void onContactEnded(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 	}
 
 	@Override
-	public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
+	public void onContactStarted(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 	}
 
 	@Override
-	public void onContactDestroyed(int manifoldPointUserValue) {
+	public void onContactDestroyed(final int manifoldPointUserValue) {
 	}
 
 	@Override
-	public void onContactProcessed(btManifoldPoint cp, btCollisionObject colObj0, btCollisionObject colObj1) {
+	public void onContactProcessed(final btManifoldPoint cp, final btCollisionObject colObj0,
+			final btCollisionObject colObj1) {
 	}
 
 	@Override
-	public boolean onContactAdded(btManifoldPoint cp, btCollisionObject colObj0, int partId0, int index0,
-			btCollisionObject colObj1, int partId1, int index1) {
+	public boolean onContactAdded(final btManifoldPoint cp, final btCollisionObject colObj0, final int partId0,
+			final int index0, final btCollisionObject colObj1, final int partId1, final int index1) {
 		return false;
 	}
 }

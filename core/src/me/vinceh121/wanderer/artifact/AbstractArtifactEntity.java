@@ -28,7 +28,7 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 	private final btGhostObject pickupZone;
 	private final IContactListener pickupListener;
 
-	public AbstractArtifactEntity(Wanderer game, ArtifactMeta meta) {
+	public AbstractArtifactEntity(final Wanderer game, final ArtifactMeta meta) {
 		super(game);
 		this.meta = meta;
 		this.pickupZone = new btGhostObject();
@@ -36,30 +36,30 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 		this.pickupZone.setCollisionShape(new btSphereShape(meta.getPickupZoneRadius()));
 		this.pickupListener = new ContactListenerAdapter() {
 			@Override
-			public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
+			public void onContactStarted(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 				// do not interact if we aren't controlling a character
 				// TODO if vehicle, fetch controlling character
 				if (!(game.getControlledEntity() instanceof CharacterW)) {
 					return;
 				}
-				CharacterW chara = (CharacterW) game.getControlledEntity();
+				final CharacterW chara = (CharacterW) game.getControlledEntity();
 
 				// if collided objects are interaction zone and player character
-				if ((colObj0.getCPointer() == pickupZone.getCPointer()
-						&& colObj1.getCPointer() == chara.getGhostObject().getCPointer())
-						|| (colObj1.getCPointer() == pickupZone.getCPointer()
-								&& colObj0.getCPointer() == chara.getGhostObject().getCPointer())) {
+				if (colObj0.getCPointer() == AbstractArtifactEntity.this.pickupZone.getCPointer()
+						&& colObj1.getCPointer() == chara.getGhostObject().getCPointer()
+						|| colObj1.getCPointer() == AbstractArtifactEntity.this.pickupZone.getCPointer()
+								&& colObj0.getCPointer() == chara.getGhostObject().getCPointer()) {
 					if (AbstractArtifactEntity.this.onPickUp(game, chara)) {
 						game.removeEntity(AbstractArtifactEntity.this);
-						dispose();
+						AbstractArtifactEntity.this.dispose();
 					}
 				}
 			}
 		};
-		this.game.getPhysicsManager().addContactListener(pickupListener);
+		this.game.getPhysicsManager().addContactListener(this.pickupListener);
 
 		if (meta.getArtifactModel() != null && meta.getArtifactTexture() != null) {
-			DisplayModel model = new DisplayModel(meta.getArtifactModel(), meta.getArtifactTexture());
+			final DisplayModel model = new DisplayModel(meta.getArtifactModel(), meta.getArtifactTexture());
 			if (meta.getArtifactColor() != null) {
 				model.addTextureAttribute(ColorAttribute.createEmissive(meta.getArtifactColor()));
 			}
@@ -70,55 +70,55 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 
 	/**
 	 * Tries to pickup the artifact for the player.
-	 * 
+	 *
 	 * @return true if the artifact is to be picked up, false otherwise
 	 */
 	public abstract boolean onPickUp(Wanderer game, CharacterW chara);
 
 	@Override
-	public void enterBtWorld(btDiscreteDynamicsWorld world) {
+	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
 		super.enterBtWorld(world);
 		world.addCollisionObject(this.pickupZone, CollisionFilterGroups.SensorTrigger,
 				CollisionFilterGroups.CharacterFilter);
 	}
 
 	@Override
-	public void leaveBtWorld(btDiscreteDynamicsWorld world) {
+	public void leaveBtWorld(final btDiscreteDynamicsWorld world) {
 		super.leaveBtWorld(world);
 		world.removeCollisionObject(this.pickupZone);
 	}
 
 	@Override
-	public void render(ModelBatch batch, Environment env) {
+	public void render(final ModelBatch batch, final Environment env) {
 		super.render(batch, env);
-		rotate(Vector3.Y, 3);
+		this.rotate(Vector3.Y, 3);
 	}
 
 	@Override
 	protected void updateTransform() {
 		super.updateTransform();
 		if (this.meta.isRotate()) {
-			Matrix4 noScaleRotation = new Matrix4(getTransform().getTranslation(new Vector3()).add(0, 1, 0),
+			final Matrix4 noScaleRotation = new Matrix4(this.getTransform().getTranslation(new Vector3()).add(0, 1, 0),
 					new Quaternion(), new Vector3(1, 1, 1));
 			this.pickupZone.setWorldTransform(noScaleRotation);
 		}
 	}
 
 	public ArtifactMeta getMeta() {
-		return meta;
+		return this.meta;
 	}
 
 	public btGhostObject getPickupZone() {
-		return pickupZone;
+		return this.pickupZone;
 	}
 
 	public IContactListener getPickupListener() {
-		return pickupListener;
+		return this.pickupListener;
 	}
 
 	@Override
 	public void dispose() {
-		this.game.getPhysicsManager().removeContactListener(pickupListener);
+		this.game.getPhysicsManager().removeContactListener(this.pickupListener);
 		this.game.getBtWorld().removeCollisionObject(this.pickupZone);
 		// hack to dispose of the zone next tick as it is still referenced in the
 		// current one

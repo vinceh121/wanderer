@@ -6,12 +6,13 @@ public class LighthouseMeta extends AbstractBuildingMeta {
 	public LighthouseMeta() {
 	}
 
-	public LighthouseMeta(int energyRequired, boolean red, String artifactModel, String artifactTexture) {
+	public LighthouseMeta(final int energyRequired, final boolean red, final String artifactModel,
+			final String artifactTexture) {
 		super(energyRequired, red, artifactModel, artifactTexture);
 	}
 
 	@Override
-	public AbstractBuilding createBuilding(Wanderer game) {
+	public AbstractBuilding createBuilding(final Wanderer game) {
 		return new Lighthouse(game, this);
 	}
 }

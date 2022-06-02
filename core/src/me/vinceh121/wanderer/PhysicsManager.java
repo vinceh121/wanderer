@@ -98,15 +98,15 @@ public class PhysicsManager extends ApplicationAdapter {
 	}
 
 	public ContactDispatcher getContactDispatcher() {
-		return contactDispatcher;
+		return this.contactDispatcher;
 	}
 
-	public void addContactListener(IContactListener value) {
-		contactDispatcher.addContactListener(value);
+	public void addContactListener(final IContactListener value) {
+		this.contactDispatcher.addContactListener(value);
 	}
 
-	public boolean removeContactListener(IContactListener value) {
-		return contactDispatcher.removeContactListener(value);
+	public boolean removeContactListener(final IContactListener value) {
+		return this.contactDispatcher.removeContactListener(value);
 	}
 
 	static {

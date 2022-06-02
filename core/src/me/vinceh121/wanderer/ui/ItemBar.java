@@ -1,7 +1,5 @@
 package me.vinceh121.wanderer.ui;
 
-import static me.vinceh121.wanderer.ui.UiUtils.drawFlip;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -28,56 +26,58 @@ public class ItemBar extends WandererWidget {
 	private Array<ArtifactMeta> belt = new Array<>();
 	private int count;
 
-	public ItemBar(Wanderer game) {
+	public ItemBar(final Wanderer game) {
 		super(game);
 	}
 
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
+	public void draw(final Batch batch, final float parentAlpha) {
 		super.draw(batch, parentAlpha);
 
-		if (this.count == 0)
+		if (this.count == 0) {
 			return;
+		}
 
 		this.angle += 3f;
 		this.rotation.setFromAxis(Vector3.Y, this.angle);
 
-		final int sX = (int) getX();
+		final int sX = (int) this.getX();
 		for (int i = 0; i < this.count * 2; i += 2) {
-			drawFlip(batch, TEX_SLOT, 32 * i + sX, getY());
+			UiUtils.drawFlip(batch, ItemBar.TEX_SLOT, 32 * i + sX, this.getY());
 
 			if (i / 2 < this.belt.size) {
-				ArtifactMeta artifact = this.belt.get(i / 2);
+				final ArtifactMeta artifact = this.belt.get(i / 2);
 
-				DisplayModel m = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
-				m.setAbsoluteTransform(new Matrix4(new Vector3(32 * i + sX + TEX_SLOT.getWidth() / 2, getY() + 15, -10),
-						this.rotation, new Vector3(1, 1, 1)));
+				final DisplayModel m = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
+				m.setAbsoluteTransform(
+						new Matrix4(new Vector3(32 * i + sX + ItemBar.TEX_SLOT.getWidth() / 2, this.getY() + 15, -10),
+								this.rotation, new Vector3(1, 1, 1)));
 
 				m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
 				m.render(this.game.getGraphicsManager().getModelBatch(), this.game.getGraphicsManager().getEnv());
 			}
 
 			if (i == this.count * 2 - 2) {
-				drawFlip(batch, TEX_END, 32 * (i + 1) + sX, getY());
+				UiUtils.drawFlip(batch, ItemBar.TEX_END, 32 * (i + 1) + sX, this.getY());
 			} else {
-				drawFlip(batch, TEX_GAP, 32 * (i + 1) + sX, getY());
+				UiUtils.drawFlip(batch, ItemBar.TEX_GAP, 32 * (i + 1) + sX, this.getY());
 			}
 		}
 	}
 
 	public int getCount() {
-		return count;
+		return this.count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(final int count) {
 		this.count = count;
 	}
 
 	public Array<ArtifactMeta> getBelt() {
-		return belt;
+		return this.belt;
 	}
 
-	public void setBelt(Array<ArtifactMeta> belt) {
+	public void setBelt(final Array<ArtifactMeta> belt) {
 		this.belt = belt;
 	}
 }

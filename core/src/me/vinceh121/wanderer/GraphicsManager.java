@@ -31,8 +31,8 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.modelBatch = new ModelBatch(new DefaultShaderProvider(Gdx.files.internal("shaders/default.vert"),
 				Gdx.files.internal("shaders/default.frag")) {
 			@Override
-			protected Shader createShader(Renderable renderable) {
-				return new WandererShader(renderable, config);
+			protected Shader createShader(final Renderable renderable) {
+				return new WandererShader(renderable, this.config);
 			}
 		});
 
