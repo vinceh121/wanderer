@@ -26,11 +26,12 @@ import com.badlogic.gdx.utils.Logger;
 import me.vinceh121.wanderer.artifact.AbstractArtifactEntity;
 import me.vinceh121.wanderer.artifact.BackpackArtifact;
 import me.vinceh121.wanderer.artifact.EnergyArtefact;
-import me.vinceh121.wanderer.building.Building;
+import me.vinceh121.wanderer.building.AbstractBuilding;
 import me.vinceh121.wanderer.building.BuildingArtifactEntity;
-import me.vinceh121.wanderer.building.BuildingArtifactMeta;
+import me.vinceh121.wanderer.building.InConstructionBuilding;
 import me.vinceh121.wanderer.building.Island;
-import me.vinceh121.wanderer.building.Lighthouse;
+import me.vinceh121.wanderer.building.IslandMeta;
+import me.vinceh121.wanderer.building.LighthouseMeta;
 import me.vinceh121.wanderer.building.Slot;
 import me.vinceh121.wanderer.building.SlotType;
 import me.vinceh121.wanderer.character.CharacterMeta;
@@ -60,7 +61,7 @@ public class Wanderer extends ApplicationAdapter {
 	private boolean debugBullet = false, glxDebug = false;
 
 	private IControllableEntity controlledEntity;
-	private Building interactingBuilding;
+	private AbstractBuilding interactingBuilding;
 
 	private BlinkLabel messageLabel;
 	private ItemBar itemBar;
@@ -143,8 +144,14 @@ public class Wanderer extends ApplicationAdapter {
 		backpack.setTranslation(-5, 34, 10);
 		this.addEntity(backpack);
 
-		final BuildingArtifactMeta lighthouseArtifactMeta = new BuildingArtifactMeta(10, true,
+		final LighthouseMeta lighthouseArtifactMeta = new LighthouseMeta(10, true,
 				"orig/j_lighthouse01.n/j_lighthouse01.obj", "orig/j_lighthouse01.n/base32_2none.ktx");
+		lighthouseArtifactMeta.addModel(
+				new DisplayModel("orig/j_lighthouse01.n/base32_1.obj", "orig/j_lighthouse01.n/base32_1none.ktx"));
+		lighthouseArtifactMeta.addModel(
+				new DisplayModel("orig/j_lighthouse01.n/base32_2.obj", "orig/j_lighthouse01.n/base32_2none.ktx"));
+		lighthouseArtifactMeta.setCollisionModel("orig/j_lighthouse01.n/collide.obj");
+		lighthouseArtifactMeta.setBuildTime(10);
 		final AbstractArtifactEntity artifactEntity = new BuildingArtifactEntity(this, lighthouseArtifactMeta);
 		artifactEntity.setTranslation(5, 34, 10);
 		this.addEntity(artifactEntity);
@@ -159,7 +166,7 @@ public class Wanderer extends ApplicationAdapter {
 		playerClan.setMaxEnergy(100);
 		this.clans.add(playerClan);
 
-		final Island island = new Island(this);
+		final Island island = new Island(this, new IslandMeta(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8))));
 		island.setCollideModel("orig/first_island.n/collide.obj");
 		island.addModel(new DisplayModel("orig/first_island.n/terrain.obj", "orig/first_island.n/texturenone.ktx"));
 
@@ -172,7 +179,6 @@ public class Wanderer extends ApplicationAdapter {
 		island.getModels().get(0)
 				.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(50f, 50f)));
 
-		island.addSlot(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8)));
 		this.addEntity(island);
 		playerClan.addMember(island);
 
@@ -184,12 +190,7 @@ public class Wanderer extends ApplicationAdapter {
 		grass.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f));
 		island.addModel(grass);
 
-		final Lighthouse lighthouse = new Lighthouse(this);
-		lighthouse.addModel(
-				new DisplayModel("orig/j_lighthouse01.n/base32_1.obj", "orig/j_lighthouse01.n/base32_1none.ktx"));
-		lighthouse.addModel(
-				new DisplayModel("orig/j_lighthouse01.n/base32_2.obj", "orig/j_lighthouse01.n/base32_2none.ktx"));
-		lighthouse.setCollideModel("orig/j_lighthouse01.n/collide.obj");
+		final InConstructionBuilding lighthouse = new InConstructionBuilding(this, lighthouseArtifactMeta);
 		this.addEntity(lighthouse);
 		island.addBuilding(lighthouse, island.getSlot(0));
 		playerClan.addMember(lighthouse);
@@ -200,7 +201,7 @@ public class Wanderer extends ApplicationAdapter {
 		final CharacterW john = new CharacterW(this);
 		john.setMeta(johnMeta);
 		john.setTranslation(0.1f, 50f, 0.1f);
-		
+
 		this.itemBar.setBelt(john.getBelt());
 
 		playerClan.addMember(john);
@@ -286,7 +287,7 @@ public class Wanderer extends ApplicationAdapter {
 		return controlledEntity;
 	}
 
-	public void enterInteractBuilding(final Building building) {
+	public void enterInteractBuilding(final AbstractBuilding building) {
 		if (this.interactingBuilding == building) {
 			return;
 		}
@@ -299,7 +300,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.interactingBuilding = null;
 	}
 
-	public Building getInteractingBuilding() {
+	public AbstractBuilding getInteractingBuilding() {
 		return interactingBuilding;
 	}
 

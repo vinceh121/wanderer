@@ -2,6 +2,7 @@ package me.vinceh121.wanderer.entity;
 
 import java.util.Objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -346,7 +347,7 @@ public abstract class AbstractEntity implements Disposable {
 	@Override
 	public void dispose() {
 		if (this.collideObject != null) {
-			this.collideObject.dispose();
+			Gdx.app.postRunnable(() -> this.collideObject.dispose());
 		}
 	}
 

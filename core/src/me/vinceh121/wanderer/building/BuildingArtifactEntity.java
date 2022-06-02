@@ -9,7 +9,7 @@ import me.vinceh121.wanderer.character.CharacterW;
 
 public class BuildingArtifactEntity extends AbstractArtifactEntity {
 
-	public BuildingArtifactEntity(Wanderer game, BuildingArtifactMeta meta) {
+	public BuildingArtifactEntity(Wanderer game, AbstractBuildingMeta meta) {
 		super(game, meta);
 
 		if (meta.isShrink()) {
@@ -21,7 +21,7 @@ public class BuildingArtifactEntity extends AbstractArtifactEntity {
 	public boolean onPickUp(Wanderer game, CharacterW chara) {
 		if (chara.canPickUpArtifact()) {
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound.class).play();
-			chara.pickUpArtifact((BuildingArtifactMeta) this.getMeta());
+			chara.pickUpArtifact((AbstractBuildingMeta) this.getMeta());
 			return true;
 		} else {
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/beltfull.wav", Sound.class).play();

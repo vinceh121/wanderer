@@ -6,7 +6,7 @@ public class ArtifactMeta {
 	private String artifactModel, artifactTexture;
 	private Color artifactColor = new Color(0f, 0.8f, 1f, 0f);
 	private boolean rotate = true;
-	private float interactZoneRadius = 2f;
+	private float pickupZoneRadius = 2f;
 
 	public String getArtifactModel() {
 		return artifactModel;
@@ -40,11 +40,11 @@ public class ArtifactMeta {
 		this.rotate = rotate;
 	}
 
-	public float getInteractZoneRadius() {
-		return interactZoneRadius;
+	public float getPickupZoneRadius() {
+		return pickupZoneRadius;
 	}
 
-	public void setInteractZoneRadius(float interactZoneRadius) {
-		this.interactZoneRadius = interactZoneRadius;
+	public void setPickupZoneRadius(float pickupZoneRadius) {
+		this.pickupZoneRadius = pickupZoneRadius;
 	}
 }

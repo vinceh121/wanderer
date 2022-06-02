@@ -170,7 +170,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	/**
-	 * Sets the {@link CharacterMeta} objet, and applies its model and texture
+	 * Sets the {@link CharacterMeta} object, and applies its model and texture
 	 *
 	 * @param meta the meta to set
 	 */

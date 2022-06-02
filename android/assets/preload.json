@@ -3,7 +3,8 @@
 		"orig/feedback/use_ok.wav",
 		"orig/feedback/beltfull.wav",
 		"orig/feedback/artefactcollected.wav",
-		"orig/feedback/backpack_active.wav"
+		"orig/feedback/backpack_active.wav",
+		"orig/lib/sound/healingspell.wav"
 	],
 	"textures": [
 		"orig/if_emptyslot.n/endend_alpha.ktx",

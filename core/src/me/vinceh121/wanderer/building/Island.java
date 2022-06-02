@@ -19,13 +19,14 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.AbstractLivingEntity;
 
 public class Island extends AbstractLivingEntity implements IClanMember {
-	private final Array<Slot> slots = new Array<>();
-	private final Array<Building> buildings = new Array<>();
+	private final Array<Slot> slots;
+	private final Array<AbstractBuilding> buildings = new Array<>();
 	private final Vector3 velocity = new Vector3();
 	private Clan clan;
 
-	public Island(final Wanderer game) {
+	public Island(final Wanderer game, final IslandMeta meta) {
 		super(game);
+		this.slots = meta.getSlots();
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 		return this.slots;
 	}
 
-	public void addBuilding(final Building value, final Slot slot) {
+	public void addBuilding(final AbstractBuilding value, final Slot slot) {
 		if (this.isSlotTaken(slot)) {
 			throw new IllegalStateException("Slot is taken");
 		}
@@ -63,21 +64,34 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 		value.setSlot(slot);
 		this.updateBuildings();
 	}
+	
+	public void removeBuilding(final AbstractBuilding building) {
+		this.buildings.removeValue(building, true);
+	}
 
 	private void updateBuildings() {
 		final Matrix4 islandTrans = this.getTransform();
-		for (Building building : this.buildings) {
+		for (AbstractBuilding building : this.buildings) {
 			building.setTransform(islandTrans.cpy().translate(building.getSlot().getLocation()));
 		}
 	}
 
 	public boolean isSlotTaken(Slot slot) {
-		for (Building b : this.buildings) {
+		for (AbstractBuilding b : this.buildings) {
 			if (b.getSlot() == slot) {
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	public AbstractBuilding getBuildingForSlot(Slot slot) {
+		for (AbstractBuilding b : this.buildings) {
+			if (b.getSlot() == slot) {
+				return b;
+			}
+		}
+		return null;
 	}
 
 	@Override

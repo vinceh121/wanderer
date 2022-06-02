@@ -40,6 +40,15 @@ public class DisplayModel {
 		this(displayModel, displayTexture);
 		this.relativeTransform.set(relativeTransform);
 	}
+	
+	public DisplayModel(DisplayModel from) {
+		this.setRelativeTransform(from.getRelativeTransform());
+		this.setAbsoluteTransform(from.getAbsoluteTransform());
+		this.textureAttributes.addAll(from.textureAttributes);
+		this.setDisplayModel(from.getDisplayModel());
+		this.setDisplayTexture(from.getDisplayTexture());
+		this.setCacheDisplayModel(from.getCacheDisplayModel());
+	}
 
 	public void render(final ModelBatch batch, final Environment env) {
 		if (this.displayModel == null) {
