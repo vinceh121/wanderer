@@ -23,6 +23,7 @@ public class CharacterWController extends CustomActionInterface {
 		public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
 			if (this.validInteract(colObj0, colObj1)) {
 				CharacterWController.this.stopJump();
+				CharacterWController.this.falling = false;
 			}
 		};
 
@@ -59,7 +60,7 @@ public class CharacterWController extends CustomActionInterface {
 	private final Vector3 walkDirection = new Vector3();
 	private final Wanderer game;
 	private final CharacterW character;
-	private boolean jumping, bigJump;
+	private boolean jumping, bigJump, falling;
 	private float jumpProgress;
 	private Bezier<Vector3> jumpCurve;
 	private FallListener fallListener = a -> {
@@ -76,7 +77,8 @@ public class CharacterWController extends CustomActionInterface {
 		this.ghostObj.setCollisionShape(shape);
 		this.ghostObj.setWorldTransform(character.getTransform().cpy().rotate(Vector3.X, 90));
 		// do NOT add this action to the world
-		this.delegateController = new btKinematicCharacterController(this.ghostObj, shape, 0.2f, Vector3.Y);
+		this.delegateController = new btKinematicCharacterController(this.ghostObj, shape, 0.5f, Vector3.Y);
+		System.out.println(this.delegateController.getFallSpeed());
 		this.game.getBtWorld().addCollisionObject(this.ghostObj, CollisionFilterGroups.CharacterFilter,
 				CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter
 						| CollisionFilterGroups.SensorTrigger);
@@ -84,15 +86,15 @@ public class CharacterWController extends CustomActionInterface {
 	}
 
 	public void bigJump() {
-		this.jump(4, 8);
+		this.jump(2.4f, 15f);
 		this.bigJump = true;
 	}
 
 	public void jump() {
-		this.jump(2, 2);
+		this.jump(1.6f, 3f);
 	}
 
-	public void jump(final int height, final int distance) {
+	public void jump(final float height, final float distance) {
 		if (this.jumping || !this.delegateController.canJump()) {
 			return;
 		}
@@ -128,7 +130,18 @@ public class CharacterWController extends CustomActionInterface {
 			this.ghostObj.setWorldTransform(trans);
 			this.character.setTransform(trans);
 			this.jumpProgress += deltaTimeStep;
+
+			if ((this.bigJump && this.jumpProgress > 3f) || (!this.bigJump && this.jumpProgress > 1.2)) {
+				// do no call #stopJump() as to not trigger onFall
+				this.jumping = false;
+				this.bigJump = false;
+				this.jumpProgress = 0;
+				this.falling = true;
+			}
 			return;
+		} else if (this.falling) {
+			this.character.getTransform()
+					.setTranslation(this.character.getTransform().getTranslation(new Vector3()).add(0, -1, 0));
 		}
 		this.delegateController.updateAction(this.game.getBtWorld(), deltaTimeStep);
 	}

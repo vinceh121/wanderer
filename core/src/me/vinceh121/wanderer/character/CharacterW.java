@@ -99,10 +99,10 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 	public void processInput() {
 		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, 5f));
+			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, 3f));
 		}
 		if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, -5f));
+			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, -3f));
 		}
 		this.characterDirection.set(0, 0, 1).rot(this.getTransform()).nor();
 		this.walkDirection.set(0, 0, 0);
