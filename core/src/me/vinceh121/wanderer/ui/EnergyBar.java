@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.clan.Clan;
 
 public class EnergyBar extends Widget {
 	private static final Texture TEX_BASE = WandererConstants.ASSET_MANAGER
@@ -17,10 +18,16 @@ public class EnergyBar extends Widget {
 	private static final Texture TEX_BAR = WandererConstants.ASSET_MANAGER.get("orig/if_ebar.n/texturenone.ktx",
 			Texture.class);
 	private int segmentCount = 5, value = 0, maxValue = 100;
+	private Clan clan;
 
 	@Override
 	public void draw(final Batch batch, final float parentAlpha) {
 		super.draw(batch, parentAlpha);
+		if (this.clan != null) {
+			this.setMaxValue(this.clan.getMaxEnergy());
+			this.updateSegments();
+			this.setValue(this.clan.getEnergy());
+		}
 
 		final float maxHeight = /* base */116 + /* tip */2 + /* segments */32 * this.segmentCount;
 		final float barHeight = this.value * maxHeight / this.maxValue;
@@ -66,6 +73,14 @@ public class EnergyBar extends Widget {
 
 	public void setMaxValue(final int maxValue) {
 		this.maxValue = maxValue;
+	}
+
+	public Clan getClan() {
+		return clan;
+	}
+
+	public void setClan(Clan clan) {
+		this.clan = clan;
 	}
 
 	public void updateSegments() {

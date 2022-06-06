@@ -2,7 +2,9 @@ package me.vinceh121.wanderer.artifact;
 
 import com.badlogic.gdx.graphics.Color;
 
-public class ArtifactMeta {
+import me.vinceh121.wanderer.IMeta;
+
+public class ArtifactMeta implements IMeta {
 	private String artifactModel, artifactTexture;
 	private Color artifactColor = new Color(0f, 0.8f, 1f, 0f);
 	private boolean rotate = true;

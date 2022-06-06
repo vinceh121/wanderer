@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.WandererConstants;
 
@@ -26,6 +27,7 @@ public class DisplayModel {
 	private final Matrix4 absoluteTransform = new Matrix4();
 	private final Array<Attribute> textureAttributes = new Array<>();
 	private String displayModel, displayTexture;
+	@JsonIgnore
 	private ModelInstance cacheDisplayModel;
 
 	public DisplayModel() {
@@ -115,10 +117,12 @@ public class DisplayModel {
 		this.displayTexture = displayTexture;
 	}
 
+	@JsonIgnore
 	public ModelInstance getCacheDisplayModel() {
 		return this.cacheDisplayModel;
 	}
 
+	@JsonIgnore
 	public void setCacheDisplayModel(final ModelInstance cacheDisplayModel) {
 		this.cacheDisplayModel = cacheDisplayModel;
 	}

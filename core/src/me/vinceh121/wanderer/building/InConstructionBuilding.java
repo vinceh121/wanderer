@@ -57,6 +57,8 @@ public class InConstructionBuilding extends AbstractBuilding {
 			final Bezier<Vector3> bezier = this.curves.get(i);
 			final DisplayModel model = this.getModels().get(i);
 
+			// / 5: slows down the animation
+			// % 1: repeats the curve progress between 0.0 and 1.0
 			final Vector3 v = bezier.valueAt(new Vector3(), this.aliveTime / 5 % 1);
 			v.add(model.getRelativeTransform().getTranslation(new Vector3()));
 			v.add(this.getTransform().getTranslation(new Vector3()));

@@ -86,5 +86,6 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
         api "org.mozilla:rhino:1.7.14"
+        api "com.fasterxml.jackson.core:jackson-databind:2.13.3"
     }
 }

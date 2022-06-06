@@ -1,0 +1,107 @@
+{
+	"j_lighthouse01": {
+		"artifactModel": "orig/j_lighthouse01.n/j_lighthouse01.obj",
+		"artifactTexture": "orig/j_lighthouse01.n/base32_2none.ktx",
+		"artifactColor": {
+			"r": 1.0,
+			"g": 0.1,
+			"b": 0.0,
+			"a": 0.0
+		},
+		"rotate": true,
+		"pickupZoneRadius": 2.0,
+		"displayModels": [
+			{
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				"absoluteTransform": {
+					"translation": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				"textureAttributes": [
+				],
+				"displayModel": "orig/j_lighthouse01.n/base32_1.obj",
+				"displayTexture": "orig/j_lighthouse01.n/base32_1none.ktx"
+			},
+			{
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				"absoluteTransform": {
+					"translation": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				"textureAttributes": [
+				],
+				"displayModel": "orig/j_lighthouse01.n/base32_2.obj",
+				"displayTexture": "orig/j_lighthouse01.n/base32_2none.ktx"
+			}
+		],
+		"collisionModel": "orig/j_lighthouse01.n/collide.obj",
+		"energyRequired": 10,
+		"buildTime": 10,
+		"red": true,
+		"shrink": true,
+		"interactZoneRadius": 11.0,
+		"interactZoneHeight": 20.0
+	}
+}
