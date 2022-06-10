@@ -24,7 +24,7 @@ public class QuaternionDeserializer extends StdDeserializer<Quaternion> {
 		}
 		float[] vals = new float[4];
 		for (int i = 0; i < 4; i++) {
-			if (p.nextToken() != JsonToken.VALUE_NUMBER_FLOAT) {
+			if (p.nextToken() != JsonToken.VALUE_NUMBER_FLOAT && p.currentToken() != JsonToken.VALUE_NUMBER_INT) {
 				throw new IllegalStateException("Expected quaternion float value, got garbage");
 			}
 			vals[i] = p.getFloatValue();

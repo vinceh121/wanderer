@@ -13,11 +13,11 @@ public final class WandererJsonModule {
 		mod.addSerializer(Array.class, new GdxArraySerializer());
 		mod.addDeserializer(Array.class, new GdxArrayDeserializer());
 
-		mod.addDeserializer(Vector3.class, new Vector3Deserializer());
 		mod.addSerializer(Vector3.class, new Vector3Serializer());
+		mod.addDeserializer(Vector3.class, new Vector3Deserializer());
 
-		mod.addDeserializer(Quaternion.class, new QuaternionDeserializer());
 		mod.addSerializer(Quaternion.class, new QuaternionSerializer());
+		mod.addDeserializer(Quaternion.class, new QuaternionDeserializer());
 
 		mod.addSerializer(Matrix4.class, new Matrix4Serializer());
 		mod.addDeserializer(Matrix4.class, new Matrix4Deserializer());

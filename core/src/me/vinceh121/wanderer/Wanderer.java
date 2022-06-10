@@ -19,7 +19,6 @@ import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -35,7 +34,6 @@ import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.building.IslandMeta;
 import me.vinceh121.wanderer.building.LighthouseMeta;
 import me.vinceh121.wanderer.building.Slot;
-import me.vinceh121.wanderer.building.SlotType;
 import me.vinceh121.wanderer.character.CharacterMeta;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.clan.Clan;
@@ -140,22 +138,19 @@ public class Wanderer extends ApplicationAdapter {
 		this.energyBar.setY(10);
 		this.graphicsManager.getStage().addActor(this.energyBar);
 
+		try {
+			MetaRegistry.getInstance().loadDefaults();
+		} catch (IOException e1) {
+			throw new RuntimeException(e1);
+		}
+
 		///// GAMEPLAY
 
 		final BackpackArtifact backpack = new BackpackArtifact(this);
 		backpack.setTranslation(-5, 34, 10);
 		this.addEntity(backpack);
 
-		final LighthouseMeta lighthouseArtifactMeta = new LighthouseMeta(10,
-				true,
-				"orig/j_lighthouse01.n/j_lighthouse01.obj",
-				"orig/j_lighthouse01.n/base32_2none.ktx");
-		lighthouseArtifactMeta
-			.addModel(new DisplayModel("orig/j_lighthouse01.n/base32_1.obj", "orig/j_lighthouse01.n/base32_1none.ktx"));
-		lighthouseArtifactMeta
-			.addModel(new DisplayModel("orig/j_lighthouse01.n/base32_2.obj", "orig/j_lighthouse01.n/base32_2none.ktx"));
-		lighthouseArtifactMeta.setCollisionModel("orig/j_lighthouse01.n/collide.obj");
-		lighthouseArtifactMeta.setBuildTime(10);
+		final LighthouseMeta lighthouseArtifactMeta = MetaRegistry.getInstance().get("j_lighthouse01");
 
 		final AbstractArtifactEntity artifactEntity = new BuildingArtifactEntity(this, lighthouseArtifactMeta);
 		artifactEntity.setTranslation(5, 34, 10);
@@ -172,21 +167,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.clans.add(playerClan);
 		this.energyBar.setClan(playerClan);
 
-		final IslandMeta firstIsland = new IslandMeta(new Slot(SlotType.LIGHTHOUSE, new Vector3(-26, 36, 8)));
-
-		try {
-			String json = WandererConstants.MAPPER.writeValueAsString(lighthouseArtifactMeta);
-			System.out.println(json);
-			LighthouseMeta meta2 = WandererConstants.MAPPER.readValue(json, LighthouseMeta.class);
-			WandererConstants.MAPPER.writeValue(System.out, meta2);
-			System.out.println();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		final Island island = new Island(this, firstIsland);
-		island.setCollideModel("orig/first_island.n/collide.obj");
-		island.addModel(new DisplayModel("orig/first_island.n/terrain.obj", "orig/first_island.n/texturenone.ktx"));
+		final IslandMeta firstIsland = MetaRegistry.getInstance().get("first_island");
 
 		final String sandName = "orig/lib/textures/detailmap_sandnone.ktx";
 		WandererConstants.ASSET_MANAGER.load(sandName, Texture.class, WandererConstants.MIPMAPS);
@@ -194,9 +175,11 @@ public class Wanderer extends ApplicationAdapter {
 		final Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
 		sand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
-		island.getModels()
+		firstIsland.getDisplayModels()
 			.get(0)
 			.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(50f, 50f)));
+
+		final Island island = new Island(this, firstIsland);
 
 		this.addEntity(island);
 		playerClan.addMember(island);
@@ -209,10 +192,12 @@ public class Wanderer extends ApplicationAdapter {
 		grass.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f));
 		island.addModel(grass);
 
-		final InConstructionBuilding lighthouse = new InConstructionBuilding(this, lighthouseArtifactMeta);
-		this.addEntity(lighthouse);
-		island.addBuilding(lighthouse, island.getSlot(0));
-		playerClan.addMember(lighthouse);
+		for (Slot s : island.getSlots()) {
+			final InConstructionBuilding lighthouse = new InConstructionBuilding(this, lighthouseArtifactMeta);
+			this.addEntity(lighthouse);
+			island.addBuilding(lighthouse, s);
+			playerClan.addMember(lighthouse);
+		}
 
 		final CharacterMeta johnMeta = WandererConstants.CHARACTER_METAS.get(1);
 		johnMeta.ensureLoading();

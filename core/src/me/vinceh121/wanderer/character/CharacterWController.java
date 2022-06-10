@@ -80,7 +80,6 @@ public class CharacterWController extends CustomActionInterface {
 		this.ghostObj.setWorldTransform(character.getTransform().cpy().rotate(Vector3.X, 90));
 		// do NOT add this action to the world
 		this.delegateController = new btKinematicCharacterController(this.ghostObj, shape, 0.5f, Vector3.Y);
-		System.out.println(this.delegateController.getFallSpeed());
 		this.game.getBtWorld().addCollisionObject(this.ghostObj, CollisionFilterGroups.CharacterFilter,
 				CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter
 						| CollisionFilterGroups.SensorTrigger);

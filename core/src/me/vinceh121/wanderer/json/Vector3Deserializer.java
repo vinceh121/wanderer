@@ -24,7 +24,7 @@ public class Vector3Deserializer extends StdDeserializer<Vector3> {
 		}
 		float[] vals = new float[3];
 		for (int i = 0; i < 3; i++) {
-			if (p.nextToken() != JsonToken.VALUE_NUMBER_FLOAT) {
+			if (p.nextToken() != JsonToken.VALUE_NUMBER_FLOAT && p.currentToken() != JsonToken.VALUE_NUMBER_INT) {
 				throw new JsonParseException(p, "Expected vector float value, got " + p.currentToken());
 			}
 			vals[i] = p.getFloatValue();

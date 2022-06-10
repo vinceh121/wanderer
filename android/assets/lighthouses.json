@@ -30,24 +30,6 @@
 						1.0
 					]
 				},
-				"absoluteTransform": {
-					"translation": [
-						0.0,
-						0.0,
-						0.0
-					],
-					"rotation": [
-						0.0,
-						0.0,
-						0.0,
-						1.0
-					],
-					"scale": [
-						1.0,
-						1.0,
-						1.0
-					]
-				},
 				"textureAttributes": [
 				],
 				"displayModel": "orig/j_lighthouse01.n/base32_1.obj",
@@ -55,24 +37,6 @@
 			},
 			{
 				"relativeTransform": {
-					"translation": [
-						0.0,
-						0.0,
-						0.0
-					],
-					"rotation": [
-						0.0,
-						0.0,
-						0.0,
-						1.0
-					],
-					"scale": [
-						1.0,
-						1.0,
-						1.0
-					]
-				},
-				"absoluteTransform": {
 					"translation": [
 						0.0,
 						0.0,

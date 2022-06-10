@@ -3,23 +3,37 @@ package me.vinceh121.wanderer;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
-public class MetaRegistry {
+import me.vinceh121.wanderer.building.IslandMeta;
+import me.vinceh121.wanderer.building.LighthouseMeta;
+
+public final class MetaRegistry {
 	private static final MetaRegistry INSTANCE = new MetaRegistry();
 	private final Map<String, IMeta> metaMap = new HashMap<>();
 
-	public <T extends IMeta> void readMetas(FileHandle fh) throws StreamReadException, DatabindException, IOException {
-		final Map<String, T> read = WandererConstants.MAPPER.readValue(fh.read(), new TypeReference<Map<String, T>>() {
-		});
+	private MetaRegistry() {
+	}
+
+	public <T extends IMeta> void readMetas(FileHandle fh, Class<T> clazz)
+			throws StreamReadException, DatabindException, IOException {
+		final Map<String, T> read = WandererConstants.MAPPER.readValue(fh.read(),
+				TypeFactory.defaultInstance().constructMapType(Hashtable.class, String.class, clazz));
 		this.putAll(read);
+	}
+
+	public void loadDefaults() throws StreamReadException, DatabindException, IOException {
+		this.readMetas(Gdx.files.internal("lighthouses.json"), LighthouseMeta.class);
+		this.readMetas(Gdx.files.internal("islands.json"), IslandMeta.class);
 	}
 
 	public void clear() {

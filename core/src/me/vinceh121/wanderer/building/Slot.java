@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.building;
 
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 
 public class Slot {
@@ -8,13 +9,15 @@ public class Slot {
 	 * Slot's location relative to the island's origin
 	 */
 	private Vector3 location;
+	private Quaternion rotation = new Quaternion();
 
 	public Slot() {
 	}
 
-	public Slot(final SlotType type, final Vector3 location) {
+	public Slot(final SlotType type, final Vector3 location, final Quaternion rotation) {
 		this.type = type;
 		this.location = location;
+		this.rotation = rotation;
 	}
 
 	/**
@@ -47,5 +50,13 @@ public class Slot {
 	 */
 	public void setLocation(final Vector3 location) {
 		this.location = location;
+	}
+
+	public Quaternion getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(Quaternion rotation) {
+		this.rotation = rotation;
 	}
 }

@@ -1,0 +1,143 @@
+{
+	"first_island": {
+		"displayModels": [
+			{
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				"displayModel": "orig/first_island.n/terrain.obj",
+				"displayTexture": "orig/first_island.n/texturenone.ktx"
+			}
+		],
+		"collisionModel": "orig/first_island.n/collide.obj",
+		"slots": [
+			{
+				"type": "LIGHTHOUSE",
+				"location": [
+					-26.0,
+					36.0,
+					8.0
+				]
+			},
+			{
+				"type": "NAVTOWER",
+				"location": [
+					1.928767,
+					32.355053,
+					8.601938
+				]
+			},
+			{
+				"type": "GENERIC",
+				"location": [
+					-4.002781,
+					31.104174,
+					-58.77964
+				]
+			},
+			{
+				"type": "GENERIC",
+				"location": [
+					-27.518015,
+					36.346584,
+					-25.146284
+				],
+				"rotation": [
+					0,
+					0.57357645,
+					0,
+					0.81915206
+				]
+			},
+			{
+				"type": "GENERIC",
+				"location": [
+					-3.455196,
+					31.104176,
+					-41.13696
+				]
+			},
+			{
+				"type": "GENERIC",
+				"location": [
+					18.916117,
+					34.837185,
+					-33.36996
+				],
+				"rotation": [
+					0,
+					0.45399037,
+					0,
+					-0.8910066
+				]
+			},
+			{
+				"type": "GENERIC",
+				"location": [
+					1.66647,
+					32.34784,
+					26.6142
+				]
+			},
+			{
+				"type": "GENERIC",
+				"location": [
+					2.61176,
+					39.066067,
+					60.337402
+				],
+				"rotation": [
+					0,
+					0.017452406,
+					0,
+					0.9998477
+				]
+			},
+			{
+				"type": "GENERIC",
+				"location": [
+					17.59323,
+					39.05875,
+					56.42451
+				],
+				"rotation": [
+					0,
+					0.18566647,
+					0,
+					-0.98261285
+				]
+			},
+			{
+				"type": "GARAGE",
+				"location": [
+					30.649788,
+					27.689941,
+					17.919296
+				]
+			},
+			{
+				"type": "GARAGE",
+				"location": [
+					-36.519108,
+					28.392473,
+					46.42752
+				]
+			}
+		]
+	}
+}

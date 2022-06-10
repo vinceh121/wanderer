@@ -27,6 +27,8 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	public Island(final Wanderer game, final IslandMeta meta) {
 		super(game);
 		this.slots = meta.getSlots();
+		this.setCollideModel(meta.getCollisionModel());
+		this.getModels().addAll(meta.getDisplayModels());
 	}
 
 	@Override
@@ -73,6 +75,7 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 		final Matrix4 islandTrans = this.getTransform();
 		for (final AbstractBuilding building : this.buildings) {
 			building.setTransform(islandTrans.cpy().translate(building.getSlot().getLocation()));
+			building.rotate(building.getSlot().getRotation());
 		}
 	}
 

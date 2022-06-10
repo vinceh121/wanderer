@@ -24,7 +24,9 @@ public class DisplayModel {
 	 * This model's transform relative to the entity's
 	 */
 	private final Matrix4 relativeTransform = new Matrix4();
+	@JsonIgnore
 	private final Matrix4 absoluteTransform = new Matrix4();
+	@JsonIgnore
 	private final Array<Attribute> textureAttributes = new Array<>();
 	private String displayModel, displayTexture;
 	@JsonIgnore
@@ -34,12 +36,12 @@ public class DisplayModel {
 	}
 
 	public DisplayModel(final String displayModel, final String displayTexture) {
-		this.displayModel = displayModel;
-		this.displayTexture = displayTexture;
+		this(displayModel, displayTexture, new Matrix4());
 	}
 
 	public DisplayModel(final String displayModel, final String displayTexture, final Matrix4 relativeTransform) {
-		this(displayModel, displayTexture);
+		this.displayModel = displayModel;
+		this.displayTexture = displayTexture;
 		this.relativeTransform.set(relativeTransform);
 	}
 
@@ -127,10 +129,12 @@ public class DisplayModel {
 		this.cacheDisplayModel = cacheDisplayModel;
 	}
 
+	@JsonIgnore
 	public Matrix4 getAbsoluteTransform() {
 		return this.absoluteTransform;
 	}
 
+	@JsonIgnore
 	public void setAbsoluteTransform(final Matrix4 trans) {
 		this.absoluteTransform.set(trans);
 	}
@@ -143,10 +147,12 @@ public class DisplayModel {
 		this.relativeTransform.set(trans);
 	}
 
+	@JsonIgnore
 	public Array<Attribute> getTextureAttributes() {
 		return this.textureAttributes;
 	}
 
+	@JsonIgnore
 	public void addTextureAttribute(final Attribute value) {
 		this.textureAttributes.add(value);
 	}

@@ -43,7 +43,7 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.cam = new PerspectiveCamera(90, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		this.cam.position.set(3f, 50f, 0f);
 		this.cam.lookAt(5f, 4f, 0);
-		this.cam.far = 1000f;
+		this.cam.far = 10000f;
 		this.cam.near = 0.1f;
 		this.cam.update();
 
