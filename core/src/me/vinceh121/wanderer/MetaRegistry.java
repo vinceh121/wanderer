@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import me.vinceh121.wanderer.building.IslandMeta;
 import me.vinceh121.wanderer.building.LighthouseMeta;
+import me.vinceh121.wanderer.character.CharacterMeta;
 
 public final class MetaRegistry {
 	private static final MetaRegistry INSTANCE = new MetaRegistry();
@@ -34,6 +35,7 @@ public final class MetaRegistry {
 	public void loadDefaults() throws StreamReadException, DatabindException, IOException {
 		this.readMetas(Gdx.files.internal("lighthouses.json"), LighthouseMeta.class);
 		this.readMetas(Gdx.files.internal("islands.json"), IslandMeta.class);
+		this.readMetas(Gdx.files.internal("characters.json"), CharacterMeta.class);
 	}
 
 	public void clear() {

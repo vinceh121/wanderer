@@ -36,12 +36,12 @@ public class CharacterWController extends CustomActionInterface {
 				// recover from penetration
 				// https://github.com/bulletphysics/bullet3/blob/e306b274f1885f32b7e9d65062aa942b398805c2/src/BulletDynamics/Character/btKinematicCharacterController.cpp#L238
 				final Vector3 pos = CharacterWController.this.ghostObj.getWorldTransform()
-						.getTranslation(new Vector3());
+					.getTranslation(new Vector3());
 				final Vector3 normalWorldB = new Vector3();
 				cp.getNormalWorldOnB(normalWorldB);
 				pos.add(normalWorldB
-						.scl(colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer() ? -1 : 1)
-						.scl(dist)/* .scl(0.3f) */);
+					.scl(colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer() ? -1 : 1)
+					.scl(dist)/* .scl(0.3f) */);
 			}
 		};
 
@@ -68,21 +68,22 @@ public class CharacterWController extends CustomActionInterface {
 	private FallListener fallListener = a -> {
 	};
 
-	public CharacterWController(final Wanderer game, final CharacterW character) {
+	public CharacterWController(final Wanderer game, final CharacterW character, final float capsuleRadius,
+			final float capsuleHeight) {
 		this.game = game;
 		this.character = character;
-//		final btCapsuleShape chShape = (btCapsuleShape) character.getCollideObject().getCollisionShape();
-//		final btCapsuleShape shape = new btCapsuleShape(chShape.getRadius(), chShape.getHalfHeight() * 2);
-		final btCapsuleShape shape = new btCapsuleShape(0.3f, 1.5f);
+		final btCapsuleShape shape = new btCapsuleShape(capsuleRadius, capsuleHeight);
 		this.ghostObj = new btPairCachingGhostObject();
 		this.ghostObj.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT);
 		this.ghostObj.setCollisionShape(shape);
 		this.ghostObj.setWorldTransform(character.getTransform().cpy().rotate(Vector3.X, 90));
 		// do NOT add this action to the world
 		this.delegateController = new btKinematicCharacterController(this.ghostObj, shape, 0.5f, Vector3.Y);
-		this.game.getBtWorld().addCollisionObject(this.ghostObj, CollisionFilterGroups.CharacterFilter,
-				CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter
-						| CollisionFilterGroups.SensorTrigger);
+		this.game.getBtWorld()
+			.addCollisionObject(this.ghostObj,
+					CollisionFilterGroups.CharacterFilter,
+					CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter
+							| CollisionFilterGroups.SensorTrigger);
 		this.game.getPhysicsManager().addContactListener(this.contactListener);
 	}
 
@@ -102,8 +103,9 @@ public class CharacterWController extends CustomActionInterface {
 		final Array<Vector3> points = new Array<>(3);
 		// starting point, character's translation, add half the height of the capsule
 		// to compensate for offset
-		points.add(this.character.getTransform().getTranslation(new Vector3()).add(0,
-				((btCapsuleShape) this.ghostObj.getCollisionShape()).getHalfHeight(), 0));
+		points.add(this.character.getTransform()
+			.getTranslation(new Vector3())
+			.add(0, ((btCapsuleShape) this.ghostObj.getCollisionShape()).getHalfHeight(), 0));
 		// high point, start with relative direction, rotate by global transform, add
 		// position offset
 		points.add(new Vector3(0, height, distance / 2).rot(this.getWorldTransform()).add(points.peek()));
@@ -142,7 +144,7 @@ public class CharacterWController extends CustomActionInterface {
 			return;
 		} else if (this.falling) {
 			this.character.getTransform()
-					.setTranslation(this.character.getTransform().getTranslation(new Vector3()).add(0, -1, 0));
+				.setTranslation(this.character.getTransform().getTranslation(new Vector3()).add(0, -1, 0));
 		}
 		this.delegateController.updateAction(this.game.getBtWorld(), deltaTimeStep);
 	}

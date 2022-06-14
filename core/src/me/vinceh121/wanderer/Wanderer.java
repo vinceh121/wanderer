@@ -173,7 +173,7 @@ public class Wanderer extends ApplicationAdapter {
 		WandererConstants.ASSET_MANAGER.load(sandName, Texture.class, WandererConstants.MIPMAPS);
 		WandererConstants.ASSET_MANAGER.finishLoadingAsset(sandName);
 		final Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
-		sand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		sand.setFilter(TextureFilter.MipMapNearestLinear, TextureFilter.Linear);
 		sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 		firstIsland.getDisplayModels()
 			.get(0)
@@ -199,11 +199,10 @@ public class Wanderer extends ApplicationAdapter {
 			playerClan.addMember(lighthouse);
 		}
 
-		final CharacterMeta johnMeta = WandererConstants.CHARACTER_METAS.get(1);
+		final CharacterMeta johnMeta = MetaRegistry.getInstance().get("john");
 		johnMeta.ensureLoading();
 
-		final CharacterW john = new CharacterW(this);
-		john.setMeta(johnMeta);
+		final CharacterW john = new CharacterW(this, johnMeta);
 		john.setTranslation(0.1f, 50f, 0.1f);
 
 		this.itemBar.setBelt(john.getBelt());

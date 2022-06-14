@@ -1,9 +1,0 @@
-{
-  "name" : "Susie",
-  "model" : "orig/char_susie.n/skin.obj",
-  "texture" : "orig/char_susie.n/texturenone.png",
-  "fallSound" : "orig/lib/sound/step_bigland_susie.wav",
-  "steps" : [ "orig/lib/sound/step_susie01.wav", "orig/lib/sound/step_susie02.wav", "orig/lib/sound/step_susie03.wav" ],
-  "stepsSide" : [ "orig/lib/sound/step_side_susie01.wav", "orig/lib/sound/step_side_susie02.wav", "orig/lib/sound/step_side_susie03.wav" ],
-  "storyMode": true
-}

@@ -29,24 +29,23 @@ import me.vinceh121.wanderer.entity.DisplayModel;
  * Named like that to differentiate with java.lang.Character
  */
 public class CharacterW extends AbstractLivingControllableEntity implements IClanMember {
+	private final CharacterMeta meta;
 	private final CharacterWController controller;
 	private final Vector3 characterDirection = new Vector3();
 	private final Vector3 walkDirection = new Vector3();
 	private final Array<ArtifactMeta> belt = new Array<>();
 	private int beltSize = 3;
-	private CharacterMeta meta;
 	private Clan clan;
 
-	public CharacterW(final Wanderer game) {
-		this(game, 0.3f, 1.5f);
-	}
-
-	public CharacterW(final Wanderer game, final float capsuleRadius, final float capsuleHeight) {
+	public CharacterW(final Wanderer game, CharacterMeta meta) {
 		super(game);
-		this.setCollideObjectOffset(new Vector3(0, 0.8f, 0));
-		this.controller = new CharacterWController(this.game, this);
+		this.meta = meta;
+		this.setCollideObjectOffset(meta.getCapsuleOffset());
+		this.controller = new CharacterWController(this.game, this, meta.getCapsuleRadius(), meta.getCapsuleHeight());
 		this.controller.setFallListener(this::onFall);
 		game.getBtWorld().addAction(this.controller);
+
+		this.addModel(new DisplayModel(meta.getModel(), meta.getTexture()));
 	}
 
 	private void onFall(final boolean bigJump) {
@@ -171,17 +170,6 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	 */
 	public CharacterMeta getMeta() {
 		return this.meta;
-	}
-
-	/**
-	 * Sets the {@link CharacterMeta} object, and applies its model and texture
-	 *
-	 * @param meta the meta to set
-	 */
-	public void setMeta(final CharacterMeta meta) {
-		this.meta = meta;
-		this.clearModels();
-		this.addModel(new DisplayModel(meta.getModel(), meta.getTexture()));
 	}
 
 	/**

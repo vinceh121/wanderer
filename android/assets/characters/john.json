@@ -1,9 +1,0 @@
-{
-  "name" : "John",
-  "model" : "orig/char_john.n/skin.obj",
-  "texture" : "orig/char_john.n/texturenone.png",
-  "fallSound" : "orig/lib/sound/step_bigland_john.wav",
-  "steps" : [ "orig/lib/sound/step_john01.wav", "orig/lib/sound/step_john02.wav", "orig/lib/sound/step_john03.wav" ],
-  "stepsSide" : [ "orig/lib/sound/step_side_john01.wav", "orig/lib/sound/step_side_john02.wav", "orig/lib/sound/step_side_john03.wav" ],
-  "storyMode": true
-}

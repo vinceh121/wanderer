@@ -5,13 +5,17 @@ import java.util.Arrays;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.math.Vector3;
 
+import me.vinceh121.wanderer.IMeta;
 import me.vinceh121.wanderer.WandererConstants;
 
-public class CharacterMeta {
+public class CharacterMeta implements IMeta {
 	private String name, model, texture, fallSound;
 	private String[] steps, stepsSide;
 	private boolean storyMode;
+	private Vector3 capsuleOffset = new Vector3(0, 0.8f, 0);
+	private float capsuleRadius = 0.3f, capsuleHeight = 1.5f;
 
 	/**
 	 * @return the model
@@ -109,6 +113,30 @@ public class CharacterMeta {
 	 */
 	public void setStoryMode(final boolean storyMode) {
 		this.storyMode = storyMode;
+	}
+
+	public Vector3 getCapsuleOffset() {
+		return capsuleOffset;
+	}
+
+	public void setCapsuleOffset(Vector3 capsuleOffset) {
+		this.capsuleOffset = capsuleOffset;
+	}
+
+	public float getCapsuleRadius() {
+		return capsuleRadius;
+	}
+
+	public void setCapsuleRadius(float capsuleRadius) {
+		this.capsuleRadius = capsuleRadius;
+	}
+
+	public float getCapsuleHeight() {
+		return capsuleHeight;
+	}
+
+	public void setCapsuleHeight(float capsuleHeight) {
+		this.capsuleHeight = capsuleHeight;
 	}
 
 	/**
