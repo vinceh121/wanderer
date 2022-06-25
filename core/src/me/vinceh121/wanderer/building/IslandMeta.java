@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.building;
 
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.IMeta;
@@ -9,6 +10,7 @@ public class IslandMeta implements IMeta {
 	private Array<DisplayModel> displayModels = new Array<>();
 	private String collisionModel;
 	private Array<Slot> slots = new Array<>();
+	private Vector3 placeCameraPosition = new Vector3(), placeCameraDirection = new Vector3();
 
 	public IslandMeta() {
 	}
@@ -55,5 +57,21 @@ public class IslandMeta implements IMeta {
 
 	public void setSlots(final Array<Slot> slots) {
 		this.slots = slots;
+	}
+
+	public Vector3 getPlaceCameraPosition() {
+		return placeCameraPosition;
+	}
+
+	public void setPlaceCameraPosition(Vector3 placeCameraPosition) {
+		this.placeCameraPosition = placeCameraPosition;
+	}
+
+	public Vector3 getPlaceCameraDirection() {
+		return placeCameraDirection;
+	}
+
+	public void setPlaceCameraDirection(Vector3 placeCameraDirection) {
+		this.placeCameraDirection = placeCameraDirection;
 	}
 }

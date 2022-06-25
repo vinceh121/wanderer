@@ -33,7 +33,6 @@ import me.vinceh121.wanderer.building.InConstructionBuilding;
 import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.building.IslandMeta;
 import me.vinceh121.wanderer.building.LighthouseMeta;
-import me.vinceh121.wanderer.building.Slot;
 import me.vinceh121.wanderer.character.CharacterMeta;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.clan.Clan;
@@ -192,12 +191,10 @@ public class Wanderer extends ApplicationAdapter {
 		grass.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f));
 		island.addModel(grass);
 
-		for (Slot s : island.getSlots()) {
-			final InConstructionBuilding lighthouse = new InConstructionBuilding(this, lighthouseArtifactMeta);
-			this.addEntity(lighthouse);
-			island.addBuilding(lighthouse, s);
-			playerClan.addMember(lighthouse);
-		}
+		final InConstructionBuilding lighthouse = new InConstructionBuilding(this, lighthouseArtifactMeta);
+		this.addEntity(lighthouse);
+		island.addBuilding(lighthouse, island.getSlot(0));
+		playerClan.addMember(lighthouse);
 
 		final CharacterMeta johnMeta = MetaRegistry.getInstance().get("john");
 		johnMeta.ensureLoading();
@@ -239,19 +236,32 @@ public class Wanderer extends ApplicationAdapter {
 		this.graphicsManager.renderUI();
 	}
 
-	public void addEntity(final AbstractEntity e) {
+	public int addEntity(final AbstractEntity e) {
 		this.entities.add(e);
-		e.enterBtWorld(this.physicsManager.getBtWorld());
+		final int idx = this.entities.indexOf(e, true);
+		e.enterBtWorld(this.physicsManager.getBtWorld(), idx);
+		return idx;
 	}
 
 	public void removeEntity(final AbstractEntity e) {
 		this.entities.removeValue(e, true);
+		this.updateEntityIndexes();
 		e.leaveBtWorld(this.physicsManager.getBtWorld());
 		if (e instanceof IClanMember) {
 			for (final Clan c : this.clans) {
 				c.removeMember((IClanMember) e);
 			}
 		}
+	}
+	
+	private void updateEntityIndexes() {
+		for (int i = 0; i < this.entities.size; i++) {
+			this.entities.get(i).setIndex(i);
+		}
+	}
+
+	public AbstractEntity getEntity(int idx) {
+		return this.entities.get(idx);
 	}
 
 	public Clan getClanForMember(final IClanMember member) {

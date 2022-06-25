@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
+import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
@@ -34,6 +35,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	private final Vector3 characterDirection = new Vector3();
 	private final Vector3 walkDirection = new Vector3();
 	private final Array<ArtifactMeta> belt = new Array<>();
+	private Island attachedIsland;
 	private int beltSize = 3;
 	private Clan clan;
 
@@ -149,6 +151,12 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	@Override
+	public void setIndex(int index) {
+		super.setIndex(index);
+		this.getGhostObject().setUserIndex(index);
+	}
+
+	@Override
 	public void dispose() {
 		this.game.getBtWorld().removeAction(this.controller);
 		super.dispose();
@@ -201,5 +209,13 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 			throw new IllegalStateException("Can't pickup items");
 		}
 		this.belt.add(artifact);
+	}
+
+	public Island getAttachedIsland() {
+		return attachedIsland;
+	}
+
+	public void setAttachedIsland(Island attachedIsland) {
+		this.attachedIsland = attachedIsland;
 	}
 }

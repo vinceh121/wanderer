@@ -76,8 +76,8 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 	public abstract boolean onPickUp(Wanderer game, CharacterW chara);
 
 	@Override
-	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
-		super.enterBtWorld(world);
+	public void enterBtWorld(final btDiscreteDynamicsWorld world, final int idx) {
+		super.enterBtWorld(world, idx);
 		world.addCollisionObject(this.pickupZone, CollisionFilterGroups.SensorTrigger,
 				CollisionFilterGroups.CharacterFilter);
 	}

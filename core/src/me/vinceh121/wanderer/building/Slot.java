@@ -8,10 +8,14 @@ public class Slot {
 	/**
 	 * Slot's location relative to the island's origin
 	 */
-	private Vector3 location;
+	private Vector3 location = new Vector3();
 	private Quaternion rotation = new Quaternion();
 
 	public Slot() {
+	}
+
+	public Slot(final Slot cloneFrom) {
+		this(cloneFrom.type, cloneFrom.location, cloneFrom.rotation);
 	}
 
 	public Slot(final SlotType type, final Vector3 location, final Quaternion rotation) {

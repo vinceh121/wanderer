@@ -75,7 +75,6 @@ public class InConstructionBuilding extends AbstractBuilding {
 		if (this.isConstructionDone()) {
 			return;
 		}
-		this.constructionDone = true;
 		if (this.getIsland() != null) {
 			this.getIsland().removeBuilding(this);
 			final AbstractBuilding newBuilding = this.meta.createBuilding(this.game);
@@ -86,6 +85,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 		this.sound.stop(this.soundId);
 		this.game.removeEntity(this);
 		this.dispose();
+		this.constructionDone = true;
 	}
 
 	public boolean isConstructionDone() {
@@ -93,8 +93,8 @@ public class InConstructionBuilding extends AbstractBuilding {
 	}
 
 	@Override
-	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
-		super.enterBtWorld(world);
+	public void enterBtWorld(final btDiscreteDynamicsWorld world, final int idx) {
+		super.enterBtWorld(world, idx);
 		this.sound = WandererConstants.ASSET_MANAGER.get("orig/lib/sound/healingspell.wav", Sound.class);
 		this.soundId = this.sound.play();
 		this.sound.setLooping(this.soundId, true);

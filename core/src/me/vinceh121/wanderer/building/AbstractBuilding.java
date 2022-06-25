@@ -35,7 +35,7 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 
 		this.interactZone = new btGhostObject();
 		this.interactZone
-				.setCollisionShape(new btCapsuleShape(meta.getInteractZoneRadius(), meta.getInteractZoneHeight()));
+			.setCollisionShape(new btCapsuleShape(meta.getInteractZoneRadius(), meta.getInteractZoneHeight()));
 		this.interactZone.setCollisionFlags(CollisionFlags.CF_NO_CONTACT_RESPONSE);
 		this.interactListener = new ContactListenerAdapter() {
 			@Override
@@ -155,9 +155,10 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 	}
 
 	@Override
-	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
-		super.enterBtWorld(world);
-		world.addCollisionObject(this.interactZone, CollisionFilterGroups.SensorTrigger,
+	public void enterBtWorld(final btDiscreteDynamicsWorld world, final int idx) {
+		super.enterBtWorld(world, idx);
+		world.addCollisionObject(this.interactZone,
+				CollisionFilterGroups.SensorTrigger,
 				CollisionFilterGroups.CharacterFilter);
 	}
 
