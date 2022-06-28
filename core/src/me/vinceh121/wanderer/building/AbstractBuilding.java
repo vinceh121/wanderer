@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlag
 import com.badlogic.gdx.physics.bullet.collision.btGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
+import me.vinceh121.wanderer.ID;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.clan.Clan;
@@ -155,7 +156,7 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 	}
 
 	@Override
-	public void enterBtWorld(final btDiscreteDynamicsWorld world, final int idx) {
+	public void enterBtWorld(final btDiscreteDynamicsWorld world, final ID idx) {
 		super.enterBtWorld(world, idx);
 		world.addCollisionObject(this.interactZone,
 				CollisionFilterGroups.SensorTrigger,

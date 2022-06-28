@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.bullet.collision.btGhostObject;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
+import me.vinceh121.wanderer.ID;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractEntity;
@@ -76,7 +77,7 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 	public abstract boolean onPickUp(Wanderer game, CharacterW chara);
 
 	@Override
-	public void enterBtWorld(final btDiscreteDynamicsWorld world, final int idx) {
+	public void enterBtWorld(final btDiscreteDynamicsWorld world, final ID idx) {
 		super.enterBtWorld(world, idx);
 		world.addCollisionObject(this.pickupZone, CollisionFilterGroups.SensorTrigger,
 				CollisionFilterGroups.CharacterFilter);

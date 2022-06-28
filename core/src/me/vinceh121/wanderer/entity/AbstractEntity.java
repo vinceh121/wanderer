@@ -21,12 +21,13 @@ import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+import me.vinceh121.wanderer.ID;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 
 public abstract class AbstractEntity implements Disposable {
 	protected final Wanderer game;
-	private int index = -1;
+	private ID id = ID.NULL_ID;
 	private Matrix4 transform = new Matrix4();
 	private final Vector3 collideObjectOffset = new Vector3();
 	private final Array<DisplayModel> models = new Array<>();
@@ -67,7 +68,7 @@ public abstract class AbstractEntity implements Disposable {
 		} else {
 			this.loadCollideModelConvex();
 		}
-		this.getCollideObject().setUserIndex(index);
+		this.getCollideObject().setUserIndex(id.getValue());
 		this.updateTransform();
 	}
 
@@ -86,8 +87,8 @@ public abstract class AbstractEntity implements Disposable {
 				new btConvexHullShape(mesh.getVerticesBuffer(), mesh.getNumVertices(), mesh.getVertexSize())));
 	}
 
-	public void enterBtWorld(final btDiscreteDynamicsWorld world, final int idx) {
-		this.setIndex(idx);
+	public void enterBtWorld(final btDiscreteDynamicsWorld world, final ID idx) {
+		this.setID(idx);
 		if (this.getCollideObject() != null) {
 			world.addRigidBody(this.getCollideObject(), this.collisionGroup, this.collisionMask);
 		}
@@ -348,14 +349,14 @@ public abstract class AbstractEntity implements Disposable {
 		this.collisionMask = collisionMask;
 	}
 
-	public int getIndex() {
-		return index;
+	public ID getID() {
+		return this.id;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
+	public void setID(ID id) {
+		this.id = id;
 		if (this.getCollideObject() != null) {
-			this.getCollideObject().setUserIndex(index);
+			this.getCollideObject().setUserIndex(id.getValue());
 		}
 	}
 

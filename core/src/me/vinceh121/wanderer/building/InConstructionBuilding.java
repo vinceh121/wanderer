@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
 
+import me.vinceh121.wanderer.ID;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.entity.DisplayModel;
@@ -93,7 +94,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 	}
 
 	@Override
-	public void enterBtWorld(final btDiscreteDynamicsWorld world, final int idx) {
+	public void enterBtWorld(final btDiscreteDynamicsWorld world, final ID idx) {
 		super.enterBtWorld(world, idx);
 		this.sound = WandererConstants.ASSET_MANAGER.get("orig/lib/sound/healingspell.wav", Sound.class);
 		this.soundId = this.sound.play();
