@@ -46,13 +46,8 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 
 		this.characterContactListener = new ContactListenerAdapter() {
 			private CharacterW getChara(btCollisionObject colObj0, btCollisionObject colObj1) {
-				final AbstractEntity ent0, ent1;
-				try {
-					ent0 = game.getEntity(colObj0.getUserIndex());
-					ent1 = game.getEntity(colObj1.getUserIndex());
-				} catch (IndexOutOfBoundsException e) {
-					return null;
-				}
+				final AbstractEntity ent0 = game.getEntityFromHash(colObj0.getUserIndex());
+				final AbstractEntity ent1 = game.getEntityFromHash(colObj1.getUserIndex());
 
 				final CharacterW chara;
 				if (ent0 instanceof CharacterW && ent1 == Island.this) {

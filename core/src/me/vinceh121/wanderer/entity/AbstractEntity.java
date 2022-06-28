@@ -26,7 +26,6 @@ import me.vinceh121.wanderer.WandererConstants;
 
 public abstract class AbstractEntity implements Disposable {
 	protected final Wanderer game;
-	private int index = -1;
 	private Matrix4 transform = new Matrix4();
 	private final Vector3 collideObjectOffset = new Vector3();
 	private final Array<DisplayModel> models = new Array<>();
@@ -67,7 +66,7 @@ public abstract class AbstractEntity implements Disposable {
 		} else {
 			this.loadCollideModelConvex();
 		}
-		this.getCollideObject().setUserIndex(index);
+		this.getCollideObject().setUserIndex(hashCode());
 		this.updateTransform();
 	}
 
@@ -86,8 +85,7 @@ public abstract class AbstractEntity implements Disposable {
 				new btConvexHullShape(mesh.getVerticesBuffer(), mesh.getNumVertices(), mesh.getVertexSize())));
 	}
 
-	public void enterBtWorld(final btDiscreteDynamicsWorld world, final int idx) {
-		this.setIndex(idx);
+	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
 		if (this.getCollideObject() != null) {
 			world.addRigidBody(this.getCollideObject(), this.collisionGroup, this.collisionMask);
 		}
@@ -123,6 +121,7 @@ public abstract class AbstractEntity implements Disposable {
 	}
 
 	public void setCollideObject(final btRigidBody collideObject) {
+		collideObject.setUserIndex(hashCode());
 		// https://pybullet.org/Bullet/BulletFull/btDiscreteDynamicsWorld_8cpp_source.html#l00579
 		final boolean isDynamic = !collideObject.isStaticObject() && !collideObject.isKinematicObject();
 		final int collisionFilterGroup = isDynamic ? btBroadphaseProxy.CollisionFilterGroups.DefaultFilter
@@ -346,17 +345,6 @@ public abstract class AbstractEntity implements Disposable {
 
 	public void setCollisionMask(final int collisionMask) {
 		this.collisionMask = collisionMask;
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-		if (this.getCollideObject() != null) {
-			this.getCollideObject().setUserIndex(index);
-		}
 	}
 
 	@Override

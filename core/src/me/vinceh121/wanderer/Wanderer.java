@@ -236,16 +236,13 @@ public class Wanderer extends ApplicationAdapter {
 		this.graphicsManager.renderUI();
 	}
 
-	public int addEntity(final AbstractEntity e) {
+	public void addEntity(final AbstractEntity e) {
 		this.entities.add(e);
-		final int idx = this.entities.indexOf(e, true);
-		e.enterBtWorld(this.physicsManager.getBtWorld(), idx);
-		return idx;
+		e.enterBtWorld(this.physicsManager.getBtWorld());
 	}
 
 	public void removeEntity(final AbstractEntity e) {
 		this.entities.removeValue(e, true);
-		this.updateEntityIndexes();
 		e.leaveBtWorld(this.physicsManager.getBtWorld());
 		if (e instanceof IClanMember) {
 			for (final Clan c : this.clans) {
@@ -253,15 +250,14 @@ public class Wanderer extends ApplicationAdapter {
 			}
 		}
 	}
-	
-	private void updateEntityIndexes() {
-		for (int i = 0; i < this.entities.size; i++) {
-			this.entities.get(i).setIndex(i);
-		}
-	}
 
-	public AbstractEntity getEntity(int idx) {
-		return this.entities.get(idx);
+	public AbstractEntity getEntityFromHash(int hashcode) {
+		for (AbstractEntity e : this.entities) {
+			if (e.hashCode() == hashcode) {
+				return e;
+			}
+		}
+		return null;
 	}
 
 	public Clan getClanForMember(final IClanMember member) {

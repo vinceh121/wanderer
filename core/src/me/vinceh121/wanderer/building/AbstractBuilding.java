@@ -155,8 +155,7 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 	}
 
 	@Override
-	public void enterBtWorld(final btDiscreteDynamicsWorld world, final int idx) {
-		super.enterBtWorld(world, idx);
+	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
 		world.addCollisionObject(this.interactZone,
 				CollisionFilterGroups.SensorTrigger,
 				CollisionFilterGroups.CharacterFilter);

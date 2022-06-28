@@ -45,6 +45,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		this.setCollideObjectOffset(meta.getCapsuleOffset());
 		this.controller = new CharacterWController(this.game, this, meta.getCapsuleRadius(), meta.getCapsuleHeight());
 		this.controller.setFallListener(this::onFall);
+		this.getGhostObject().setUserIndex(this.hashCode());
 		game.getBtWorld().addAction(this.controller);
 
 		this.addModel(new DisplayModel(meta.getModel(), meta.getTexture()));
@@ -148,12 +149,6 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	@Override
 	public void setMass(final float mass) {
 		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setIndex(int index) {
-		super.setIndex(index);
-		this.getGhostObject().setUserIndex(index);
 	}
 
 	@Override
