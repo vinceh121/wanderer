@@ -29,7 +29,7 @@ public class DebugOverlay extends Table {
 	@Override
 	public void act(final float delta) {
 		this.lblFps.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
-		this.lblEntities.setText("Entities: " + this.game.getEntities().size());
+		this.lblEntities.setText("Entities: " + this.game.getEntities().size);
 		if (this.game.getControlledEntity() instanceof AbstractEntity) {// doubles as null-check
 			this.lblCoords.setText("Coords (controlled): "
 					+ ((AbstractEntity) this.game.getControlledEntity()).getTransform().getTranslation(new Vector3()));

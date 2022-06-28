@@ -15,7 +15,6 @@ import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
 
-import me.vinceh121.wanderer.ID;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
@@ -152,9 +151,9 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	@Override
-	public void setID(ID index) {
-		super.setID(index);
-		this.getGhostObject().setUserIndex(index.getValue());
+	public void setIndex(int index) {
+		super.setIndex(index);
+		this.getGhostObject().setUserIndex(index);
 	}
 
 	@Override

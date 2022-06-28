@@ -1,8 +1,6 @@
 package me.vinceh121.wanderer;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -52,7 +50,7 @@ public class Wanderer extends ApplicationAdapter {
 	private final PhysicsManager physicsManager = new PhysicsManager();
 	private final GraphicsManager graphicsManager = new GraphicsManager();
 
-	private HashMap<ID, AbstractEntity> entities;
+	private Array<AbstractEntity> entities;
 	private Array<Clan> clans;
 
 	private CameraInputController camcon;
@@ -97,7 +95,7 @@ public class Wanderer extends ApplicationAdapter {
 					return true;
 				} else if (keycode == Keys.TAB) {
 					if (Wanderer.this.controlledEntity == null) {
-						for (final AbstractEntity e : Wanderer.this.entities.values()) {
+						for (final AbstractEntity e : Wanderer.this.entities) {
 							if (e instanceof IControllableEntity) {
 								System.out.println("Controlling " + e);
 								Wanderer.this.controlEntity((IControllableEntity) e);
@@ -117,7 +115,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		this.debugOverlay = new DebugOverlay(this);
 
-		this.entities = new HashMap<>(256);
+		this.entities = new Array<>();
 		this.clans = new Array<>();
 
 		this.messageLabel = new BlinkLabel("", WandererConstants.getDevSkin());
@@ -222,8 +220,8 @@ public class Wanderer extends ApplicationAdapter {
 		this.physicsManager.render();
 
 		this.graphicsManager.begin();
-		for (ID id : this.entities.keySet()) {
-			AbstractEntity entity = this.getEntity(id);
+		for (int i = 0; i < this.entities.size; i++) {
+			final AbstractEntity entity = this.entities.get(i);
 			entity.updatePhysics(this.physicsManager.getBtWorld());
 			entity.render(this.graphicsManager.getModelBatch(), this.graphicsManager.getEnv());
 		}
@@ -238,15 +236,16 @@ public class Wanderer extends ApplicationAdapter {
 		this.graphicsManager.renderUI();
 	}
 
-	public ID addEntity(final AbstractEntity e) {
-		final ID id = new ID();
-		this.entities.put(id, e);
-		e.enterBtWorld(this.physicsManager.getBtWorld(), id);
-		return id;
+	public int addEntity(final AbstractEntity e) {
+		this.entities.add(e);
+		final int idx = this.entities.indexOf(e, true);
+		e.enterBtWorld(this.physicsManager.getBtWorld(), idx);
+		return idx;
 	}
 
 	public void removeEntity(final AbstractEntity e) {
-		this.entities.remove(e.getID());
+		this.entities.removeValue(e, true);
+		this.updateEntityIndexes();
 		e.leaveBtWorld(this.physicsManager.getBtWorld());
 		if (e instanceof IClanMember) {
 			for (final Clan c : this.clans) {
@@ -254,12 +253,14 @@ public class Wanderer extends ApplicationAdapter {
 			}
 		}
 	}
-
-	public AbstractEntity getEntity(int id) {
-		return this.getEntity(new ID(id));
-	}
 	
-	public AbstractEntity getEntity(ID idx) {
+	private void updateEntityIndexes() {
+		for (int i = 0; i < this.entities.size; i++) {
+			this.entities.get(i).setIndex(i);
+		}
+	}
+
+	public AbstractEntity getEntity(int idx) {
 		return this.entities.get(idx);
 	}
 
@@ -272,7 +273,7 @@ public class Wanderer extends ApplicationAdapter {
 		return null;
 	}
 
-	public Map<ID, AbstractEntity> getEntities() {
+	public Array<AbstractEntity> getEntities() {
 		return this.entities;
 	}
 
