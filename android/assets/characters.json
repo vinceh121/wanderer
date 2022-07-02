@@ -2,7 +2,7 @@
 	"goliath": {
 		"name": "Goliath",
 		"model": "orig/char_goliath.n/skin.obj",
-		"texture": "orig/char_goliath.n/texturenone.png",
+		"texture": "orig/char_goliath.n/texturenone.ktx",
 		"fallSound": "orig/lib/sound/step_bigland_goliath.wav",
 		"steps": [
 			"orig/lib/sound/step_goliath01.wav",
@@ -19,7 +19,7 @@
 	"john": {
 		"name": "John",
 		"model": "orig/char_john.n/skin.obj",
-		"texture": "orig/char_john.n/texturenone.png",
+		"texture": "orig/char_john.n/texturenone.ktx",
 		"fallSound": "orig/lib/sound/step_bigland_john.wav",
 		"steps": [
 			"orig/lib/sound/step_john01.wav",
@@ -36,7 +36,7 @@
 	"susie": {
 		"name": "Susie",
 		"model": "orig/char_susie.n/skin.obj",
-		"texture": "orig/char_susie.n/texturenone.png",
+		"texture": "orig/char_susie.n/texturenone.ktx",
 		"fallSound": "orig/lib/sound/step_bigland_susie.wav",
 		"steps": [
 			"orig/lib/sound/step_susie01.wav",
