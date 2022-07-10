@@ -51,6 +51,11 @@ public class Wanderer extends ApplicationAdapter {
 	private final GraphicsManager graphicsManager = new GraphicsManager();
 
 	private Array<AbstractEntity> entities;
+	/**
+	 * List of entities that have been added this current tick. To be moved to
+	 * normal entity list after they all ticked.
+	 */
+	private Array<AbstractEntity> toAdd;
 	private Array<Clan> clans;
 
 	private CameraInputController camcon;
@@ -116,6 +121,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.debugOverlay = new DebugOverlay(this);
 
 		this.entities = new Array<>();
+		this.toAdd = new Array<>();
 		this.clans = new Array<>();
 
 		this.messageLabel = new BlinkLabel("", WandererConstants.getDevSkin());
@@ -229,6 +235,12 @@ public class Wanderer extends ApplicationAdapter {
 		this.graphicsManager.renderParticles(delta);
 		this.graphicsManager.end();
 
+		this.entities.addAll(this.toAdd);
+		for (AbstractEntity e : this.toAdd) {
+			e.enterBtWorld(this.physicsManager.getBtWorld());
+		}
+		this.toAdd.clear();
+
 		if (this.debugBullet) {
 			this.physicsManager.getDebugDrawer().begin(this.graphicsManager.getViewport3d());
 			this.physicsManager.getBtWorld().debugDrawWorld();
@@ -239,12 +251,13 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public void addEntity(final AbstractEntity e) {
-		this.entities.add(e);
-		e.enterBtWorld(this.physicsManager.getBtWorld());
+		this.toAdd.add(e);
 	}
 
 	public void removeEntity(final AbstractEntity e) {
-		this.entities.removeValue(e, true);
+		if (!this.entities.removeValue(e, true)) {
+			this.toAdd.removeValue(e, true);
+		}
 		e.leaveBtWorld(this.physicsManager.getBtWorld());
 		if (e instanceof IClanMember) {
 			for (final Clan c : this.clans) {
@@ -256,7 +269,7 @@ public class Wanderer extends ApplicationAdapter {
 	public AbstractEntity getEntity(ID id) {
 		return this.getEntity(id.getValue());
 	}
-	
+
 	public AbstractEntity getEntity(int id) {
 		for (AbstractEntity e : this.entities) {
 			if (e.getId().getValue() == id) {
