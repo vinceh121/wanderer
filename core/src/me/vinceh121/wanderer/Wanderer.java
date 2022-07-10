@@ -253,9 +253,13 @@ public class Wanderer extends ApplicationAdapter {
 		}
 	}
 
-	public AbstractEntity getEntityFromHash(int hashcode) {
+	public AbstractEntity getEntity(ID id) {
+		return this.getEntity(id.getValue());
+	}
+	
+	public AbstractEntity getEntity(int id) {
 		for (AbstractEntity e : this.entities) {
-			if (e.hashCode() == hashcode) {
+			if (e.getId().getValue() == id) {
 				return e;
 			}
 		}

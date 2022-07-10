@@ -45,7 +45,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		this.setCollideObjectOffset(meta.getCapsuleOffset());
 		this.controller = new CharacterWController(this.game, this, meta.getCapsuleRadius(), meta.getCapsuleHeight());
 		this.controller.setFallListener(this::onFall);
-		this.getGhostObject().setUserIndex(this.hashCode());
+		this.getGhostObject().setUserIndex(this.getId().getValue());
 		game.getBtWorld().addAction(this.controller);
 
 		this.addModel(new DisplayModel(meta.getModel(), meta.getTexture()));

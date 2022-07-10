@@ -21,10 +21,12 @@ import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+import me.vinceh121.wanderer.ID;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 
 public abstract class AbstractEntity implements Disposable {
+	private final ID id = new ID();
 	protected final Wanderer game;
 	private Matrix4 transform = new Matrix4();
 	private final Vector3 collideObjectOffset = new Vector3();
@@ -67,7 +69,7 @@ public abstract class AbstractEntity implements Disposable {
 		} else {
 			this.loadCollideModelConvex();
 		}
-		this.getCollideObject().setUserIndex(hashCode());
+		this.getCollideObject().setUserIndex(getId().getValue());
 		this.updateTransform();
 	}
 
@@ -125,7 +127,7 @@ public abstract class AbstractEntity implements Disposable {
 	}
 
 	public void setCollideObject(final btRigidBody collideObject) {
-		collideObject.setUserIndex(hashCode());
+		collideObject.setUserIndex(getId().getValue());
 		// https://pybullet.org/Bullet/BulletFull/btDiscreteDynamicsWorld_8cpp_source.html#l00579
 		final boolean isDynamic = !collideObject.isStaticObject() && !collideObject.isKinematicObject();
 		final int collisionFilterGroup = isDynamic ? btBroadphaseProxy.CollisionFilterGroups.DefaultFilter
@@ -354,14 +356,16 @@ public abstract class AbstractEntity implements Disposable {
 		this.collisionMask = collisionMask;
 	}
 
-	
-	
 	public void addParticle(ParticleEmitter value) {
 		particles.add(value);
 	}
 
 	public Array<ParticleEmitter> getParticles() {
 		return particles;
+	}
+
+	public ID getId() {
+		return id;
 	}
 
 	@Override
