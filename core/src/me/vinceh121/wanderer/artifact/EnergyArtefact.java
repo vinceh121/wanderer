@@ -6,12 +6,14 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.clan.Clan;
+import me.vinceh121.wanderer.entity.ParticleEmitter;
 
 public class EnergyArtefact extends AbstractArtifactEntity {
 	private static final ArtifactMeta ENERGY_META = new ArtifactMeta();
 
 	public EnergyArtefact(final Wanderer game) {
 		super(game, EnergyArtefact.ENERGY_META);
+		this.addParticle(new ParticleEmitter(game.getGraphicsManager().getParticleSystem(), "particles/energyclot.p"));
 	}
 
 	@Override

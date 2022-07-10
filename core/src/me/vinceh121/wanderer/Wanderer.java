@@ -212,6 +212,7 @@ public class Wanderer extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		final float delta = Gdx.graphics.getDeltaTime();
 		this.graphicsManager.apply();
 		this.camcon.update();
 
@@ -225,6 +226,7 @@ public class Wanderer extends ApplicationAdapter {
 			entity.updatePhysics(this.physicsManager.getBtWorld());
 			entity.render(this.graphicsManager.getModelBatch(), this.graphicsManager.getEnv());
 		}
+		this.graphicsManager.renderParticles(delta);
 		this.graphicsManager.end();
 
 		if (this.debugBullet) {

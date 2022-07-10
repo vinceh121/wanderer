@@ -29,6 +29,7 @@ public abstract class AbstractEntity implements Disposable {
 	private Matrix4 transform = new Matrix4();
 	private final Vector3 collideObjectOffset = new Vector3();
 	private final Array<DisplayModel> models = new Array<>();
+	private final Array<ParticleEmitter> particles = new Array<>();
 	private String collideModel;
 	private btRigidBody collideObject;
 	private float mass;
@@ -105,6 +106,9 @@ public abstract class AbstractEntity implements Disposable {
 		for (final DisplayModel m : this.models) {
 			m.render(batch, env);
 		}
+		for (final ParticleEmitter e : this.particles) {
+			e.updateLoading();
+		}
 	}
 
 	public String getCollideModel() {
@@ -168,6 +172,9 @@ public abstract class AbstractEntity implements Disposable {
 
 		for (final DisplayModel m : this.models) {
 			m.updateTransform(this.transform);
+		}
+		for (final ParticleEmitter p : this.particles) {
+			p.updateTransform(this.transform);
 		}
 	}
 
@@ -347,8 +354,22 @@ public abstract class AbstractEntity implements Disposable {
 		this.collisionMask = collisionMask;
 	}
 
+	
+	
+	public void addParticle(ParticleEmitter value) {
+		particles.add(value);
+	}
+
+	public Array<ParticleEmitter> getParticles() {
+		return particles;
+	}
+
 	@Override
 	public void dispose() {
+		for (final ParticleEmitter e : this.particles) {
+			this.game.getGraphicsManager().removeParticle(e);
+			e.dispose();
+		}
 		if (this.collideObject != null) {
 			Gdx.app.postRunnable(() -> this.collideObject.dispose());
 		}

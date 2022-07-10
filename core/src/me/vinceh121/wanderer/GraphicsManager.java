@@ -10,12 +10,15 @@ import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
+import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import me.vinceh121.wanderer.entity.ParticleEmitter;
 import me.vinceh121.wanderer.glx.WandererShader;
 
 public class GraphicsManager extends ApplicationAdapter {
@@ -25,6 +28,8 @@ public class GraphicsManager extends ApplicationAdapter {
 	private PerspectiveCamera cam;
 	private Viewport viewport3d;
 	private Stage stage;
+	private ParticleSystem particleSystem;
+	private BillboardParticleBatch particleBatch;
 
 	@Override
 	public void create() {
@@ -47,6 +52,11 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.cam.near = 0.1f;
 		this.cam.update();
 
+		this.particleSystem = new ParticleSystem();
+		particleBatch = new BillboardParticleBatch();
+		particleBatch.setCamera(cam);
+		this.particleSystem.add(particleBatch);
+
 		this.viewportUi = new ScreenViewport();
 		this.viewport3d = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.cam);
 
@@ -63,6 +73,14 @@ public class GraphicsManager extends ApplicationAdapter {
 				| (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
 		this.modelBatch.begin(this.cam);
+	}
+
+	public void renderParticles(final float delta) {
+		this.particleSystem.update(Gdx.graphics.getDeltaTime());
+		this.particleSystem.begin();
+		this.particleSystem.draw();
+		this.particleSystem.end();
+		this.modelBatch.render(this.particleSystem);
 	}
 
 	public void end() {
@@ -86,6 +104,14 @@ public class GraphicsManager extends ApplicationAdapter {
 	public void dispose() {
 		this.modelBatch.dispose();
 		this.stage.dispose();
+	}
+
+	public void addParticle(ParticleEmitter effect) {
+		particleSystem.add(effect.getDelegate());
+	}
+
+	public void removeParticle(ParticleEmitter effect) {
+		particleSystem.remove(effect.getDelegate());
 	}
 
 	/**
@@ -149,5 +175,9 @@ public class GraphicsManager extends ApplicationAdapter {
 	 */
 	public Environment getEnv() {
 		return this.env;
+	}
+
+	public ParticleSystem getParticleSystem() {
+		return particleSystem;
 	}
 }
