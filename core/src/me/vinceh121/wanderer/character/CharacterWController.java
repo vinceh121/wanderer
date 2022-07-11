@@ -31,7 +31,7 @@ public class CharacterWController extends CustomActionInterface {
 		public void onContactProcessed(final btManifoldPoint cp, final btCollisionObject colObj0,
 				final btCollisionObject colObj1) {
 			final float dist = cp.getDistance();
-			if (this.validInteract(colObj0, colObj1) && dist < -0.3) {
+			if (this.validInteract(colObj0, colObj1) && dist < -0.25f) {
 				CharacterWController.this.stopJump();
 				// recover from penetration
 				// https://github.com/bulletphysics/bullet3/blob/e306b274f1885f32b7e9d65062aa942b398805c2/src/BulletDynamics/Character/btKinematicCharacterController.cpp#L238
@@ -41,7 +41,10 @@ public class CharacterWController extends CustomActionInterface {
 				cp.getNormalWorldOnB(normalWorldB);
 				pos.add(normalWorldB
 					.scl(colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer() ? -1 : 1)
-					.scl(dist)/* .scl(0.3f) */);
+					.scl(dist)
+					.scl(0.4f));
+				// this wierd shit is due to JNI
+				CharacterWController.this.setWorldTransform(CharacterWController.this.getWorldTransform().setTranslation(pos));
 			}
 		};
 
