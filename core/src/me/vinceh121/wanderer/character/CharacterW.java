@@ -73,6 +73,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	@Override
 	public void render(final ModelBatch batch, final Environment env) {
 		super.render(batch, env);
+
 		if (this.isControlled()) {
 			this.processInput();
 			this.moveCamera();

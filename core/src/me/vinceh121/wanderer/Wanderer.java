@@ -55,7 +55,7 @@ public class Wanderer extends ApplicationAdapter {
 	 * List of entities that have been added this current tick. To be moved to
 	 * normal entity list after they all ticked.
 	 */
-	private Array<AbstractEntity> toAdd;
+	private Array<AbstractEntity> toAdd, toRemove;
 	private Array<Clan> clans;
 
 	private CameraInputController camcon;
@@ -122,6 +122,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		this.entities = new Array<>();
 		this.toAdd = new Array<>();
+		this.toRemove = new Array<>();
 		this.clans = new Array<>();
 
 		this.messageLabel = new BlinkLabel("", WandererConstants.getDevSkin());
@@ -222,7 +223,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.graphicsManager.apply();
 		this.camcon.update();
 
-		WandererConstants.ASSET_MANAGER.update(62);
+		WandererConstants.ASSET_MANAGER.update(8);
 
 		this.physicsManager.render();
 
@@ -234,6 +235,18 @@ public class Wanderer extends ApplicationAdapter {
 		}
 		this.graphicsManager.renderParticles(delta);
 		this.graphicsManager.end();
+
+		this.entities.removeAll(this.toRemove, true);
+		for (AbstractEntity e : this.toRemove) {
+			this.toAdd.removeValue(e, true);
+			e.leaveBtWorld(this.physicsManager.getBtWorld());
+			if (e instanceof IClanMember) {
+				for (final Clan c : this.clans) {
+					c.removeMember((IClanMember) e);
+				}
+			}
+		}
+		this.toRemove.clear();
 
 		this.entities.addAll(this.toAdd);
 		for (AbstractEntity e : this.toAdd) {
@@ -255,15 +268,7 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public void removeEntity(final AbstractEntity e) {
-		if (!this.entities.removeValue(e, true)) {
-			this.toAdd.removeValue(e, true);
-		}
-		e.leaveBtWorld(this.physicsManager.getBtWorld());
-		if (e instanceof IClanMember) {
-			for (final Clan c : this.clans) {
-				c.removeMember((IClanMember) e);
-			}
-		}
+		this.toRemove.add(e);
 	}
 
 	public AbstractEntity getEntity(ID id) {
