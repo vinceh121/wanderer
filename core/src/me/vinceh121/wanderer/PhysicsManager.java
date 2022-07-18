@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
@@ -44,7 +45,7 @@ public class PhysicsManager extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		this.btWorld.stepSimulation(1f / 60f, 10);
+		this.btWorld.stepSimulation(Gdx.graphics.getDeltaTime(), 10);
 		this.btWorld.performDiscreteCollisionDetection();
 	}
 

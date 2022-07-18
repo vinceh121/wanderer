@@ -43,7 +43,7 @@ public class CharacterWController extends CustomActionInterface {
 					.scl(colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer() ? -1 : 1)
 					.scl(dist)
 					.scl(0.4f));
-				// this wierd shit is due to JNI
+				// this weird shit is due to JNI
 				CharacterWController.this.setWorldTransform(CharacterWController.this.getWorldTransform().setTranslation(pos));
 			}
 		};

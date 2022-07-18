@@ -2,6 +2,7 @@ package me.vinceh121.wanderer.building;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy.CollisionFilterGroups;
+import com.badlogic.gdx.physics.bullet.collision.CollisionConstants;
 import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
@@ -151,7 +152,7 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 	public void loadCollideModel() {
 		super.loadCollideModel();
 		this.getCollideObject().setCollisionFlags(CollisionFlags.CF_KINEMATIC_OBJECT);
-		this.getCollideObject().forceActivationState(4); // DISABLE_DEACTIVATION
+		this.getCollideObject().forceActivationState(CollisionConstants.DISABLE_DEACTIVATION);
 	}
 
 	@Override
