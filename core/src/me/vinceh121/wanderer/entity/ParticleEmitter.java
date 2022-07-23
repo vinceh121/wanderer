@@ -1,15 +1,11 @@
 package me.vinceh121.wanderer.entity;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
-import com.badlogic.gdx.graphics.g3d.particles.ResourceData;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.WandererConstants;
@@ -49,10 +45,6 @@ public class ParticleEmitter {
 				this.delegate.start();
 				this.delegate.setTransform(this.absoluteTransform);
 				this.system.add(delegate);
-				Json json = new Json();
-				ResourceData<ParticleEffect> data = json.fromJson(ResourceData.class, Gdx.files.internal(this.particle));
-				json.setOutputType(OutputType.json);
-				System.out.println(json.prettyPrint(data));
 			} else {
 				ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(
 						this.system.getBatches());

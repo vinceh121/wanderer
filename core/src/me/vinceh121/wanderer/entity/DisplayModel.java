@@ -80,7 +80,7 @@ public class DisplayModel {
 		final ModelInstance instance = new ModelInstance(model);
 		if (this.displayTexture != null) {
 			final Texture texture = WandererConstants.ASSET_MANAGER.get(this.displayTexture, Texture.class);
-			texture.setFilter(TextureFilter.MipMapNearestLinear, TextureFilter.Linear);
+			texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.Linear);
 
 			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
 			instance.materials.get(0).set(this.textureAttributes); // this is called set but it's more like add
