@@ -13,8 +13,8 @@ public class WandererShader extends DefaultShader {
 		public void set(final BaseShader shader, final int inputID, final Renderable renderable,
 				final Attributes combinedAttributes) {
 			final int unit = shader.context.textureBinder
-					.bind(((TiledMaterialAttribute) combinedAttributes.get(TiledMaterialAttribute.TiledMaterial))
-							.getTextureDescriptor());
+				.bind(((TiledMaterialAttribute) combinedAttributes.get(TiledMaterialAttribute.TiledMaterial))
+					.getTextureDescriptor());
 			shader.set(inputID, unit);
 		}
 	};

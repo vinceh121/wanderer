@@ -1,11 +1,15 @@
 package me.vinceh121.wanderer.entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
+import com.badlogic.gdx.graphics.g3d.particles.ResourceData;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.WandererConstants;
@@ -39,23 +43,22 @@ public class ParticleEmitter {
 	public void updateLoading() {
 		if (this.particle != null && this.delegate == null) {
 			if (WandererConstants.ASSET_MANAGER.isLoaded(this.particle, ParticleEffect.class)) {
-				this.delegate = WandererConstants.ASSET_MANAGER.get(this.particle, ParticleEffect.class).copy();
+				this.delegate = new ParticleEffect(
+						WandererConstants.ASSET_MANAGER.get(this.particle, ParticleEffect.class));
 				this.delegate.init();
 				this.delegate.start();
+				this.delegate.setTransform(this.absoluteTransform);
 				this.system.add(delegate);
+				Json json = new Json();
+				ResourceData<ParticleEffect> data = json.fromJson(ResourceData.class, Gdx.files.internal(this.particle));
+				json.setOutputType(OutputType.json);
+				System.out.println(json.prettyPrint(data));
 			} else {
-				ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(this.system.getBatches());
+				ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(
+						this.system.getBatches());
 				WandererConstants.ASSET_MANAGER.load(this.particle, ParticleEffect.class, loadParam);
 			}
 		}
-	}
-
-	public void start() {
-		delegate.start();
-	}
-
-	public void end() {
-		delegate.end();
 	}
 
 	public void reset() {
@@ -103,7 +106,8 @@ public class ParticleEmitter {
 	}
 
 	public void dispose() {
-		if (this.delegate != null)
-			delegate.dispose();
+		if (this.delegate != null) {
+			this.delegate.dispose();
+		}
 	}
 }

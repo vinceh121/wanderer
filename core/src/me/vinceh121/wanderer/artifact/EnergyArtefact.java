@@ -14,6 +14,7 @@ public class EnergyArtefact extends AbstractArtifactEntity {
 	public EnergyArtefact(final Wanderer game) {
 		super(game, EnergyArtefact.ENERGY_META);
 		this.addParticle(new ParticleEmitter(game.getGraphicsManager().getParticleSystem(), "particles/energyclot.p"));
+		this.setRotate(false);
 	}
 
 	@Override

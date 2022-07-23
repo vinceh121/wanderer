@@ -27,10 +27,12 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 	private final ArtifactMeta meta;
 	private final btGhostObject pickupZone;
 	private final IContactListener pickupListener;
+	private boolean rotate;
 
 	public AbstractArtifactEntity(final Wanderer game, final ArtifactMeta meta) {
 		super(game);
 		this.meta = meta;
+		this.rotate = meta.isRotate();
 		this.pickupZone = new btGhostObject();
 		this.pickupZone.setCollisionFlags(CollisionFlags.CF_NO_CONTACT_RESPONSE);
 		this.pickupZone.setCollisionShape(new btSphereShape(meta.getPickupZoneRadius()));
@@ -77,7 +79,8 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 
 	@Override
 	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
-		world.addCollisionObject(this.pickupZone, CollisionFilterGroups.SensorTrigger,
+		world.addCollisionObject(this.pickupZone,
+				CollisionFilterGroups.SensorTrigger,
 				CollisionFilterGroups.CharacterFilter);
 	}
 
@@ -90,17 +93,18 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 	@Override
 	public void render(final ModelBatch batch, final Environment env) {
 		super.render(batch, env);
-		this.rotate(Vector3.Y, 3);
+		if (this.rotate) {
+			this.rotate(Vector3.Y, 3);
+		}
 	}
 
 	@Override
 	protected void updateTransform() {
 		super.updateTransform();
-		if (this.meta.isRotate()) {
-			final Matrix4 noScaleRotation = new Matrix4(this.getTransform().getTranslation(new Vector3()).add(0, 1, 0),
-					new Quaternion(), new Vector3(1, 1, 1));
-			this.pickupZone.setWorldTransform(noScaleRotation);
-		}
+		final Matrix4 noScaleRotation = new Matrix4(this.getTransform().getTranslation(new Vector3()).add(0, 1, 0),
+				new Quaternion(),
+				new Vector3(1, 1, 1));
+		this.pickupZone.setWorldTransform(noScaleRotation);
 	}
 
 	public ArtifactMeta getMeta() {
@@ -113,6 +117,14 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 
 	public IContactListener getPickupListener() {
 		return this.pickupListener;
+	}
+
+	public boolean isRotate() {
+		return rotate;
+	}
+
+	public void setRotate(boolean rotate) {
+		this.rotate = rotate;
 	}
 
 	@Override

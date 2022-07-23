@@ -4,13 +4,18 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleShader.AlignMode;
 import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -19,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import me.vinceh121.wanderer.entity.ParticleEmitter;
+import me.vinceh121.wanderer.glx.WandererParticleShader;
 import me.vinceh121.wanderer.glx.WandererShader;
 
 public class GraphicsManager extends ApplicationAdapter {
@@ -53,8 +59,26 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.cam.update();
 
 		this.particleSystem = new ParticleSystem();
-		particleBatch = new BillboardParticleBatch();
-		particleBatch.setCamera(cam);
+		this.particleBatch = new BillboardParticleBatch(AlignMode.Screen,
+				true,
+				1024,
+				new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f),
+				new DepthTestAttribute(GL20.GL_LESS, true)) {
+			@Override
+			protected Renderable allocRenderable() {
+				Renderable r = super.allocRenderable();
+				r.material.set(FloatAttribute.createAlphaTest(0.5f));
+				return r;
+			}
+
+			@Override
+			protected Shader getShader(Renderable renderable) {
+				final Shader shader = new WandererParticleShader(renderable);
+				shader.init();
+				return shader;
+			}
+		};
+		this.particleBatch.setCamera(cam);
 		this.particleSystem.add(particleBatch);
 
 		this.viewportUi = new ScreenViewport();
