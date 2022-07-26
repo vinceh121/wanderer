@@ -209,7 +209,7 @@ public class Wanderer extends ApplicationAdapter {
 		final CharacterW john = new CharacterW(this, johnMeta);
 		john.setTranslation(0.1f, 50f, 0.1f);
 
-		this.itemBar.setBelt(john.getBelt());
+		this.itemBar.setCharacter(john);
 
 		playerClan.addMember(john);
 		this.addEntity(john);

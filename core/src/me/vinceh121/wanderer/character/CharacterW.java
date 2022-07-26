@@ -197,7 +197,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	public boolean canPickUpArtifact() {
-		return this.beltSize >= this.belt.size;
+		return this.beltSize > this.belt.size;
 	}
 
 	public void pickUpArtifact(final ArtifactMeta artifact) {

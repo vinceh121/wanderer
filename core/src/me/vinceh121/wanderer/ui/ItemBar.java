@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
+import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.DisplayModel;
 
 public class ItemBar extends WandererWidget {
@@ -23,6 +24,7 @@ public class ItemBar extends WandererWidget {
 	private final Quaternion rotation = new Quaternion();
 	private float angle;
 
+	private CharacterW character;
 	private Array<ArtifactMeta> belt = new Array<>();
 	private int count;
 
@@ -33,6 +35,9 @@ public class ItemBar extends WandererWidget {
 	@Override
 	public void draw(final Batch batch, final float parentAlpha) {
 		super.draw(batch, parentAlpha);
+		if (this.character != null) {
+			this.count = this.character.getBeltSize();
+		}
 
 		if (this.count == 0) {
 			return;
@@ -79,5 +84,14 @@ public class ItemBar extends WandererWidget {
 
 	public void setBelt(final Array<ArtifactMeta> belt) {
 		this.belt = belt;
+	}
+
+	public CharacterW getCharacter() {
+		return character;
+	}
+
+	public void setCharacter(final CharacterW character) {
+		this.character = character;
+		this.setBelt(character.getBelt());
 	}
 }
