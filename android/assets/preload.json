@@ -4,6 +4,8 @@
 		"orig/feedback/beltfull.wav",
 		"orig/feedback/artefactcollected.wav",
 		"orig/feedback/backpack_active.wav",
+		"orig/feedback/noenergy.wav",
+		"orig/feedback/nobuildarea.wav",
 		"orig/lib/sound/healingspell.wav"
 	],
 	"textures": [

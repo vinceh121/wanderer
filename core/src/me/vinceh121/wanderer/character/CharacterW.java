@@ -237,11 +237,13 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		final AbstractBuildingMeta build = (AbstractBuildingMeta) arti;
 		if (this.getClan().getEnergy() < build.getEnergyRequired()) {
 			this.game.showMessage("Not enough energy!");
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound.class).play();
 			return;
 		}
 		final Array<Slot> free = this.attachedIsland.getFreeSlots(build.getSlotType());
 		if (free.size == 0) {
 			this.game.showMessage("No free slot!");
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound.class).play();
 			return;
 		}
 		CharacterW.this.placing = build;
