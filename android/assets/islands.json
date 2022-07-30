@@ -1,5 +1,8 @@
 {
 	"first_island": {
+		"placeCameraPosition": [
+			0.0, 180.0, 120.0
+		],
 		"displayModels": [
 			{
 				"relativeTransform": {

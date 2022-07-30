@@ -63,4 +63,9 @@ public class Slot {
 	public void setRotation(Quaternion rotation) {
 		this.rotation = rotation;
 	}
+
+	@Override
+	public String toString() {
+		return "Slot [type=" + type + ", location=" + location + ", rotation=" + rotation + "]";
+	}
 }

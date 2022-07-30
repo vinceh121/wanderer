@@ -1,9 +1,7 @@
 package me.vinceh121.wanderer.building;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
@@ -41,8 +39,8 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 		}
 
 		this.setCollideModel(meta.getCollisionModel());
-		this.setPlaceCameraPosition(meta.getPlaceCameraPosition().cpy());
-		this.setPlaceCameraDirection(meta.getPlaceCameraDirection().cpy());
+		this.setPlaceCameraPosition(meta.getPlaceCameraPosition());
+		this.setPlaceCameraDirection(meta.getPlaceCameraDirection());
 
 		this.characterContactListener = new ContactListenerAdapter() {
 			private CharacterW getChara(btCollisionObject colObj0, btCollisionObject colObj1) {
@@ -111,6 +109,9 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	}
 
 	public void addBuilding(final AbstractBuilding value, final Slot slot) {
+		if (!this.slots.contains(slot, true)) {
+			throw new IllegalStateException("This island does not contain passed slot: " + slot);
+		}
 		if (this.isSlotTaken(slot)) {
 			throw new IllegalStateException("Slot is taken");
 		}
@@ -150,14 +151,24 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 		return null;
 	}
 
-	public void moveCameraBuildingPlace(Camera cam) {
-		this.getTransform().getTranslation(cam.position);
-		cam.position.add(placeCameraPosition);
-
-		cam.direction.set(this.placeCameraDirection);
-		cam.rotate(this.getTransform().getRotation(new Quaternion()));
-
-		cam.update();
+	public Array<Slot> getFreeSlots() {
+		Array<Slot> a = new Array<>();
+		for (Slot s : this.slots) {
+			if (!isSlotTaken(s)) {
+				a.add(s);
+			}
+		}
+		return a;
+	}
+	
+	public Array<Slot> getFreeSlots(SlotType type) {
+		Array<Slot> a = new Array<>();
+		for (Slot s : this.slots) {
+			if (s.getType() == type && !isSlotTaken(s)) {
+				a.add(s);
+			}
+		}
+		return a;
 	}
 
 	@Override
@@ -196,6 +207,10 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 		super.loadCollideModel();
 		this.getCollideObject().setCollisionFlags(CollisionFlags.CF_KINEMATIC_OBJECT);
 		this.getCollideObject().forceActivationState(4); // DISABLE_DEACTIVATION
+	}
+
+	public void startBuilding(Slot slot, AbstractBuildingMeta meta) {
+		this.addBuilding(new InConstructionBuilding(game, meta), slot);
 	}
 
 	@Override

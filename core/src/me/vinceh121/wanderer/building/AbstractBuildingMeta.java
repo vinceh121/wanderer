@@ -13,6 +13,7 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	private int energyRequired, buildTime;
 	private boolean red, shrink = true;
 	private float interactZoneRadius = 11f, interactZoneHeight = 20f;
+	private SlotType slotType = SlotType.GENERIC;
 
 	public AbstractBuildingMeta() {
 	}
@@ -115,6 +116,14 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 
 	public void setInteractZoneHeight(final float interactZoneHeight) {
 		this.interactZoneHeight = interactZoneHeight;
+	}
+
+	public SlotType getSlotType() {
+		return slotType;
+	}
+
+	public void setSlotType(SlotType slotType) {
+		this.slotType = slotType;
 	}
 
 	public abstract AbstractBuilding createBuilding(Wanderer game);

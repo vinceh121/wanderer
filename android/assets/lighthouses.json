@@ -61,7 +61,6 @@
 			}
 		],
 		"collisionModel": "orig/j_lighthouse01.n/collide.obj",
-		"energyRequired": 10,
 		"buildTime": 10,
 		"red": true,
 		"shrink": true,

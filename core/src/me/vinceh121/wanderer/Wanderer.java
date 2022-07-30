@@ -29,7 +29,6 @@ import me.vinceh121.wanderer.artifact.BackpackArtifact;
 import me.vinceh121.wanderer.artifact.EnergyArtefact;
 import me.vinceh121.wanderer.building.AbstractBuilding;
 import me.vinceh121.wanderer.building.BuildingArtifactEntity;
-import me.vinceh121.wanderer.building.InConstructionBuilding;
 import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.building.IslandMeta;
 import me.vinceh121.wanderer.building.LighthouseMeta;
@@ -197,11 +196,6 @@ public class Wanderer extends ApplicationAdapter {
 		grass.addTextureAttribute(FloatAttribute.createAlphaTest(0.5f));
 		grass.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f));
 		island.addModel(grass);
-
-		final InConstructionBuilding lighthouse = new InConstructionBuilding(this, lighthouseArtifactMeta);
-		this.addEntity(lighthouse);
-		island.addBuilding(lighthouse, island.getSlot(0));
-		playerClan.addMember(lighthouse);
 
 		final CharacterMeta johnMeta = MetaRegistry.getInstance().get("john");
 		johnMeta.ensureLoading();

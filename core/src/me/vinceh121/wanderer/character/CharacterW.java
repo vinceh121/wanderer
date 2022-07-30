@@ -18,11 +18,16 @@ import com.badlogic.gdx.utils.Array;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
+import me.vinceh121.wanderer.building.AbstractBuildingMeta;
+import me.vinceh121.wanderer.building.InConstructionBuilding;
 import me.vinceh121.wanderer.building.Island;
+import me.vinceh121.wanderer.building.PreviewBuilding;
+import me.vinceh121.wanderer.building.Slot;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.ui.BeltSelection;
 
 /**
  * An entity of a character, a person.
@@ -36,8 +41,13 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	private final Vector3 walkDirection = new Vector3();
 	private final Array<ArtifactMeta> belt = new Array<>();
 	private Island attachedIsland;
-	private int beltSize = 3;
+	private int beltSize = 10;
 	private Clan clan;
+	private boolean beltOpen;
+	private BeltSelection beltWidget;
+	private AbstractBuildingMeta placing;
+	private int placingSlotIndex;
+	private PreviewBuilding previewBuilding;
 
 	public CharacterW(final Wanderer game, CharacterMeta meta) {
 		super(game);
@@ -82,15 +92,30 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 	private void moveCamera() {
 		final PerspectiveCamera cam = this.game.getCamera();
-		final Vector3 characterTransform = new Vector3();
-		this.getTransform().getTranslation(characterTransform);
 
-		final Quaternion characterRotation = new Quaternion();
-		this.getTransform().getRotation(characterRotation);
+		if (this.placing != null) {
+			if (this.attachedIsland == null) {
+				this.placing = null;
+				return;
+			}
+			cam.position.set(this.attachedIsland.getPlaceCameraPosition())
+				.add(this.attachedIsland.getTransform().getTranslation(new Vector3()));
+			if (this.attachedIsland.getPlaceCameraDirection().equals(Vector3.Zero)) {
+				cam.lookAt(this.attachedIsland.getTransform().getTranslation(new Vector3()));
+			} else {
+				cam.direction.set(this.attachedIsland.getPlaceCameraDirection());
+			}
+		} else {
+			final Vector3 characterTransform = new Vector3();
+			this.getTransform().getTranslation(characterTransform);
 
-		cam.position.set(characterRotation.transform(new Vector3(0, 3, -4)).add(characterTransform));
-		cam.lookAt(characterTransform.cpy().add(0, 1, 0));
-		cam.up.set(0, 1, 0); // should this be doable without this?
+			final Quaternion characterRotation = new Quaternion();
+			this.getTransform().getRotation(characterRotation);
+
+			cam.position.set(characterRotation.transform(new Vector3(0, 3, -4)).add(characterTransform));
+			cam.lookAt(characterTransform.cpy().add(0, 1, 0));
+			cam.up.set(0, 1, 0); // should this be doable without this?
+		}
 		cam.update(true);
 	}
 
@@ -101,7 +126,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	public void processInput() {
-		if (this.controller.isJumping() || this.controller.isFalling()) {
+		if (this.controller.isJumping() || this.controller.isFalling() || this.beltOpen || this.placing != null) {
 			return;
 		}
 
@@ -129,16 +154,141 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		return new InputAdapter() {
 			@Override
 			public boolean keyDown(final int keycode) {
+				if (CharacterW.this.beltOpen) {
+					if (keycode == Keys.RIGHT) {
+						CharacterW.this.beltWidget.increment();
+						return true;
+					} else if (keycode == Keys.LEFT) {
+						CharacterW.this.beltWidget.decrement();
+						return true;
+					} else if (keycode == Keys.ESCAPE) {
+						CharacterW.this.closeBelt();
+						return true;
+					} else if (keycode == Keys.ENTER) {
+						selectBuilding();
+						return true;
+					}
+					return false;
+				}
+
+				if (CharacterW.this.placing != null) {
+					if (keycode == Keys.RIGHT) {
+						incrementPreviewSlot();
+						return true;
+					} else if (keycode == Keys.LEFT) {
+						decrementPreviewSlot();
+						return true;
+					} else if (keycode == Keys.ESCAPE) {
+						placing = null;
+						attachedIsland.removeBuilding(previewBuilding);
+						game.removeEntity(previewBuilding);
+						previewBuilding.dispose();
+						return true;
+					} else if (keycode == Keys.ENTER) {
+						placeBuilding();
+						return true;
+					}
+					return false;
+				}
+
 				if (keycode == Keys.SPACE && Gdx.input.isKeyPressed(Keys.UP)) {
 					CharacterW.this.controller.bigJump();
 					return true;
 				} else if (keycode == Keys.SPACE) {
 					CharacterW.this.controller.jump();
 					return true;
+				} else if (keycode == Keys.ENTER) {
+					CharacterW.this.openBelt();
+					return true;
 				}
 				return false;
 			}
 		};
+	}
+
+	private void placeBuilding() {
+		if (getClan().getEnergy() < this.placing.getEnergyRequired()) {
+			game.showMessage("Not enough energy!");
+			return;
+		}
+
+		getClan().setEnergy(getClan().getEnergy() - this.placing.getEnergyRequired());
+
+		final Slot s = this.previewBuilding.getSlot();
+
+		attachedIsland.removeBuilding(previewBuilding);
+		game.removeEntity(previewBuilding);
+		previewBuilding.dispose();
+
+		InConstructionBuilding build = new InConstructionBuilding(game, placing);
+		game.addEntity(build);
+		attachedIsland.addBuilding(build, s);
+
+		this.belt.removeValue(placing, true);
+		this.placing = null;
+	}
+
+	private void selectBuilding() {
+		final int idx = CharacterW.this.beltWidget.getIndex();
+		final ArtifactMeta arti = CharacterW.this.belt.get(idx);
+		if (!(arti instanceof AbstractBuildingMeta)) {
+			return;
+		}
+		final AbstractBuildingMeta build = (AbstractBuildingMeta) arti;
+		if (getClan().getEnergy() < build.getEnergyRequired()) {
+			game.showMessage("Not enough energy!");
+			return;
+		}
+		final Array<Slot> free = attachedIsland.getFreeSlots(build.getSlotType());
+		if (free.size == 0) {
+			game.showMessage("No free slot!");
+			return;
+		}
+		CharacterW.this.placing = build;
+		if (previewBuilding != null) {
+			game.removeEntity(previewBuilding);
+			previewBuilding.dispose();
+		}
+		previewBuilding = new PreviewBuilding(game, placing);
+		game.addEntity(previewBuilding);
+		closeBelt();
+		updatePlacePreview(free);
+	}
+
+	private void incrementPreviewSlot() {
+		final Array<Slot> freeSlots = this.attachedIsland.getFreeSlots(this.placing.getSlotType());
+		if (freeSlots.size != 0) {
+			this.placingSlotIndex = (this.placingSlotIndex + 1) % freeSlots.size;
+		}
+		updatePlacePreview(freeSlots);
+	}
+
+	private void decrementPreviewSlot() {
+		this.placingSlotIndex = Math.max(this.placingSlotIndex - 1, 0);
+		updatePlacePreview(this.attachedIsland.getFreeSlots(this.placing.getSlotType()));
+	}
+
+	private void updatePlacePreview(Array<Slot> freeSlots) {
+		if (freeSlots.size == 0) {
+			return;
+		}
+		final Slot s = freeSlots.get(placingSlotIndex);
+		this.attachedIsland.removeBuilding(this.previewBuilding);
+		this.attachedIsland.addBuilding(previewBuilding, s);
+	}
+
+	public void openBelt() {
+		this.beltOpen = true;
+		this.beltWidget = new BeltSelection(game, belt);
+		this.beltWidget.setWidth(Gdx.graphics.getWidth());
+		this.beltWidget.setHeight(Gdx.graphics.getHeight());
+		this.game.getGraphicsManager().getStage().addActor(this.beltWidget);
+	}
+
+	public void closeBelt() {
+		this.beltOpen = false;
+		this.game.getGraphicsManager().getStage().getRoot().removeActor(this.beltWidget);
+		this.beltWidget = null;
 	}
 
 	@Override
@@ -155,6 +305,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	@Override
 	public void dispose() {
 		this.game.getBtWorld().removeAction(this.controller);
+		this.controller.dispose();
 		super.dispose();
 	}
 
