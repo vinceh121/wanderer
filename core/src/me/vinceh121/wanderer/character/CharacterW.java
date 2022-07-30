@@ -41,7 +41,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	private final Vector3 walkDirection = new Vector3();
 	private final Array<ArtifactMeta> belt = new Array<>();
 	private Island attachedIsland;
-	private int beltSize = 10;
+	private int beltSize = 3;
 	private Clan clan;
 	private boolean beltOpen;
 	private BeltSelection beltWidget;
