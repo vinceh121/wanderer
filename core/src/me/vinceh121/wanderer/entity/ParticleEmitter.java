@@ -29,10 +29,10 @@ public class ParticleEmitter {
 	}
 
 	public ParticleEffect getDelegate() {
-		return delegate;
+		return this.delegate;
 	}
 
-	public void setDelegate(ParticleEffect delegate) {
+	public void setDelegate(final ParticleEffect delegate) {
 		this.delegate = delegate;
 	}
 
@@ -44,9 +44,9 @@ public class ParticleEmitter {
 				this.delegate.init();
 				this.delegate.start();
 				this.delegate.setTransform(this.absoluteTransform);
-				this.system.add(delegate);
+				this.system.add(this.delegate);
 			} else {
-				ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(
+				final ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(
 						this.system.getBatches());
 				WandererConstants.ASSET_MANAGER.load(this.particle, ParticleEffect.class, loadParam);
 			}
@@ -54,7 +54,7 @@ public class ParticleEmitter {
 	}
 
 	public void reset() {
-		delegate.reset();
+		this.delegate.reset();
 	}
 
 	public void updateTransform(final Matrix4 emitterTrans) {
@@ -67,33 +67,33 @@ public class ParticleEmitter {
 		this.absoluteTransform.scl(this.relativeTransform.getScale(new Vector3()));
 
 		if (this.delegate != null) {
-			this.delegate.setTransform(absoluteTransform);
+			this.delegate.setTransform(this.absoluteTransform);
 		}
 	}
 
 	public String getParticle() {
-		return particle;
+		return this.particle;
 	}
 
-	public void setParticle(String particle) {
+	public void setParticle(final String particle) {
 		this.particle = particle;
 	}
 
 	public Matrix4 getRelativeTransform() {
-		return relativeTransform;
+		return this.relativeTransform;
 	}
 
-	public void setRelativeTransform(Matrix4 transform) {
+	public void setRelativeTransform(final Matrix4 transform) {
 		this.relativeTransform.set(transform);
 	}
 
 	@JsonIgnore
 	public Matrix4 getAbsoluteTransform() {
-		return absoluteTransform;
+		return this.absoluteTransform;
 	}
 
 	@JsonIgnore
-	public void setAbsoluteTransform(Matrix4 transform) {
+	public void setAbsoluteTransform(final Matrix4 transform) {
 		this.absoluteTransform.set(transform);
 	}
 

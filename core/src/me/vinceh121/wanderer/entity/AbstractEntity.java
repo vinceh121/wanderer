@@ -69,7 +69,7 @@ public abstract class AbstractEntity implements Disposable {
 		} else {
 			this.loadCollideModelConvex();
 		}
-		this.getCollideObject().setUserIndex(getId().getValue());
+		this.getCollideObject().setUserIndex(this.getId().getValue());
 		this.updateTransform();
 	}
 
@@ -127,7 +127,7 @@ public abstract class AbstractEntity implements Disposable {
 	}
 
 	public void setCollideObject(final btRigidBody collideObject) {
-		collideObject.setUserIndex(getId().getValue());
+		collideObject.setUserIndex(this.getId().getValue());
 		// https://pybullet.org/Bullet/BulletFull/btDiscreteDynamicsWorld_8cpp_source.html#l00579
 		final boolean isDynamic = !collideObject.isStaticObject() && !collideObject.isKinematicObject();
 		final int collisionFilterGroup = isDynamic ? btBroadphaseProxy.CollisionFilterGroups.DefaultFilter
@@ -356,16 +356,16 @@ public abstract class AbstractEntity implements Disposable {
 		this.collisionMask = collisionMask;
 	}
 
-	public void addParticle(ParticleEmitter value) {
-		particles.add(value);
+	public void addParticle(final ParticleEmitter value) {
+		this.particles.add(value);
 	}
 
 	public Array<ParticleEmitter> getParticles() {
-		return particles;
+		return this.particles;
 	}
 
 	public ID getId() {
-		return id;
+		return this.id;
 	}
 
 	@Override

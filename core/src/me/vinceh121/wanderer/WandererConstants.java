@@ -22,7 +22,7 @@ public final class WandererConstants {
 	}
 
 	static {
-		WandererJsonModule.registerModules(MAPPER);
+		WandererJsonModule.registerModules(WandererConstants.MAPPER);
 
 		WandererConstants.MIPMAPS.genMipMaps = true;
 

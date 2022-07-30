@@ -18,9 +18,10 @@ public class Matrix4Serializer extends StdSerializer<Matrix4> {
 	}
 
 	@Override
-	public void serialize(Matrix4 value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-		JsonSerializer<Object> vector3Ser = provider.findValueSerializer(Vector3.class);
-		JsonSerializer<Object> quaternionSer = provider.findValueSerializer(Quaternion.class);
+	public void serialize(final Matrix4 value, final JsonGenerator gen, final SerializerProvider provider)
+			throws IOException {
+		final JsonSerializer<Object> vector3Ser = provider.findValueSerializer(Vector3.class);
+		final JsonSerializer<Object> quaternionSer = provider.findValueSerializer(Quaternion.class);
 
 		final Vector3 translation = value.getTranslation(new Vector3());
 		final Quaternion rotation = value.getRotation(new Quaternion());

@@ -36,18 +36,18 @@ public class IslandMeta implements IMeta {
 	}
 
 	public Array<DisplayModel> getDisplayModels() {
-		return displayModels;
+		return this.displayModels;
 	}
 
-	public void setDisplayModels(Array<DisplayModel> displayModels) {
+	public void setDisplayModels(final Array<DisplayModel> displayModels) {
 		this.displayModels = displayModels;
 	}
 
 	public String getCollisionModel() {
-		return collisionModel;
+		return this.collisionModel;
 	}
 
-	public void setCollisionModel(String collisionModel) {
+	public void setCollisionModel(final String collisionModel) {
 		this.collisionModel = collisionModel;
 	}
 
@@ -60,18 +60,18 @@ public class IslandMeta implements IMeta {
 	}
 
 	public Vector3 getPlaceCameraPosition() {
-		return placeCameraPosition;
+		return this.placeCameraPosition;
 	}
 
-	public void setPlaceCameraPosition(Vector3 placeCameraPosition) {
+	public void setPlaceCameraPosition(final Vector3 placeCameraPosition) {
 		this.placeCameraPosition = placeCameraPosition;
 	}
 
 	public Vector3 getPlaceCameraDirection() {
-		return placeCameraDirection;
+		return this.placeCameraDirection;
 	}
 
-	public void setPlaceCameraDirection(Vector3 placeCameraDirection) {
+	public void setPlaceCameraDirection(final Vector3 placeCameraDirection) {
 		this.placeCameraDirection = placeCameraDirection;
 	}
 }

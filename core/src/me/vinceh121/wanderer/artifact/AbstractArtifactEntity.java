@@ -120,10 +120,10 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 	}
 
 	public boolean isRotate() {
-		return rotate;
+		return this.rotate;
 	}
 
-	public void setRotate(boolean rotate) {
+	public void setRotate(final boolean rotate) {
 		this.rotate = rotate;
 	}
 

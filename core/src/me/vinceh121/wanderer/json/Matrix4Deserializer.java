@@ -22,10 +22,11 @@ public class Matrix4Deserializer extends StdDeserializer<Matrix4> {
 	}
 
 	@Override
-	public Matrix4 deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
-		JsonDeserializer<Object> vector3Deser = ctxt
+	public Matrix4 deserialize(final JsonParser p, final DeserializationContext ctxt)
+			throws IOException, JacksonException {
+		final JsonDeserializer<Object> vector3Deser = ctxt
 			.findNonContextualValueDeserializer(SimpleType.constructUnsafe(Vector3.class));
-		JsonDeserializer<Object> quaternionDeser = ctxt
+		final JsonDeserializer<Object> quaternionDeser = ctxt
 			.findNonContextualValueDeserializer(SimpleType.constructUnsafe(Quaternion.class));
 
 		Vector3 translation = new Vector3();

@@ -18,11 +18,12 @@ public class QuaternionDeserializer extends StdDeserializer<Quaternion> {
 	}
 
 	@Override
-	public Quaternion deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+	public Quaternion deserialize(final JsonParser p, final DeserializationContext ctxt)
+			throws IOException, JacksonException {
 		if (p.currentToken() != JsonToken.START_ARRAY) {
 			throw new IllegalStateException("Expected quaternion array start, got garbage");
 		}
-		float[] vals = new float[4];
+		final float[] vals = new float[4];
 		for (int i = 0; i < 4; i++) {
 			if (p.nextToken() != JsonToken.VALUE_NUMBER_FLOAT && p.currentToken() != JsonToken.VALUE_NUMBER_INT) {
 				throw new IllegalStateException("Expected quaternion float value, got garbage");

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public final class WandererJsonModule {
-	public static void registerModules(ObjectMapper mapper) {
+	public static void registerModules(final ObjectMapper mapper) {
 		final SimpleModule mod = new SimpleModule("WandererJson");
 		mod.addSerializer(Array.class, new GdxArraySerializer());
 		mod.addDeserializer(Array.class, new GdxArrayDeserializer());

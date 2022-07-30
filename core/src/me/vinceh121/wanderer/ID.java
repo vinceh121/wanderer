@@ -13,10 +13,10 @@ public class ID implements Comparable<ID> {
 	private final int value;
 
 	public ID() {
-		this(newValue());
+		this(ID.newValue());
 	}
 
-	public ID(int value) {
+	public ID(final int value) {
 		this.value = value;
 	}
 
@@ -30,19 +30,19 @@ public class ID implements Comparable<ID> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if ((obj == null) || (this.getClass() != obj.getClass())) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ID other = (ID) obj;
-		return value == other.value;
+		}
+		final ID other = (ID) obj;
+		return this.value == other.value;
 	}
 
 	@Override
-	public int compareTo(ID o) {
+	public int compareTo(final ID o) {
 		return Integer.compare(o.value, this.value);
 	}
 

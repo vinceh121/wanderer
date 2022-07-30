@@ -15,13 +15,16 @@ public class TiledMaterialAttribute extends Attribute {
 	}
 
 	public static TiledMaterialAttribute create(final Texture texture, final float opacity) {
-		return new TiledMaterialAttribute(TiledMaterialAttribute.TiledMaterial, new TextureDescriptor<>(texture),
+		return new TiledMaterialAttribute(TiledMaterialAttribute.TiledMaterial,
+				new TextureDescriptor<>(texture),
 				opacity);
 	}
 
 	public static TiledMaterialAttribute create(final Texture texture, final float opacity, final Vector2 ratio) {
-		return new TiledMaterialAttribute(TiledMaterialAttribute.TiledMaterial, new TextureDescriptor<>(texture),
-				opacity, ratio);
+		return new TiledMaterialAttribute(TiledMaterialAttribute.TiledMaterial,
+				new TextureDescriptor<>(texture),
+				opacity,
+				ratio);
 	}
 
 	private final TextureDescriptor<Texture> textureDescriptor;

@@ -16,7 +16,7 @@ import me.vinceh121.wanderer.entity.DisplayModel;
 
 public class ItemBar extends WandererWidget {
 	private static final Texture TEX_SLOT = WandererConstants.ASSET_MANAGER
-			.get("orig/if_emptyslot.n/slotslot_alpha.ktx", Texture.class);
+		.get("orig/if_emptyslot.n/slotslot_alpha.ktx", Texture.class);
 	private static final Texture TEX_GAP = WandererConstants.ASSET_MANAGER.get("orig/if_emptyslot.n/gapgap_alpha.ktx",
 			Texture.class);
 	private static final Texture TEX_END = WandererConstants.ASSET_MANAGER.get("orig/if_emptyslot.n/endend_alpha.ktx",
@@ -56,7 +56,8 @@ public class ItemBar extends WandererWidget {
 				final DisplayModel m = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
 				m.setAbsoluteTransform(
 						new Matrix4(new Vector3(32 * i + sX + ItemBar.TEX_SLOT.getWidth() / 2, this.getY() + 15, -10),
-								this.rotation, new Vector3(1, 1, 1)));
+								this.rotation,
+								new Vector3(1, 1, 1)));
 
 				m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
 				m.render(this.game.getGraphicsManager().getModelBatch(), this.game.getGraphicsManager().getEnv());
@@ -87,7 +88,7 @@ public class ItemBar extends WandererWidget {
 	}
 
 	public CharacterW getCharacter() {
-		return character;
+		return this.character;
 	}
 
 	public void setCharacter(final CharacterW character) {

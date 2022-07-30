@@ -10,11 +10,11 @@ import me.vinceh121.wanderer.clan.Clan;
 
 public class EnergyBar extends Widget {
 	private static final Texture TEX_BASE = WandererConstants.ASSET_MANAGER
-			.get("orig/if_ebar.n/clan_energy_leftclan_energy_left_alpha.ktx", Texture.class);
+		.get("orig/if_ebar.n/clan_energy_leftclan_energy_left_alpha.ktx", Texture.class);
 	private static final Texture TEX_SEGMENT = WandererConstants.ASSET_MANAGER
-			.get("orig/if_ebar.n/clan_energy_middleclan_energy_middle_alpha.ktx", Texture.class);
+		.get("orig/if_ebar.n/clan_energy_middleclan_energy_middle_alpha.ktx", Texture.class);
 	private static final Texture TEX_TIP = WandererConstants.ASSET_MANAGER
-			.get("orig/if_ebar.n/clan_energy_rightclan_energy_right_alpha.ktx", Texture.class);
+		.get("orig/if_ebar.n/clan_energy_rightclan_energy_right_alpha.ktx", Texture.class);
 	private static final Texture TEX_BAR = WandererConstants.ASSET_MANAGER.get("orig/if_ebar.n/texturenone.ktx",
 			Texture.class);
 	private int segmentCount = 5, value = 0, maxValue = 100;
@@ -37,15 +37,31 @@ public class EnergyBar extends Widget {
 		UiUtils.beginBlend(batch);
 //		batch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_ONE_MINUS_SRC_COLOR);
 		// width and height are swapped because of flip
-		batch.draw(EnergyBar.TEX_BAR, 103, 23, 0, 0, barHeight, 18, 1, 1, 90, 0, 0, EnergyBar.TEX_BAR.getWidth(),
-				EnergyBar.TEX_BAR.getHeight(), false, true);
+		batch.draw(EnergyBar.TEX_BAR,
+				103,
+				23,
+				0,
+				0,
+				barHeight,
+				18,
+				1,
+				1,
+				90,
+				0,
+				0,
+				EnergyBar.TEX_BAR.getWidth(),
+				EnergyBar.TEX_BAR.getHeight(),
+				false,
+				true);
 		UiUtils.endBlend(batch);
 		batch.setColor(Color.WHITE);
 
 		UiUtils.drawFlip(batch, EnergyBar.TEX_BASE, this.getX(), this.getY());
 		int i;
 		for (i = 0; i < this.segmentCount; i++) {
-			UiUtils.drawFlip(batch, EnergyBar.TEX_SEGMENT, this.getX(),
+			UiUtils.drawFlip(batch,
+					EnergyBar.TEX_SEGMENT,
+					this.getX(),
 					32 * i + this.getY() + EnergyBar.TEX_BASE.getHeight());
 		}
 		UiUtils.drawFlip(batch, EnergyBar.TEX_TIP, this.getX(), 32 * i + this.getY() + EnergyBar.TEX_BASE.getHeight());
@@ -76,10 +92,10 @@ public class EnergyBar extends Widget {
 	}
 
 	public Clan getClan() {
-		return clan;
+		return this.clan;
 	}
 
-	public void setClan(Clan clan) {
+	public void setClan(final Clan clan) {
 		this.clan = clan;
 	}
 

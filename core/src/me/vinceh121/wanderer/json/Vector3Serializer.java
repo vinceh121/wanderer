@@ -15,7 +15,8 @@ public class Vector3Serializer extends StdSerializer<Vector3> {
 	}
 
 	@Override
-	public void serialize(Vector3 value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+	public void serialize(final Vector3 value, final JsonGenerator gen, final SerializerProvider provider)
+			throws IOException {
 		gen.writeStartArray();
 		gen.writeNumber(value.x);
 		gen.writeNumber(value.y);

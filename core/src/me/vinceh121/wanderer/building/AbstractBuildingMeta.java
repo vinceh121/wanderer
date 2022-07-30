@@ -119,10 +119,10 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	}
 
 	public SlotType getSlotType() {
-		return slotType;
+		return this.slotType;
 	}
 
-	public void setSlotType(SlotType slotType) {
+	public void setSlotType(final SlotType slotType) {
 		this.slotType = slotType;
 	}
 

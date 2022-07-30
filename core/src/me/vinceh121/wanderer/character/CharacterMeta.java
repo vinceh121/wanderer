@@ -116,26 +116,26 @@ public class CharacterMeta implements IMeta {
 	}
 
 	public Vector3 getCapsuleOffset() {
-		return capsuleOffset;
+		return this.capsuleOffset;
 	}
 
-	public void setCapsuleOffset(Vector3 capsuleOffset) {
+	public void setCapsuleOffset(final Vector3 capsuleOffset) {
 		this.capsuleOffset = capsuleOffset;
 	}
 
 	public float getCapsuleRadius() {
-		return capsuleRadius;
+		return this.capsuleRadius;
 	}
 
-	public void setCapsuleRadius(float capsuleRadius) {
+	public void setCapsuleRadius(final float capsuleRadius) {
 		this.capsuleRadius = capsuleRadius;
 	}
 
 	public float getCapsuleHeight() {
-		return capsuleHeight;
+		return this.capsuleHeight;
 	}
 
-	public void setCapsuleHeight(float capsuleHeight) {
+	public void setCapsuleHeight(final float capsuleHeight) {
 		this.capsuleHeight = capsuleHeight;
 	}
 

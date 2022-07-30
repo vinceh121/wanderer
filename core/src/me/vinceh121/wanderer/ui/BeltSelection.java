@@ -40,7 +40,7 @@ public class BeltSelection extends WandererWidget {
 
 		// left hand side
 		final Vector3 scale = new Vector3(1.5f, 1.5f, 1.5f);
-		for (int i = index - 1; i >= 0; i--) {
+		for (int i = this.index - 1; i >= 0; i--) {
 			final ArtifactMeta artifact = this.belt.get(i);
 
 			final DisplayModel m = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
@@ -51,8 +51,9 @@ public class BeltSelection extends WandererWidget {
 
 			m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
 			m.render(this.game.getGraphicsManager().getModelBatch(), this.game.getGraphicsManager().getEnv());
-			if (scale.x < 2)
+			if (scale.x < 2) {
 				scale.scl(1.1f);
+			}
 		}
 
 		// selected artifact
@@ -71,7 +72,7 @@ public class BeltSelection extends WandererWidget {
 
 		// right hand side
 		scale.set(2, 2, 2);
-		for (int i = index + 1; i < this.belt.size; i++) {
+		for (int i = this.index + 1; i < this.belt.size; i++) {
 			final ArtifactMeta artifact = this.belt.get(i);
 
 			final DisplayModel m = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
@@ -85,19 +86,20 @@ public class BeltSelection extends WandererWidget {
 
 			m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
 			m.render(this.game.getGraphicsManager().getModelBatch(), this.game.getGraphicsManager().getEnv());
-			if (scale.x > 1.5)
+			if (scale.x > 1.5) {
 				scale.scl(0.9f);
+			}
 		}
 	}
 
 	public void increment() {
-		this.index = Math.min(index + 1, belt.size - 1);
-		this.game.showMessage(this.belt.get(index).toString());
+		this.index = Math.min(this.index + 1, this.belt.size - 1);
+		this.game.showMessage(this.belt.get(this.index).toString());
 	}
 
 	public void decrement() {
-		this.index = Math.max(index - 1, 0);
-		this.game.showMessage(this.belt.get(index).toString());
+		this.index = Math.max(this.index - 1, 0);
+		this.game.showMessage(this.belt.get(this.index).toString());
 	}
 
 	public void setIndex(final int index) {
@@ -105,6 +107,6 @@ public class BeltSelection extends WandererWidget {
 	}
 
 	public int getIndex() {
-		return index;
+		return this.index;
 	}
 }

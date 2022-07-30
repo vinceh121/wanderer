@@ -15,7 +15,8 @@ public class QuaternionSerializer extends StdSerializer<Quaternion> {
 	}
 
 	@Override
-	public void serialize(Quaternion value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+	public void serialize(final Quaternion value, final JsonGenerator gen, final SerializerProvider provider)
+			throws IOException {
 		gen.writeStartArray();
 		gen.writeNumber(value.x);
 		gen.writeNumber(value.y);

@@ -65,20 +65,20 @@ public class GraphicsManager extends ApplicationAdapter {
 				new DepthTestAttribute(GL20.GL_LESS, true)) {
 			@Override
 			protected Renderable allocRenderable() {
-				Renderable r = super.allocRenderable();
+				final Renderable r = super.allocRenderable();
 				r.material.set(FloatAttribute.createAlphaTest(0.5f));
 				return r;
 			}
 
 			@Override
-			protected Shader getShader(Renderable renderable) {
+			protected Shader getShader(final Renderable renderable) {
 				final Shader shader = new WandererParticleShader(renderable);
 				shader.init();
 				return shader;
 			}
 		};
-		this.particleBatch.setCamera(cam);
-		this.particleSystem.add(particleBatch);
+		this.particleBatch.setCamera(this.cam);
+		this.particleSystem.add(this.particleBatch);
 
 		this.viewportUi = new ScreenViewport();
 		this.viewport3d = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.cam);
@@ -129,12 +129,12 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.stage.dispose();
 	}
 
-	public void addParticle(ParticleEmitter effect) {
-		particleSystem.add(effect.getDelegate());
+	public void addParticle(final ParticleEmitter effect) {
+		this.particleSystem.add(effect.getDelegate());
 	}
 
-	public void removeParticle(ParticleEmitter effect) {
-		particleSystem.remove(effect.getDelegate());
+	public void removeParticle(final ParticleEmitter effect) {
+		this.particleSystem.remove(effect.getDelegate());
 	}
 
 	/**
@@ -201,6 +201,6 @@ public class GraphicsManager extends ApplicationAdapter {
 	}
 
 	public ParticleSystem getParticleSystem() {
-		return particleSystem;
+		return this.particleSystem;
 	}
 }

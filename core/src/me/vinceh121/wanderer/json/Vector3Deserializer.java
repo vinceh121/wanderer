@@ -18,11 +18,12 @@ public class Vector3Deserializer extends StdDeserializer<Vector3> {
 	}
 
 	@Override
-	public Vector3 deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+	public Vector3 deserialize(final JsonParser p, final DeserializationContext ctxt)
+			throws IOException, JacksonException {
 		if (p.currentToken() != JsonToken.START_ARRAY) {
 			throw new JsonParseException(p, "Expected vector array start, got " + p.currentToken());
 		}
-		float[] vals = new float[3];
+		final float[] vals = new float[3];
 		for (int i = 0; i < 3; i++) {
 			if (p.nextToken() != JsonToken.VALUE_NUMBER_FLOAT && p.currentToken() != JsonToken.VALUE_NUMBER_INT) {
 				throw new JsonParseException(p, "Expected vector float value, got " + p.currentToken());

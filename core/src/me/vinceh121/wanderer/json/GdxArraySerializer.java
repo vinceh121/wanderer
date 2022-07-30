@@ -19,14 +19,15 @@ public class GdxArraySerializer extends StdSerializer<Array> {
 	}
 
 	@Override
-	public void serialize(Array value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+	public void serialize(final Array value, final JsonGenerator gen, final SerializerProvider provider)
+			throws IOException {
 		gen.writeStartArray();
-		for (Object e : value) {
+		for (final Object e : value) {
 			if (e == null) {
 				provider.defaultSerializeNull(gen);
 			} else {
-				Class<?> cc = e.getClass();
-				JsonSerializer<Object> serializer = provider.findValueSerializer(cc);
+				final Class<?> cc = e.getClass();
+				final JsonSerializer<Object> serializer = provider.findValueSerializer(cc);
 				if (serializer == null) {
 					throw new IllegalStateException("Jackson doesn't know how to serialize " + cc);
 				}

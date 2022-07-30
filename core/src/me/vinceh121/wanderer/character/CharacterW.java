@@ -49,7 +49,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	private int placingSlotIndex;
 	private PreviewBuilding previewBuilding;
 
-	public CharacterW(final Wanderer game, CharacterMeta meta) {
+	public CharacterW(final Wanderer game, final CharacterMeta meta) {
 		super(game);
 		this.meta = meta;
 		this.setCollideObjectOffset(meta.getCapsuleOffset());
@@ -165,7 +165,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 						CharacterW.this.closeBelt();
 						return true;
 					} else if (keycode == Keys.ENTER) {
-						selectBuilding();
+						CharacterW.this.selectBuilding();
 						return true;
 					}
 					return false;
@@ -173,19 +173,19 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 				if (CharacterW.this.placing != null) {
 					if (keycode == Keys.RIGHT) {
-						incrementPreviewSlot();
+						CharacterW.this.incrementPreviewSlot();
 						return true;
 					} else if (keycode == Keys.LEFT) {
-						decrementPreviewSlot();
+						CharacterW.this.decrementPreviewSlot();
 						return true;
 					} else if (keycode == Keys.ESCAPE) {
-						placing = null;
-						attachedIsland.removeBuilding(previewBuilding);
-						game.removeEntity(previewBuilding);
-						previewBuilding.dispose();
+						CharacterW.this.placing = null;
+						CharacterW.this.attachedIsland.removeBuilding(CharacterW.this.previewBuilding);
+						CharacterW.this.game.removeEntity(CharacterW.this.previewBuilding);
+						CharacterW.this.previewBuilding.dispose();
 						return true;
 					} else if (keycode == Keys.ENTER) {
-						placeBuilding();
+						CharacterW.this.placeBuilding();
 						return true;
 					}
 					return false;
@@ -207,24 +207,24 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	private void placeBuilding() {
-		if (getClan().getEnergy() < this.placing.getEnergyRequired()) {
-			game.showMessage("Not enough energy!");
+		if (this.getClan().getEnergy() < this.placing.getEnergyRequired()) {
+			this.game.showMessage("Not enough energy!");
 			return;
 		}
 
-		getClan().setEnergy(getClan().getEnergy() - this.placing.getEnergyRequired());
+		this.getClan().setEnergy(this.getClan().getEnergy() - this.placing.getEnergyRequired());
 
 		final Slot s = this.previewBuilding.getSlot();
 
-		attachedIsland.removeBuilding(previewBuilding);
-		game.removeEntity(previewBuilding);
-		previewBuilding.dispose();
+		this.attachedIsland.removeBuilding(this.previewBuilding);
+		this.game.removeEntity(this.previewBuilding);
+		this.previewBuilding.dispose();
 
-		InConstructionBuilding build = new InConstructionBuilding(game, placing);
-		game.addEntity(build);
-		attachedIsland.addBuilding(build, s);
+		final InConstructionBuilding build = new InConstructionBuilding(this.game, this.placing);
+		this.game.addEntity(build);
+		this.attachedIsland.addBuilding(build, s);
 
-		this.belt.removeValue(placing, true);
+		this.belt.removeValue(this.placing, true);
 		this.placing = null;
 	}
 
@@ -235,24 +235,24 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 			return;
 		}
 		final AbstractBuildingMeta build = (AbstractBuildingMeta) arti;
-		if (getClan().getEnergy() < build.getEnergyRequired()) {
-			game.showMessage("Not enough energy!");
+		if (this.getClan().getEnergy() < build.getEnergyRequired()) {
+			this.game.showMessage("Not enough energy!");
 			return;
 		}
-		final Array<Slot> free = attachedIsland.getFreeSlots(build.getSlotType());
+		final Array<Slot> free = this.attachedIsland.getFreeSlots(build.getSlotType());
 		if (free.size == 0) {
-			game.showMessage("No free slot!");
+			this.game.showMessage("No free slot!");
 			return;
 		}
 		CharacterW.this.placing = build;
-		if (previewBuilding != null) {
-			game.removeEntity(previewBuilding);
-			previewBuilding.dispose();
+		if (this.previewBuilding != null) {
+			this.game.removeEntity(this.previewBuilding);
+			this.previewBuilding.dispose();
 		}
-		previewBuilding = new PreviewBuilding(game, placing);
-		game.addEntity(previewBuilding);
-		closeBelt();
-		updatePlacePreview(free);
+		this.previewBuilding = new PreviewBuilding(this.game, this.placing);
+		this.game.addEntity(this.previewBuilding);
+		this.closeBelt();
+		this.updatePlacePreview(free);
 	}
 
 	private void incrementPreviewSlot() {
@@ -260,26 +260,26 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		if (freeSlots.size != 0) {
 			this.placingSlotIndex = (this.placingSlotIndex + 1) % freeSlots.size;
 		}
-		updatePlacePreview(freeSlots);
+		this.updatePlacePreview(freeSlots);
 	}
 
 	private void decrementPreviewSlot() {
 		this.placingSlotIndex = Math.max(this.placingSlotIndex - 1, 0);
-		updatePlacePreview(this.attachedIsland.getFreeSlots(this.placing.getSlotType()));
+		this.updatePlacePreview(this.attachedIsland.getFreeSlots(this.placing.getSlotType()));
 	}
 
-	private void updatePlacePreview(Array<Slot> freeSlots) {
+	private void updatePlacePreview(final Array<Slot> freeSlots) {
 		if (freeSlots.size == 0) {
 			return;
 		}
-		final Slot s = freeSlots.get(placingSlotIndex);
+		final Slot s = freeSlots.get(this.placingSlotIndex);
 		this.attachedIsland.removeBuilding(this.previewBuilding);
-		this.attachedIsland.addBuilding(previewBuilding, s);
+		this.attachedIsland.addBuilding(this.previewBuilding, s);
 	}
 
 	public void openBelt() {
 		this.beltOpen = true;
-		this.beltWidget = new BeltSelection(game, belt);
+		this.beltWidget = new BeltSelection(this.game, this.belt);
 		this.beltWidget.setWidth(Gdx.graphics.getWidth());
 		this.beltWidget.setHeight(Gdx.graphics.getHeight());
 		this.game.getGraphicsManager().getStage().addActor(this.beltWidget);
@@ -359,10 +359,10 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	public Island getAttachedIsland() {
-		return attachedIsland;
+		return this.attachedIsland;
 	}
 
-	public void setAttachedIsland(Island attachedIsland) {
+	public void setAttachedIsland(final Island attachedIsland) {
 		this.attachedIsland = attachedIsland;
 	}
 }

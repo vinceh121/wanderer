@@ -25,7 +25,7 @@ public final class MetaRegistry {
 	private MetaRegistry() {
 	}
 
-	public <T extends IMeta> void readMetas(FileHandle fh, Class<T> clazz)
+	public <T extends IMeta> void readMetas(final FileHandle fh, final Class<T> clazz)
 			throws StreamReadException, DatabindException, IOException {
 		final Map<String, T> read = WandererConstants.MAPPER.readValue(fh.read(),
 				TypeFactory.defaultInstance().constructMapType(Hashtable.class, String.class, clazz));
@@ -39,51 +39,51 @@ public final class MetaRegistry {
 	}
 
 	public void clear() {
-		metaMap.clear();
+		this.metaMap.clear();
 	}
 
-	public boolean containsKey(String key) {
-		return metaMap.containsKey(key);
+	public boolean containsKey(final String key) {
+		return this.metaMap.containsKey(key);
 	}
 
-	public boolean containsValue(IMeta value) {
-		return metaMap.containsValue(value);
+	public boolean containsValue(final IMeta value) {
+		return this.metaMap.containsValue(value);
 	}
 
 	public Set<Entry<String, IMeta>> entrySet() {
-		return metaMap.entrySet();
+		return this.metaMap.entrySet();
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends IMeta> T get(String key) {
-		return (T) metaMap.get(key);
+	public <T extends IMeta> T get(final String key) {
+		return (T) this.metaMap.get(key);
 	}
 
-	public void putAll(Map<? extends String, ? extends IMeta> m) {
-		for (String key : m.keySet()) {
+	public void putAll(final Map<? extends String, ? extends IMeta> m) {
+		for (final String key : m.keySet()) {
 			if (this.metaMap.containsKey(key)) {
 				throw new IllegalStateException("Duplicate key: " + key);
 			}
 		}
-		metaMap.putAll(m);
+		this.metaMap.putAll(m);
 	}
 
-	public void put(String key, IMeta value) {
-		final IMeta previous = metaMap.put(key, value);
+	public void put(final String key, final IMeta value) {
+		final IMeta previous = this.metaMap.put(key, value);
 		if (previous != null) {
 			throw new IllegalStateException("Duplicate key: " + key);
 		}
 	}
 
 	public int size() {
-		return metaMap.size();
+		return this.metaMap.size();
 	}
 
 	public Collection<IMeta> values() {
-		return metaMap.values();
+		return this.metaMap.values();
 	}
 
 	public static MetaRegistry getInstance() {
-		return INSTANCE;
+		return MetaRegistry.INSTANCE;
 	}
 }

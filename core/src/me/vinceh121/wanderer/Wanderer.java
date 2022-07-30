@@ -145,7 +145,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		try {
 			MetaRegistry.getInstance().loadDefaults();
-		} catch (IOException e1) {
+		} catch (final IOException e1) {
 			throw new RuntimeException(e1);
 		}
 
@@ -231,7 +231,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.graphicsManager.end();
 
 		this.entities.removeAll(this.toRemove, true);
-		for (AbstractEntity e : this.toRemove) {
+		for (final AbstractEntity e : this.toRemove) {
 			this.toAdd.removeValue(e, true);
 			e.leaveBtWorld(this.physicsManager.getBtWorld());
 			if (e instanceof IClanMember) {
@@ -243,7 +243,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.toRemove.clear();
 
 		this.entities.addAll(this.toAdd);
-		for (AbstractEntity e : this.toAdd) {
+		for (final AbstractEntity e : this.toAdd) {
 			e.enterBtWorld(this.physicsManager.getBtWorld());
 		}
 		this.toAdd.clear();
@@ -265,12 +265,12 @@ public class Wanderer extends ApplicationAdapter {
 		this.toRemove.add(e);
 	}
 
-	public AbstractEntity getEntity(ID id) {
+	public AbstractEntity getEntity(final ID id) {
 		return this.getEntity(id.getValue());
 	}
 
-	public AbstractEntity getEntity(int id) {
-		for (AbstractEntity e : this.entities) {
+	public AbstractEntity getEntity(final int id) {
+		for (final AbstractEntity e : this.entities) {
 			if (e.getId().getValue() == id) {
 				return e;
 			}

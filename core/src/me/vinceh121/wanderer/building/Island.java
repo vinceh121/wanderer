@@ -31,10 +31,10 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	public Island(final Wanderer game, final IslandMeta meta) {
 		super(game);
 
-		for (Slot s : meta.getSlots()) {
-			slots.add(new Slot(s)); // clone slots as to not accidentally edit the prototype
+		for (final Slot s : meta.getSlots()) {
+			this.slots.add(new Slot(s)); // clone slots as to not accidentally edit the prototype
 		}
-		for (DisplayModel m : meta.getDisplayModels()) {
+		for (final DisplayModel m : meta.getDisplayModels()) {
 			this.getModels().add(new DisplayModel(m)); // clone models as to not accidentally edit the prototype
 		}
 
@@ -43,7 +43,7 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 		this.setPlaceCameraDirection(meta.getPlaceCameraDirection());
 
 		this.characterContactListener = new ContactListenerAdapter() {
-			private CharacterW getChara(btCollisionObject colObj0, btCollisionObject colObj1) {
+			private CharacterW getChara(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 				final AbstractEntity ent0 = game.getEntity(colObj0.getUserIndex());
 				final AbstractEntity ent1 = game.getEntity(colObj1.getUserIndex());
 
@@ -59,23 +59,26 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 			}
 
 			@Override
-			public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
-				CharacterW chara = this.getChara(colObj0, colObj1);
-				if (chara == null)
+			public void onContactStarted(final btCollisionObject colObj0, final btCollisionObject colObj1) {
+				final CharacterW chara = this.getChara(colObj0, colObj1);
+				if (chara == null) {
 					return;
+				}
 
-				if (!attachedCharacters.contains(chara, true))
-					attachedCharacters.add(chara);
+				if (!Island.this.attachedCharacters.contains(chara, true)) {
+					Island.this.attachedCharacters.add(chara);
+				}
 				chara.setAttachedIsland(Island.this);
 			}
 
 			@Override
-			public void onContactEnded(btCollisionObject colObj0, btCollisionObject colObj1) {
-				CharacterW chara = this.getChara(colObj0, colObj1);
-				if (chara == null)
+			public void onContactEnded(final btCollisionObject colObj0, final btCollisionObject colObj1) {
+				final CharacterW chara = this.getChara(colObj0, colObj1);
+				if (chara == null) {
 					return;
+				}
 
-				attachedCharacters.removeValue(chara, true);
+				Island.this.attachedCharacters.removeValue(chara, true);
 				chara.setAttachedIsland(null);
 			}
 		};
@@ -152,19 +155,19 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	}
 
 	public Array<Slot> getFreeSlots() {
-		Array<Slot> a = new Array<>();
-		for (Slot s : this.slots) {
-			if (!isSlotTaken(s)) {
+		final Array<Slot> a = new Array<>();
+		for (final Slot s : this.slots) {
+			if (!this.isSlotTaken(s)) {
 				a.add(s);
 			}
 		}
 		return a;
 	}
-	
-	public Array<Slot> getFreeSlots(SlotType type) {
-		Array<Slot> a = new Array<>();
-		for (Slot s : this.slots) {
-			if (s.getType() == type && !isSlotTaken(s)) {
+
+	public Array<Slot> getFreeSlots(final SlotType type) {
+		final Array<Slot> a = new Array<>();
+		for (final Slot s : this.slots) {
+			if (s.getType() == type && !this.isSlotTaken(s)) {
 				a.add(s);
 			}
 		}
@@ -209,8 +212,8 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 		this.getCollideObject().forceActivationState(4); // DISABLE_DEACTIVATION
 	}
 
-	public void startBuilding(Slot slot, AbstractBuildingMeta meta) {
-		this.addBuilding(new InConstructionBuilding(game, meta), slot);
+	public void startBuilding(final Slot slot, final AbstractBuildingMeta meta) {
+		this.addBuilding(new InConstructionBuilding(this.game, meta), slot);
 	}
 
 	@Override
@@ -229,18 +232,18 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 	}
 
 	public Vector3 getPlaceCameraPosition() {
-		return placeCameraPosition;
+		return this.placeCameraPosition;
 	}
 
-	public void setPlaceCameraPosition(Vector3 placeCameraPosition) {
+	public void setPlaceCameraPosition(final Vector3 placeCameraPosition) {
 		this.placeCameraPosition.set(placeCameraPosition);
 	}
 
 	public Vector3 getPlaceCameraDirection() {
-		return placeCameraDirection;
+		return this.placeCameraDirection;
 	}
 
-	public void setPlaceCameraDirection(Vector3 placeCameraDirection) {
+	public void setPlaceCameraDirection(final Vector3 placeCameraDirection) {
 		this.placeCameraDirection.set(placeCameraDirection);
 	}
 

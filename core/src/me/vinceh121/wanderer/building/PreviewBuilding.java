@@ -11,7 +11,7 @@ import me.vinceh121.wanderer.entity.DisplayModel;
 
 public class PreviewBuilding extends AbstractBuilding {
 
-	public PreviewBuilding(Wanderer game, AbstractBuildingMeta meta) {
+	public PreviewBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
 		super(game, meta);
 
 		this.setCollideModel(null);
@@ -24,10 +24,10 @@ public class PreviewBuilding extends AbstractBuilding {
 
 	// to not add interaction zone
 	@Override
-	public void enterBtWorld(btDiscreteDynamicsWorld world) {
+	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
 	}
 
 	@Override
-	public void leaveBtWorld(btDiscreteDynamicsWorld world) {
+	public void leaveBtWorld(final btDiscreteDynamicsWorld world) {
 	}
 }

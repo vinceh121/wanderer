@@ -25,7 +25,7 @@ public class GdxArrayDeserializer extends ContainerDeserializerBase<Array<Object
 		this(TypeFactory.defaultInstance().constructCollectionLikeType(Array.class, Object.class));
 	}
 
-	public GdxArrayDeserializer(JavaType selfType) {
+	public GdxArrayDeserializer(final JavaType selfType) {
 		super(selfType);
 		this.valueType = selfType;
 	}
@@ -36,15 +36,16 @@ public class GdxArrayDeserializer extends ContainerDeserializerBase<Array<Object
 	}
 
 	@Override
-	public Array<Object> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+	public Array<Object> deserialize(final JsonParser p, final DeserializationContext ctxt)
+			throws IOException, JacksonException {
 		if (!p.isExpectedStartArrayToken()) {
 			throw new JsonParseException(p, "Excepted array start");
 		}
-		JsonDeserializer<Object> deser = ctxt.findRootValueDeserializer(this.valueType);
-		Array<Object> array = new Array<>();
+		final JsonDeserializer<Object> deser = ctxt.findRootValueDeserializer(this.valueType);
+		final Array<Object> array = new Array<>();
 
 		while (p.nextToken() != JsonToken.END_ARRAY) {
-			Object obj = deser.deserialize(p, ctxt);
+			final Object obj = deser.deserialize(p, ctxt);
 			array.add(obj);
 		}
 
@@ -52,7 +53,7 @@ public class GdxArrayDeserializer extends ContainerDeserializerBase<Array<Object
 	}
 
 	@Override
-	public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
+	public JsonDeserializer<?> createContextual(final DeserializationContext ctxt, final BeanProperty property)
 			throws JsonMappingException {
 		return new GdxArrayDeserializer(ctxt.getContextualType().containedType(0));
 	}

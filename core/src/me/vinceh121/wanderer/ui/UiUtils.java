@@ -25,7 +25,9 @@ public final class UiUtils {
 	}
 
 	public static void endBlend(final Batch batch) {
-		batch.setBlendFunctionSeparate(UiUtils.srcFuncColor, UiUtils.dstFuncColor, UiUtils.srcFuncAlpha,
+		batch.setBlendFunctionSeparate(UiUtils.srcFuncColor,
+				UiUtils.dstFuncColor,
+				UiUtils.srcFuncAlpha,
 				UiUtils.dstFuncAlpha);
 	}
 }
