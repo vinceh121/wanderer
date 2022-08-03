@@ -1,9 +1,6 @@
 package me.vinceh121.wanderer.character;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -27,6 +24,9 @@ import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.input.Input;
+import me.vinceh121.wanderer.input.InputListener;
+import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.ui.BeltSelection;
 
 /**
@@ -130,19 +130,19 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 			return;
 		}
 
-		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+		if (game.getInputManager().isPressed(Input.WALK_LEFT)) {
 			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, 3f));
 		}
-		if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+		if (game.getInputManager().isPressed(Input.WALK_RIGHT)) {
 			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, -3f));
 		}
 		this.characterDirection.set(0, 0, 1).rot(this.getTransform()).nor();
 		this.walkDirection.set(0, 0, 0);
 
-		if (Gdx.input.isKeyPressed(Keys.UP)) {
+		if (game.getInputManager().isPressed(Input.WALK_FORWARDS)) {
 			this.walkDirection.add(this.characterDirection);
 		}
-		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+		if (game.getInputManager().isPressed(Input.WALK_BACKWARDS)) {
 			this.walkDirection.add(-this.characterDirection.x, -this.characterDirection.y, -this.characterDirection.z);
 		}
 		this.walkDirection.scl(8f * Gdx.graphics.getDeltaTime());
@@ -150,54 +150,54 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	@Override
-	public InputProcessor getInputProcessor() {
-		return new InputAdapter() {
+	public InputListener getInputProcessor() {
+		return new InputListenerAdapter() {
 			@Override
-			public boolean keyDown(final int keycode) {
-				if (CharacterW.this.beltOpen) {
-					if (keycode == Keys.RIGHT) {
-						CharacterW.this.beltWidget.increment();
-						return true;
-					} else if (keycode == Keys.LEFT) {
-						CharacterW.this.beltWidget.decrement();
-						return true;
-					} else if (keycode == Keys.ESCAPE) {
-						CharacterW.this.closeBelt();
-						return true;
-					} else if (keycode == Keys.ENTER) {
-						CharacterW.this.selectBuilding();
-						return true;
-					}
-					return false;
-				}
-
+			public boolean inputDown(final Input in) {
 				if (CharacterW.this.placing != null) {
-					if (keycode == Keys.RIGHT) {
+					if (in == Input.SCROLL_BELT_RIGHT) {
 						CharacterW.this.incrementPreviewSlot();
 						return true;
-					} else if (keycode == Keys.LEFT) {
+					} else if (in == Input.SCROLL_BELT_LEFT) {
 						CharacterW.this.decrementPreviewSlot();
 						return true;
-					} else if (keycode == Keys.ESCAPE) {
+					} else if (in == Input.PAUSE_MENU) {
 						CharacterW.this.placing = null;
 						CharacterW.this.attachedIsland.removeBuilding(CharacterW.this.previewBuilding);
 						CharacterW.this.game.removeEntity(CharacterW.this.previewBuilding);
 						CharacterW.this.previewBuilding.dispose();
 						return true;
-					} else if (keycode == Keys.ENTER) {
+					} else if (in == Input.UI_VALIDATE) {
 						CharacterW.this.placeBuilding();
 						return true;
 					}
 					return false;
 				}
 
-				if (keycode == Keys.SPACE && Gdx.input.isKeyPressed(Keys.UP)) {
+				if (CharacterW.this.beltOpen) {
+					if (in == Input.SCROLL_BELT_RIGHT) {
+						CharacterW.this.beltWidget.increment();
+						return true;
+					} else if (in == Input.SCROLL_BELT_LEFT) {
+						CharacterW.this.beltWidget.decrement();
+						return true;
+					} else if (in == Input.PAUSE_MENU) {
+						CharacterW.this.closeBelt();
+						return true;
+					} else if (in == Input.UI_VALIDATE) {
+						CharacterW.this.selectBuilding();
+						return true;
+					}
+					return false;
+				}
+
+				if (in == Input.JUMP && game.getInputManager().isPressed(Input.WALK_FORWARDS)) {
 					CharacterW.this.controller.bigJump();
 					return true;
-				} else if (keycode == Keys.SPACE) {
+				} else if (in == Input.JUMP) {
 					CharacterW.this.controller.jump();
 					return true;
-				} else if (keycode == Keys.ENTER) {
+				} else if (in == Input.OPEN_BELT) {
 					CharacterW.this.openBelt();
 					return true;
 				}

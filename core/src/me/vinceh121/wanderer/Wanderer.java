@@ -4,9 +4,6 @@ import java.io.IOException;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,7 +14,6 @@ import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Align;
@@ -40,12 +36,15 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
+import me.vinceh121.wanderer.input.Input;
+import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.ui.BlinkLabel;
 import me.vinceh121.wanderer.ui.DebugOverlay;
 import me.vinceh121.wanderer.ui.EnergyBar;
 import me.vinceh121.wanderer.ui.ItemBar;
 
 public class Wanderer extends ApplicationAdapter {
+	private final InputManager inputManager = new InputManager();
 	private final PhysicsManager physicsManager = new PhysicsManager();
 	private final GraphicsManager graphicsManager = new GraphicsManager();
 
@@ -56,9 +55,6 @@ public class Wanderer extends ApplicationAdapter {
 	 */
 	private Array<AbstractEntity> toAdd, toRemove;
 	private Array<Clan> clans;
-
-	private CameraInputController camcon;
-	private final InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
 	private DebugOverlay debugOverlay;
 	private boolean debugBullet = false, glxDebug = false;
@@ -78,18 +74,17 @@ public class Wanderer extends ApplicationAdapter {
 			t.printStackTrace();
 		});
 
+		this.inputManager.create();
 		this.physicsManager.create();
 		this.graphicsManager.create();
 
-		this.camcon = new CameraInputController(this.getCamera());
-		this.inputMultiplexer.addProcessor(this.camcon);
-		this.inputMultiplexer.addProcessor(new InputAdapter() {
+		this.inputManager.addListener(new InputListenerAdapter() {
 			@Override
-			public boolean keyDown(final int keycode) {
-				if (keycode == Keys.F7) {
+			public boolean inputDown(Input in) {
+				if (in == Input.DEBUG_BULLET) {
 					Wanderer.this.debugBullet = !Wanderer.this.debugBullet;
 					return true;
-				} else if (keycode == Keys.F3) {
+				} else if (in == Input.DEBUG_GLX) {
 					Wanderer.this.glxDebug = !Wanderer.this.glxDebug;
 					if (Wanderer.this.glxDebug) {
 						Wanderer.this.graphicsManager.getStage().addActor(Wanderer.this.debugOverlay);
@@ -97,7 +92,7 @@ public class Wanderer extends ApplicationAdapter {
 						Wanderer.this.graphicsManager.getStage().getRoot().removeActor(Wanderer.this.debugOverlay);
 					}
 					return true;
-				} else if (keycode == Keys.TAB) {
+				} else if (in == Input.SWITCH_CONTROLLED_VEHICLE) {
 					if (Wanderer.this.controlledEntity == null) {
 						for (final AbstractEntity e : Wanderer.this.entities) {
 							if (e instanceof IControllableEntity) {
@@ -115,7 +110,6 @@ public class Wanderer extends ApplicationAdapter {
 				return false;
 			}
 		});
-		Gdx.input.setInputProcessor(this.inputMultiplexer);
 
 		this.debugOverlay = new DebugOverlay(this);
 
@@ -157,9 +151,11 @@ public class Wanderer extends ApplicationAdapter {
 
 		final LighthouseMeta lighthouseArtifactMeta = MetaRegistry.getInstance().get("j_lighthouse01");
 
-		final AbstractArtifactEntity artifactEntity = new BuildingArtifactEntity(this, lighthouseArtifactMeta);
-		artifactEntity.setTranslation(5, 34, 10);
-		this.addEntity(artifactEntity);
+		for (int i = 0; i < 3; i++) {
+			final AbstractArtifactEntity artifactEntity = new BuildingArtifactEntity(this, lighthouseArtifactMeta);
+			artifactEntity.setTranslation(5, 34, 10);
+			this.addEntity(artifactEntity);
+		}
 
 		final EnergyArtefact energyEntity = new EnergyArtefact(this);
 		energyEntity.setTranslation(2, 34, 10);
@@ -215,10 +211,10 @@ public class Wanderer extends ApplicationAdapter {
 	public void render() {
 		final float delta = Gdx.graphics.getDeltaTime();
 		this.graphicsManager.apply();
-		this.camcon.update();
 
 		WandererConstants.ASSET_MANAGER.update(8);
 
+		this.inputManager.render();
 		this.physicsManager.render();
 
 		this.graphicsManager.begin();
@@ -291,21 +287,30 @@ public class Wanderer extends ApplicationAdapter {
 		return this.entities;
 	}
 
+	public InputManager getInputManager() {
+		return inputManager;
+	}
+
 	public PhysicsManager getPhysicsManager() {
 		return this.physicsManager;
 	}
 
+	public GraphicsManager getGraphicsManager() {
+		return this.graphicsManager;
+	}
+
 	public void controlEntity(final IControllableEntity e) {
 		if (this.controlledEntity != null) {
+			this.getInputManager().removeListener(this.controlledEntity.getInputProcessor());
 			this.controlledEntity.onRemoveControl();
 		}
 		this.controlledEntity = e;
-		this.inputMultiplexer.getProcessors().set(0, e.getInputProcessor());
+		this.getInputManager().addListener(e.getInputProcessor());
 		e.onTakeControl();
 	}
 
 	public void removeEntityControl() {
-		this.inputMultiplexer.getProcessors().set(0, this.camcon);
+		this.getInputManager().removeListener(this.controlledEntity.getInputProcessor());
 		this.controlledEntity.onRemoveControl();
 		this.controlledEntity = null;
 	}
@@ -355,9 +360,5 @@ public class Wanderer extends ApplicationAdapter {
 
 	public PerspectiveCamera getCamera() {
 		return this.graphicsManager.getCamera();
-	}
-
-	public GraphicsManager getGraphicsManager() {
-		return this.graphicsManager;
 	}
 }

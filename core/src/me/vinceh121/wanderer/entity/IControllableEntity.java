@@ -1,9 +1,9 @@
 package me.vinceh121.wanderer.entity;
 
-import com.badlogic.gdx.InputProcessor;
+import me.vinceh121.wanderer.input.InputListener;
 
 public interface IControllableEntity {
-	InputProcessor getInputProcessor();
+	InputListener getInputProcessor();
 
 	void onTakeControl();
 
