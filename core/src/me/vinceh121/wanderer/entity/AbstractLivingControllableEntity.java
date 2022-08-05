@@ -13,7 +13,7 @@ public abstract class AbstractLivingControllableEntity extends AbstractLivingEnt
 
 	@Override
 	public InputListener getInputProcessor() {
-		return new InputListenerAdapter();
+		return new InputListenerAdapter(-1000);
 	}
 
 	@Override

@@ -4,4 +4,6 @@ public interface InputListener {
 	boolean inputDown(Input in);
 
 	boolean inputUp(Input in);
+
+	int getPriority();
 }

@@ -3,6 +3,7 @@ package me.vinceh121.wanderer;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Vector;
 
@@ -29,7 +30,8 @@ import me.vinceh121.wanderer.input.MouseWheelScroll;
 public class InputManager extends ApplicationAdapter {
 	private static final String PREF_NAME = "me.vinceh121.wanderer.inputs";
 	private final HashSetValuedHashMap<Input, Binding> bindings = new HashSetValuedHashMap<>();
-	private final Vector<InputListener> listeners = new Vector<>();
+	private final PriorityQueue<InputListener> listeners = new PriorityQueue<>(
+			(o1, o2) -> Integer.compare(o2.getPriority(), o1.getPriority())); // reverse sort order
 	private boolean controllersReady;
 
 	public void loadOrDefaults() throws JsonProcessingException {
@@ -291,10 +293,6 @@ public class InputManager extends ApplicationAdapter {
 
 	public void removeListener(InputListener listener) {
 		this.listeners.remove(listener);
-	}
-
-	public void removeListener(int index) {
-		this.listeners.remove(index);
 	}
 
 	public static String nameForControllerButton(final ControllerMapping m, final int b) {

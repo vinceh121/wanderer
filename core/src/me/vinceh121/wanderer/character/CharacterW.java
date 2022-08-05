@@ -151,7 +151,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 	@Override
 	public InputListener getInputProcessor() {
-		return new InputListenerAdapter() {
+		return new InputListenerAdapter(50) {
 			@Override
 			public boolean inputDown(final Input in) {
 				if (CharacterW.this.placing != null) {

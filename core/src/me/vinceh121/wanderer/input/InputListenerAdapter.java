@@ -1,6 +1,12 @@
 package me.vinceh121.wanderer.input;
 
 public class InputListenerAdapter implements InputListener {
+	private final int priority;
+
+	public InputListenerAdapter(final int priority) {
+		this.priority = priority;
+	}
+
 	@Override
 	public boolean inputDown(Input in) {
 		return false;
@@ -9,5 +15,10 @@ public class InputListenerAdapter implements InputListener {
 	@Override
 	public boolean inputUp(Input in) {
 		return false;
+	}
+
+	@Override
+	public int getPriority() {
+		return priority;
 	}
 }

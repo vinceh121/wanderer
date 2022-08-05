@@ -85,7 +85,7 @@ public class Wanderer extends ApplicationAdapter {
 			System.err.println("Failed to load key bindings");
 			e.printStackTrace();
 		}
-		this.inputManager.addListener(new InputListenerAdapter() {
+		this.inputManager.addListener(new InputListenerAdapter(0) {
 			@Override
 			public boolean inputDown(Input in) {
 				if (in == Input.DEBUG_BULLET) {
