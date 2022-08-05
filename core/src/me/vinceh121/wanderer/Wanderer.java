@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import me.vinceh121.wanderer.artifact.AbstractArtifactEntity;
 import me.vinceh121.wanderer.artifact.BackpackArtifact;
@@ -78,6 +79,12 @@ public class Wanderer extends ApplicationAdapter {
 		this.physicsManager.create();
 		this.graphicsManager.create();
 
+		try {
+			this.inputManager.loadOrDefaults();
+		} catch (final JsonProcessingException e) {
+			System.err.println("Failed to load key bindings");
+			e.printStackTrace();
+		}
 		this.inputManager.addListener(new InputListenerAdapter() {
 			@Override
 			public boolean inputDown(Input in) {

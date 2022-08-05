@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
@@ -11,10 +12,13 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.ControllerMapping;
 import com.badlogic.gdx.controllers.Controllers;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import me.vinceh121.wanderer.input.Binding;
 import me.vinceh121.wanderer.input.Binding.DeviceType;
@@ -23,9 +27,39 @@ import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.MouseWheelScroll;
 
 public class InputManager extends ApplicationAdapter {
+	private static final String PREF_NAME = "me.vinceh121.wanderer.inputs";
 	private final HashSetValuedHashMap<Input, Binding> bindings = new HashSetValuedHashMap<>();
 	private final Vector<InputListener> listeners = new Vector<>();
 	private boolean controllersReady;
+
+	public void loadOrDefaults() throws JsonProcessingException {
+		this.load();
+		if (this.bindings.size() == 0) {
+			this.setDefaultBinds();
+			this.save();
+		}
+	}
+
+	public void load() throws JsonProcessingException {
+		this.bindings.clear();
+		final Preferences pref = Gdx.app.getPreferences(PREF_NAME);
+		for (final Input i : Input.values()) {
+			if (pref.contains(i.toString())) {
+				this.bindings.putAll(i,
+						WandererConstants.MAPPER.readValue(pref.getString(i.toString()),
+								new TypeReference<List<Binding>>() {
+								}));
+			}
+		}
+	}
+
+	public void save() throws JsonProcessingException {
+		final Preferences pref = Gdx.app.getPreferences(PREF_NAME);
+		for (final Input i : this.bindings.keySet()) {
+			pref.putString(i.toString(), WandererConstants.MAPPER.writeValueAsString(this.bindings.get(i)));
+		}
+		pref.flush();
+	}
 
 	public void setDefaultBinds() {
 		this.bindings.clear();
@@ -59,7 +93,6 @@ public class InputManager extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		setDefaultBinds();
 		new Thread(this::controllersInit, "ControllersInit").start();
 
 		Gdx.input.setInputProcessor(new InputAdapter() {
