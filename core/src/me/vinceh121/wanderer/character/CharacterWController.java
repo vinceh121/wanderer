@@ -18,25 +18,8 @@ import com.badlogic.gdx.physics.bullet.dynamics.CustomActionInterface;
 import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.Wanderer;
-import me.vinceh121.wanderer.phys.ContactListenerAdapter;
-import me.vinceh121.wanderer.phys.IContactListener;
 
 public class CharacterWController extends CustomActionInterface {
-	private final IContactListener contactListener = new ContactListenerAdapter() {
-		@Override
-		public void onContactStarted(final btCollisionObject colObj0, final btCollisionObject colObj1) {
-			if (CharacterWController.this.validInteract(colObj0, colObj1)) {
-				CharacterWController.this.stopJump();
-				CharacterWController.this.falling = false;
-			}
-		};
-
-		@Override
-		public void onContactProcessed(final btManifoldPoint cp, final btCollisionObject colObj0,
-				final btCollisionObject colObj1) {
-//			CharacterWController.this.stopJump();
-		};
-	};
 	private final btPairCachingGhostObject ghostObj;
 	private final Vector3 walkDirection = new Vector3();
 	private final Wanderer game;
@@ -62,7 +45,6 @@ public class CharacterWController extends CustomActionInterface {
 					CollisionFilterGroups.CharacterFilter,
 					CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter
 							| CollisionFilterGroups.SensorTrigger);
-		this.game.getPhysicsManager().addContactListener(this.contactListener);
 	}
 
 	public void bigJump() {
@@ -136,7 +118,7 @@ public class CharacterWController extends CustomActionInterface {
 		final Vector3 origPosition = this.getTranslation();
 		final Matrix4 start = this.character.getTransform().cpy();
 		final Matrix4 end = this.character.getTransform().cpy();
-		end.setTranslation(this.jumpCurve.valueAt(new Vector3(), jumpProgress));
+		end.setTranslation(this.jumpCurve.valueAt(new Vector3(), jumpProgress / getJumpTime()));
 
 		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
 				start.getTranslation(new Vector3()),
@@ -324,9 +306,9 @@ public class CharacterWController extends CustomActionInterface {
 				this.getWorldTransform().getTranslation(newPos);
 				newPos.add(up.cpy().scl(cb.getClosestHitFraction()));
 				this.ghostObj.setWorldTransform(this.ghostObj.getWorldTransform().setTranslation(newPos));
-				cb.dispose();
 			}
 		}
+		cb.dispose();
 	}
 
 	public boolean recoverFromPenetration() {
@@ -464,7 +446,6 @@ public class CharacterWController extends CustomActionInterface {
 
 	@Override
 	public void dispose() {
-		this.game.getPhysicsManager().removeContactListener(this.contactListener);
 		super.dispose();
 	}
 
