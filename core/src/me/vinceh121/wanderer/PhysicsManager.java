@@ -35,6 +35,7 @@ public class PhysicsManager extends ApplicationAdapter {
 		this.debugDrawer = new DebugDrawer(); // do not init in place
 		this.debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_DrawWireframe
 				| btIDebugDraw.DebugDrawModes.DBG_DrawText | btIDebugDraw.DebugDrawModes.DBG_DrawContactPoints);
+		this.debugDrawer.setFont(WandererConstants.getDevSkin().getFont("default-font"));
 		this.btWorld.setDebugDrawer(this.debugDrawer);
 
 		this.btInterface.getOverlappingPairCache().setInternalGhostPairCallback(this.ghostPairCallback);
