@@ -35,7 +35,6 @@ public class CharacterWController extends CustomActionInterface {
 		public void onContactProcessed(final btManifoldPoint cp, final btCollisionObject colObj0,
 				final btCollisionObject colObj1) {
 			CharacterWController.this.stopJump();
-			CharacterWController.this.recoverFromPenetration(cp, colObj0, colObj1);
 		};
 	};
 	private final btPairCachingGhostObject ghostObj;
@@ -284,9 +283,9 @@ public class CharacterWController extends CustomActionInterface {
 		}
 	}
 
-	private final btPersistentManifoldArray manifolds = new btPersistentManifoldArray();
 
 	public boolean recoverFromPenetration() {
+		final btPersistentManifoldArray manifolds = new btPersistentManifoldArray();
 		boolean hasPenetration = false;
 		this.game.getBtWorld()
 			.getDispatcher()
@@ -309,7 +308,7 @@ public class CharacterWController extends CustomActionInterface {
 				pair.getAlgorithm().getAllContactManifolds(manifolds);
 
 			for (int j = 0; j < manifolds.size(); j++) {
-				btPersistentManifold m = this.manifolds.atConst(j);
+				btPersistentManifold m = manifolds.atConst(j);
 				for (int k = 0; k < m.getNumContacts(); k++) {
 					btManifoldPoint cp = m.getContactPoint(k);
 					if (this.recoverFromPenetration(cp, obj0, obj1)) {
@@ -318,6 +317,7 @@ public class CharacterWController extends CustomActionInterface {
 				}
 			}
 		}
+		manifolds.dispose();
 		return hasPenetration;
 	}
 
@@ -330,7 +330,7 @@ public class CharacterWController extends CustomActionInterface {
 			cp.getNormalWorldOnB(normalWorldB);
 			pos.add(normalWorldB.scl(colObj0.getCPointer() == CharacterWController.this.ghostObj.getCPointer() ? -1 : 1)
 				.scl(dist)
-				.scl(0.4f));
+				.scl(0.2f));
 			// this weird shit is due to JNI
 			CharacterWController.this
 				.setWorldTransform(CharacterWController.this.getWorldTransform().setTranslation(pos));
