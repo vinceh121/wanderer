@@ -34,7 +34,7 @@ public class CharacterWController extends CustomActionInterface {
 		@Override
 		public void onContactProcessed(final btManifoldPoint cp, final btCollisionObject colObj0,
 				final btCollisionObject colObj1) {
-			CharacterWController.this.stopJump();
+//			CharacterWController.this.stopJump();
 		};
 	};
 	private final btPairCachingGhostObject ghostObj;
@@ -75,7 +75,7 @@ public class CharacterWController extends CustomActionInterface {
 	}
 
 	public void jump(final float height, final float distance) {
-		if (this.jumping /* || !this.delegateController.canJump() */) {
+		if (!this.canJump()) {
 			return;
 		}
 		final Array<Vector3> points = new Array<>(3);
@@ -91,6 +91,10 @@ public class CharacterWController extends CustomActionInterface {
 		points.add(new Vector3(0, 0, distance).rot(this.getWorldTransform()).add(points.first()));
 		this.jumpCurve = new Bezier<>(points, 0, points.size);
 		this.jumping = true;
+	}
+
+	public boolean canJump() {
+		return !this.falling && !this.jumping;
 	}
 
 	public void stopJump() {
@@ -110,17 +114,7 @@ public class CharacterWController extends CustomActionInterface {
 	@Override
 	public void updateAction(final float deltaTimeStep) {
 		if (this.jumping) {
-			final Matrix4 trans = this.character.getTransform();
-			trans.setTranslation(this.jumpCurve.valueAt(new Vector3(), this.jumpProgress));
-			this.ghostObj.setWorldTransform(trans);
-			this.character.setTransform(trans);
-			this.jumpProgress += deltaTimeStep;
-
-			if (this.bigJump && this.jumpProgress > 3f || !this.bigJump && this.jumpProgress > 1.2f) {
-				// do no call #stopJump() as to not trigger onFall
-				this.stopJump0();
-				this.falling = true;
-			}
+			this.stepJump(deltaTimeStep);
 		} else if (this.falling) {
 			this.walkDirection.setZero();
 			this.stepDown();
@@ -134,6 +128,58 @@ public class CharacterWController extends CustomActionInterface {
 			if (!this.recoverFromPenetration()) {
 				break;
 			}
+		}
+	}
+
+	private void stepJump(float delta) {
+		this.jumpProgress += delta;
+		final Vector3 origPosition = this.getTranslation();
+		final Matrix4 start = this.character.getTransform().cpy();
+		final Matrix4 end = this.character.getTransform().cpy();
+		end.setTranslation(this.jumpCurve.valueAt(new Vector3(), jumpProgress));
+
+		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
+				start.getTranslation(new Vector3()),
+				end.getTranslation(new Vector3()));
+		cb.setCollisionFilterGroup(this.ghostObj.getBroadphaseHandle().getCollisionFilterGroup());
+		cb.setCollisionFilterMask(this.ghostObj.getBroadphaseHandle().getCollisionFilterMask());
+
+		this.ghostObj.convexSweepTest((btConvexShape) this.ghostObj.getCollisionShape(),
+				start,
+				end,
+				cb,
+				this.game.getPhysicsManager().getBtWorld().getDispatchInfo().getAllowedCcdPenetration());
+		if (cb.hasHit()) {
+			Vector3 hitPointWorld = new Vector3();
+			cb.getHitPointWorld(hitPointWorld);
+
+//			float frac = (origPosition.y - hitPointWorld.y) / 2;
+			Vector3 newPosition = origPosition.cpy();
+			newPosition.lerp(end.getTranslation(new Vector3()), cb.getClosestHitFraction());
+
+			this.setWorldTransform(getWorldTransform().setTranslation(newPosition));
+			this.stopJump0();
+			this.falling = true;
+		} else {
+			this.setWorldTransform(end);
+		}
+
+		if (this.jumpProgress >= getJumpTime()) {
+			// do no call #stopJump() as to not trigger onFall
+			this.stopJump0();
+			this.falling = true;
+		}
+		cb.dispose();
+	}
+
+	/**
+	 * @return the max time of the current's jump in seconds, whether big or small
+	 */
+	private float getJumpTime() {
+		if (this.bigJump) {
+			return 3f;
+		} else {
+			return 1.2f;
 		}
 	}
 
@@ -282,7 +328,6 @@ public class CharacterWController extends CustomActionInterface {
 			}
 		}
 	}
-
 
 	public boolean recoverFromPenetration() {
 		final btPersistentManifoldArray manifolds = new btPersistentManifoldArray();
