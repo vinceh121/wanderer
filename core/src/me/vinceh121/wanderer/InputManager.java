@@ -101,6 +101,8 @@ public class InputManager extends ApplicationAdapter {
 	public void create() {
 		new Thread(this::controllersInit, "ControllersInit").start();
 
+		Gdx.input.setCursorCatched(true);
+
 		Gdx.input.setInputProcessor(new InputAdapter() {
 			@Override
 			public boolean keyDown(int keycode) {
@@ -168,6 +170,12 @@ public class InputManager extends ApplicationAdapter {
 					return true;
 				}
 				return false;
+			}
+
+			@Override
+			public boolean mouseMoved(int screenX, int screenY) {
+				Gdx.input.setCursorPosition(0, 0);
+				return fireMouseMoved(screenX, screenY);
 			}
 		});
 	}
@@ -287,6 +295,15 @@ public class InputManager extends ApplicationAdapter {
 		for (InputListener l : this.listeners) {
 			if (l.inputUp(i))
 				return true;
+		}
+		return false;
+	}
+
+	private boolean fireMouseMoved(int x, int y) {
+		for (InputListener l : this.listeners) {
+			if (l.mouseMoved(x, y)) {
+				return true;
+			}
 		}
 		return false;
 	}

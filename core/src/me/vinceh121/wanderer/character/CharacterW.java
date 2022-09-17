@@ -203,6 +203,17 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 				}
 				return false;
 			}
+
+			@Override
+			public boolean mouseMoved(int x, int y) {
+				controller.setWorldTransform(controller.getWorldTransform()
+					.rotate(0,
+							1,
+							0,
+							-Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay").getFloat("lookSensitivityX", 0.2f)
+									* x));
+				return true;
+			}
 		};
 	}
 

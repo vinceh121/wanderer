@@ -5,5 +5,7 @@ public interface InputListener {
 
 	boolean inputUp(Input in);
 
+	boolean mouseMoved(int x, int y);
+
 	int getPriority();
 }

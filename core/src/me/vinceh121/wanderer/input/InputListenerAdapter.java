@@ -18,6 +18,11 @@ public class InputListenerAdapter implements InputListener {
 	}
 
 	@Override
+	public boolean mouseMoved(int x, int y) {
+		return false;
+	}
+
+	@Override
 	public int getPriority() {
 		return priority;
 	}
