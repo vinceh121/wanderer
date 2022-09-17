@@ -34,7 +34,7 @@ public class ID implements Comparable<ID> {
 		if (this == obj) {
 			return true;
 		}
-		if ((obj == null) || (this.getClass() != obj.getClass())) {
+		if (obj == null || this.getClass() != obj.getClass()) {
 			return false;
 		}
 		final ID other = (ID) obj;

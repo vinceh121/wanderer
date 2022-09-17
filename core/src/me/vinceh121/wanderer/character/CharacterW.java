@@ -130,19 +130,19 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 			return;
 		}
 
-		if (game.getInputManager().isPressed(Input.WALK_LEFT)) {
+		if (this.game.getInputManager().isPressed(Input.WALK_LEFT)) {
 			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, 3f));
 		}
-		if (game.getInputManager().isPressed(Input.WALK_RIGHT)) {
+		if (this.game.getInputManager().isPressed(Input.WALK_RIGHT)) {
 			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, -3f));
 		}
 		this.characterDirection.set(0, 0, 1).rot(this.getTransform()).nor();
 		this.walkDirection.set(0, 0, 0);
 
-		if (game.getInputManager().isPressed(Input.WALK_FORWARDS)) {
+		if (this.game.getInputManager().isPressed(Input.WALK_FORWARDS)) {
 			this.walkDirection.add(this.characterDirection);
 		}
-		if (game.getInputManager().isPressed(Input.WALK_BACKWARDS)) {
+		if (this.game.getInputManager().isPressed(Input.WALK_BACKWARDS)) {
 			this.walkDirection.add(-this.characterDirection.x, -this.characterDirection.y, -this.characterDirection.z);
 		}
 		this.walkDirection.scl(8f * Gdx.graphics.getDeltaTime());
@@ -191,7 +191,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 					return false;
 				}
 
-				if (in == Input.JUMP && game.getInputManager().isPressed(Input.WALK_FORWARDS)) {
+				if (in == Input.JUMP && CharacterW.this.game.getInputManager().isPressed(Input.WALK_FORWARDS)) {
 					CharacterW.this.controller.bigJump();
 					return true;
 				} else if (in == Input.JUMP) {
@@ -205,8 +205,8 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 			}
 
 			@Override
-			public boolean mouseMoved(int x, int y) {
-				controller.setWorldTransform(controller.getWorldTransform()
+			public boolean mouseMoved(final int x, final int y) {
+				CharacterW.this.controller.setWorldTransform(CharacterW.this.controller.getWorldTransform()
 					.rotate(0,
 							1,
 							0,

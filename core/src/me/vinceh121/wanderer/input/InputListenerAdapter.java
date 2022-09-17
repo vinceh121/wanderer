@@ -8,22 +8,22 @@ public class InputListenerAdapter implements InputListener {
 	}
 
 	@Override
-	public boolean inputDown(Input in) {
+	public boolean inputDown(final Input in) {
 		return false;
 	}
 
 	@Override
-	public boolean inputUp(Input in) {
+	public boolean inputUp(final Input in) {
 		return false;
 	}
 
 	@Override
-	public boolean mouseMoved(int x, int y) {
+	public boolean mouseMoved(final int x, final int y) {
 		return false;
 	}
 
 	@Override
 	public int getPriority() {
-		return priority;
+		return this.priority;
 	}
 }

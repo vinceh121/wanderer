@@ -113,12 +113,12 @@ public class CharacterWController extends CustomActionInterface {
 		}
 	}
 
-	private void stepJump(float delta) {
+	private void stepJump(final float delta) {
 		this.jumpProgress += delta;
 		final Vector3 origPosition = this.getTranslation();
 		final Matrix4 start = this.character.getTransform().cpy();
 		final Matrix4 end = this.character.getTransform().cpy();
-		end.setTranslation(this.jumpCurve.valueAt(new Vector3(), jumpProgress / getJumpTime()));
+		end.setTranslation(this.jumpCurve.valueAt(new Vector3(), this.jumpProgress / this.getJumpTime()));
 
 		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
 				start.getTranslation(new Vector3()),
@@ -132,21 +132,21 @@ public class CharacterWController extends CustomActionInterface {
 				cb,
 				this.game.getPhysicsManager().getBtWorld().getDispatchInfo().getAllowedCcdPenetration());
 		if (cb.hasHit()) {
-			Vector3 hitPointWorld = new Vector3();
+			final Vector3 hitPointWorld = new Vector3();
 			cb.getHitPointWorld(hitPointWorld);
 
 //			float frac = (origPosition.y - hitPointWorld.y) / 2;
-			Vector3 newPosition = origPosition.cpy();
+			final Vector3 newPosition = origPosition.cpy();
 			newPosition.lerp(end.getTranslation(new Vector3()), cb.getClosestHitFraction());
 
-			this.setWorldTransform(getWorldTransform().setTranslation(newPosition));
+			this.setWorldTransform(this.getWorldTransform().setTranslation(newPosition));
 			this.stopJump0();
 			this.falling = true;
 		} else {
 			this.setWorldTransform(end);
 		}
 
-		if (this.jumpProgress >= getJumpTime()) {
+		if (this.jumpProgress >= this.getJumpTime()) {
 			// do no call #stopJump() as to not trigger onFall
 			this.stopJump0();
 			this.falling = true;
@@ -166,15 +166,15 @@ public class CharacterWController extends CustomActionInterface {
 	}
 
 	private void stepDown() {
-		Matrix4 start = new Matrix4();
-		Matrix4 end = new Matrix4();
-		Vector3 origPosition = this.getTranslation();
+		final Matrix4 start = new Matrix4();
+		final Matrix4 end = new Matrix4();
+		final Vector3 origPosition = this.getTranslation();
 
-		Vector3 downTarget = new Vector3(0, -1, 0).scl(fallSpeed);
+		final Vector3 downTarget = new Vector3(0, -1, 0).scl(this.fallSpeed);
 
 		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
-				getTranslation(),
-				getTranslation().add(downTarget));
+				this.getTranslation(),
+				this.getTranslation().add(downTarget));
 		cb.setCollisionFilterGroup(this.ghostObj.getBroadphaseHandle().getCollisionFilterGroup());
 		cb.setCollisionFilterMask(this.ghostObj.getBroadphaseHandle().getCollisionFilterMask());
 		for (int maxIter = 0; maxIter < 1; maxIter++) {
@@ -182,8 +182,8 @@ public class CharacterWController extends CustomActionInterface {
 			start.idt();
 			end.idt();
 
-			start.setTranslation(getTranslation());
-			end.setTranslation(getTranslation().add(downTarget));
+			start.setTranslation(this.getTranslation());
+			end.setTranslation(this.getTranslation().add(downTarget));
 
 			this.ghostObj.convexSweepTest((btConvexShape) this.ghostObj.getCollisionShape(),
 					start,
@@ -192,7 +192,7 @@ public class CharacterWController extends CustomActionInterface {
 					this.game.getPhysicsManager().getBtWorld().getDispatchInfo().getAllowedCcdPenetration());
 
 			if (cb.hasHit() && this.ghostObj.hasContactResponse()
-					&& this.validInteract(ghostObj, cb.getHitCollisionObject())) {
+					&& this.validInteract(this.ghostObj, cb.getHitCollisionObject())) {
 				break;
 			} else {
 //				downTarget.sub(new Vector3(0, fallSpeed, 0));
@@ -201,21 +201,22 @@ public class CharacterWController extends CustomActionInterface {
 		}
 
 		if (!cb.hasHit()) {
-			this.setWorldTransform(getWorldTransform().setTranslation(getTranslation().add(downTarget)));
+			this.setWorldTransform(this.getWorldTransform().setTranslation(this.getTranslation().add(downTarget)));
 			this.falling = true;
 			cb.dispose();
 			return;
 		}
-		Vector3 hitPointWorld = new Vector3();
+		final Vector3 hitPointWorld = new Vector3();
 		cb.getHitPointWorld(hitPointWorld);
 
-		float frac = (origPosition.y - hitPointWorld.y) / 2;
-		if (Float.isNaN(frac))
+		final float frac = (origPosition.y - hitPointWorld.y) / 2;
+		if (Float.isNaN(frac)) {
 			throw new RuntimeException("NaNaNaNaNaNaNaNaNaNaN BATMAAAAAAAAN");
-		Vector3 newPosition = origPosition.cpy();
-		newPosition.lerp(downTarget.add(getTranslation()), cb.getClosestHitFraction());
+		}
+		final Vector3 newPosition = origPosition.cpy();
+		newPosition.lerp(downTarget.add(this.getTranslation()), cb.getClosestHitFraction());
 
-		this.setWorldTransform(getWorldTransform().setTranslation(newPosition));
+		this.setWorldTransform(this.getWorldTransform().setTranslation(newPosition));
 		cb.dispose();
 
 		this.stopJump0();
@@ -225,12 +226,12 @@ public class CharacterWController extends CustomActionInterface {
 	private void stepForward() {
 		float fraction = 1;
 
-		Vector3 target = new Vector3();
+		final Vector3 target = new Vector3();
 		this.getWorldTransform().getTranslation(target);
 		target.add(this.walkDirection);
 
-		Matrix4 start = new Matrix4();
-		Matrix4 end = new Matrix4();
+		final Matrix4 start = new Matrix4();
+		final Matrix4 end = new Matrix4();
 
 		int maxIter = 10;
 
@@ -238,7 +239,7 @@ public class CharacterWController extends CustomActionInterface {
 			start.set(this.getWorldTransform());
 			end.setTranslation(target);
 
-			final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(ghostObj,
+			final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
 					new Vector3(),
 					new Vector3());
 			cb.setCollisionFilterGroup(this.ghostObj.getBroadphaseHandle().getCollisionFilterGroup());
@@ -255,17 +256,17 @@ public class CharacterWController extends CustomActionInterface {
 			fraction -= cb.getClosestHitFraction();
 
 			if (cb.hasHit() && this.ghostObj.hasContactResponse()
-					&& this.validInteract(ghostObj, cb.getHitCollisionObject())) {
+					&& this.validInteract(this.ghostObj, cb.getHitCollisionObject())) {
 				cb.dispose();
 
-				Vector3 direction = new Vector3(target).sub(this.getTranslation());
-				float dist = direction.len();
+				final Vector3 direction = new Vector3(target).sub(this.getTranslation());
+				final float dist = direction.len();
 
-				target.set(getTranslation());
+				target.set(this.getTranslation());
 
 				if (dist > 0.1f) {
 					direction.nor();
-					Vector3 normalizedTargetDirection = new Vector3(this.walkDirection).nor();
+					final Vector3 normalizedTargetDirection = new Vector3(this.walkDirection).nor();
 					if (direction.dot(normalizedTargetDirection) <= 0) {
 						break;
 					}
@@ -280,7 +281,7 @@ public class CharacterWController extends CustomActionInterface {
 	}
 
 	private void stepUp() {
-		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(ghostObj,
+		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
 				new Vector3(),
 				new Vector3());
 		cb.setCollisionFilterGroup(this.ghostObj.getBroadphaseHandle().getCollisionFilterGroup());
@@ -288,21 +289,21 @@ public class CharacterWController extends CustomActionInterface {
 
 		final Vector3 up = new Vector3(0, 0, this.stepHeight + 1);
 
-		final Matrix4 end = getWorldTransform().cpy();
+		final Matrix4 end = this.getWorldTransform().cpy();
 		end.setTranslation(end.getTranslation(new Vector3()).add(up));
 
 		this.ghostObj.convexSweepTest((btConvexShape) this.ghostObj.getCollisionShape(),
-				getWorldTransform(),
+				this.getWorldTransform(),
 				end,
 				cb,
-				jumpProgress);
+				this.jumpProgress);
 
 		if (cb.hasHit() && this.ghostObj.hasContactResponse()
-				&& this.validInteract(ghostObj, cb.getHitCollisionObject())) {
+				&& this.validInteract(this.ghostObj, cb.getHitCollisionObject())) {
 			final Vector3 norm = new Vector3();
 			cb.getHitNormalWorld(norm);
 			if (norm.dot(Vector3.Z) > 0) {
-				Vector3 newPos = new Vector3();
+				final Vector3 newPos = new Vector3();
 				this.getWorldTransform().getTranslation(newPos);
 				newPos.add(up.cpy().scl(cb.getClosestHitFraction()));
 				this.ghostObj.setWorldTransform(this.ghostObj.getWorldTransform().setTranslation(newPos));
@@ -321,23 +322,24 @@ public class CharacterWController extends CustomActionInterface {
 					this.game.getBtWorld().getDispatcher());
 
 		for (int i = 0; i < this.ghostObj.getOverlappingPairCache().getNumOverlappingPairs(); i++) {
-			btBroadphasePair pair = this.ghostObj.getOverlappingPairCache().getOverlappingPairArray().at(i);
+			final btBroadphasePair pair = this.ghostObj.getOverlappingPairCache().getOverlappingPairArray().at(i);
 
 			// uhoh, pointers
-			btCollisionObject obj0 = btCollisionObject.getInstance(pair.getPProxy0().getClientObject());
-			btCollisionObject obj1 = btCollisionObject.getInstance(pair.getPProxy1().getClientObject());
+			final btCollisionObject obj0 = btCollisionObject.getInstance(pair.getPProxy0().getClientObject());
+			final btCollisionObject obj1 = btCollisionObject.getInstance(pair.getPProxy1().getClientObject());
 
-			if ((obj0 != null && !obj0.hasContactResponse()) || (obj1 != null && !obj1.hasContactResponse())) {
+			if (obj0 != null && !obj0.hasContactResponse() || obj1 != null && !obj1.hasContactResponse()) {
 				continue;
 			}
 
-			if (pair.getAlgorithm() != null)
+			if (pair.getAlgorithm() != null) {
 				pair.getAlgorithm().getAllContactManifolds(manifolds);
+			}
 
 			for (int j = 0; j < manifolds.size(); j++) {
-				btPersistentManifold m = manifolds.atConst(j);
+				final btPersistentManifold m = manifolds.atConst(j);
 				for (int k = 0; k < m.getNumContacts(); k++) {
-					btManifoldPoint cp = m.getContactPoint(k);
+					final btManifoldPoint cp = m.getContactPoint(k);
 					if (this.recoverFromPenetration(cp, obj0, obj1)) {
 						hasPenetration = true;
 					}
@@ -348,7 +350,8 @@ public class CharacterWController extends CustomActionInterface {
 		return hasPenetration;
 	}
 
-	public boolean recoverFromPenetration(btManifoldPoint cp, btCollisionObject colObj0, btCollisionObject colObj1) {
+	public boolean recoverFromPenetration(final btManifoldPoint cp, final btCollisionObject colObj0,
+			final btCollisionObject colObj1) {
 		// https://github.com/bulletphysics/bullet3/blob/e306b274f1885f32b7e9d65062aa942b398805c2/src/BulletDynamics/Character/btKinematicCharacterController.cpp#L238
 		final float dist = cp.getDistance();
 		if (this.validInteract(colObj0, colObj1) && dist < -0.25f) {

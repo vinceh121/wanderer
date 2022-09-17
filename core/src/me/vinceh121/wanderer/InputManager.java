@@ -44,7 +44,7 @@ public class InputManager extends ApplicationAdapter {
 
 	public void load() throws JsonProcessingException {
 		this.bindings.clear();
-		final Preferences pref = Gdx.app.getPreferences(PREF_NAME);
+		final Preferences pref = Gdx.app.getPreferences(InputManager.PREF_NAME);
 		for (final Input i : Input.values()) {
 			if (pref.contains(i.toString())) {
 				this.bindings.putAll(i,
@@ -56,7 +56,7 @@ public class InputManager extends ApplicationAdapter {
 	}
 
 	public void save() throws JsonProcessingException {
-		final Preferences pref = Gdx.app.getPreferences(PREF_NAME);
+		final Preferences pref = Gdx.app.getPreferences(InputManager.PREF_NAME);
 		for (final Input i : this.bindings.keySet()) {
 			pref.putString(i.toString(), WandererConstants.MAPPER.writeValueAsString(this.bindings.get(i)));
 		}
@@ -105,51 +105,51 @@ public class InputManager extends ApplicationAdapter {
 
 		Gdx.input.setInputProcessor(new InputAdapter() {
 			@Override
-			public boolean keyDown(int keycode) {
-				Binding b = new Binding(keycode, DeviceType.KEYBOARD);
-				Collection<Input> in = inputsForBinding(b);
+			public boolean keyDown(final int keycode) {
+				final Binding b = new Binding(keycode, DeviceType.KEYBOARD);
+				final Collection<Input> in = InputManager.this.inputsForBinding(b);
 				if (!in.isEmpty()) {
-					fireInputDown(in);
+					InputManager.this.fireInputDown(in);
 					return true;
 				}
 				return false;
 			}
 
 			@Override
-			public boolean keyUp(int keycode) {
-				Binding b = new Binding(keycode, DeviceType.KEYBOARD);
-				Collection<Input> in = inputsForBinding(b);
+			public boolean keyUp(final int keycode) {
+				final Binding b = new Binding(keycode, DeviceType.KEYBOARD);
+				final Collection<Input> in = InputManager.this.inputsForBinding(b);
 				if (!in.isEmpty()) {
-					fireInputUp(in);
+					InputManager.this.fireInputUp(in);
 					return true;
 				}
 				return false;
 			}
 
 			@Override
-			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-				Binding b = new Binding(button, DeviceType.MOUSE);
-				Collection<Input> in = inputsForBinding(b);
+			public boolean touchDown(final int screenX, final int screenY, final int pointer, final int button) {
+				final Binding b = new Binding(button, DeviceType.MOUSE);
+				final Collection<Input> in = InputManager.this.inputsForBinding(b);
 				if (!in.isEmpty()) {
-					fireInputDown(in);
+					InputManager.this.fireInputDown(in);
 					return true;
 				}
 				return false;
 			}
 
 			@Override
-			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-				Binding b = new Binding(button, DeviceType.MOUSE);
-				Collection<Input> in = inputsForBinding(b);
+			public boolean touchUp(final int screenX, final int screenY, final int pointer, final int button) {
+				final Binding b = new Binding(button, DeviceType.MOUSE);
+				final Collection<Input> in = InputManager.this.inputsForBinding(b);
 				if (!in.isEmpty()) {
-					fireInputUp(in);
+					InputManager.this.fireInputUp(in);
 					return true;
 				}
 				return false;
 			}
 
 			@Override
-			public boolean scrolled(float amountX, float amountY) {
+			public boolean scrolled(final float amountX, final float amountY) {
 				final MouseWheelScroll scroll;
 				if (amountY > 0) {
 					scroll = MouseWheelScroll.DOWN;
@@ -160,22 +160,23 @@ public class InputManager extends ApplicationAdapter {
 				} else if (amountX < 0) {
 					scroll = MouseWheelScroll.LEFT;
 				} else {
-					Gdx.app.log(getClass().getName(), "Couldn't figure out a mouse scroll value");
+					Gdx.app.log(this.getClass().getName(), "Couldn't figure out a mouse scroll value");
 					return false;
 				}
 
-				Collection<Input> in = inputsForBinding(new Binding(scroll.ordinal(), DeviceType.MOUSE_WHEEL));
+				final Collection<Input> in = InputManager.this
+					.inputsForBinding(new Binding(scroll.ordinal(), DeviceType.MOUSE_WHEEL));
 				if (!in.isEmpty()) {
-					fireInputDown(in);
+					InputManager.this.fireInputDown(in);
 					return true;
 				}
 				return false;
 			}
 
 			@Override
-			public boolean mouseMoved(int screenX, int screenY) {
+			public boolean mouseMoved(final int screenX, final int screenY) {
 				Gdx.input.setCursorPosition(0, 0);
-				return fireMouseMoved(screenX, screenY);
+				return InputManager.this.fireMouseMoved(screenX, screenY);
 			}
 		});
 	}
@@ -186,34 +187,34 @@ public class InputManager extends ApplicationAdapter {
 
 		Controllers.addListener(new ControllerAdapter() {
 			@Override
-			public boolean buttonDown(Controller controller, int buttonIndex) {
-				Binding b = new Binding(buttonIndex, DeviceType.CONTROLLER);
-				Collection<Input> in = inputsForBinding(b);
+			public boolean buttonDown(final Controller controller, final int buttonIndex) {
+				final Binding b = new Binding(buttonIndex, DeviceType.CONTROLLER);
+				final Collection<Input> in = InputManager.this.inputsForBinding(b);
 				if (in != null) {
-					fireInputDown(in);
+					InputManager.this.fireInputDown(in);
 					return true;
 				}
 				return false;
 			}
 
 			@Override
-			public boolean buttonUp(Controller controller, int buttonIndex) {
-				Binding b = new Binding(buttonIndex, DeviceType.CONTROLLER);
-				Collection<Input> in = inputsForBinding(b);
+			public boolean buttonUp(final Controller controller, final int buttonIndex) {
+				final Binding b = new Binding(buttonIndex, DeviceType.CONTROLLER);
+				final Collection<Input> in = InputManager.this.inputsForBinding(b);
 				if (in != null) {
-					fireInputUp(in);
+					InputManager.this.fireInputUp(in);
 					return true;
 				}
 				return false;
 			}
 
 			@Override
-			public void connected(Controller controller) {
+			public void connected(final Controller controller) {
 				System.out.println(controller.getName() + " connected");
 			}
 
 			@Override
-			public void disconnected(Controller controller) {
+			public void disconnected(final Controller controller) {
 				System.out.println(controller.getName() + " disconnected");
 			}
 		});
@@ -221,9 +222,9 @@ public class InputManager extends ApplicationAdapter {
 		this.controllersReady = true;
 	}
 
-	public Collection<Input> inputsForBinding(Binding b) {
+	public Collection<Input> inputsForBinding(final Binding b) {
 		final Vector<Input> vec = new Vector<>();
-		for (Entry<Input, Binding> e : this.bindings.entries()) {
+		for (final Entry<Input, Binding> e : this.bindings.entries()) {
 			if (b.equals(e.getValue())) {
 				vec.add(e.getKey());
 			}
@@ -231,8 +232,8 @@ public class InputManager extends ApplicationAdapter {
 		return vec;
 	}
 
-	public Input inputForBinding(Binding b) {
-		for (Entry<Input, Binding> e : this.bindings.entries()) {
+	public Input inputForBinding(final Binding b) {
+		for (final Entry<Input, Binding> e : this.bindings.entries()) {
 			if (b.equals(e.getValue())) {
 				return e.getKey();
 			}
@@ -241,7 +242,7 @@ public class InputManager extends ApplicationAdapter {
 	}
 
 	public boolean isPressed(final Input in) {
-		final Set<Binding> binds = bindings.get(in);
+		final Set<Binding> binds = this.bindings.get(in);
 		if (binds.isEmpty()) {
 			return false;
 		}
@@ -255,7 +256,7 @@ public class InputManager extends ApplicationAdapter {
 					return true;
 				}
 			} else if (b.getDeviceType() == DeviceType.CONTROLLER && this.controllersReady) {
-				for (Controller c : Controllers.getControllers()) {
+				for (final Controller c : Controllers.getControllers()) {
 					if (c.getButton(b.getKey())) {
 						return true;
 					}
@@ -265,8 +266,8 @@ public class InputManager extends ApplicationAdapter {
 		return false;
 	}
 
-	private boolean fireInputDown(Collection<Input> c) {
-		for (Input i : c) {
+	private boolean fireInputDown(final Collection<Input> c) {
+		for (final Input i : c) {
 			if (this.fireInputDown(i)) {
 				return true;
 			}
@@ -274,8 +275,8 @@ public class InputManager extends ApplicationAdapter {
 		return false;
 	}
 
-	private boolean fireInputUp(Collection<Input> c) {
-		for (Input i : c) {
+	private boolean fireInputUp(final Collection<Input> c) {
+		for (final Input i : c) {
 			if (this.fireInputUp(i)) {
 				return true;
 			}
@@ -283,24 +284,26 @@ public class InputManager extends ApplicationAdapter {
 		return false;
 	}
 
-	private boolean fireInputDown(Input i) {
-		for (InputListener l : this.listeners) {
-			if (l.inputDown(i))
+	private boolean fireInputDown(final Input i) {
+		for (final InputListener l : this.listeners) {
+			if (l.inputDown(i)) {
 				return true;
+			}
 		}
 		return false;
 	}
 
-	private boolean fireInputUp(Input i) {
-		for (InputListener l : this.listeners) {
-			if (l.inputUp(i))
+	private boolean fireInputUp(final Input i) {
+		for (final InputListener l : this.listeners) {
+			if (l.inputUp(i)) {
 				return true;
+			}
 		}
 		return false;
 	}
 
-	private boolean fireMouseMoved(int x, int y) {
-		for (InputListener l : this.listeners) {
+	private boolean fireMouseMoved(final int x, final int y) {
+		for (final InputListener l : this.listeners) {
 			if (l.mouseMoved(x, y)) {
 				return true;
 			}
@@ -308,11 +311,11 @@ public class InputManager extends ApplicationAdapter {
 		return false;
 	}
 
-	public void addListener(InputListener listener) {
+	public void addListener(final InputListener listener) {
 		this.listeners.add(listener);
 	}
 
-	public void removeListener(InputListener listener) {
+	public void removeListener(final InputListener listener) {
 		this.listeners.remove(listener);
 	}
 

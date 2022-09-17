@@ -87,7 +87,7 @@ public class Wanderer extends ApplicationAdapter {
 		}
 		this.inputManager.addListener(new InputListenerAdapter(0) {
 			@Override
-			public boolean inputDown(Input in) {
+			public boolean inputDown(final Input in) {
 				if (in == Input.DEBUG_BULLET) {
 					Wanderer.this.debugBullet = !Wanderer.this.debugBullet;
 					return true;
@@ -295,7 +295,7 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public InputManager getInputManager() {
-		return inputManager;
+		return this.inputManager;
 	}
 
 	public PhysicsManager getPhysicsManager() {

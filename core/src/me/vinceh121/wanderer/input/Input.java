@@ -20,11 +20,11 @@ public enum Input {
 
 	private final String name;
 
-	private Input(final String name) {
+	Input(final String name) {
 		this.name = name;
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 }
