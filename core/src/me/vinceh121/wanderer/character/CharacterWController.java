@@ -39,7 +39,7 @@ public class CharacterWController extends CustomActionInterface {
 		this.ghostObj.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT);
 		this.ghostObj.setCollisionShape(shape);
 		this.ghostObj.setWorldTransform(character.getTransform().cpy().rotate(Vector3.X, 90));
-		
+
 		// do NOT add this action to the world
 		this.game.getBtWorld()
 			.addCollisionObject(this.ghostObj,
