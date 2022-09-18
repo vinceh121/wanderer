@@ -33,7 +33,6 @@ public class InputManager extends ApplicationAdapter {
 	private final PriorityQueue<InputListener> listeners = new PriorityQueue<>(
 			(o1, o2) -> Integer.compare(o2.getPriority(), o1.getPriority())); // reverse sort order
 	private boolean controllersReady;
-	private int previousMouseX, previousMouseY;
 
 	public void loadOrDefaults() throws JsonProcessingException {
 		this.load();
@@ -176,10 +175,12 @@ public class InputManager extends ApplicationAdapter {
 
 			@Override
 			public boolean mouseMoved(final int screenX, final int screenY) {
-				final boolean b = InputManager.this.fireMouseMoved(screenX - InputManager.this.previousMouseX,
-						screenY - InputManager.this.previousMouseY);
-				InputManager.this.previousMouseX = screenX;
-				InputManager.this.previousMouseY = screenY;
+				final int centerX = Gdx.graphics.getWidth() / 2;
+				final int centerY = Gdx.graphics.getHeight() / 2;
+				
+				Gdx.input.setCursorPosition(centerX, centerY);
+				final boolean b = InputManager.this.fireMouseMoved(screenX - centerX,
+						screenY - centerY);
 				return b;
 			}
 		});
