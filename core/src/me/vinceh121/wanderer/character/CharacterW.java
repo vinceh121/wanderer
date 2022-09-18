@@ -206,6 +206,9 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 			@Override
 			public boolean mouseMoved(final int x, final int y) {
+				if (!CharacterW.this.controller.canJump()) {
+					return false;
+				}
 				CharacterW.this.controller.setWorldTransform(CharacterW.this.controller.getWorldTransform()
 					.rotate(0,
 							1,
