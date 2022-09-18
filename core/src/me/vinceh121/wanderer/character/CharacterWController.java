@@ -39,6 +39,7 @@ public class CharacterWController extends CustomActionInterface {
 		this.ghostObj.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT);
 		this.ghostObj.setCollisionShape(shape);
 		this.ghostObj.setWorldTransform(character.getTransform().cpy().rotate(Vector3.X, 90));
+		
 		// do NOT add this action to the world
 		this.game.getBtWorld()
 			.addCollisionObject(this.ghostObj,
@@ -101,9 +102,13 @@ public class CharacterWController extends CustomActionInterface {
 			this.walkDirection.setZero();
 			this.stepDown();
 		} else {
+			final Vector3 origPos = this.getTranslation();
 			this.stepUp();
 			this.stepForward();
 			this.stepDown();
+			if (!this.isTouchingSomething()) {
+				this.setWorldTransform(this.getWorldTransform().setTranslation(origPos));
+			}
 		}
 
 		for (int i = 0; i < 4; i++) {
@@ -130,7 +135,7 @@ public class CharacterWController extends CustomActionInterface {
 				start,
 				end,
 				cb,
-				this.game.getPhysicsManager().getBtWorld().getDispatchInfo().getAllowedCcdPenetration());
+				this.getCCDPenetration());
 		if (cb.hasHit()) {
 			final Vector3 hitPointWorld = new Vector3();
 			cb.getHitPointWorld(hitPointWorld);
@@ -189,7 +194,7 @@ public class CharacterWController extends CustomActionInterface {
 					start,
 					end,
 					cb,
-					this.game.getPhysicsManager().getBtWorld().getDispatchInfo().getAllowedCcdPenetration());
+					this.getCCDPenetration());
 
 			if (cb.hasHit() && this.ghostObj.hasContactResponse()
 					&& this.validInteract(this.ghostObj, cb.getHitCollisionObject())) {
@@ -250,7 +255,7 @@ public class CharacterWController extends CustomActionInterface {
 						start,
 						end,
 						cb,
-						this.game.getPhysicsManager().getBtWorld().getDispatchInfo().getAllowedCcdPenetration());
+						this.getCCDPenetration());
 			}
 
 			fraction -= cb.getClosestHitFraction();
@@ -310,6 +315,40 @@ public class CharacterWController extends CustomActionInterface {
 			}
 		}
 		cb.dispose();
+	}
+
+	public boolean isTouchingSomething() {
+		final btPersistentManifoldArray manifolds = new btPersistentManifoldArray();
+		this.game.getBtWorld()
+			.getDispatcher()
+			.dispatchAllCollisionPairs(this.ghostObj.getOverlappingPairCache(),
+					this.game.getBtWorld().getDispatchInfo(),
+					this.game.getBtWorld().getDispatcher());
+		for (int i = 0; i < this.ghostObj.getOverlappingPairCache().getNumOverlappingPairs(); i++) {
+			final btBroadphasePair pair = this.ghostObj.getOverlappingPairCache().getOverlappingPairArray().at(i);
+
+			// uhoh, pointers
+			final btCollisionObject obj0 = btCollisionObject.getInstance(pair.getPProxy0().getClientObject());
+			final btCollisionObject obj1 = btCollisionObject.getInstance(pair.getPProxy1().getClientObject());
+
+			if (obj0 != null && !obj0.hasContactResponse() || obj1 != null && !obj1.hasContactResponse()) {
+				return false;
+			}
+
+			if (pair.getAlgorithm() != null) {
+				pair.getAlgorithm().getAllContactManifolds(manifolds);
+			}
+
+			for (int j = 0; j < manifolds.size(); j++) {
+				final btPersistentManifold m = manifolds.atConst(j);
+				if (m.getNumContacts() > 0) {
+					manifolds.dispose();
+					return true;
+				}
+			}
+		}
+		manifolds.dispose();
+		return false;
 	}
 
 	public boolean recoverFromPenetration() {
@@ -379,6 +418,10 @@ public class CharacterWController extends CustomActionInterface {
 				&& (colObj1.getCollisionFlags() & CollisionFlags.CF_NO_CONTACT_RESPONSE) == 0
 				|| colObj1.getCPointer() == CharacterWController.this.ghostObj.getCPointer()
 						&& (colObj0.getCollisionFlags() & CollisionFlags.CF_NO_CONTACT_RESPONSE) == 0;
+	}
+
+	private float getCCDPenetration() {
+		return this.game.getPhysicsManager().getBtWorld().getDispatchInfo().getAllowedCcdPenetration();
 	}
 
 	/**
