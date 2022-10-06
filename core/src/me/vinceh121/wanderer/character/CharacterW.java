@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -42,12 +43,13 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	private final Array<ArtifactMeta> belt = new Array<>();
 	private Island attachedIsland;
 	private int beltSize = 3;
+	private int placingSlotIndex;
 	private Clan clan;
 	private boolean beltOpen;
 	private BeltSelection beltWidget;
 	private AbstractBuildingMeta placing;
-	private int placingSlotIndex;
 	private PreviewBuilding previewBuilding;
+	private float cameraHeight = 0.5f;
 
 	public CharacterW(final Wanderer game, final CharacterMeta meta) {
 		super(game);
@@ -112,8 +114,13 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 			final Quaternion characterRotation = new Quaternion();
 			this.getTransform().getRotation(characterRotation);
 
-			cam.position.set(characterRotation.transform(new Vector3(0, 3, -4)).add(characterTransform));
-			cam.lookAt(characterTransform.cpy().add(0, 1, 0));
+			final float invertCameraHeight = 1f - this.cameraHeight;
+
+			cam.position.set(characterRotation
+				.transform(new Vector3(0, 5f * this.cameraHeight, -0.1f + -4f * invertCameraHeight))
+				.add(characterTransform));
+			cam.lookAt(new Vector3(0, 5 * invertCameraHeight, 5 * this.cameraHeight).rot(this.getTransform())
+				.add(characterTransform));
 			cam.up.set(0, 1, 0); // should this be doable without this?
 		}
 		cam.update(true);
@@ -206,13 +213,13 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 			@Override
 			public boolean mouseMoved(final int x, final int y) {
+				cameraHeight = MathUtils.clamp(cameraHeight + 0.005f * y, 0, 1);
+
 				if (!CharacterW.this.controller.canJump()) {
 					return false;
 				}
 				CharacterW.this.controller.setWorldTransform(CharacterW.this.controller.getWorldTransform()
-					.rotate(0,
-							1,
-							0,
+					.rotate(Vector3.Y,
 							-Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay").getFloat("lookSensitivityX", 0.2f)
 									* x));
 				return true;
