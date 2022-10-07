@@ -213,15 +213,18 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 			@Override
 			public boolean mouseMoved(final int x, final int y) {
-				cameraHeight = MathUtils.clamp(cameraHeight + 0.005f * y, 0, 1);
+				final float lookSensY = Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay").getFloat("lookSensitivityY", 0.005f);
+				cameraHeight = MathUtils.clamp(cameraHeight + lookSensY * y, 0, 1);
 
 				if (!CharacterW.this.controller.canJump()) {
 					return false;
 				}
-				CharacterW.this.controller.setWorldTransform(CharacterW.this.controller.getWorldTransform()
-					.rotate(Vector3.Y,
-							-Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay").getFloat("lookSensitivityX", 0.2f)
-									* x));
+
+				final float lookSensX = Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay")
+					.getFloat("lookSensitivityX", 0.2f);
+
+				CharacterW.this.controller.setWorldTransform(
+						CharacterW.this.controller.getWorldTransform().rotate(Vector3.Y, -lookSensX * x));
 				return true;
 			}
 		};
