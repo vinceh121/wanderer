@@ -121,9 +121,9 @@ public class CharacterWController extends CustomActionInterface {
 	private void stepJump(final float delta) {
 		this.jumpProgress += delta;
 		final Vector3 origPosition = this.getTranslation();
-		final Matrix4 start = this.character.getTransform().cpy();
-		final Matrix4 end = this.character.getTransform().cpy();
-		end.setTranslation(this.jumpCurve.valueAt(new Vector3(), this.jumpProgress / this.getJumpTime()));
+		final Matrix4 start = this.getWorldTransform().cpy();
+		final Matrix4 end = this.getWorldTransform().cpy();
+		end.setTranslation(this.jumpCurve.valueAt(new Vector3(), this.jumpProgress));
 
 		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
 				start.getTranslation(new Vector3()),
