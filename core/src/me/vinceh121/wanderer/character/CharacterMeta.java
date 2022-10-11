@@ -2,13 +2,13 @@ package me.vinceh121.wanderer.character;
 
 import java.util.Arrays;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector3;
 
 import me.vinceh121.wanderer.IMeta;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.platform.audio.Sound3D;
 
 public class CharacterMeta implements IMeta {
 	private String name, model, texture, fallSound;
@@ -145,14 +145,14 @@ public class CharacterMeta implements IMeta {
 	public void ensureLoading() {
 		WandererConstants.ASSET_MANAGER.load(this.model, Model.class);
 		WandererConstants.ASSET_MANAGER.load(this.texture, Texture.class, WandererConstants.MIPMAPS);
-		WandererConstants.ASSET_MANAGER.load(this.fallSound, Sound.class);
+		WandererConstants.ASSET_MANAGER.load(this.fallSound, Sound3D.class);
 
 		for (final String s : this.steps) {
-			WandererConstants.ASSET_MANAGER.load(s, Sound.class);
+			WandererConstants.ASSET_MANAGER.load(s, Sound3D.class);
 		}
 
 		for (final String s : this.stepsSide) {
-			WandererConstants.ASSET_MANAGER.load(s, Sound.class);
+			WandererConstants.ASSET_MANAGER.load(s, Sound3D.class);
 		}
 	}
 

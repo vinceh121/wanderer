@@ -4,10 +4,12 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.openal.AL10;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
 
-public class OpenAL3DBuffer implements Sound {
+import me.vinceh121.wanderer.platform.audio.Sound3D;
+import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
+
+public class OpenAL3DBuffer implements Sound3D {
 	private final OpenAL3DAudio audio;
 	private final int buffer;
 	private boolean disposed;
@@ -30,20 +32,12 @@ public class OpenAL3DBuffer implements Sound {
 
 	@Override
 	public long play() {
-		try {
-			return this.playSource(1, this.audio.getListenerPosition()).getSource();
-		} catch (final OpenALException e) {
-			throw new RuntimeException(e);
-		}
+		return this.playSource(1, this.audio.getListenerPosition()).getId();
 	}
 
 	@Override
 	public long play(final float volume) {
-		try {
-			return this.playSource(volume).getSource();
-		} catch (final OpenALException e) {
-			throw new RuntimeException(e);
-		}
+		return this.playSource(volume).getId();
 	}
 
 	@Override
@@ -51,25 +45,32 @@ public class OpenAL3DBuffer implements Sound {
 		throw new UnsupportedOperationException("OpenAL3DBuffer#play(volume, pitch, pan) is not implemented");
 	}
 
-	public OpenAL3DSource playSource() throws OpenALException {
-		OpenAL3DSource src = new OpenAL3DSource(this.audio);
-		src.setBuffer(this.buffer);
-		src.play();
-		OpenAL3DAudio.checkOpenALError();
-		return src;
+	@Override
+	public SoundEmitter3D playSource() {
+		try {
+			OpenAL3DSource src = new OpenAL3DSource(this.audio);
+			src.setBuffer(this.buffer);
+			src.play();
+			OpenAL3DAudio.runtimeCheckOpenAlError();
+			return src;
+		} catch (OpenALException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	public OpenAL3DSource playSource(final float volume) throws OpenALException {
-		OpenAL3DSource src = this.playSource();
+	@Override
+	public SoundEmitter3D playSource(final float volume) {
+		SoundEmitter3D src = this.playSource();
 		src.setGain(volume);
-		OpenAL3DAudio.checkOpenALError();
+		OpenAL3DAudio.runtimeCheckOpenAlError();
 		return src;
 	}
 
-	public OpenAL3DSource playSource(final float volume, final Vector3 position) throws OpenALException {
-		OpenAL3DSource src = this.playSource(volume);
+	@Override
+	public SoundEmitter3D playSource(final float volume, final Vector3 position) {
+		SoundEmitter3D src = this.playSource(volume);
 		src.setPosition(position);
-		OpenAL3DAudio.checkOpenALError();
+		OpenAL3DAudio.runtimeCheckOpenAlError();
 		return src;
 	}
 
@@ -138,6 +139,7 @@ public class OpenAL3DBuffer implements Sound {
 		throw new UnsupportedOperationException("OpenAL3DBuffer#setPan(soundId, pan, volume) is not implemented");
 	}
 
+	@Override
 	public boolean isDisposed() {
 		return disposed;
 	}

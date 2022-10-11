@@ -1,11 +1,7 @@
 package me.vinceh121.wanderer.desktop.audio;
 
-import static org.lwjgl.openal.AL10.alDeleteBuffers;
-import static org.lwjgl.openal.AL11.*;
-import static org.lwjgl.openal.ALC10.alcCloseDevice;
-import static org.lwjgl.openal.ALC10.alcDestroyContext;
-import static org.lwjgl.openal.ALC10.alcMakeContextCurrent;
-import static org.lwjgl.openal.ALC11.*;
+import static org.lwjgl.openal.AL10.*;
+import static org.lwjgl.openal.ALC10.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,8 +30,11 @@ import me.vinceh121.wanderer.desktop.audio.formats.AudioLoader;
 import me.vinceh121.wanderer.desktop.audio.formats.OggLoader;
 import me.vinceh121.wanderer.desktop.audio.formats.PcmData;
 import me.vinceh121.wanderer.desktop.audio.formats.WavLoader;
+import me.vinceh121.wanderer.platform.audio.AudioSystem3D;
+import me.vinceh121.wanderer.platform.audio.Sound3D;
+import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
-public class OpenAL3DAudio implements Lwjgl3Audio {
+public class OpenAL3DAudio implements Lwjgl3Audio, AudioSystem3D {
 	private static final Map<String, AudioLoader> AUDIO_LOADERS = new HashMap<>();
 	private final long device, context3D;
 	private final Set<Integer> bufferPool = new HashSet<>();
@@ -69,10 +68,12 @@ public class OpenAL3DAudio implements Lwjgl3Audio {
 		this.checkALCError();
 	}
 
+	@Override
 	public void setListenerPosition(final Vector3 pos) {
 		alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
 	}
 
+	@Override
 	public Vector3 getListenerPosition() {
 		final float[] x = new float[1];
 		final float[] y = new float[1];
@@ -81,10 +82,12 @@ public class OpenAL3DAudio implements Lwjgl3Audio {
 		return new Vector3(x[0], y[0], z[0]);
 	}
 
+	@Override
 	public void setListenerVelocity(final Vector3 vel) {
 		alListener3f(AL_VELOCITY, vel.x, vel.y, vel.z);
 	}
 
+	@Override
 	public void setListenerOrientation(final Vector3 at, final Vector3 up) {
 		alListenerfv(AL_ORIENTATION, new float[] { at.x, at.y, at.z, up.x, up.y, up.z });
 	}
@@ -100,7 +103,7 @@ public class OpenAL3DAudio implements Lwjgl3Audio {
 	}
 
 	@Override
-	public Sound newSound(final FileHandle fileHandle) {
+	public Sound3D newSound3D(final FileHandle fileHandle) {
 		try (final InputStream in = fileHandle.read()) {
 			final OpenAL3DBuffer sound = new OpenAL3DBuffer(this);
 			final AudioLoader loader = OpenAL3DAudio.AUDIO_LOADERS.get(fileHandle.extension());
@@ -120,6 +123,11 @@ public class OpenAL3DAudio implements Lwjgl3Audio {
 		} catch (IOException | OpenALException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public Sound newSound(final FileHandle fileHandle) {
+		return this.newSound3D(fileHandle);
 	}
 
 	@Override
@@ -150,7 +158,7 @@ public class OpenAL3DAudio implements Lwjgl3Audio {
 		this.sourcePool.add(source);
 	}
 
-	public void unregisterSource(final OpenAL3DSource source) {
+	public void unregisterSource(final SoundEmitter3D source) {
 		this.sourcePool.remove(source);
 	}
 
@@ -192,6 +200,14 @@ public class OpenAL3DAudio implements Lwjgl3Audio {
 		final int err = alGetError();
 		if (err != AL_NO_ERROR) {
 			throw new OpenALException(err);
+		}
+	}
+
+	public static void runtimeCheckOpenAlError() {
+		try {
+			checkOpenALError();
+		} catch (OpenALException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

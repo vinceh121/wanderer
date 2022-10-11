@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -39,6 +38,7 @@ import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
+import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.ui.BlinkLabel;
 import me.vinceh121.wanderer.ui.DebugOverlay;
 import me.vinceh121.wanderer.ui.EnergyBar;
@@ -216,6 +216,9 @@ public class Wanderer extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		WandererConstants.AUDIO.setListenerPosition(this.getCamera().position);
+		WandererConstants.AUDIO.setListenerOrientation(this.getCamera().direction, this.getCamera().up);
+
 		final float delta = Gdx.graphics.getDeltaTime();
 		this.graphicsManager.apply();
 
@@ -332,7 +335,7 @@ public class Wanderer extends ApplicationAdapter {
 		}
 		this.interactingBuilding = building;
 		this.showMessage("Control " + building.getName());
-		WandererConstants.ASSET_MANAGER.get("orig/feedback/use_ok.wav", Sound.class).play();
+		WandererConstants.ASSET_MANAGER.get("orig/feedback/use_ok.wav", Sound3D.class).play();
 	}
 
 	public void removeInteractBuilding() {

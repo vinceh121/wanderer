@@ -1,7 +1,6 @@
 package me.vinceh121.wanderer.character;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -28,6 +27,7 @@ import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
+import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.ui.BeltSelection;
 
 /**
@@ -64,7 +64,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	private void onFall(final boolean bigJump) {
-		WandererConstants.ASSET_MANAGER.get(this.meta.getFallSound(), Sound.class).play();
+		WandererConstants.ASSET_MANAGER.get(this.meta.getFallSound(), Sound3D.class).play();
 	}
 
 	@Override
@@ -261,13 +261,13 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		final AbstractBuildingMeta build = (AbstractBuildingMeta) arti;
 		if (this.getClan().getEnergy() < build.getEnergyRequired()) {
 			this.game.showMessage("Not enough energy!");
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound.class).play();
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class).play();
 			return;
 		}
 		final Array<Slot> free = this.attachedIsland.getFreeSlots(build.getSlotType());
 		if (free.size == 0) {
 			this.game.showMessage("No free slot!");
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound.class).play();
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound3D.class).play();
 			return;
 		}
 		CharacterW.this.placing = build;

@@ -1,12 +1,11 @@
 package me.vinceh121.wanderer.artifact;
 
-import com.badlogic.gdx.audio.Sound;
-
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.entity.ParticleEmitter;
+import me.vinceh121.wanderer.platform.audio.Sound3D;
 
 public class EnergyArtefact extends AbstractArtifactEntity {
 	private static final ArtifactMeta ENERGY_META = new ArtifactMeta();
@@ -21,7 +20,7 @@ public class EnergyArtefact extends AbstractArtifactEntity {
 	public boolean onPickUp(final Wanderer game, final CharacterW chara) {
 		final Clan c = game.getClanForMember(chara);
 		if (c != null) {
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound.class).play();
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound3D.class).play();
 			// TODO find proper value
 			c.setEnergy(Math.min(c.getEnergy() + 10, c.getMaxEnergy()));
 			return true;

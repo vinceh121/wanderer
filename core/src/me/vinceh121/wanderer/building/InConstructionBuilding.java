@@ -1,7 +1,6 @@
 package me.vinceh121.wanderer.building;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -18,13 +17,14 @@ import com.badlogic.gdx.utils.Array;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.platform.audio.Sound3D;
+import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
 public class InConstructionBuilding extends AbstractBuilding {
 	private final AbstractBuildingMeta meta;
 	private final Array<Bezier<Vector3>> curves = new Array<>();
 	private boolean constructionDone;
-	private Sound sound;
-	private long soundId;
+	private SoundEmitter3D sound;
 	private float aliveTime;
 
 	public InConstructionBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
@@ -82,7 +82,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 			this.getIsland().addBuilding(newBuilding, this.getSlot());
 		}
 
-		this.sound.stop(this.soundId);
+		this.sound.stop();
 		this.game.removeEntity(this);
 		this.dispose();
 		this.constructionDone = true;
@@ -94,14 +94,14 @@ public class InConstructionBuilding extends AbstractBuilding {
 
 	@Override
 	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
-		this.sound = WandererConstants.ASSET_MANAGER.get("orig/lib/sound/healingspell.wav", Sound.class);
-		this.soundId = this.sound.play();
-		this.sound.setLooping(this.soundId, true);
+		final Sound3D snd = WandererConstants.ASSET_MANAGER.get("orig/lib/sound/healingspell.wav", Sound3D.class);
+		this.sound = snd.playSource(1, getTransform().getTranslation(new Vector3()));
+		this.sound.setLooping(true);
 	}
 
 	@Override
 	public void dispose() {
-		this.sound.stop(this.soundId);
+		this.sound.stop();
 		super.dispose();
 	}
 }
