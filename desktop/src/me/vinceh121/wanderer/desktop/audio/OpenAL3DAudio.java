@@ -1,7 +1,11 @@
 package me.vinceh121.wanderer.desktop.audio;
 
-import static org.lwjgl.openal.AL10.AL_PLAYING;
-import static org.lwjgl.openal.AL10.AL_STOPPED;
+import static org.lwjgl.openal.AL10.alDeleteBuffers;
+import static org.lwjgl.openal.AL11.*;
+import static org.lwjgl.openal.ALC10.alcCloseDevice;
+import static org.lwjgl.openal.ALC10.alcDestroyContext;
+import static org.lwjgl.openal.ALC10.alcMakeContextCurrent;
+import static org.lwjgl.openal.ALC11.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,9 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.lwjgl.openal.AL;
-import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
-import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
 
 import com.badlogic.gdx.audio.AudioDevice;
@@ -36,21 +38,22 @@ import me.vinceh121.wanderer.desktop.audio.formats.WavLoader;
 public class OpenAL3DAudio implements Lwjgl3Audio {
 	private static final Map<String, AudioLoader> AUDIO_LOADERS = new HashMap<>();
 	private final long device, context3D;
-	private final Set<Integer> bufferPool = new HashSet<>(), sourcePool = new HashSet<>();
+	private final Set<Integer> bufferPool = new HashSet<>();
+	private final Set<OpenAL3DSource> sourcePool = new HashSet<>();
 
 	public OpenAL3DAudio() throws OpenALException {
 		AL.setCurrentProcess(null);
-		this.device = ALC10.alcOpenDevice((ByteBuffer) null);
+		this.device = alcOpenDevice((ByteBuffer) null);
 		if (this.device == 0) {
 			throw new IllegalStateException("No audio output");
 		}
 		final ALCCapabilities alcCap = ALC.createCapabilities(this.device);
 
-		this.context3D = ALC10.alcCreateContext(this.device, (IntBuffer) null);
+		this.context3D = alcCreateContext(this.device, (IntBuffer) null);
 		if (this.context3D == 0) {
 			throw new IllegalStateException("alcCreateContext failed");
 		}
-		if (!ALC10.alcMakeContextCurrent(this.context3D)) {
+		if (!alcMakeContextCurrent(this.context3D)) {
 			throw new IllegalStateException("alcMakeContextCurrent failed");
 		}
 		AL.createCapabilities(alcCap);
@@ -67,23 +70,23 @@ public class OpenAL3DAudio implements Lwjgl3Audio {
 	}
 
 	public void setListenerPosition(final Vector3 pos) {
-		AL10.alListener3f(AL10.AL_POSITION, pos.x, pos.y, pos.z);
+		alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
 	}
 
 	public Vector3 getListenerPosition() {
 		final float[] x = new float[1];
 		final float[] y = new float[1];
 		final float[] z = new float[1];
-		AL10.alGetListener3f(AL10.AL_POSITION, x, y, z);
+		alGetListener3f(AL_POSITION, x, y, z);
 		return new Vector3(x[0], y[0], z[0]);
 	}
 
 	public void setListenerVelocity(final Vector3 vel) {
-		AL10.alListener3f(AL10.AL_VELOCITY, vel.x, vel.y, vel.z);
+		alListener3f(AL_VELOCITY, vel.x, vel.y, vel.z);
 	}
 
 	public void setListenerOrientation(final Vector3 at, final Vector3 up) {
-		AL10.alListenerfv(AL10.AL_ORIENTATION, new float[] { at.x, at.y, at.z, up.x, up.y, up.z });
+		alListenerfv(AL_ORIENTATION, new float[] { at.x, at.y, at.z, up.x, up.y, up.z });
 	}
 
 	@Override
@@ -99,7 +102,7 @@ public class OpenAL3DAudio implements Lwjgl3Audio {
 	@Override
 	public Sound newSound(final FileHandle fileHandle) {
 		try (final InputStream in = fileHandle.read()) {
-			final OpenAL3DSound sound = new OpenAL3DSound(this);
+			final OpenAL3DBuffer sound = new OpenAL3DBuffer(this);
 			final AudioLoader loader = OpenAL3DAudio.AUDIO_LOADERS.get(fileHandle.extension());
 			final PcmData pcm = loader.readPCM(in);
 
@@ -125,7 +128,7 @@ public class OpenAL3DAudio implements Lwjgl3Audio {
 	}
 
 	public int acquireNewBuffer() throws OpenALException {
-		final int newBuf = AL10.alGenBuffers();
+		final int newBuf = alGenBuffers();
 		OpenAL3DAudio.checkOpenALError();
 		this.bufferPool.add(newBuf);
 		return newBuf;
@@ -133,44 +136,61 @@ public class OpenAL3DAudio implements Lwjgl3Audio {
 
 	public void disposeBuffer(final int buffer) throws OpenALException {
 		this.bufferPool.remove(buffer);
-		AL10.alDeleteBuffers(buffer);
+		for (final OpenAL3DSource src : this.sourcePool) {
+			if (!src.isDisposed() && src.getBuffer() == buffer) {
+				src.stop();
+				src.dispose();
+			}
+		}
+		alDeleteBuffers(buffer);
 		OpenAL3DAudio.checkOpenALError();
 	}
 
-	public int acquireNewSource() throws OpenALException {
-		final int newSource = AL10.alGenSources();
-		OpenAL3DAudio.checkOpenALError();
-		this.sourcePool.add(newSource);
-		return newSource;
+	public void registerSource(final OpenAL3DSource source) {
+		this.sourcePool.add(source);
 	}
 
-	public void disposeSource(final int source) throws OpenALException {
+	public void unregisterSource(final OpenAL3DSource source) {
 		this.sourcePool.remove(source);
-		AL10.alDeleteSources(source);
-		OpenAL3DAudio.checkOpenALError();
 	}
 
-	@Override
-	public void dispose() {
-		ALC10.alcMakeContextCurrent(0);
-		ALC10.alcDestroyContext(this.context3D);
-		ALC10.alcCloseDevice(this.device);
+	public void set3DContext() {
+		alcMakeContextCurrent(this.context3D);
 	}
 
 	@Override
 	public void update() {
+		Set<OpenAL3DSource> toRemove = new HashSet<>();
+		for (OpenAL3DSource src : this.sourcePool) {
+			if (src.isDisposed()) {
+				toRemove.add(src);
+				continue;
+			}
+			src.update();
+		}
+		this.sourcePool.removeAll(toRemove);
 	}
 
 	public void checkALCError() throws OpenALException {
-		final int err = ALC10.alcGetError(this.device);
-		if (err != ALC10.ALC_NO_ERROR) {
-			throw new RuntimeException(AL10.alGetString(err));
+		final int err = alcGetError(this.device);
+		if (err != ALC_NO_ERROR) {
+			throw new RuntimeException(alGetString(err));
 		}
 	}
 
+	@Override
+	public void dispose() {
+		for (OpenAL3DSource src : this.sourcePool) {
+			src.dispose();
+		}
+		alcMakeContextCurrent(0);
+		alcDestroyContext(this.context3D);
+		alcCloseDevice(this.device);
+	}
+
 	public static void checkOpenALError() throws OpenALException {
-		final int err = AL10.alGetError();
-		if (err != AL10.AL_NO_ERROR) {
+		final int err = alGetError();
+		if (err != AL_NO_ERROR) {
 			throw new OpenALException(err);
 		}
 	}
