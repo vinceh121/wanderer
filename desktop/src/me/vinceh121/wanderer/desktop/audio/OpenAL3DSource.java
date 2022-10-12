@@ -2,6 +2,8 @@ package me.vinceh121.wanderer.desktop.audio;
 
 import static org.lwjgl.openal.AL10.*;
 
+import org.lwjgl.openal.ALC11;
+
 import com.badlogic.gdx.math.Vector3;
 
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
@@ -9,10 +11,13 @@ import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 public class OpenAL3DSource implements SoundEmitter3D {
 	private final OpenAL3DAudio audio;
 	private final int source;
+	private final long context;
 	private boolean disposeOnStop, disposed;
 
-	public OpenAL3DSource(final OpenAL3DAudio audio) throws OpenALException {
+	public OpenAL3DSource(final OpenAL3DAudio audio, final long context) throws OpenALException {
 		this.audio = audio;
+		this.context = context;
+		ALC11.alcMakeContextCurrent(context);
 		this.source = alGenSources();
 		this.audio.registerSource(this);
 	}

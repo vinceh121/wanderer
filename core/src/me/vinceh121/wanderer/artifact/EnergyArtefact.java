@@ -20,7 +20,9 @@ public class EnergyArtefact extends AbstractArtifactEntity {
 	public boolean onPickUp(final Wanderer game, final CharacterW chara) {
 		final Clan c = game.getClanForMember(chara);
 		if (c != null) {
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound3D.class).play();
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound3D.class)
+				.playGeneral()
+				.setDisposeOnStop(true);
 			// TODO find proper value
 			c.setEnergy(Math.min(c.getEnergy() + 10, c.getMaxEnergy()));
 			return true;

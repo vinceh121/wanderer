@@ -14,7 +14,9 @@ public class BackpackArtifact extends AbstractArtifactEntity {
 
 	@Override
 	public boolean onPickUp(final Wanderer game, final CharacterW chara) {
-		WandererConstants.ASSET_MANAGER.get("orig/feedback/backpack_active.wav", Sound3D.class).play();
+		WandererConstants.ASSET_MANAGER.get("orig/feedback/backpack_active.wav", Sound3D.class)
+			.playGeneral()
+			.setDisposeOnStop(true);
 		game.showMessage("Backpack activated!");
 		// TODO enable backpack for player
 		return true;

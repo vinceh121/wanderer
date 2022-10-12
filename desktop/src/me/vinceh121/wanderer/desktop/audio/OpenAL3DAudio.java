@@ -36,7 +36,7 @@ import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
 public class OpenAL3DAudio implements Lwjgl3Audio, AudioSystem3D {
 	private static final Map<String, AudioLoader> AUDIO_LOADERS = new HashMap<>();
-	private final long device, context3D;
+	private final long device, context3D, contextGeneral;
 	private final Set<Integer> bufferPool = new HashSet<>();
 	private final Set<OpenAL3DSource> sourcePool = new HashSet<>();
 
@@ -57,6 +57,11 @@ public class OpenAL3DAudio implements Lwjgl3Audio, AudioSystem3D {
 		}
 		AL.createCapabilities(alcCap);
 
+		this.contextGeneral = alcCreateContext(this.device, (IntBuffer) null);
+		if (this.contextGeneral == 0) {
+			throw new IllegalStateException("alcCreateContext failed");
+		}
+
 		OpenAL3DAudio.checkOpenALError();
 		this.checkALCError();
 
@@ -70,6 +75,7 @@ public class OpenAL3DAudio implements Lwjgl3Audio, AudioSystem3D {
 
 	@Override
 	public void setListenerPosition(final Vector3 pos) {
+		this.set3DContext();
 		alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
 	}
 
@@ -78,17 +84,20 @@ public class OpenAL3DAudio implements Lwjgl3Audio, AudioSystem3D {
 		final float[] x = new float[1];
 		final float[] y = new float[1];
 		final float[] z = new float[1];
+		this.set3DContext();
 		alGetListener3f(AL_POSITION, x, y, z);
 		return new Vector3(x[0], y[0], z[0]);
 	}
 
 	@Override
 	public void setListenerVelocity(final Vector3 vel) {
+		this.set3DContext();
 		alListener3f(AL_VELOCITY, vel.x, vel.y, vel.z);
 	}
 
 	@Override
 	public void setListenerOrientation(final Vector3 at, final Vector3 up) {
+		this.set3DContext();
 		alListenerfv(AL_ORIENTATION, new float[] { at.x, at.y, at.z, up.x, up.y, up.z });
 	}
 
@@ -164,6 +173,18 @@ public class OpenAL3DAudio implements Lwjgl3Audio, AudioSystem3D {
 
 	public void set3DContext() {
 		alcMakeContextCurrent(this.context3D);
+	}
+
+	public void setGeneralContext() {
+		alcMakeContextCurrent(this.contextGeneral);
+	}
+
+	public long getContext3D() {
+		return context3D;
+	}
+
+	public long getContextGeneral() {
+		return contextGeneral;
 	}
 
 	@Override

@@ -7,10 +7,12 @@ public interface Sound3D extends Sound {
 
 	boolean isDisposed();
 
-	SoundEmitter3D playSource(final float volume, final Vector3 position);
+	SoundEmitter3D playSource3D(final float volume, final Vector3 position);
 
-	SoundEmitter3D playSource(final float volume);
+	SoundEmitter3D playSource3D(final float volume);
 
-	SoundEmitter3D playSource();
+	SoundEmitter3D playSource3D();
+
+	SoundEmitter3D playGeneral();
 
 }

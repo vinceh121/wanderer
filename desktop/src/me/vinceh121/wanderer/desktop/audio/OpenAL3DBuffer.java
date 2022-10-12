@@ -32,12 +32,12 @@ public class OpenAL3DBuffer implements Sound3D {
 
 	@Override
 	public long play() {
-		return this.playSource(1, this.audio.getListenerPosition()).getId();
+		return this.playSource3D(1, this.audio.getListenerPosition()).getId();
 	}
 
 	@Override
 	public long play(final float volume) {
-		return this.playSource(volume).getId();
+		return this.playSource3D(volume).getId();
 	}
 
 	@Override
@@ -45,10 +45,9 @@ public class OpenAL3DBuffer implements Sound3D {
 		throw new UnsupportedOperationException("OpenAL3DBuffer#play(volume, pitch, pan) is not implemented");
 	}
 
-	@Override
-	public SoundEmitter3D playSource() {
+	public SoundEmitter3D playSource(long context) {
 		try {
-			OpenAL3DSource src = new OpenAL3DSource(this.audio);
+			OpenAL3DSource src = new OpenAL3DSource(this.audio, context);
 			src.setBuffer(this.buffer);
 			src.play();
 			OpenAL3DAudio.runtimeCheckOpenAlError();
@@ -59,16 +58,26 @@ public class OpenAL3DBuffer implements Sound3D {
 	}
 
 	@Override
-	public SoundEmitter3D playSource(final float volume) {
-		SoundEmitter3D src = this.playSource();
+	public SoundEmitter3D playGeneral() {
+		return this.playSource(this.audio.getContextGeneral());
+	}
+
+	@Override
+	public SoundEmitter3D playSource3D() {
+		return this.playSource(this.audio.getContext3D());
+	}
+
+	@Override
+	public SoundEmitter3D playSource3D(final float volume) {
+		SoundEmitter3D src = this.playSource3D();
 		src.setGain(volume);
 		OpenAL3DAudio.runtimeCheckOpenAlError();
 		return src;
 	}
 
 	@Override
-	public SoundEmitter3D playSource(final float volume, final Vector3 position) {
-		SoundEmitter3D src = this.playSource(volume);
+	public SoundEmitter3D playSource3D(final float volume, final Vector3 position) {
+		SoundEmitter3D src = this.playSource3D(volume);
 		src.setPosition(position);
 		OpenAL3DAudio.runtimeCheckOpenAlError();
 		return src;
