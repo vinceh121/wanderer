@@ -32,7 +32,8 @@ public class DebugOverlay extends Table {
 		this.lblEntities.setText("Entities: " + this.game.getEntities().size);
 		if (this.game.getControlledEntity() instanceof AbstractEntity) {// doubles as null-check
 			this.lblCoords.setText("Coords (controlled): "
-					+ ((AbstractEntity) this.game.getControlledEntity()).getTransform().getTranslation(new Vector3()));
+					+ ((AbstractEntity) this.game.getControlledEntity()).getTransform().getTranslation(new Vector3())
+					+ "\nCoords (camera): " + this.game.getCamera().position);
 		} else {
 			this.lblCoords.setText("Coords (camera): " + this.game.getCamera().position);
 		}
