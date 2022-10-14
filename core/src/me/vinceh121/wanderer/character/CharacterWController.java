@@ -103,8 +103,8 @@ public class CharacterWController extends CustomActionInterface {
 			this.stepDown();
 		} else {
 			final Vector3 origPos = this.getTranslation();
-			this.stepUp();
 			this.stepForward();
+			this.stepUp();
 			this.stepDown();
 			if (!this.isTouchingSomething()) {
 				this.setWorldTransform(this.getWorldTransform().setTranslation(origPos));
@@ -200,7 +200,7 @@ public class CharacterWController extends CustomActionInterface {
 					&& this.validInteract(this.ghostObj, cb.getHitCollisionObject())) {
 				break;
 			} else {
-//				downTarget.sub(new Vector3(0, fallSpeed, 0));
+				downTarget.sub(new Vector3(0, fallSpeed, 0));
 				continue;
 			}
 		}
@@ -235,8 +235,8 @@ public class CharacterWController extends CustomActionInterface {
 		this.getWorldTransform().getTranslation(target);
 		target.add(this.walkDirection);
 
-		final Matrix4 start = new Matrix4();
-		final Matrix4 end = new Matrix4();
+		final Matrix4 start = this.getWorldTransform().cpy();
+		final Matrix4 end = this.getWorldTransform().cpy();
 
 		int maxIter = 10;
 
@@ -245,18 +245,16 @@ public class CharacterWController extends CustomActionInterface {
 			end.setTranslation(target);
 
 			final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
-					new Vector3(),
-					new Vector3());
+					start.getTranslation(new Vector3()),
+					end.getTranslation(new Vector3()));
 			cb.setCollisionFilterGroup(this.ghostObj.getBroadphaseHandle().getCollisionFilterGroup());
 			cb.setCollisionFilterMask(this.ghostObj.getBroadphaseHandle().getCollisionFilterMask());
 
-			if (!start.equals(end)) {
-				this.ghostObj.convexSweepTest((btConvexShape) this.ghostObj.getCollisionShape(),
-						start,
-						end,
-						cb,
-						this.getCCDPenetration());
-			}
+			this.ghostObj.convexSweepTest((btConvexShape) this.ghostObj.getCollisionShape(),
+					start,
+					end,
+					cb,
+					this.getCCDPenetration());
 
 			fraction -= cb.getClosestHitFraction();
 
@@ -267,7 +265,8 @@ public class CharacterWController extends CustomActionInterface {
 				final Vector3 direction = new Vector3(target).sub(this.getTranslation());
 				final float dist = direction.len();
 
-				target.set(this.getTranslation());
+				final Vector3 newPos = this.getTranslation().cpy().lerp(target, fraction);
+				this.setWorldTransform(this.getWorldTransform().setTranslation(newPos));
 
 				if (dist > 0.1f) {
 					direction.nor();
@@ -286,22 +285,22 @@ public class CharacterWController extends CustomActionInterface {
 	}
 
 	private void stepUp() {
-		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
-				new Vector3(),
-				new Vector3());
-		cb.setCollisionFilterGroup(this.ghostObj.getBroadphaseHandle().getCollisionFilterGroup());
-		cb.setCollisionFilterMask(this.ghostObj.getBroadphaseHandle().getCollisionFilterMask());
-
-		final Vector3 up = new Vector3(0, 0, this.stepHeight + 1);
+		final Vector3 up = new Vector3(0, this.stepHeight + 1, 0);
 
 		final Matrix4 end = this.getWorldTransform().cpy();
 		end.setTranslation(end.getTranslation(new Vector3()).add(up));
+
+		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
+				this.getTranslation(),
+				end.getTranslation(new Vector3()));
+		cb.setCollisionFilterGroup(this.ghostObj.getBroadphaseHandle().getCollisionFilterGroup());
+		cb.setCollisionFilterMask(this.ghostObj.getBroadphaseHandle().getCollisionFilterMask());
 
 		this.ghostObj.convexSweepTest((btConvexShape) this.ghostObj.getCollisionShape(),
 				this.getWorldTransform(),
 				end,
 				cb,
-				this.jumpProgress);
+				this.getCCDPenetration());
 
 		if (cb.hasHit() && this.ghostObj.hasContactResponse()
 				&& this.validInteract(this.ghostObj, cb.getHitCollisionObject())) {

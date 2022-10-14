@@ -15,7 +15,7 @@ public class CharacterMeta implements IMeta {
 	private String[] steps, stepsSide;
 	private boolean storyMode;
 	private Vector3 capsuleOffset = new Vector3(0, 0.8f, 0);
-	private float capsuleRadius = 0.3f, capsuleHeight = 1.5f;
+	private float capsuleRadius = 0.5f, capsuleHeight = 1.5f;
 
 	/**
 	 * @return the model
