@@ -180,11 +180,11 @@ public class OpenAL3DAudio implements Lwjgl3Audio, AudioSystem3D {
 	}
 
 	public long getContext3D() {
-		return context3D;
+		return this.context3D;
 	}
 
 	public long getContextGeneral() {
-		return contextGeneral;
+		return this.contextGeneral;
 	}
 
 	@Override

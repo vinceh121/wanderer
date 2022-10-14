@@ -17,13 +17,16 @@ public class OpenAL3DSource implements SoundEmitter3D {
 	public OpenAL3DSource(final OpenAL3DAudio audio, final long context) throws OpenALException {
 		this.audio = audio;
 		this.context = context;
-		ALC11.alcMakeContextCurrent(context);
+		OpenAL3DAudio.checkOpenALError();
+		setContext();
 		this.source = alGenSources();
 		this.audio.registerSource(this);
+		OpenAL3DAudio.checkOpenALError();
 	}
 
 	@Override
 	public Vector3 getPosition() {
+		setContext();
 		final float[] x = new float[1];
 		final float[] y = new float[1];
 		final float[] z = new float[1];
@@ -33,11 +36,13 @@ public class OpenAL3DSource implements SoundEmitter3D {
 
 	@Override
 	public void setPosition(final Vector3 pos) {
+		setContext();
 		alSource3f(this.source, AL_POSITION, pos.x, pos.y, pos.z);
 	}
 
 	@Override
 	public Vector3 getVelocity() {
+		setContext();
 		final float[] x = new float[1];
 		final float[] y = new float[1];
 		final float[] z = new float[1];
@@ -47,41 +52,49 @@ public class OpenAL3DSource implements SoundEmitter3D {
 
 	@Override
 	public void setVelocity(final Vector3 vel) {
+		setContext();
 		alSource3f(this.source, AL_VELOCITY, vel.x, vel.y, vel.z);
 	}
 
 	@Override
 	public boolean isLooping() {
+		setContext();
 		return alGetSourcei(this.source, AL_LOOPING) == AL_TRUE;
 	}
 
 	@Override
 	public void setLooping(final boolean loop) {
+		setContext();
 		alSourcei(this.source, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
 	}
 
 	@Override
 	public float getGain() {
+		setContext();
 		return alGetSourcef(this.source, AL_GAIN);
 	}
 
 	@Override
 	public void setGain(final float gain) {
+		setContext();
 		alSourcef(this.source, AL_GAIN, gain);
 	}
 
 	@Override
 	public int getBuffer() {
+		setContext();
 		return alGetSourcei(this.source, AL_BUFFER);
 	}
 
 	@Override
 	public void setBuffer(int buffer) {
+		setContext();
 		alSourcei(this.source, AL_BUFFER, buffer);
 	}
 
 	@Override
 	public float[] getOrientation() {
+		setContext();
 		final float[] orientation = new float[6];
 		alGetSourcefv(this.source, AL_VELOCITY, orientation);
 		return orientation;
@@ -89,41 +102,49 @@ public class OpenAL3DSource implements SoundEmitter3D {
 
 	@Override
 	public void setOrientation(final Vector3 at, final Vector3 up) {
+		setContext();
 		alSourcefv(this.source, AL_ORIENTATION, new float[] { at.x, at.y, at.z, up.x, up.y, up.z });
 	}
 
 	@Override
 	public boolean isPlaying() {
+		setContext();
 		return alGetSourcei(this.source, AL_SOURCE_STATE) == AL_PLAYING;
 	}
 
 	@Override
 	public boolean isStopped() {
+		setContext();
 		return alGetSourcei(this.source, AL_SOURCE_STATE) == AL_STOPPED;
 	}
 
 	@Override
 	public boolean isPaused() {
+		setContext();
 		return alGetSourcei(this.source, AL_SOURCE_STATE) == AL_PAUSED;
 	}
 
 	@Override
 	public void play() {
+		setContext();
 		alSourcePlay(this.source);
 	}
 
 	@Override
 	public void pause() {
+		setContext();
 		alSourcePause(this.source);
 	}
 
 	@Override
 	public void stop() {
+		setContext();
 		alSourceStop(this.source);
 	}
 
 	@Override
 	public void rewind() {
+		setContext();
 		alSourceRewind(this.source);
 	}
 
@@ -150,12 +171,24 @@ public class OpenAL3DSource implements SoundEmitter3D {
 	}
 
 	@Override
+	protected void finalize() throws Throwable {
+		System.err.println("Garbaging " + this.source);
+		this.dispose();
+	}
+
+	private void setContext() {
+		ALC11.alcMakeContextCurrent(this.context);
+	}
+
+	@Override
 	public void dispose() {
 		try {
 			if (this.disposed) {
 				return;
 			}
+			setContext();
 			this.disposed = true;
+			this.stop();
 			this.setBuffer(0);
 			alDeleteSources(this.source);
 			OpenAL3DAudio.checkOpenALError();

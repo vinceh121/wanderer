@@ -64,7 +64,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	private void onFall(final boolean bigJump) {
-		WandererConstants.ASSET_MANAGER.get(this.meta.getFallSound(), Sound3D.class).play();
+		WandererConstants.ASSET_MANAGER.get(this.meta.getFallSound(), Sound3D.class).playSource3D();
 	}
 
 	@Override
@@ -261,13 +261,13 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		final AbstractBuildingMeta build = (AbstractBuildingMeta) arti;
 		if (this.getClan().getEnergy() < build.getEnergyRequired()) {
 			this.game.showMessage("Not enough energy!");
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class).play();
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class).playGeneral();
 			return;
 		}
 		final Array<Slot> free = this.attachedIsland.getFreeSlots(build.getSlotType());
 		if (free.size == 0) {
 			this.game.showMessage("No free slot!");
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound3D.class).play();
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound3D.class).playGeneral();
 			return;
 		}
 		CharacterW.this.placing = build;

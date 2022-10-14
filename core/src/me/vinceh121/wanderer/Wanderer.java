@@ -335,7 +335,7 @@ public class Wanderer extends ApplicationAdapter {
 		}
 		this.interactingBuilding = building;
 		this.showMessage("Control " + building.getName());
-		WandererConstants.ASSET_MANAGER.get("orig/feedback/use_ok.wav", Sound3D.class).play();
+		WandererConstants.ASSET_MANAGER.get("orig/feedback/use_ok.wav", Sound3D.class).playGeneral();
 	}
 
 	public void removeInteractBuilding() {

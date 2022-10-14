@@ -19,11 +19,11 @@ public class BuildingArtifactEntity extends AbstractArtifactEntity {
 	@Override
 	public boolean onPickUp(final Wanderer game, final CharacterW chara) {
 		if (chara.canPickUpArtifact()) {
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound3D.class).play();
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound3D.class).playSource3D();
 			chara.pickUpArtifact(this.getMeta());
 			return true;
 		} else {
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/beltfull.wav", Sound3D.class).play();
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/beltfull.wav", Sound3D.class).playGeneral();
 			game.showMessage("Belt full!");
 			return false;
 		}
