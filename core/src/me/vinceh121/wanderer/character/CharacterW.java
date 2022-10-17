@@ -116,9 +116,12 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 			final float invertCameraHeight = 1f - this.cameraHeight;
 
-			cam.position.set(characterRotation
+			final Vector3 pos = new Vector3(characterRotation
 				.transform(new Vector3(0, 5f * this.cameraHeight, -0.1f + -4f * invertCameraHeight))
 				.add(characterTransform));
+			pos.lerp(cam.position, 0.6f);
+			cam.position.set(pos);
+
 			cam.lookAt(new Vector3(0, 5 * invertCameraHeight, 5 * this.cameraHeight).rot(this.getTransform())
 				.add(characterTransform));
 			cam.up.set(0, 1, 0); // should this be doable without this?
@@ -213,7 +216,8 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 			@Override
 			public boolean mouseMoved(final int x, final int y) {
-				final float lookSensY = Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay").getFloat("lookSensitivityY", 0.005f);
+				final float lookSensY = Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay")
+					.getFloat("lookSensitivityY", 0.005f);
 				cameraHeight = MathUtils.clamp(cameraHeight + lookSensY * y, 0, 1);
 
 				if (!CharacterW.this.controller.canJump()) {
