@@ -100,8 +100,12 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 				this.placing = null;
 				return;
 			}
-			cam.position.set(this.attachedIsland.getPlaceCameraPosition())
+
+			final Vector3 pos = new Vector3(this.attachedIsland.getPlaceCameraPosition())
 				.add(this.attachedIsland.getTransform().getTranslation(new Vector3()));
+			pos.lerp(cam.position, 0.9f);
+			cam.position.set(pos);
+
 			if (this.attachedIsland.getPlaceCameraDirection().equals(Vector3.Zero)) {
 				cam.lookAt(this.attachedIsland.getTransform().getTranslation(new Vector3()));
 			} else {
