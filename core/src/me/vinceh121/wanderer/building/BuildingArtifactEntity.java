@@ -19,7 +19,9 @@ public class BuildingArtifactEntity extends AbstractArtifactEntity {
 	@Override
 	public boolean onPickUp(final Wanderer game, final CharacterW chara) {
 		if (chara.canPickUpArtifact()) {
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound3D.class).playSource3D();
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound3D.class)
+				.playSource3D()
+				.setPosition(WandererConstants.AUDIO.getListenerPosition());
 			chara.pickUpArtifact(this.getMeta());
 			return true;
 		} else {
