@@ -241,7 +241,6 @@ public class CharacterWController extends CustomActionInterface {
 		int maxIter = 10;
 
 		while (fraction > 0.01f && maxIter-- > 0) {
-			start.set(this.getWorldTransform());
 			end.setTranslation(target);
 
 			final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
@@ -265,6 +264,10 @@ public class CharacterWController extends CustomActionInterface {
 				final Vector3 direction = new Vector3(target).sub(this.getTranslation());
 				final float dist = direction.len();
 
+				if (fraction < 0) {
+					fraction = 1;
+				}
+
 				final Vector3 newPos = this.getTranslation().cpy().lerp(target, fraction);
 				this.setWorldTransform(this.getWorldTransform().setTranslation(newPos));
 
@@ -280,6 +283,7 @@ public class CharacterWController extends CustomActionInterface {
 			} else {
 				cb.dispose();
 				this.setWorldTransform(this.getWorldTransform().setTranslation(target));
+				break;
 			}
 		}
 	}
