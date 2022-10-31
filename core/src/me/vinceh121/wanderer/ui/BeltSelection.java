@@ -40,7 +40,7 @@ public class BeltSelection extends WandererWidget {
 
 		// left hand side
 		final Vector3 scale = new Vector3(1.5f, 1.5f, 1.5f);
-		for (int i = this.index - 1; i >= 0; i--) {
+		for (int i = this.index; i >= 0; i--) {
 			final ArtifactMeta artifact = this.belt.get(i);
 
 			final DisplayModel m = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
