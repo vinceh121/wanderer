@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -11,12 +12,14 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.animation.TransformAnimation;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
 import me.vinceh121.wanderer.entity.DisplayModel;
 
 public class BeltSelection extends WandererWidget {
 	private final Array<ArtifactMeta> belt;
 	private final Quaternion rotation = new Quaternion();
+	private final Matrix4[] previousTransforms;
 	private float angle;
 	private int index;
 
@@ -24,6 +27,10 @@ public class BeltSelection extends WandererWidget {
 		super(game);
 		Objects.nonNull(belt);
 		this.belt = belt;
+		this.previousTransforms = new Matrix4[this.belt.size];
+		for (int i = 0; i < this.previousTransforms.length; i++) {
+			this.previousTransforms[i] = new Matrix4();
+		}
 	}
 
 	@Override
@@ -46,9 +53,14 @@ public class BeltSelection extends WandererWidget {
 
 			final int artefactWidth = this.getModelWidthOrDefault(m);
 
-			m.setAbsoluteTransform(new Matrix4(new Vector3(this.getWidth() / 2 - artefactWidth / 2 - artefactWidth * (i+1),
-					this.getHeight() / 2,
-					-32), this.rotation, scale));
+			final Matrix4 trans = new Matrix4(
+					new Vector3(this.getWidth() / 2 - artefactWidth / 2 - artefactWidth * (i + 1),
+							this.getHeight() / 2,
+							-32),
+					this.rotation,
+					scale);
+
+			this.setModelTransform(i, trans, m);
 
 			m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
 			m.render(this.game.getGraphicsManager().getModelBatch(), this.game.getGraphicsManager().getEnv());
@@ -65,10 +77,12 @@ public class BeltSelection extends WandererWidget {
 
 			final int artefactWidth = this.getModelWidthOrDefault(m);
 
-			m.setAbsoluteTransform(
-					new Matrix4(new Vector3(this.getWidth() / 2 - artefactWidth / 2, this.getHeight() / 2, -32),
-							this.rotation,
-							new Vector3(2.5f, 2.5f, 2.5f)));
+			final Matrix4 trans = new Matrix4(
+					new Vector3(this.getWidth() / 2 - artefactWidth / 2, this.getHeight() / 2, -32),
+					this.rotation,
+					new Vector3(2.5f, 2.5f, 2.5f));
+
+			this.setModelTransform(this.index, trans, m);
 
 			m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
 			m.render(this.game.getGraphicsManager().getModelBatch(), this.game.getGraphicsManager().getEnv());
@@ -83,13 +97,14 @@ public class BeltSelection extends WandererWidget {
 
 			final int artefactWidth = this.getModelWidthOrDefault(m);
 
-			m.setAbsoluteTransform(
-					new Matrix4(
-							new Vector3(this.getWidth() / 2 + artefactWidth / 2 + artefactWidth * (i - this.index - 1),
-									this.getHeight() / 2,
-									-32),
-							this.rotation,
-							scale));
+			final Matrix4 trans = new Matrix4(
+					new Vector3(this.getWidth() / 2 + artefactWidth / 2 + artefactWidth * (i - this.index - 1),
+							this.getHeight() / 2,
+							-32),
+					this.rotation,
+					scale);
+
+			this.setModelTransform(i, trans, m);
 
 			m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
 			m.render(this.game.getGraphicsManager().getModelBatch(), this.game.getGraphicsManager().getEnv());
@@ -97,6 +112,12 @@ public class BeltSelection extends WandererWidget {
 				scale.scl(0.9f);
 			}
 		}
+	}
+
+	private void setModelTransform(int i, Matrix4 trans, DisplayModel m) {
+		m.setAbsoluteTransform(
+				TransformAnimation.interpolate(trans, this.previousTransforms[i], 0.8f, Interpolation.sine));
+		this.previousTransforms[i].set(m.getAbsoluteTransform());
 	}
 
 	private int getModelWidthOrDefault(final DisplayModel m) {

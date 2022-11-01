@@ -158,7 +158,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		final LighthouseMeta lighthouseArtifactMeta = MetaRegistry.getInstance().get("j_lighthouse01");
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 5; i++) {
 			final AbstractArtifactEntity artifactEntity = new BuildingArtifactEntity(this, lighthouseArtifactMeta);
 			artifactEntity.setTranslation(5, 34, 10);
 			this.addEntity(artifactEntity);
@@ -204,6 +204,7 @@ public class Wanderer extends ApplicationAdapter {
 		johnMeta.ensureLoading();
 
 		final CharacterW john = new CharacterW(this, johnMeta);
+		john.setBeltSize(5);
 		john.setTranslation(0.1f, 50f, 0.1f);
 
 		this.itemBar.setCharacter(john);
