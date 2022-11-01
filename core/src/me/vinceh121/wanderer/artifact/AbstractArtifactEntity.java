@@ -94,7 +94,7 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 	public void render(final ModelBatch batch, final Environment env) {
 		super.render(batch, env);
 		if (this.rotate) {
-			this.rotate(Vector3.Y, 3);
+			this.rotate(Vector3.Y, 180f * Gdx.graphics.getDeltaTime());
 		}
 	}
 
