@@ -2,6 +2,7 @@ package me.vinceh121.wanderer.ui;
 
 import java.util.Objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Interpolation;
@@ -41,7 +42,7 @@ public class BeltSelection extends WandererWidget {
 			return;
 		}
 
-		this.angle += 3f;
+		this.angle += 180 * Gdx.graphics.getDeltaTime();
 		this.rotation.setFromAxis(Vector3.Y, this.angle);
 
 		// left hand side

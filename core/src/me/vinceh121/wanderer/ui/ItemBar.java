@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -43,7 +44,7 @@ public class ItemBar extends WandererWidget {
 			return;
 		}
 
-		this.angle += 3f;
+		this.angle += 180 * Gdx.graphics.getDeltaTime();
 		this.rotation.setFromAxis(Vector3.Y, this.angle);
 
 		final int sX = (int) this.getX();
