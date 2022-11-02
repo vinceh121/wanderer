@@ -103,19 +103,19 @@ public class CharacterWController extends CustomActionInterface {
 			this.stepDown();
 		} else {
 			final Vector3 origPos = this.getTranslation();
-			this.stepForward();
 			this.stepUp();
+			this.stepForward(deltaTimeStep);
 			this.stepDown();
 			if (!this.isTouchingSomething()) {
 				this.setWorldTransform(this.getWorldTransform().setTranslation(origPos));
 			}
 		}
 
-		for (int i = 0; i < 4; i++) {
-			if (!this.recoverFromPenetration()) {
-				break;
-			}
-		}
+//		for (int i = 0; i < 4; i++) {
+//			if (!this.recoverFromPenetration()) {
+//				break;
+//			}
+//		}
 	}
 
 	private void stepJump(final float delta) {
@@ -137,10 +137,6 @@ public class CharacterWController extends CustomActionInterface {
 				cb,
 				this.getCCDPenetration());
 		if (cb.hasHit()) {
-			final Vector3 hitPointWorld = new Vector3();
-			cb.getHitPointWorld(hitPointWorld);
-
-//			float frac = (origPosition.y - hitPointWorld.y) / 2;
 			final Vector3 newPosition = origPosition.cpy();
 			newPosition.lerp(end.getTranslation(new Vector3()), cb.getClosestHitFraction());
 
@@ -171,6 +167,8 @@ public class CharacterWController extends CustomActionInterface {
 	}
 
 	private void stepDown() {
+		final int maxIter = 10;
+
 		final Matrix4 start = new Matrix4();
 		final Matrix4 end = new Matrix4();
 		final Vector3 origPosition = this.getTranslation();
@@ -182,8 +180,7 @@ public class CharacterWController extends CustomActionInterface {
 				this.getTranslation().add(downTarget));
 		cb.setCollisionFilterGroup(this.ghostObj.getBroadphaseHandle().getCollisionFilterGroup());
 		cb.setCollisionFilterMask(this.ghostObj.getBroadphaseHandle().getCollisionFilterMask());
-		for (int maxIter = 0; maxIter < 1; maxIter++) {
-
+		for (int iter = 0; iter < maxIter; iter++) {
 			start.idt();
 			end.idt();
 
@@ -206,7 +203,8 @@ public class CharacterWController extends CustomActionInterface {
 		}
 
 		if (!cb.hasHit()) {
-			this.setWorldTransform(this.getWorldTransform().setTranslation(this.getTranslation().add(downTarget)));
+			this.setWorldTransform(this.getWorldTransform()
+				.setTranslation(this.getTranslation().add(new Vector3(0, -1, 0).scl(this.fallSpeed))));
 			this.falling = true;
 			cb.dispose();
 			return;
@@ -214,10 +212,6 @@ public class CharacterWController extends CustomActionInterface {
 		final Vector3 hitPointWorld = new Vector3();
 		cb.getHitPointWorld(hitPointWorld);
 
-		final float frac = (origPosition.y - hitPointWorld.y) / 2;
-		if (Float.isNaN(frac)) {
-			throw new RuntimeException("NaNaNaNaNaNaNaNaNaNaN BATMAAAAAAAAN");
-		}
 		final Vector3 newPosition = origPosition.cpy();
 		newPosition.lerp(downTarget.add(this.getTranslation()), cb.getClosestHitFraction());
 
@@ -228,12 +222,12 @@ public class CharacterWController extends CustomActionInterface {
 		this.falling = false;
 	}
 
-	private void stepForward() {
+	private void stepForward(final float delta) {
 		float fraction = 1;
 
 		final Vector3 target = new Vector3();
 		this.getWorldTransform().getTranslation(target);
-		target.add(this.walkDirection);
+		target.add(this.walkDirection.cpy().scl(delta / (1f / 60f)));
 
 		final Matrix4 start = this.getWorldTransform().cpy();
 		final Matrix4 end = this.getWorldTransform().cpy();
@@ -259,17 +253,24 @@ public class CharacterWController extends CustomActionInterface {
 
 			if (cb.hasHit() && this.ghostObj.hasContactResponse()
 					&& this.validInteract(this.ghostObj, cb.getHitCollisionObject())) {
+				final Vector3 hitNormal = new Vector3();
+				cb.getHitNormalWorld(hitNormal);
 				cb.dispose();
 
 				final Vector3 direction = new Vector3(target).sub(this.getTranslation());
 				final float dist = direction.len();
 
-				if (fraction < 0) {
-					fraction = 1;
+				if (dist >= 0) {
+					direction.nor();
+					final Vector3 reflectDir = direction.cpy()
+						.sub(hitNormal.cpy().scl(direction.dot(hitNormal) * 2))
+						.nor();
+					final Vector3 perpendicularDir = reflectDir.cpy()
+						.sub(hitNormal.cpy().scl(reflectDir.dot(hitNormal)));
+					final Vector3 perpendicularComponent = reflectDir.cpy().sub(perpendicularDir);
+					this.setWorldTransform(
+							this.getWorldTransform().setTranslation(getTranslation().add(perpendicularComponent)));
 				}
-
-				final Vector3 newPos = this.getTranslation().cpy().lerp(target, fraction);
-				this.setWorldTransform(this.getWorldTransform().setTranslation(newPos));
 
 				if (dist > 0.1f) {
 					direction.nor();
@@ -292,7 +293,8 @@ public class CharacterWController extends CustomActionInterface {
 		final Vector3 up = new Vector3(0, this.stepHeight + 1, 0);
 
 		final Matrix4 end = this.getWorldTransform().cpy();
-		end.setTranslation(end.getTranslation(new Vector3()).add(up));
+		final Vector3 target = end.getTranslation(new Vector3()).add(up);
+		end.setTranslation(target);
 
 		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
 				this.getTranslation(),
@@ -313,9 +315,11 @@ public class CharacterWController extends CustomActionInterface {
 			if (norm.dot(Vector3.Z) > 0) {
 				final Vector3 newPos = new Vector3();
 				this.getWorldTransform().getTranslation(newPos);
-				newPos.add(up.cpy().scl(cb.getClosestHitFraction()));
+				newPos.lerp(newPos, cb.getClosestHitFraction());
 				this.ghostObj.setWorldTransform(this.ghostObj.getWorldTransform().setTranslation(newPos));
 			}
+		} else {
+			this.setWorldTransform(end);
 		}
 		cb.dispose();
 	}
