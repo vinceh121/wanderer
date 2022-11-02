@@ -312,6 +312,9 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	}
 
 	public void openBelt() {
+		if (this.belt.size == 0 || this.attachedIsland == null) {
+			return;
+		}
 		this.beltOpen = true;
 		this.beltWidget = new BeltSelection(this.game, this.belt);
 		this.beltWidget.setWidth(Gdx.graphics.getWidth());
