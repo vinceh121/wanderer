@@ -24,14 +24,18 @@ import com.badlogic.gdx.utils.Disposable;
 import me.vinceh121.wanderer.ID;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.event.EventDispatcher;
+import me.vinceh121.wanderer.event.IEventListener;
+import me.vinceh121.wanderer.event.IEventType;
 
 public abstract class AbstractEntity implements Disposable {
 	private final ID id = new ID();
 	protected final Wanderer game;
-	private Matrix4 transform = new Matrix4();
+	protected final EventDispatcher eventDispatcher = new EventDispatcher();
 	private final Vector3 collideObjectOffset = new Vector3();
 	private final Array<DisplayModel> models = new Array<>();
 	private final Array<ParticleEmitter> particles = new Array<>();
+	private Matrix4 transform = new Matrix4();
 	private String collideModel;
 	private btRigidBody collideObject;
 	private float mass;
@@ -362,6 +366,14 @@ public abstract class AbstractEntity implements Disposable {
 
 	public Array<ParticleEmitter> getParticles() {
 		return this.particles;
+	}
+
+	public void addEventListener(IEventType type, IEventListener l) {
+		this.eventDispatcher.addEventListener(type, l);
+	}
+
+	public void removeEventListener(IEventType type, IEventListener l) {
+		this.eventDispatcher.removeEventListener(type, l);
 	}
 
 	public ID getId() {

@@ -20,10 +20,13 @@ import me.vinceh121.wanderer.building.InConstructionBuilding;
 import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.building.PreviewBuilding;
 import me.vinceh121.wanderer.building.Slot;
+import me.vinceh121.wanderer.character.CharacterWController.FallListener;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.event.Event;
+import me.vinceh121.wanderer.event.IEventType;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
@@ -56,15 +59,28 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		this.meta = meta;
 		this.setCollideObjectOffset(meta.getCapsuleOffset());
 		this.controller = new CharacterWController(this.game, this, meta.getCapsuleRadius(), meta.getCapsuleHeight());
-		this.controller.setFallListener(this::onFall);
+		this.controller.setFallListener(new FallListener() {
+
+			@Override
+			public void onStartFall() {
+			}
+
+			@Override
+			public void onJumpEnd(boolean bigJump) {
+				WandererConstants.ASSET_MANAGER.get(meta.getFallSound(), Sound3D.class)
+				.playSource3D()
+				.setPosition(getTransform().getTranslation(new Vector3()));
+				eventDispatcher.dispatchEvent(new Event(EventTypes.JUMP_END));
+			}
+
+			@Override
+			public void onEndFall() {
+			}
+		});
 		this.getGhostObject().setUserIndex(this.getId().getValue());
 		game.getBtWorld().addAction(this.controller);
 
 		this.addModel(new DisplayModel(meta.getModel(), meta.getTexture()));
-	}
-
-	private void onFall(final boolean bigJump) {
-		WandererConstants.ASSET_MANAGER.get(this.meta.getFallSound(), Sound3D.class).playSource3D();
 	}
 
 	@Override
@@ -401,5 +417,9 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 	public void setAttachedIsland(final Island attachedIsland) {
 		this.attachedIsland = attachedIsland;
+	}
+
+	public static enum EventTypes implements IEventType {
+		START_FALL, END_FALL, JUMP_END;
 	}
 }

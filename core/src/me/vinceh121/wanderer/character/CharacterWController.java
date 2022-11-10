@@ -27,7 +27,18 @@ public class CharacterWController extends CustomActionInterface {
 	private boolean jumping, bigJump, falling;
 	private float jumpProgress, stepHeight = 0.5f, fallSpeed = 0.2f;
 	private Bezier<Vector3> jumpCurve;
-	private FallListener fallListener = a -> {
+	private FallListener fallListener = new FallListener() {
+		@Override
+		public void onStartFall() {
+		}
+
+		@Override
+		public void onJumpEnd(boolean bigJump) {
+		}
+
+		@Override
+		public void onEndFall() {
+		}
 	};
 
 	public CharacterWController(final Wanderer game, final CharacterW character, final float capsuleRadius,
@@ -85,7 +96,7 @@ public class CharacterWController extends CustomActionInterface {
 			return;
 		}
 		this.stopJump0();
-		this.fallListener.onFall(this.bigJump);
+		this.fallListener.onJumpEnd(this.bigJump);
 	}
 
 	private void stopJump0() {
@@ -141,7 +152,7 @@ public class CharacterWController extends CustomActionInterface {
 			newPosition.lerp(end.getTranslation(new Vector3()), cb.getClosestHitFraction());
 
 			this.setWorldTransform(this.getWorldTransform().setTranslation(newPosition));
-			this.stopJump0();
+			this.stopJump();
 			this.falling = true;
 		} else {
 			this.setWorldTransform(end);
@@ -503,6 +514,10 @@ public class CharacterWController extends CustomActionInterface {
 	}
 
 	public interface FallListener {
-		void onFall(boolean bigJump);
+		void onStartFall();
+
+		void onEndFall();
+
+		void onJumpEnd(boolean bigJump);
 	}
 }
