@@ -48,6 +48,7 @@ public class Wanderer extends ApplicationAdapter {
 	private final InputManager inputManager = new InputManager();
 	private final PhysicsManager physicsManager = new PhysicsManager();
 	private final GraphicsManager graphicsManager = new GraphicsManager();
+	private final ScriptManager scriptManager = new ScriptManager();
 
 	private Array<AbstractEntity> entities;
 	/**
@@ -213,6 +214,10 @@ public class Wanderer extends ApplicationAdapter {
 		this.addEntity(john);
 
 		this.controlEntity(john);
+
+		// GAMEPLAY SCRIPTS
+
+		this.scriptManager.loadChapter(Gdx.files.internal("story/singleplayer.js"), Gdx.files.internal("story/"));
 	}
 
 	@Override
@@ -260,6 +265,8 @@ public class Wanderer extends ApplicationAdapter {
 			this.physicsManager.getBtWorld().debugDrawWorld();
 			this.physicsManager.getDebugDrawer().end();
 		}
+
+		this.scriptManager.update();
 
 		this.graphicsManager.renderUI();
 	}
@@ -362,6 +369,9 @@ public class Wanderer extends ApplicationAdapter {
 
 	@Override
 	public void dispose() {
+		this.scriptManager.dispose();
+		this.graphicsManager.dispose();
+		this.physicsManager.dispose();
 		WandererConstants.ASSET_MANAGER.dispose();
 	}
 
