@@ -13,11 +13,11 @@ import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 public final class JsAudio {
 	private static final Logger LOG = new Logger("JsAudio");
 
-	public static void install(Scriptable scope) {
+	public static void install(final Scriptable scope) {
 		JsUtils.install(scope, "play", JsAudio::play);
 	}
 
-	private static Object play(Context lcx, Scriptable lscope, Scriptable thisObj, Object[] args) {
+	private static Object play(final Context lcx, final Scriptable lscope, final Scriptable thisObj, final Object[] args) {
 		final SoundEmitter3D source;
 		if (args.length == 0) {
 			throw new IllegalArgumentException("Can't invoke play() with no arguments");
@@ -25,7 +25,7 @@ public final class JsAudio {
 			final String file = (String) args[0];
 
 			if (!WandererConstants.ASSET_MANAGER.isLoaded(file)) {
-				LOG.error("Hot-loading sound " + file);
+				JsAudio.LOG.error("Hot-loading sound " + file);
 				WandererConstants.ASSET_MANAGER.load(file, Sound3D.class);
 				WandererConstants.ASSET_MANAGER.finishLoadingAsset(file);
 			}

@@ -9,32 +9,30 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 
 public class TransformAnimation {
-	private final SortedSet<TransformKeyFrame> keys = new TreeSet<>((k1, k2) -> {
-		return Float.compare(k1.getTime(), k2.getTime());
-	});
+	private final SortedSet<TransformKeyFrame> keys = new TreeSet<>((k1, k2) -> Float.compare(k1.getTime(), k2.getTime()));
 	private Interpolation inter;
 
 	public Interpolation getInter() {
-		return inter;
+		return this.inter;
 	}
 
-	public void setInter(Interpolation inter) {
+	public void setInter(final Interpolation inter) {
 		this.inter = inter;
 	}
 
-	public boolean add(TransformKeyFrame e) {
-		return keys.add(e);
+	public boolean add(final TransformKeyFrame e) {
+		return this.keys.add(e);
 	}
 
 	public SortedSet<TransformKeyFrame> getKeys() {
-		return keys;
+		return this.keys;
 	}
 
 	public float getTotalTime() {
 		return this.keys.last().getTime();
 	}
 
-	public Matrix4 valueAt(float time) {
+	public Matrix4 valueAt(final float time) {
 		final TransformKeyFrame first = this.keys.first();
 		if (first.getTime() >= time) {
 			return first.getTransform().cpy();
@@ -46,7 +44,7 @@ public class TransformAnimation {
 
 		TransformKeyFrame prev = first;
 		TransformKeyFrame next = null;
-		for (TransformKeyFrame k : this.keys) {
+		for (final TransformKeyFrame k : this.keys) {
 			if (prev.getTime() < time && k.getTime() > time) {
 				next = k;
 				break;
@@ -57,13 +55,13 @@ public class TransformAnimation {
 			// shouldn't happen
 			throw new IllegalStateException("Couldn't find valid key");
 		}
-		return interpolate(prev.getTransform(),
+		return TransformAnimation.interpolate(prev.getTransform(),
 				next.getTransform(),
 				MathUtils.norm(prev.getTime(), next.getTime(), time),
 				this.inter);
 	}
 
-	public static TransformAnimation distributed(float totalTime, Matrix4... transforms) {
+	public static TransformAnimation distributed(final float totalTime, final Matrix4... transforms) {
 		final TransformAnimation anim = new TransformAnimation();
 		for (int i = 0; i < transforms.length; i++) {
 			final TransformKeyFrame key = new TransformKeyFrame();
@@ -74,9 +72,9 @@ public class TransformAnimation {
 		return anim;
 	}
 
-	public static Matrix4 interpolate(Matrix4 k1, Matrix4 k2, float alpha, Interpolation inter) {
+	public static Matrix4 interpolate(final Matrix4 k1, final Matrix4 k2, final float alpha, final Interpolation inter) {
 		Objects.requireNonNull(inter);
-		float[] arr = new float[16];
+		final float[] arr = new float[16];
 		for (int i = 0; i < 16; i++) {
 			arr[i] = inter.apply(k1.val[i], k2.val[i], alpha);
 		}

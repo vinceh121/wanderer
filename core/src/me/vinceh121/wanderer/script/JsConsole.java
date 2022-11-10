@@ -7,12 +7,12 @@ import org.mozilla.javascript.Undefined;
 
 public class JsConsole {
 	public void install(final Scriptable scope) {
-		Scriptable console = this.buildConsoleObject(scope);
+		final Scriptable console = this.buildConsoleObject(scope);
 		scope.put("console", scope, console);
 	}
 
 	public Scriptable buildConsoleObject(final Scriptable scope) {
-		Scriptable console = new NativeObject();
+		final Scriptable console = new NativeObject();
 
 		JsUtils.install(console, "log", this::log);
 		JsUtils.install(console, "trace", this::trace);
@@ -22,18 +22,18 @@ public class JsConsole {
 		return console;
 	}
 
-	private Object log(Context lcx, Scriptable lscope, Scriptable thisObj, Object[] args) {
+	private Object log(final Context lcx, final Scriptable lscope, final Scriptable thisObj, final Object[] args) {
 		System.out.println(this.buildOutput(args));
 		return Undefined.instance;
 	}
 
-	private Object trace(Context lcx, Scriptable lscope, Scriptable thisObj, Object[] args) {
+	private Object trace(final Context lcx, final Scriptable lscope, final Scriptable thisObj, final Object[] args) {
 		Thread.dumpStack();
 		return Undefined.instance;
 	}
 
-	private String buildOutput(Object[] args) {
-		StringBuilder sb = new StringBuilder();
+	private String buildOutput(final Object[] args) {
+		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < args.length; i++) {
 			sb.append(String.valueOf(args[i]));
 			if (i != args.length - 1) {

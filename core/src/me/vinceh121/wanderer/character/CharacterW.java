@@ -66,11 +66,11 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 			}
 
 			@Override
-			public void onJumpEnd(boolean bigJump) {
+			public void onJumpEnd(final boolean bigJump) {
 				WandererConstants.ASSET_MANAGER.get(meta.getFallSound(), Sound3D.class)
-				.playSource3D()
-				.setPosition(getTransform().getTranslation(new Vector3()));
-				eventDispatcher.dispatchEvent(new Event(EventTypes.JUMP_END));
+					.playSource3D()
+					.setPosition(CharacterW.this.getTransform().getTranslation(new Vector3()));
+				CharacterW.this.eventDispatcher.dispatchEvent(new Event(EventTypes.JUMP_END));
 			}
 
 			@Override
@@ -238,7 +238,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 			public boolean mouseMoved(final int x, final int y) {
 				final float lookSensY = Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay")
 					.getFloat("lookSensitivityY", 0.005f);
-				cameraHeight = MathUtils.clamp(cameraHeight + lookSensY * y, 0, 1);
+				CharacterW.this.cameraHeight = MathUtils.clamp(CharacterW.this.cameraHeight + lookSensY * y, 0, 1);
 
 				if (!CharacterW.this.controller.canJump()) {
 					return false;
@@ -419,7 +419,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		this.attachedIsland = attachedIsland;
 	}
 
-	public static enum EventTypes implements IEventType {
+	public enum EventTypes implements IEventType {
 		START_FALL, END_FALL, JUMP_END;
 	}
 }

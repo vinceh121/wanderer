@@ -13,41 +13,41 @@ public class Part {
 	public Part() {
 	}
 
-	public Part(String title, List<String> objectives) {
+	public Part(final String title, final List<String> objectives) {
 		this.title = title;
 		this.objectives = objectives;
 	}
 
 	public Map<String, Object> getState() {
-		return state;
+		return this.state;
 	}
 
 	public List<String> getObjectives() {
-		return objectives;
+		return this.objectives;
 	}
 
-	public void setObjectives(List<String> objectives) {
+	public void setObjectives(final List<String> objectives) {
 		this.objectives = objectives;
 	}
 
 	public String getTitle() {
-		return title;
+		return this.title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
 	public Runnable getPartStart() {
-		return partStart;
+		return this.partStart;
 	}
 
-	public void setPartStart(Runnable partStart) {
+	public void setPartStart(final Runnable partStart) {
 		this.partStart = partStart;
 	}
 
 	@Override
 	public String toString() {
-		return "Part [objectives=" + objectives + ", title=" + title + "]";
+		return "Part [objectives=" + this.objectives + ", title=" + this.title + "]";
 	}
 }

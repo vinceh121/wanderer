@@ -368,11 +368,11 @@ public abstract class AbstractEntity implements Disposable {
 		return this.particles;
 	}
 
-	public void addEventListener(IEventType type, IEventListener l) {
+	public void addEventListener(final IEventType type, final IEventListener l) {
 		this.eventDispatcher.addEventListener(type, l);
 	}
 
-	public void removeEventListener(IEventType type, IEventListener l) {
+	public void removeEventListener(final IEventType type, final IEventListener l) {
 		this.eventDispatcher.removeEventListener(type, l);
 	}
 

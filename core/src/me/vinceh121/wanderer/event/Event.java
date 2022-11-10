@@ -4,23 +4,23 @@ public class Event {
 	private final IEventType type;
 	private boolean cancelable, cancelled;
 
-	public Event(IEventType type) {
+	public Event(final IEventType type) {
 		this.type = type;
 	}
 
 	public boolean isCancelable() {
-		return cancelable;
+		return this.cancelable;
 	}
 
-	public void setCancelable(boolean cancelable) {
+	public void setCancelable(final boolean cancelable) {
 		this.cancelable = cancelable;
 	}
 
 	public boolean isCancelled() {
-		return cancelled;
+		return this.cancelled;
 	}
 
-	public void setCancelled(boolean cancelled) {
+	public void setCancelled(final boolean cancelled) {
 		if (!this.isCancelable()) {
 			throw new IllegalStateException("Cannot cancel an event that's not cancellable");
 		}
@@ -28,11 +28,11 @@ public class Event {
 	}
 
 	public IEventType getType() {
-		return type;
+		return this.type;
 	}
 
 	@Override
 	public String toString() {
-		return "Event [type=" + type + ", cancelable=" + cancelable + ", cancelled=" + cancelled + "]";
+		return "Event [type=" + this.type + ", cancelable=" + this.cancelable + ", cancelled=" + this.cancelled + "]";
 	}
 }

@@ -8,20 +8,20 @@ public class StoryBook {
 	public StoryBook() {
 	}
 
-	public StoryBook(List<Chapter> chapters) {
+	public StoryBook(final List<Chapter> chapters) {
 		this.chapters = chapters;
 	}
 
 	public List<Chapter> getChapters() {
-		return chapters;
+		return this.chapters;
 	}
 
-	public void setChapters(List<Chapter> chapters) {
+	public void setChapters(final List<Chapter> chapters) {
 		this.chapters = chapters;
 	}
 
 	@Override
 	public String toString() {
-		return "StoryBook [chapters=" + chapters + "]";
+		return "StoryBook [chapters=" + this.chapters + "]";
 	}
 }

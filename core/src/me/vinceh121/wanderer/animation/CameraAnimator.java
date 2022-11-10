@@ -7,33 +7,33 @@ public class CameraAnimator implements ITransformAnimatable {
 	private Camera cam;
 	private boolean ignoreRotation;
 
-	public CameraAnimator(Camera cam) {
+	public CameraAnimator(final Camera cam) {
 		this.cam = cam;
 	}
 
 	@Override
-	public void setWorldTransform(Matrix4 transform) {
+	public void setWorldTransform(final Matrix4 transform) {
 		transform.getTranslation(this.cam.position);
 		if (!this.ignoreRotation) {
-			cam.direction.set(0, 0, -1);
-			cam.up.set(0, 1, 0);
-			cam.rotate(transform);
+			this.cam.direction.set(0, 0, -1);
+			this.cam.up.set(0, 1, 0);
+			this.cam.rotate(transform);
 		}
 	}
 
 	public Camera getCam() {
-		return cam;
+		return this.cam;
 	}
 
-	public void setCam(Camera cam) {
+	public void setCam(final Camera cam) {
 		this.cam = cam;
 	}
 
 	public boolean isIgnoreRotation() {
-		return ignoreRotation;
+		return this.ignoreRotation;
 	}
 
-	public void setIgnoreRotation(boolean ignoreRotation) {
+	public void setIgnoreRotation(final boolean ignoreRotation) {
 		this.ignoreRotation = ignoreRotation;
 	}
 }

@@ -95,7 +95,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 	@Override
 	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
 		final Sound3D snd = WandererConstants.ASSET_MANAGER.get("orig/lib/sound/healingspell.wav", Sound3D.class);
-		this.sound = snd.playSource3D(1, getTransform().getTranslation(new Vector3()));
+		this.sound = snd.playSource3D(1, this.getTransform().getTranslation(new Vector3()));
 		this.sound.setLooping(true);
 	}
 

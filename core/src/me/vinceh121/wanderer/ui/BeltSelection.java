@@ -115,7 +115,7 @@ public class BeltSelection extends WandererWidget {
 		}
 	}
 
-	private void setModelTransform(int i, Matrix4 trans, DisplayModel m) {
+	private void setModelTransform(final int i, final Matrix4 trans, final DisplayModel m) {
 		m.setAbsoluteTransform(
 				TransformAnimation.interpolate(trans, this.previousTransforms[i], 0.8f, Interpolation.sine));
 		this.previousTransforms[i].set(m.getAbsoluteTransform());

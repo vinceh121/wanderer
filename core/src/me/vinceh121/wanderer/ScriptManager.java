@@ -28,17 +28,17 @@ public class ScriptManager {
 		this.ctx.setLanguageVersion(Context.VERSION_ES6);
 	}
 
-	public Scriptable loadChapter(FileHandle src, FileHandle base) {
+	public Scriptable loadChapter(final FileHandle src, final FileHandle base) {
 		return this.loadChapter(FileHandleModuleSourceProvider.fromFileHandle(src),
 				FileHandleModuleSourceProvider.fromFileHandle(base));
 	}
 
-	public Scriptable loadChapter(URI src, URI base) {
+	public Scriptable loadChapter(final URI src, final URI base) {
 		final RequireBuilder reqBuild = new RequireBuilder();
 		reqBuild.setSandboxed(true);
 		reqBuild.setModuleScriptProvider(new SoftCachingModuleScriptProvider(new FileHandleModuleSourceProvider(base)));
-		final ScriptableObject scope = ctx.initSafeStandardObjects();
-		fillStoryScope(scope);
+		final ScriptableObject scope = this.ctx.initSafeStandardObjects();
+		ScriptManager.fillStoryScope(scope);
 		final Require req = reqBuild.createRequire(this.ctx, scope);
 		final Scriptable exports = req.requireMain(this.ctx, src.toString());
 		return exports;
@@ -52,18 +52,18 @@ public class ScriptManager {
 		Context.exit();
 	}
 
-	private static void fillStoryScope(ScriptableObject scope) {
-		fillStoryPartScope(scope);
+	private static void fillStoryScope(final ScriptableObject scope) {
+		ScriptManager.fillStoryPartScope(scope);
 	}
 
-	private static void fillStoryPartScope(ScriptableObject scope) {
+	private static void fillStoryPartScope(final ScriptableObject scope) {
 		new JsConsole().install(scope);
 		// Use a global JsTimers to avoid id-collision as much as possible
 		JsTimers.getInstance().install(scope);
 		JsAudio.install(scope);
 		final Class<?>[] classesToImport = { StoryBook.class, Chapter.class, Part.class };
 
-		for (Class<?> cls : classesToImport) {
+		for (final Class<?> cls : classesToImport) {
 			scope.put(cls.getSimpleName(), scope, new NativeJavaClass(scope, cls));
 		}
 	}

@@ -33,7 +33,7 @@ public class CharacterWController extends CustomActionInterface {
 		}
 
 		@Override
-		public void onJumpEnd(boolean bigJump) {
+		public void onJumpEnd(final boolean bigJump) {
 		}
 
 		@Override
@@ -208,7 +208,7 @@ public class CharacterWController extends CustomActionInterface {
 					&& this.validInteract(this.ghostObj, cb.getHitCollisionObject())) {
 				break;
 			} else {
-				downTarget.sub(new Vector3(0, fallSpeed, 0));
+				downTarget.sub(new Vector3(0, this.fallSpeed, 0));
 				continue;
 			}
 		}
@@ -280,7 +280,7 @@ public class CharacterWController extends CustomActionInterface {
 						.sub(hitNormal.cpy().scl(reflectDir.dot(hitNormal)));
 					final Vector3 perpendicularComponent = reflectDir.cpy().sub(perpendicularDir);
 					this.setWorldTransform(
-							this.getWorldTransform().setTranslation(getTranslation().add(perpendicularComponent)));
+							this.getWorldTransform().setTranslation(this.getTranslation().add(perpendicularComponent)));
 				}
 
 				if (dist > 0.1f) {

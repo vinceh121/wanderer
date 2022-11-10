@@ -27,7 +27,7 @@ public final class WandererConstants {
 	static {
 		WandererJsonModule.registerModules(WandererConstants.MAPPER);
 
-		ASSET_MANAGER.setLoader(Sound3D.class, new Sound3DLoader(ASSET_MANAGER.getFileHandleResolver()));
+		WandererConstants.ASSET_MANAGER.setLoader(Sound3D.class, new Sound3DLoader(WandererConstants.ASSET_MANAGER.getFileHandleResolver()));
 
 		WandererConstants.MIPMAPS.genMipMaps = true;
 

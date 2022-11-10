@@ -177,10 +177,9 @@ public class InputManager extends ApplicationAdapter {
 			public boolean mouseMoved(final int screenX, final int screenY) {
 				final int centerX = Gdx.graphics.getWidth() / 2;
 				final int centerY = Gdx.graphics.getHeight() / 2;
-				
+
 				Gdx.input.setCursorPosition(centerX, centerY);
-				final boolean b = InputManager.this.fireMouseMoved(screenX - centerX,
-						screenY - centerY);
+				final boolean b = InputManager.this.fireMouseMoved(screenX - centerX, screenY - centerY);
 				return b;
 			}
 		});

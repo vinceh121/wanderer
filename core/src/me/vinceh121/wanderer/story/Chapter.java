@@ -8,20 +8,20 @@ public class Chapter {
 	public Chapter() {
 	}
 
-	public Chapter(List<Part> parts) {
+	public Chapter(final List<Part> parts) {
 		this.parts = parts;
 	}
 
 	public List<Part> getParts() {
-		return parts;
+		return this.parts;
 	}
 
-	public void setParts(List<Part> parts) {
+	public void setParts(final List<Part> parts) {
 		this.parts = parts;
 	}
 
 	@Override
 	public String toString() {
-		return "Chapter [parts=" + parts + "]";
+		return "Chapter [parts=" + this.parts + "]";
 	}
 }

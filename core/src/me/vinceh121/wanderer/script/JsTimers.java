@@ -13,12 +13,12 @@ public class JsTimers {
 	private final Map<Integer, Timeout> timeouts = new Hashtable<>();
 	private int nextId;
 
-	public void install(Scriptable scope) {
+	public void install(final Scriptable scope) {
 		JsUtils.install(scope, "setTimeout", this::setTimeout);
 		JsUtils.install(scope, "clearTimeout", this::clearTimeout);
 	}
 
-	private Object setTimeout(Context ctx, Scriptable lscope, Scriptable thisObj, Object[] args) {
+	private Object setTimeout(final Context ctx, final Scriptable lscope, final Scriptable thisObj, final Object[] args) {
 		/// XXX Note: unlike spec-compliant Javascript, the this value is properly kept.
 		final Timeout timeout;
 
@@ -27,7 +27,12 @@ public class JsTimers {
 		} else if (args.length > 2) {
 			final Object[] timeoutArgs = new Object[args.length - 2];
 			System.arraycopy(args, 2, timeoutArgs, 0, args.length - 2);
-			timeout = new Timeout(ctx, lscope, thisObj, (Callable) args[0], ((Number) args[1]).longValue(), timeoutArgs);
+			timeout = new Timeout(ctx,
+					lscope,
+					thisObj,
+					(Callable) args[0],
+					((Number) args[1]).longValue(),
+					timeoutArgs);
 		} else {
 			throw new IllegalStateException("setTimeout() needs arguments");
 		}
@@ -36,7 +41,7 @@ public class JsTimers {
 		return this.nextId;
 	}
 
-	private Object clearTimeout(Context lcx, Scriptable lscope, Scriptable thisObj, Object[] args) {
+	private Object clearTimeout(final Context lcx, final Scriptable lscope, final Scriptable thisObj, final Object[] args) {
 		if (args.length != 1) {
 			throw new IllegalArgumentException("clearTimeout() must have 1 argument");
 		}
@@ -44,10 +49,10 @@ public class JsTimers {
 		return Undefined.instance;
 	}
 
-	public void update(float delta) {
+	public void update(final float delta) {
 		for (final int id : this.timeouts.keySet()) {
 			final Timeout t = this.timeouts.get(id);
-			t.timeRemaining -= ((long) (delta * 1000));
+			t.timeRemaining -= (long) (delta * 1000);
 			System.out.println(t.timeRemaining);
 			if (t.timeRemaining < 0) {
 				this.timeouts.remove(id);
@@ -57,11 +62,11 @@ public class JsTimers {
 	}
 
 	public Map<Integer, Timeout> getTimeouts() {
-		return timeouts;
+		return this.timeouts;
 	}
 
 	public static JsTimers getInstance() {
-		return INSTANCE;
+		return JsTimers.INSTANCE;
 	}
 
 	private static class Timeout {
@@ -71,12 +76,12 @@ public class JsTimers {
 		private final Object[] args;
 		private long timeRemaining;
 
-		public Timeout(Context ctx, Scriptable scope, Scriptable thys, Callable function, long timeRemaining) {
+		public Timeout(final Context ctx, final Scriptable scope, final Scriptable thys, final Callable function, final long timeRemaining) {
 			this(ctx, scope, thys, function, timeRemaining, new Object[0]);
 		}
 
-		public Timeout(Context ctx, Scriptable scope, Scriptable thys, Callable function, long timeRemaining,
-				Object[] args) {
+		public Timeout(final Context ctx, final Scriptable scope, final Scriptable thys, final Callable function, final long timeRemaining,
+				final Object[] args) {
 			this.ctx = ctx;
 			this.scope = scope;
 			this.thys = thys;
