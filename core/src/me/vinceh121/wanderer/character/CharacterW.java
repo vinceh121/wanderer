@@ -26,7 +26,6 @@ import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.event.Event;
-import me.vinceh121.wanderer.event.IEventType;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
@@ -39,6 +38,8 @@ import me.vinceh121.wanderer.ui.BeltSelection;
  * Named like that to differentiate with java.lang.Character
  */
 public class CharacterW extends AbstractLivingControllableEntity implements IClanMember {
+	public static final String EVENT_START_FALL = "START_FALL", EVENT_END_FALL = "END_FALL",
+			EVENT_JUMP_END = "JUMP_END";
 	private final CharacterMeta meta;
 	private final CharacterWController controller;
 	private final Vector3 characterDirection = new Vector3();
@@ -70,7 +71,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 				WandererConstants.ASSET_MANAGER.get(meta.getFallSound(), Sound3D.class)
 					.playSource3D()
 					.setPosition(CharacterW.this.getTransform().getTranslation(new Vector3()));
-				CharacterW.this.eventDispatcher.dispatchEvent(new Event(EventTypes.JUMP_END));
+				CharacterW.this.eventDispatcher.dispatchEvent(new Event(EVENT_JUMP_END));
 			}
 
 			@Override
@@ -417,9 +418,5 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 
 	public void setAttachedIsland(final Island attachedIsland) {
 		this.attachedIsland = attachedIsland;
-	}
-
-	public enum EventTypes implements IEventType {
-		START_FALL, END_FALL, JUMP_END;
 	}
 }

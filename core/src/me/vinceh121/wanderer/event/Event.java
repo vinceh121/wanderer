@@ -1,10 +1,10 @@
 package me.vinceh121.wanderer.event;
 
 public class Event {
-	private final IEventType type;
+	private final String type;
 	private boolean cancelable, cancelled;
 
-	public Event(final IEventType type) {
+	public Event(final String type) {
 		this.type = type;
 	}
 
@@ -27,7 +27,7 @@ public class Event {
 		this.cancelled = cancelled;
 	}
 
-	public IEventType getType() {
+	public String getType() {
 		return this.type;
 	}
 

@@ -11,9 +11,9 @@ public class EventDispatcher {
 	 *
 	 * Value: listener
 	 */
-	private final MultiValuedMap<IEventType, IEventListener> listeners = new ArrayListValuedHashMap<>();
+	private final MultiValuedMap<String, IEventListener> listeners = new ArrayListValuedHashMap<>();
 
-	public void addEventListener(final IEventType type, final IEventListener l) {
+	public void addEventListener(final String type, final IEventListener l) {
 		this.listeners.put(type, l);
 	}
 
@@ -24,11 +24,11 @@ public class EventDispatcher {
 		}
 	}
 
-	public void removeEventListener(final IEventType type, final IEventListener l) {
+	public void removeEventListener(final String type, final IEventListener l) {
 		this.listeners.removeMapping(type, l);
 	}
 
-	public MultiValuedMap<IEventType, IEventListener> getListeners() {
+	public MultiValuedMap<String, IEventListener> getListeners() {
 		return this.listeners;
 	}
 }

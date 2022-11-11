@@ -26,7 +26,6 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.event.EventDispatcher;
 import me.vinceh121.wanderer.event.IEventListener;
-import me.vinceh121.wanderer.event.IEventType;
 
 public abstract class AbstractEntity implements Disposable {
 	private final ID id = new ID();
@@ -368,11 +367,11 @@ public abstract class AbstractEntity implements Disposable {
 		return this.particles;
 	}
 
-	public void addEventListener(final IEventType type, final IEventListener l) {
+	public void addEventListener(final String type, final IEventListener l) {
 		this.eventDispatcher.addEventListener(type, l);
 	}
 
-	public void removeEventListener(final IEventType type, final IEventListener l) {
+	public void removeEventListener(final String type, final IEventListener l) {
 		this.eventDispatcher.removeEventListener(type, l);
 	}
 
