@@ -1,12 +1,18 @@
 package me.vinceh121.wanderer.entity;
 
-import me.vinceh121.wanderer.Wanderer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public abstract class AbstractLivingEntity extends AbstractEntity implements ILivingEntity {
+import me.vinceh121.wanderer.ID;
+import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.clan.Clan;
+import me.vinceh121.wanderer.clan.IClanMember;
+
+public abstract class AbstractClanLivingEntity extends AbstractEntity implements ILivingEntity, IClanMember {
 	private float health = 1;
 	private boolean invincible;
+	private ID clanId;
 
-	public AbstractLivingEntity(final Wanderer game) {
+	public AbstractClanLivingEntity(final Wanderer game) {
 		super(game);
 	}
 
@@ -37,8 +43,23 @@ public abstract class AbstractLivingEntity extends AbstractEntity implements ILi
 		this.health += health;
 		this.checkDeath();
 	}
+	
+	public ID getClanId() {
+		return this.clanId;
+	}
+	
+	@Override
+	@JsonIgnore
+	public Clan getClan() {
+		return this.game.getClan(this.clanId);
+	}
+	
+	@Override
+	public void onJoinClan(Clan clan) {
+		this.clanId = clan.getId();
+	}
 
-	private void checkDeath() {
+	protected void checkDeath() {
 		if (this.health <= 0 && !this.invincible) {
 			this.onDeath();
 		}

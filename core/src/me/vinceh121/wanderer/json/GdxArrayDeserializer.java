@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
+import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 // help taken from https://github.com/spring-projects/spring-hateoas/blob/7a17be558a77b158e7a4c6a40a5e5609fffd91f8/src/main/java/org/springframework/hateoas/mediatype/hal/forms/HalFormsDeserializers.java#L44
@@ -50,6 +51,13 @@ public class GdxArrayDeserializer extends ContainerDeserializerBase<Array<Object
 		}
 
 		return array;
+	}
+
+	@Override
+	public Object deserializeWithType(JsonParser p, DeserializationContext ctxt, TypeDeserializer typeDeserializer)
+			throws IOException {
+		typeDeserializer.deserializeTypedFromArray(p, ctxt);
+		return null;
 	}
 
 	@Override

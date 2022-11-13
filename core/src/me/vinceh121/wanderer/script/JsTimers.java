@@ -53,7 +53,6 @@ public class JsTimers {
 		for (final int id : this.timeouts.keySet()) {
 			final Timeout t = this.timeouts.get(id);
 			t.timeRemaining -= (long) (delta * 1000);
-			System.out.println(t.timeRemaining);
 			if (t.timeRemaining < 0) {
 				this.timeouts.remove(id);
 				t.function.call(t.ctx, t.scope, t.thys, t.args);

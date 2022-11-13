@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlag
 import com.badlogic.gdx.physics.bullet.collision.btGhostObject;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
@@ -111,10 +112,12 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 		return this.meta;
 	}
 
+	@JsonIgnore
 	public btGhostObject getPickupZone() {
 		return this.pickupZone;
 	}
 
+	@JsonIgnore
 	public IContactListener getPickupListener() {
 		return this.pickupListener;
 	}

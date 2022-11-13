@@ -1,9 +1,12 @@
 package me.vinceh121.wanderer;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -114,6 +117,22 @@ public class Wanderer extends ApplicationAdapter {
 						Wanderer.this.removeEntityControl();
 					}
 					return true;
+				} else if (in == Input.QUICK_SAVE) {
+					try {
+						Wanderer.this.saveStateless(Gdx.files.local("quick.json"));
+						showMessage("Quick saved!");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					return true;
+				} else if (in == Input.QUICK_LOAD) {
+					try {
+						Wanderer.this.loadStateless(Gdx.files.local("quick.json"));
+						showMessage("Quick loaded!");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					return true;
 				}
 				return false;
 			}
@@ -169,7 +188,7 @@ public class Wanderer extends ApplicationAdapter {
 		energyEntity.setTranslation(2, 34, 10);
 		this.addEntity(energyEntity);
 
-		final Clan playerClan = new Clan();
+		final Clan playerClan = new Clan(this);
 		playerClan.setColor(Color.BLUE);
 		playerClan.setName("player clan");
 		playerClan.setMaxEnergy(100);
@@ -299,6 +318,46 @@ public class Wanderer extends ApplicationAdapter {
 			}
 		}
 		return null;
+	}
+
+	public Clan getClan(final ID id) {
+		return this.getClan(id.getValue());
+	}
+
+	public Clan getClan(final int id) {
+		for (final Clan c : this.clans) {
+			if (c.getId().getValue() == id) {
+				return c;
+			}
+		}
+		return null;
+	}
+
+	public void saveStateless(FileHandle dest) throws IOException {
+		System.out.println(dest.path());
+		final MapW mapW = new MapW();
+		mapW.setClans(this.clans);
+		mapW.setEntities(this.entities);
+
+		final Save save = new Save();
+		save.setMap(mapW);
+		try (OutputStream out = dest.write(false)) {
+			WandererConstants.SAVE_MAPPER.writeValue(out, save);
+		}
+	}
+
+	public void loadStateless(FileHandle src) throws IOException {
+		try (InputStream in = src.read()) {
+			Save sav = WandererConstants.SAVE_MAPPER.readValue(in, Save.class);
+			MapW map = sav.getMap();
+			for (AbstractEntity e : this.entities) {
+				e.dispose();
+			}
+			this.entities.clear();
+			this.clans.clear();
+			this.entities.addAll(map.getEntities());
+			this.clans.addAll(map.getClans());
+		}
 	}
 
 	public Array<AbstractEntity> getEntities() {

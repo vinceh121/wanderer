@@ -4,7 +4,7 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
 
-public abstract class AbstractLivingControllableEntity extends AbstractLivingEntity implements IControllableEntity {
+public abstract class AbstractLivingControllableEntity extends AbstractClanLivingEntity implements IControllableEntity {
 	private boolean isControlled;
 
 	public AbstractLivingControllableEntity(final Wanderer game) {

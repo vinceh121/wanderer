@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
@@ -21,8 +22,6 @@ import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.building.PreviewBuilding;
 import me.vinceh121.wanderer.building.Slot;
 import me.vinceh121.wanderer.character.CharacterWController.FallListener;
-import me.vinceh121.wanderer.clan.Clan;
-import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.event.Event;
@@ -37,7 +36,7 @@ import me.vinceh121.wanderer.ui.BeltSelection;
  *
  * Named like that to differentiate with java.lang.Character
  */
-public class CharacterW extends AbstractLivingControllableEntity implements IClanMember {
+public class CharacterW extends AbstractLivingControllableEntity {
 	public static final String EVENT_START_FALL = "START_FALL", EVENT_END_FALL = "END_FALL",
 			EVENT_JUMP_END = "JUMP_END";
 	private final CharacterMeta meta;
@@ -48,7 +47,6 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	private Island attachedIsland;
 	private int beltSize = 3;
 	private int placingSlotIndex;
-	private Clan clan;
 	private boolean beltOpen;
 	private BeltSelection beltWidget;
 	private AbstractBuildingMeta placing;
@@ -180,6 +178,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		this.controller.setWalkDirection(this.walkDirection);
 	}
 
+	@JsonIgnore
 	@Override
 	public InputListener getInputProcessor() {
 		return new InputListenerAdapter(50) {
@@ -363,17 +362,6 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		super.dispose();
 	}
 
-	@Override
-	public Clan getClan() {
-		return this.clan;
-	}
-
-	@Override
-	public void onJoinClan(final Clan clan) {
-		this.clan = clan;
-		// TODO change light decals colors
-	}
-
 	/**
 	 * @return the meta
 	 */
@@ -385,6 +373,7 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 	 * @return
 	 * @see me.vinceh121.wanderer.character.CharacterWController#getGhostObject()
 	 */
+	@JsonIgnore
 	public btPairCachingGhostObject getGhostObject() {
 		return this.controller.getGhostObject();
 	}
@@ -412,10 +401,12 @@ public class CharacterW extends AbstractLivingControllableEntity implements ICla
 		this.belt.add(artifact);
 	}
 
+	@JsonIgnore
 	public Island getAttachedIsland() {
 		return this.attachedIsland;
 	}
 
+	@JsonIgnore
 	public void setAttachedIsland(final Island attachedIsland) {
 		this.attachedIsland = attachedIsland;
 	}

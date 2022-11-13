@@ -8,21 +8,19 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
 import com.badlogic.gdx.physics.bullet.collision.btGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
-import me.vinceh121.wanderer.clan.Clan;
-import me.vinceh121.wanderer.clan.IClanMember;
-import me.vinceh121.wanderer.entity.AbstractLivingEntity;
+import me.vinceh121.wanderer.entity.AbstractClanLivingEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
-public abstract class AbstractBuilding extends AbstractLivingEntity implements IClanMember {
+public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 	private final btGhostObject interactZone;
 	private final IContactListener interactListener;
 	private String name;
-	private Clan clan;
 	private Island island;
 	private Slot slot;
 
@@ -124,10 +122,12 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 		this.slot = slot;
 	}
 
+	@JsonIgnore
 	public btGhostObject getInteractZone() {
 		return this.interactZone;
 	}
 
+	@JsonIgnore
 	public IContactListener getInteractListener() {
 		return this.interactListener;
 	}
@@ -135,17 +135,6 @@ public abstract class AbstractBuilding extends AbstractLivingEntity implements I
 	@Override
 	public void onDeath() {
 		// TODO explode
-	}
-
-	@Override
-	public Clan getClan() {
-		return this.clan;
-	}
-
-	@Override
-	public void onJoinClan(final Clan clan) {
-		this.clan = clan;
-		// TODO change light decal's color
 	}
 
 	@Override

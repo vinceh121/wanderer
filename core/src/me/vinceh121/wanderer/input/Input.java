@@ -16,7 +16,9 @@ public enum Input {
 	SCROLL_BELT_RIGHT("Scroll Belt Right"),
 	UI_VALIDATE("UI Validate"),
 	OPEN_BELT("Open Belt"),
-	JUMP("Jump");
+	JUMP("Jump"),
+	QUICK_SAVE("Quick Save"),
+	QUICK_LOAD("Quick Load");
 
 	private final String name;
 

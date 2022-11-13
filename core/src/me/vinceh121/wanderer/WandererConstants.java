@@ -4,10 +4,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator.TypeMatcher;
 
 import me.vinceh121.wanderer.json.WandererJsonModule;
 import me.vinceh121.wanderer.platform.audio.AudioSystem3D;
@@ -17,7 +29,7 @@ import me.vinceh121.wanderer.platform.audio.Sound3DLoader;
 public final class WandererConstants {
 	public static final AssetManager ASSET_MANAGER = new AssetManager();
 	public static final TextureParameter MIPMAPS = new TextureParameter();
-	public static final ObjectMapper MAPPER = new ObjectMapper();
+	public static final ObjectMapper MAPPER = new ObjectMapper(), SAVE_MAPPER;
 	public static final AudioSystem3D AUDIO = (AudioSystem3D) Gdx.audio;
 
 	public static Skin getDevSkin() {
@@ -27,7 +39,23 @@ public final class WandererConstants {
 	static {
 		WandererJsonModule.registerModules(WandererConstants.MAPPER);
 
-		WandererConstants.ASSET_MANAGER.setLoader(Sound3D.class, new Sound3DLoader(WandererConstants.ASSET_MANAGER.getFileHandleResolver()));
+		SAVE_MAPPER = JsonMapper.builder().enable(MapperFeature.USE_STATIC_TYPING).build();
+		SAVE_MAPPER.activateDefaultTyping(BasicPolymorphicTypeValidator.builder().allowIfSubType(new TypeMatcher() {
+			@Override
+			public boolean match(MapperConfig<?> config, Class<?> clazz) {
+				return clazz.getCanonicalName().startsWith("me.vinceh121.wanderer");
+			}
+		})
+			.allowIfSubType(Array.class)
+			.allowIfSubType(Matrix4.class)
+			.allowIfSubType(Quaternion.class)
+			.allowIfSubType(Vector3.class)
+			.build(), DefaultTyping.NON_FINAL, As.PROPERTY);
+		WandererJsonModule.registerModules(WandererConstants.SAVE_MAPPER);
+		WandererConstants.SAVE_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
+		WandererConstants.ASSET_MANAGER.setLoader(Sound3D.class,
+				new Sound3DLoader(WandererConstants.ASSET_MANAGER.getFileHandleResolver()));
 
 		WandererConstants.MIPMAPS.genMipMaps = true;
 

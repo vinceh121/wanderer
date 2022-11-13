@@ -8,25 +8,23 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlag
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.linearmath.btTransformUtil;
 import com.badlogic.gdx.utils.Array;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
-import me.vinceh121.wanderer.clan.Clan;
-import me.vinceh121.wanderer.clan.IClanMember;
+import me.vinceh121.wanderer.entity.AbstractClanLivingEntity;
 import me.vinceh121.wanderer.entity.AbstractEntity;
-import me.vinceh121.wanderer.entity.AbstractLivingEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
-public class Island extends AbstractLivingEntity implements IClanMember {
+public class Island extends AbstractClanLivingEntity {
 	private final Array<Slot> slots = new Array<>();
 	private final Array<AbstractBuilding> buildings = new Array<>();
 	private final Array<CharacterW> attachedCharacters = new Array<>();
 	private final Vector3 velocity = new Vector3(), placeCameraPosition = new Vector3(),
 			placeCameraDirection = new Vector3();
 	private final IContactListener characterContactListener;
-	private Clan clan;
 
 	public Island(final Wanderer game, final IslandMeta meta) {
 		super(game);
@@ -154,6 +152,7 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 		return null;
 	}
 
+	@JsonIgnore
 	public Array<Slot> getFreeSlots() {
 		final Array<Slot> a = new Array<>();
 		for (final Slot s : this.slots) {
@@ -214,17 +213,6 @@ public class Island extends AbstractLivingEntity implements IClanMember {
 
 	public void startBuilding(final Slot slot, final AbstractBuildingMeta meta) {
 		this.addBuilding(new InConstructionBuilding(this.game, meta), slot);
-	}
-
-	@Override
-	public Clan getClan() {
-		return this.clan;
-	}
-
-	@Override
-	public void onJoinClan(final Clan clan) {
-		this.clan = clan;
-		// TODO probably nothing?
 	}
 
 	public Vector3 getVelocity() {
