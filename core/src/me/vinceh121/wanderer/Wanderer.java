@@ -24,6 +24,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.artifact.AbstractArtifactEntity;
@@ -210,18 +212,31 @@ public class Wanderer extends ApplicationAdapter {
 			.get(0)
 			.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(50f, 50f)));
 
-		final Island island = new Island(this, firstIsland);
-
-		this.addEntity(island);
-		playerClan.addMember(island);
-
 		final DisplayModel grass = new DisplayModel();
 		grass.setDisplayModel("orig/first_island.n/grass.obj");
 		grass.setDisplayTexture("orig/lib/detailobjects01/pflanzen_rasteralpha.ktx");
 		grass.addTextureAttribute(IntAttribute.createCullFace(0));
 		grass.addTextureAttribute(FloatAttribute.createAlphaTest(0.5f));
 		grass.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f));
-		island.addModel(grass);
+		firstIsland.addModel(grass);
+
+		try {
+			WandererConstants.MAPPER.writeValue(System.out, grass);
+		} catch (StreamWriteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DatabindException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		final Island island = new Island(this, firstIsland);
+
+		this.addEntity(island);
+		playerClan.addMember(island);
 
 		final CharacterMeta johnMeta = MetaRegistry.getInstance().get("john");
 		johnMeta.ensureLoading();
@@ -337,7 +352,16 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public void saveStateless(FileHandle dest) throws IOException {
-		System.out.println(dest.path());
+		MapW mapW = this.saveMap();
+
+		final Save save = new Save();
+		save.setMap(mapW);
+		try (OutputStream out = dest.write(false)) {
+			WandererConstants.SAVE_MAPPER.writeValue(out, save);
+		}
+	}
+
+	public MapW saveMap() {
 		final MapW mapW = new MapW();
 		mapW.setClans(this.clans);
 
@@ -348,54 +372,53 @@ public class Wanderer extends ApplicationAdapter {
 			ents.add(n);
 		}
 		mapW.setEntities(ents);
-
-		final Save save = new Save();
-		save.setMap(mapW);
-		try (OutputStream out = dest.write(false)) {
-			WandererConstants.SAVE_MAPPER.writeValue(out, save);
-		}
+		return mapW;
 	}
 
 	public void loadStateless(FileHandle src) throws IOException {
 		try (InputStream in = src.read()) {
 			Save sav = WandererConstants.SAVE_MAPPER.readValue(in, Save.class);
 			MapW map = sav.getMap();
-			for (AbstractEntity e : this.entities) {
-				e.leaveBtWorld(this.getBtWorld());
-				e.dispose();
-			}
-			this.entities.clear();
-			this.clans.clear();
-			for (ObjectNode n : map.getEntities()) {
-				AbstractEntity ent = null;
-				final Class<?> cls = Class.forName(n.get("@class").asText());
-				for (Constructor<?> c : cls.getConstructors()) {
-					if (c.getParameterTypes().length == 2 && c.getParameterTypes()[0] == Wanderer.class
-							&& IMeta.class.isAssignableFrom(c.getParameterTypes()[1])) {
-						if (n.get("meta") == null) {
-							System.err.println(
-									"Entity " + cls + " has constructor w/ meta but save is missing meta property");
-							continue;
-						}
-						ent = (AbstractEntity) c.newInstance(this,
-								MetaRegistry.getInstance().get(n.get("meta").asText()));
-						break;
-					} else if (Arrays.equals(c.getParameterTypes(), new Class<?>[] { Wanderer.class })) {
-						ent = (AbstractEntity) c.newInstance(this);
-						break;
-					}
-				}
-				if (ent == null) {
-					throw new IllegalStateException("Couldn't deserialize entity " + n.toPrettyString());
-				}
-				ent.readState(n);
-				this.addEntity(ent);
-			}
-			this.clans.addAll(map.getClans());
+			this.loadMap(map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
+	}
+
+	public void loadMap(MapW map) throws ReflectiveOperationException {
+		this.removeEntityControl();
+		for (AbstractEntity e : this.entities) {
+			e.leaveBtWorld(this.getBtWorld());
+			e.dispose();
+		}
+		this.entities.clear();
+		this.clans.clear();
+		for (ObjectNode n : map.getEntities()) {
+			AbstractEntity ent = null;
+			final Class<?> cls = Class.forName(n.get("@class").asText());
+			for (Constructor<?> c : cls.getConstructors()) {
+				if (c.getParameterTypes().length == 2 && c.getParameterTypes()[0] == Wanderer.class
+						&& IMeta.class.isAssignableFrom(c.getParameterTypes()[1])) {
+					if (n.get("meta") == null) {
+						System.err
+							.println("Entity " + cls + " has constructor w/ meta but save is missing meta property");
+						continue;
+					}
+					ent = (AbstractEntity) c.newInstance(this, MetaRegistry.getInstance().get(n.get("meta").asText()));
+					break;
+				} else if (Arrays.equals(c.getParameterTypes(), new Class<?>[] { Wanderer.class })) {
+					ent = (AbstractEntity) c.newInstance(this);
+					break;
+				}
+			}
+			if (ent == null) {
+				throw new IllegalStateException("Couldn't deserialize entity " + n.toPrettyString());
+			}
+			ent.readState(n);
+			this.addEntity(ent);
+		}
+		this.clans.addAll(map.getClans());
 	}
 
 	public Array<AbstractEntity> getEntities() {

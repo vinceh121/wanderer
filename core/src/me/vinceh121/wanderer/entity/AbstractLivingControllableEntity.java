@@ -6,6 +6,7 @@ import me.vinceh121.wanderer.input.InputListenerAdapter;
 
 public abstract class AbstractLivingControllableEntity extends AbstractClanLivingEntity implements IControllableEntity {
 	private boolean isControlled;
+	private InputListener inputListener;
 
 	public AbstractLivingControllableEntity(final Wanderer game) {
 		super(game);
@@ -13,6 +14,13 @@ public abstract class AbstractLivingControllableEntity extends AbstractClanLivin
 
 	@Override
 	public InputListener getInputProcessor() {
+		if (this.inputListener == null) {
+			this.inputListener = this.createInputProcessor();
+		}
+		return this.inputListener;
+	}
+	
+	public InputListener createInputProcessor() {
 		return new InputListenerAdapter(-1000);
 	}
 
@@ -28,5 +36,10 @@ public abstract class AbstractLivingControllableEntity extends AbstractClanLivin
 
 	public boolean isControlled() {
 		return this.isControlled;
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
 	}
 }

@@ -181,9 +181,8 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		this.controller.setWalkDirection(this.walkDirection);
 	}
 
-	@JsonIgnore
 	@Override
-	public InputListener getInputProcessor() {
+	public InputListener createInputProcessor() {
 		return new InputListenerAdapter(50) {
 			@Override
 			public boolean inputDown(final Input in) {

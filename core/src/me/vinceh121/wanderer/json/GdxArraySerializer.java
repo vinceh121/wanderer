@@ -51,7 +51,8 @@ public class GdxArraySerializer extends StdSerializer<Array> {
 				}
 				if (typeSer == null) {
 					serializer.serialize(e, gen, provider);
-				} else {
+				} else { // FIXME serializeWithType is never called because this class doesn't extend a
+							// ContainerSerializer
 					serializer.serializeWithType(e, gen, provider, typeSer);
 				}
 			}

@@ -1,7 +1,9 @@
 {
 	"first_island": {
 		"placeCameraPosition": [
-			0.0, 180.0, 120.0
+			0.0,
+			180.0,
+			120.0
 		],
 		"displayModels": [
 			{
@@ -25,6 +27,48 @@
 				},
 				"displayModel": "orig/first_island.n/terrain.obj",
 				"displayTexture": "orig/first_island.n/texturenone.ktx"
+			},
+			{
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				"textureAttributes": [
+					{
+						"@class": "com.badlogic.gdx.graphics.g3d.attributes.IntAttribute",
+						"type": 524288,
+						"value": 0
+					},
+					{
+						"@class": "com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute",
+						"type": 262144,
+						"value": 0.5
+					},
+					{
+						"@class": "com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute",
+						"type": 256,
+						"blended": true,
+						"sourceFunction": 770,
+						"destFunction": 771,
+						"opacity": 1.0
+					}
+				],
+				"displayModel": "orig/first_island.n/grass.obj",
+				"displayTexture": "orig/lib/detailobjects01/pflanzen_rasteralpha.ktx"
 			}
 		],
 		"collisionModel": "orig/first_island.n/collide.obj",

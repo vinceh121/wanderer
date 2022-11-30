@@ -1,5 +1,8 @@
 package me.vinceh121.wanderer.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g3d.Attribute;
@@ -11,7 +14,6 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.WandererConstants;
@@ -26,8 +28,7 @@ public class DisplayModel {
 	private final Matrix4 relativeTransform = new Matrix4();
 	@JsonIgnore
 	private final Matrix4 absoluteTransform = new Matrix4();
-	@JsonIgnore
-	private final Array<Attribute> textureAttributes = new Array<>();
+	private final List<Attribute> textureAttributes = new ArrayList<>();
 	private String displayModel, displayTexture;
 	@JsonIgnore
 	private ModelInstance cacheDisplayModel;
@@ -147,21 +148,19 @@ public class DisplayModel {
 		this.relativeTransform.set(trans);
 	}
 
-	@JsonIgnore
-	public Array<Attribute> getTextureAttributes() {
+	public List<Attribute> getTextureAttributes() {
 		return this.textureAttributes;
 	}
 
-	@JsonIgnore
 	public void addTextureAttribute(final Attribute value) {
 		this.textureAttributes.add(value);
 	}
 
 	public boolean removeTextureAttribute(final Attribute value) {
-		return this.textureAttributes.removeValue(value, false);
+		return this.textureAttributes.remove(value);
 	}
 
 	public Attribute removeTextureAttribute(final int index) {
-		return this.textureAttributes.removeIndex(index);
+		return this.textureAttributes.remove(index);
 	}
 }

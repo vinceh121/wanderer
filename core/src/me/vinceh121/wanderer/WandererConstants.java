@@ -4,13 +4,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.Attribute;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTypeResolverBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator.TypeMatcher;
 
 import me.vinceh121.wanderer.json.WandererJsonModule;
 import me.vinceh121.wanderer.platform.audio.AudioSystem3D;
@@ -20,7 +33,7 @@ import me.vinceh121.wanderer.platform.audio.Sound3DLoader;
 public final class WandererConstants {
 	public static final AssetManager ASSET_MANAGER = new AssetManager();
 	public static final TextureParameter MIPMAPS = new TextureParameter();
-	public static final ObjectMapper MAPPER = new ObjectMapper(), SAVE_MAPPER;
+	public static final ObjectMapper MAPPER, SAVE_MAPPER;
 	public static final AudioSystem3D AUDIO = (AudioSystem3D) Gdx.audio;
 
 	public static Skin getDevSkin() {
@@ -28,20 +41,36 @@ public final class WandererConstants {
 	}
 
 	static {
+		MAPPER = JsonMapper.builder().enable(MapperFeature.USE_STATIC_TYPING).build();
 		WandererJsonModule.registerModules(WandererConstants.MAPPER);
+		DefaultTypeResolverBuilder typer = new ObjectMapper.DefaultTypeResolverBuilder(DefaultTyping.NON_FINAL,
+				BasicPolymorphicTypeValidator.builder()
+					.allowIfSubType(Object.class)
+					.allowIfBaseType(Object.class)
+					.build()) {
+			private static final long serialVersionUID = -6232320049817732267L;
+
+			@Override
+			public boolean useForType(JavaType t) {
+				return Attribute.class.isAssignableFrom(t.getRawClass());
+			}
+		};
+		typer.init(Id.CLASS, null);
+		typer.inclusion(As.PROPERTY);
+		MAPPER.setDefaultTyping(typer);
 
 		SAVE_MAPPER = JsonMapper.builder().enable(MapperFeature.USE_STATIC_TYPING).build();
-//		SAVE_MAPPER.activateDefaultTyping(BasicPolymorphicTypeValidator.builder().allowIfSubType(new TypeMatcher() {
-//			@Override
-//			public boolean match(MapperConfig<?> config, Class<?> clazz) {
-//				return clazz.getCanonicalName().startsWith("me.vinceh121.wanderer");
-//			}
-//		})
-//			.allowIfSubType(Array.class)
-//			.allowIfSubType(Matrix4.class)
-//			.allowIfSubType(Quaternion.class)
-//			.allowIfSubType(Vector3.class)
-//			.build(), DefaultTyping.NON_FINAL, As.PROPERTY);
+		SAVE_MAPPER.activateDefaultTyping(BasicPolymorphicTypeValidator.builder().allowIfSubType(new TypeMatcher() {
+			@Override
+			public boolean match(MapperConfig<?> config, Class<?> clazz) {
+				return clazz.getCanonicalName().startsWith("me.vinceh121.wanderer");
+			}
+		})
+			.allowIfSubType(Array.class)
+			.allowIfSubType(Matrix4.class)
+			.allowIfSubType(Quaternion.class)
+			.allowIfSubType(Vector3.class)
+			.build(), DefaultTyping.NON_FINAL, As.PROPERTY);
 		WandererJsonModule.registerModules(WandererConstants.SAVE_MAPPER);
 		WandererConstants.SAVE_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
