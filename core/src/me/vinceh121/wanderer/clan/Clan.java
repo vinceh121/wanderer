@@ -2,24 +2,23 @@ package me.vinceh121.wanderer.clan;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.ID;
-import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.ISaveable;
+import me.vinceh121.wanderer.WandererConstants;
 
-public class Clan {
-	protected final Wanderer game;
-	private final ID id = new ID();
+public class Clan implements ISaveable {
+	private ID id = new ID();
 	private String name;
 	private Color color = Color.WHITE;
 	private int energy, maxEnergy;
 	/**
-	 * Contains player, buildings and island
+	 * Contains player, buildings and island ids
 	 */
-	private final Array<ID> memberIds = new Array<>();
-
-	public Clan(Wanderer game) {
-		this.game = game;
-	}
+	private final Array<ID> members = new Array<>();
 
 	public ID getId() {
 		return this.id;
@@ -69,33 +68,50 @@ public class Clan {
 		this.maxEnergy = maxEnergy;
 	}
 
-	public Array<ID> getMembersIds() {
-		return memberIds;
-	}
-
-	/**
-	 * @return the members
-	 */
-	public Array<IClanMember> getMembers() {
-		final Array<IClanMember> members = new Array<>(this.memberIds.size);
-		for (final ID mId : this.memberIds) {
-			members.add((IClanMember) this.game.getEntity(mId));
-		}
+	public Array<ID> getMembers() {
 		return members;
 	}
 
 	public void addMember(final IClanMember value) {
-		this.memberIds.add(value.getId());
+		this.members.add(value.getId());
 		value.onJoinClan(this);
 	}
 
-	/**
-	 * @param value
-	 * @param identity
-	 * @return
-	 * @see com.badlogic.gdx.utils.Array#removeValue(java.lang.Object, boolean)
-	 */
 	public boolean removeMember(final IClanMember value) {
-		return this.memberIds.removeValue(value.getId(), false); // compare equality, not pointers
+		return this.members.removeValue(value.getId(), true); // compare equality, not pointers
+	}
+
+	public boolean removeMember(final ID value) {
+		return this.members.removeValue(value, true); // compare equality, not pointers
+	}
+
+	@Override
+	public void writeState(final ObjectNode node) {
+		node.put("id", this.getId().getValue());
+		node.put("name", this.getName());
+		node.putPOJO("color", this.getColor());
+		node.put("energy", this.getEnergy());
+		node.put("maxEnergy", this.getMaxEnergy());
+
+		final ArrayNode arrMem = node.putArray("members");
+		for (final ID mem : this.getMembers()) {
+			arrMem.add(mem.getValue());
+		}
+	}
+
+	@Override
+	public void readState(ObjectNode node) {
+		this.id = new ID(node.get("id").asInt());
+		this.setName(node.get("name").asText());
+		this.setColor(WandererConstants.MAPPER.convertValue(node.get("color"), Color.class));
+		this.setEnergy(node.get("energy").asInt());
+		this.setMaxEnergy(node.get("maxEnergy").asInt());
+
+		this.members.clear();
+		final ArrayNode arrMem = node.withArray("members");
+		for (final JsonNode nodes : arrMem) {
+			// FIXME need to call onJoinClan here
+			this.members.add(new ID(nodes.asInt()));
+		}
 	}
 }

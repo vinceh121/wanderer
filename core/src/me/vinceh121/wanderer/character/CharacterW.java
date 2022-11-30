@@ -12,7 +12,11 @@ import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import me.vinceh121.wanderer.MetaRegistry;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
@@ -45,8 +49,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	private final Vector3 walkDirection = new Vector3();
 	private final Array<ArtifactMeta> belt = new Array<>();
 	private Island attachedIsland;
-	private int beltSize = 3;
-	private int placingSlotIndex;
+	private int beltSize = 3, placingSlotIndex;
 	private boolean beltOpen;
 	private BeltSelection beltWidget;
 	private AbstractBuildingMeta placing;
@@ -352,7 +355,6 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 	@Override
 	public void setMass(final float mass) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -409,5 +411,27 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	@JsonIgnore
 	public void setAttachedIsland(final Island attachedIsland) {
 		this.attachedIsland = attachedIsland;
+	}
+
+	@Override
+	public void writeState(ObjectNode node) {
+		super.writeState(node);
+		node.put("meta", MetaRegistry.getInstance().getReverse(this.meta));
+		node.put("beltSize", this.getBeltSize());
+		final ArrayNode belt = node.putArray("belt");
+		for (ArtifactMeta m : this.belt) {
+			belt.add(MetaRegistry.getInstance().getReverse(m));
+		}
+	}
+
+	@Override
+	public void readState(ObjectNode node) {
+		super.readState(node);
+		this.setBeltSize(node.get("beltSize").asInt());
+		this.belt.clear();
+		final ArrayNode arrBelt = node.withArray("belt");
+		for (JsonNode n : arrBelt) {
+			this.belt.add(MetaRegistry.getInstance().get(n.asText()));
+		}
 	}
 }

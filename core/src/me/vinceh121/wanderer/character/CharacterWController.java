@@ -510,6 +510,8 @@ public class CharacterWController extends CustomActionInterface {
 
 	@Override
 	public void dispose() {
+		this.game.getBtWorld().removeCollisionObject(this.ghostObj);
+		this.ghostObj.dispose();
 		super.dispose();
 	}
 

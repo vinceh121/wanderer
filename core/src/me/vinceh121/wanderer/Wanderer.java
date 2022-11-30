@@ -3,6 +3,8 @@ package me.vinceh121.wanderer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -22,6 +24,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.artifact.AbstractArtifactEntity;
 import me.vinceh121.wanderer.artifact.BackpackArtifact;
@@ -188,7 +191,7 @@ public class Wanderer extends ApplicationAdapter {
 		energyEntity.setTranslation(2, 34, 10);
 		this.addEntity(energyEntity);
 
-		final Clan playerClan = new Clan(this);
+		final Clan playerClan = new Clan();
 		playerClan.setColor(Color.BLUE);
 		playerClan.setName("player clan");
 		playerClan.setMaxEnergy(100);
@@ -313,7 +316,7 @@ public class Wanderer extends ApplicationAdapter {
 
 	public Clan getClanForMember(final IClanMember member) {
 		for (final Clan c : this.clans) {
-			if (c.getMembers().contains(member, true)) {
+			if (c.getMembers().contains(member.getId(), false)) {
 				return c;
 			}
 		}
@@ -337,7 +340,14 @@ public class Wanderer extends ApplicationAdapter {
 		System.out.println(dest.path());
 		final MapW mapW = new MapW();
 		mapW.setClans(this.clans);
-		mapW.setEntities(this.entities);
+
+		final Array<ObjectNode> ents = new Array<>(this.entities.size);
+		for (final AbstractEntity e : this.entities) {
+			final ObjectNode n = WandererConstants.SAVE_MAPPER.createObjectNode();
+			e.writeState(n);
+			ents.add(n);
+		}
+		mapW.setEntities(ents);
 
 		final Save save = new Save();
 		save.setMap(mapW);
@@ -351,12 +361,40 @@ public class Wanderer extends ApplicationAdapter {
 			Save sav = WandererConstants.SAVE_MAPPER.readValue(in, Save.class);
 			MapW map = sav.getMap();
 			for (AbstractEntity e : this.entities) {
+				e.leaveBtWorld(this.getBtWorld());
 				e.dispose();
 			}
 			this.entities.clear();
 			this.clans.clear();
-			this.entities.addAll(map.getEntities());
+			for (ObjectNode n : map.getEntities()) {
+				AbstractEntity ent = null;
+				final Class<?> cls = Class.forName(n.get("@class").asText());
+				for (Constructor<?> c : cls.getConstructors()) {
+					if (c.getParameterTypes().length == 2 && c.getParameterTypes()[0] == Wanderer.class
+							&& IMeta.class.isAssignableFrom(c.getParameterTypes()[1])) {
+						if (n.get("meta") == null) {
+							System.err.println(
+									"Entity " + cls + " has constructor w/ meta but save is missing meta property");
+							continue;
+						}
+						ent = (AbstractEntity) c.newInstance(this,
+								MetaRegistry.getInstance().get(n.get("meta").asText()));
+						break;
+					} else if (Arrays.equals(c.getParameterTypes(), new Class<?>[] { Wanderer.class })) {
+						ent = (AbstractEntity) c.newInstance(this);
+						break;
+					}
+				}
+				if (ent == null) {
+					throw new IllegalStateException("Couldn't deserialize entity " + n.toPrettyString());
+				}
+				ent.readState(n);
+				this.addEntity(ent);
+			}
 			this.clans.addAll(map.getClans());
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
 		}
 	}
 

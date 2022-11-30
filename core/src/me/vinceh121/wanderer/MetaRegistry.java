@@ -58,6 +58,15 @@ public final class MetaRegistry {
 	public <T extends IMeta> T get(final String key) {
 		return (T) this.metaMap.get(key);
 	}
+	
+	public String getReverse(final IMeta meta) {
+		for (Entry<String, IMeta> e : this.metaMap.entrySet()) {
+			if (e.getValue() == meta) {
+				return e.getKey();
+			}
+		}
+		return null;
+	}
 
 	public void putAll(final Map<? extends String, ? extends IMeta> m) {
 		for (final String key : m.keySet()) {

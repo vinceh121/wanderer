@@ -16,7 +16,9 @@ import com.badlogic.gdx.physics.bullet.collision.btGhostObject;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import me.vinceh121.wanderer.MetaRegistry;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractEntity;
@@ -128,6 +130,12 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 
 	public void setRotate(final boolean rotate) {
 		this.rotate = rotate;
+	}
+	
+	@Override
+	public void writeState(ObjectNode node) {
+		super.writeState(node);
+		node.put("meta", MetaRegistry.getInstance().getReverse(this.meta));
 	}
 
 	@Override

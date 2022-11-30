@@ -22,7 +22,27 @@ public class Matrix4Deserializer extends StdDeserializer<Matrix4> {
 	}
 
 	@Override
-	public Matrix4 deserialize(final JsonParser p, final DeserializationContext ctxt)
+	public Matrix4 deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+		if (p.isExpectedStartObjectToken()) {
+			return this.deserializeComponents(p, ctxt);
+		} else if (p.isExpectedStartArrayToken()) {
+			return this.deserializeArray(p, ctxt);
+		} else {
+			throw new IllegalStateException("Wrong start token for matrix4");
+		}
+	}
+
+	public Matrix4 deserializeArray(final JsonParser p, final DeserializationContext ctxt)
+			throws IOException, JacksonException {
+		final float[] arr = new float[4 * 4];
+		for (int i = 0; i < arr.length; i++) {
+			p.nextToken();
+			arr[i] = p.getNumberValue().floatValue();
+		}
+		return new Matrix4(arr);
+	}
+
+	public Matrix4 deserializeComponents(final JsonParser p, final DeserializationContext ctxt)
 			throws IOException, JacksonException {
 		final JsonDeserializer<Object> vector3Deser = ctxt
 			.findNonContextualValueDeserializer(SimpleType.constructUnsafe(Vector3.class));
@@ -32,10 +52,6 @@ public class Matrix4Deserializer extends StdDeserializer<Matrix4> {
 		Vector3 translation = new Vector3();
 		Quaternion rotation = new Quaternion();
 		Vector3 scale = new Vector3();
-
-		if (!p.isExpectedStartObjectToken()) {
-			throw new IllegalStateException("Wrong start token for matrix4");
-		}
 
 		for (int i = 0; i < 3; i++) {
 			final String field = p.nextFieldName();

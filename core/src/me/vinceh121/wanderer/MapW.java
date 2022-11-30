@@ -1,13 +1,13 @@
 package me.vinceh121.wanderer;
 
 import com.badlogic.gdx.utils.Array;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.clan.Clan;
-import me.vinceh121.wanderer.entity.AbstractEntity;
 
 public class MapW {
 	private boolean loadPlayerIsland;
-	private Array<AbstractEntity> entities;
+	private Array<ObjectNode> entities;
 	private Array<Clan> clans;
 
 	public boolean isLoadPlayerIsland() {
@@ -18,11 +18,11 @@ public class MapW {
 		this.loadPlayerIsland = loadPlayerIsland;
 	}
 
-	public Array<AbstractEntity> getEntities() {
+	public Array<ObjectNode> getEntities() {
 		return entities;
 	}
 
-	public void setEntities(Array<AbstractEntity> entities) {
+	public void setEntities(Array<ObjectNode> entities) {
 		this.entities = entities;
 	}
 

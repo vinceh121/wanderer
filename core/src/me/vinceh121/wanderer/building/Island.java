@@ -9,7 +9,9 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.linearmath.btTransformUtil;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import me.vinceh121.wanderer.MetaRegistry;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractClanLivingEntity;
@@ -19,6 +21,7 @@ import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
 public class Island extends AbstractClanLivingEntity {
+	private final IslandMeta meta;
 	private final Array<Slot> slots = new Array<>();
 	private final Array<AbstractBuilding> buildings = new Array<>();
 	private final Array<CharacterW> attachedCharacters = new Array<>();
@@ -28,6 +31,7 @@ public class Island extends AbstractClanLivingEntity {
 
 	public Island(final Wanderer game, final IslandMeta meta) {
 		super(game);
+		this.meta = meta;
 
 		for (final Slot s : meta.getSlots()) {
 			this.slots.add(new Slot(s)); // clone slots as to not accidentally edit the prototype
@@ -233,6 +237,12 @@ public class Island extends AbstractClanLivingEntity {
 
 	public void setPlaceCameraDirection(final Vector3 placeCameraDirection) {
 		this.placeCameraDirection.set(placeCameraDirection);
+	}
+
+	@Override
+	public void writeState(ObjectNode node) {
+		super.writeState(node);
+		node.put("meta", MetaRegistry.getInstance().getReverse(this.meta));
 	}
 
 	@Override

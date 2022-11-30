@@ -20,20 +20,23 @@ import com.badlogic.gdx.physics.bullet.linearmath.btDefaultMotionState;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.ID;
+import me.vinceh121.wanderer.ISaveable;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.event.EventDispatcher;
 import me.vinceh121.wanderer.event.IEventListener;
 
-public abstract class AbstractEntity implements Disposable {
-	private final ID id = new ID();
+public abstract class AbstractEntity implements Disposable, ISaveable {
 	protected final Wanderer game;
 	protected final EventDispatcher eventDispatcher = new EventDispatcher();
 	private final Vector3 collideObjectOffset = new Vector3();
 	private final Array<DisplayModel> models = new Array<>();
 	private final Array<ParticleEmitter> particles = new Array<>();
+	// note: ID can't be final to be able to set explicit values when loading a save
+	private ID id = new ID();
 	private Matrix4 transform = new Matrix4();
 	private String collideModel;
 	private btRigidBody collideObject;
@@ -373,6 +376,22 @@ public abstract class AbstractEntity implements Disposable {
 
 	public void removeEventListener(final String type, final IEventListener l) {
 		this.eventDispatcher.removeEventListener(type, l);
+	}
+
+	@Override
+	public void writeState(ObjectNode node) {
+		node.put("@class", this.getClass().getCanonicalName());
+		node.put("id", this.id.getValue());
+		node.putPOJO("transform", this.getTransform());
+		node.put("mass", this.getMass());
+	}
+
+	@Override
+	public void readState(ObjectNode node) {
+		assert this.getClass().getCanonicalName().equals(node.get("@class").asText());
+		this.id = new ID(node.required("id").asInt());
+		this.setTransform(WandererConstants.MAPPER.convertValue(node.get("transform"), Matrix4.class));
+		this.setMass(node.get("mass").floatValue());
 	}
 
 	public ID getId() {
