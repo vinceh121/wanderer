@@ -10,22 +10,12 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.Texture.TextureWrap;
-import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.artifact.AbstractArtifactEntity;
@@ -41,9 +31,7 @@ import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
-import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.entity.IControllableEntity;
-import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
@@ -202,37 +190,13 @@ public class Wanderer extends ApplicationAdapter {
 
 		final IslandMeta firstIsland = MetaRegistry.getInstance().get("first_island");
 
-		final String sandName = "orig/lib/textures/detailmap_sandnone.ktx";
-		WandererConstants.ASSET_MANAGER.load(sandName, Texture.class, WandererConstants.MIPMAPS);
-		WandererConstants.ASSET_MANAGER.finishLoadingAsset(sandName);
-		final Texture sand = WandererConstants.ASSET_MANAGER.get(sandName, Texture.class);
-		sand.setFilter(TextureFilter.MipMapNearestLinear, TextureFilter.Linear);
-		sand.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
-		firstIsland.getDisplayModels()
-			.get(0)
-			.addTextureAttribute(TiledMaterialAttribute.create(sand, 1.333f, new Vector2(50f, 50f)));
-
-		final DisplayModel grass = new DisplayModel();
-		grass.setDisplayModel("orig/first_island.n/grass.obj");
-		grass.setDisplayTexture("orig/lib/detailobjects01/pflanzen_rasteralpha.ktx");
-		grass.addTextureAttribute(IntAttribute.createCullFace(0));
-		grass.addTextureAttribute(FloatAttribute.createAlphaTest(0.5f));
-		grass.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f));
-		firstIsland.addModel(grass);
-
 		try {
-			WandererConstants.MAPPER.writeValue(System.out, grass);
-		} catch (StreamWriteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DatabindException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+			WandererConstants.MAPPER.writerWithDefaultPrettyPrinter().writeValue(System.out, firstIsland);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		final Island island = new Island(this, firstIsland);
 
 		this.addEntity(island);

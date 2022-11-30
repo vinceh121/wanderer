@@ -25,6 +25,18 @@
 						1.0
 					]
 				},
+				"textureAttributes": [
+					{
+						"@class": "TiledMaterialAttribute",
+						"type": "TiledMaterial",
+						"texture": "orig/lib/textures/detailmap_sandnone.ktx",
+						"opacity": 1.333,
+						"ratio": [
+							50,
+							50
+						]
+					}
+				],
 				"displayModel": "orig/first_island.n/terrain.obj",
 				"displayTexture": "orig/first_island.n/texturenone.ktx"
 			},
@@ -49,18 +61,18 @@
 				},
 				"textureAttributes": [
 					{
-						"@class": "com.badlogic.gdx.graphics.g3d.attributes.IntAttribute",
-						"type": 524288,
+						"@class": "IntAttribute",
+						"type": "cullface",
 						"value": 0
 					},
 					{
-						"@class": "com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute",
-						"type": 262144,
+						"@class": "FloatAttribute",
+						"type": "alphaTest",
 						"value": 0.5
 					},
 					{
-						"@class": "com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute",
-						"type": 256,
+						"@class": "BlendingAttribute",
+						"type": "blended",
 						"blended": true,
 						"sourceFunction": 770,
 						"destFunction": 771,

@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.json;
 
+import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -21,6 +22,10 @@ public final class WandererJsonModule {
 
 		mod.addSerializer(Matrix4.class, new Matrix4Serializer());
 		mod.addDeserializer(Matrix4.class, new Matrix4Deserializer());
+
+		mod.addDeserializer(Attribute.class, new AttributeDeserializer());
+		mod.addSerializer(Attribute.class, new AttributeSerialiser());
+
 		mapper.registerModule(mod);
 	}
 }
