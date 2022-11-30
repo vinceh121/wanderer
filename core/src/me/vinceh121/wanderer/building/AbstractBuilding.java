@@ -9,7 +9,9 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlag
 import com.badlogic.gdx.physics.bullet.collision.btGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import me.vinceh121.wanderer.MetaRegistry;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractClanLivingEntity;
@@ -20,12 +22,14 @@ import me.vinceh121.wanderer.phys.IContactListener;
 public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 	private final btGhostObject interactZone;
 	private final IContactListener interactListener;
+	private final AbstractBuildingMeta meta;
 	private String name;
 	private Island island;
 	private Slot slot;
 
 	public AbstractBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
 		super(game);
+		this.meta = meta;
 
 		this.setCollideModel(meta.getCollisionModel());
 		for (final DisplayModel m : meta.getDisplayModels()) {
@@ -161,6 +165,23 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 	protected void updateTransform() {
 		super.updateTransform();
 		this.interactZone.setWorldTransform(this.getTransform());
+	}
+
+	public AbstractBuildingMeta getMeta() {
+		return this.meta;
+	}
+
+	@Override
+	public void writeState(ObjectNode node) {
+		super.writeState(node);
+		node.put("meta", MetaRegistry.getInstance().getReverse(this.getMeta()));
+		node.put("island", this.getIsland().getId().getValue());
+	}
+
+	@Override
+	public void readState(ObjectNode node) {
+		super.readState(node);
+		this.setIsland((Island) this.game.getEntity(node.get("island").asInt()));
 	}
 
 	@Override

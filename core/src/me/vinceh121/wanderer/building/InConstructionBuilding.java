@@ -21,7 +21,6 @@ import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
 public class InConstructionBuilding extends AbstractBuilding {
-	private final AbstractBuildingMeta meta;
 	private final Array<Bezier<Vector3>> curves = new Array<>();
 	private boolean constructionDone;
 	private SoundEmitter3D sound;
@@ -29,7 +28,6 @@ public class InConstructionBuilding extends AbstractBuilding {
 
 	public InConstructionBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
 		super(game, meta);
-		this.meta = meta;
 
 		for (final DisplayModel m : this.getModels()) {
 			m.addTextureAttribute(ColorAttribute.createEmissive(new Color(0f, 0.8f, 1f, 0f)));
@@ -66,7 +64,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 		}
 
 		this.aliveTime += Gdx.graphics.getDeltaTime();
-		if (this.aliveTime > this.meta.getBuildTime()) {
+		if (this.aliveTime > this.getMeta().getBuildTime()) {
 			this.build();
 		}
 	}
@@ -77,7 +75,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 		}
 		if (this.getIsland() != null) {
 			this.getIsland().removeBuilding(this);
-			final AbstractBuilding newBuilding = this.meta.createBuilding(this.game);
+			final AbstractBuilding newBuilding = this.getMeta().createBuilding(this.game);
 			this.game.addEntity(newBuilding);
 			this.getIsland().addBuilding(newBuilding, this.getSlot());
 		}

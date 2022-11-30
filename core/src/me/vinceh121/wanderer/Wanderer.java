@@ -189,14 +189,6 @@ public class Wanderer extends ApplicationAdapter {
 		this.energyBar.setClan(playerClan);
 
 		final IslandMeta firstIsland = MetaRegistry.getInstance().get("first_island");
-
-		try {
-			WandererConstants.MAPPER.writerWithDefaultPrettyPrinter().writeValue(System.out, firstIsland);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		final Island island = new Island(this, firstIsland);
 
 		this.addEntity(island);
