@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -61,6 +62,9 @@ public final class WandererConstants {
 		}
 		for (final String skin : preload.get("skins").asStringArray()) {
 			WandererConstants.ASSET_MANAGER.load(skin, Skin.class);
+		}
+		for (final String model : preload.get("models").asStringArray()) {
+			WandererConstants.ASSET_MANAGER.load(model, Model.class);
 		}
 		WandererConstants.ASSET_MANAGER.finishLoading();
 	}

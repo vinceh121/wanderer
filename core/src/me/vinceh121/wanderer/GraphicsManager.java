@@ -17,12 +17,14 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleShader.AlignMode;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
 import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import me.vinceh121.wanderer.entity.ParticleEmitter;
+import me.vinceh121.wanderer.glx.SkyboxRenderer;
 import me.vinceh121.wanderer.glx.WandererParticleShader;
 import me.vinceh121.wanderer.glx.WandererShader;
 
@@ -36,12 +38,17 @@ public class GraphicsManager extends ApplicationAdapter {
 	private ParticleSystem particleSystem;
 	private BillboardParticleBatch particleBatch;
 
+	private SkyboxRenderer skybox;
+
 	@Override
 	public void create() {
 		this.modelBatch = new ModelBatch(new DefaultShaderProvider(Gdx.files.internal("shaders/default.vert"),
 				Gdx.files.internal("shaders/default.frag")) {
 			@Override
 			protected Shader createShader(final Renderable renderable) {
+				if (renderable.shader != null) {
+					return renderable.shader;
+				}
 				return new WandererShader(renderable, this.config);
 			}
 		});
@@ -61,8 +68,8 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.particleBatch = new BillboardParticleBatch(AlignMode.Screen,
 				true,
 				1024,
-				new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f),
-				new DepthTestAttribute(GL20.GL_LESS, true)) {
+				new BlendingAttribute(GL20.GL_ONE, GL20.GL_ONE, 1f),
+				new DepthTestAttribute(GL20.GL_LEQUAL, true)) {
 			@Override
 			protected Renderable allocRenderable() {
 				final Renderable r = super.allocRenderable();
@@ -84,17 +91,22 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.viewport3d = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.cam);
 
 		this.stage = new Stage(this.viewportUi);
+
+		this.skybox = new SkyboxRenderer();
+		this.skybox.create();
 	}
 
 	public void apply() {
 		this.viewport3d.apply();
 	}
 
-	public void begin() {
+	public void clear() {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT
 				| (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+	}
 
+	public void begin() {
 		this.modelBatch.begin(this.cam);
 	}
 
@@ -115,6 +127,20 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.stage.act(Gdx.graphics.getDeltaTime());
 		this.stage.draw();
 		this.modelBatch.end();
+	}
+
+	public void renderSkybox(float time) {
+		final Vector3 oldPos = new Vector3(this.cam.position);
+		this.cam.position.setZero();
+		this.cam.update();
+		this.modelBatch.begin(cam);
+
+		this.skybox.update(time);
+		this.skybox.render(this.modelBatch, this.env);
+
+		this.modelBatch.end();
+		this.cam.position.set(oldPos);
+		this.cam.update();
 	}
 
 	@Override

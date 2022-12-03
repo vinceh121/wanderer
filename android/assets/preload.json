@@ -15,9 +15,29 @@
 		"orig/if_ebar.n/clan_energy_leftclan_energy_left_alpha.ktx",
 		"orig/if_ebar.n/clan_energy_middleclan_energy_middle_alpha.ktx",
 		"orig/if_ebar.n/clan_energy_rightclan_energy_right_alpha.ktx",
-		"orig/if_ebar.n/texturenone.ktx"
+		"orig/if_ebar.n/texturenone.ktx",
+		"orig/lib/sun1/texturenone.ktx",
+		"orig/lib/mars/texturealpha.ktx",
+		"orig/lib/galaxy/texturenone.ktx",
+		"orig/lib/stars/texturenone.ktx",
+		"orig/skybox01.n/texturealpha.ktx",
+		"orig/skybox02.n/texturealpha.ktx",
+		"orig/skybox03.n/texturealpha.ktx",
+		"orig/skybox04.n/texturealpha.ktx",
+		"orig/skybox05.n/texturealpha.ktx",
+		"orig/skybox01.n/texture2wow3.ktx",
+		"orig/skybox02.n/texture2wow3.ktx",
+		"orig/skybox03.n/texture2wow3.ktx",
+		"orig/skybox04.n/texture2wow3.ktx",
+		"orig/skybox05.n/texture2wow3.ktx"
 	],
 	"skins": [
 		"skins/default/uiskin.json"
+	],
+	"models": [
+		"orig/skybox01.n/model.obj",
+		"orig/skybox01.n/bgplane.obj",
+		"orig/lib/mars/plane.obj",
+		"orig/lib/stars/stars.obj"
 	]
 }

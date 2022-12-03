@@ -64,6 +64,8 @@ public class Wanderer extends ApplicationAdapter {
 	private ItemBar itemBar;
 	private EnergyBar energyBar;
 
+	private float timeOfDay;
+
 	@Override
 	public void create() {
 		WandererConstants.ASSET_MANAGER.getLogger().setLevel(Logger.DEBUG);
@@ -225,6 +227,12 @@ public class Wanderer extends ApplicationAdapter {
 
 		this.inputManager.render();
 		this.physicsManager.render();
+
+		this.timeOfDay += Gdx.graphics.getDeltaTime() * 0.0005f;
+		this.timeOfDay %= 1;
+
+		this.graphicsManager.clear();
+		this.graphicsManager.renderSkybox(this.timeOfDay);
 
 		this.graphicsManager.begin();
 		for (int i = 0; i < this.entities.size; i++) {
@@ -428,6 +436,14 @@ public class Wanderer extends ApplicationAdapter {
 
 	public AbstractBuilding getInteractingBuilding() {
 		return this.interactingBuilding;
+	}
+
+	public float getTimeOfDay() {
+		return timeOfDay;
+	}
+
+	public void setTimeOfDay(float timeOfDay) {
+		this.timeOfDay = timeOfDay;
 	}
 
 	public void showMessage(final String message) {
