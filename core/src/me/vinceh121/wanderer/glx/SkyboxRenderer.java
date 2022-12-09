@@ -19,10 +19,12 @@ import com.badlogic.gdx.math.Vector3;
 import me.vinceh121.wanderer.WandererConstants;
 
 public class SkyboxRenderer {
-	private ModelInstance stars, sun, mars, galaxy, skycap, skyring;
+	private ModelInstance sky, stars, sun, mars, galaxy, skycap, skyring;
 	private float previous;
 
 	public void create() {
+		this.sky = this.makeStars("orig/lib/stars/texturenone.ktx");
+
 		this.sun = this.makePlaneOneOne("orig/lib/sun1/texturenone.ktx");
 		this.mars = this.makePlaneAlpha("orig/lib/mars/texturealpha.ktx");
 		this.galaxy = this.makePlaneOneOne("orig/lib/galaxy/texturenone.ktx");
@@ -87,6 +89,7 @@ public class SkyboxRenderer {
 		batch.render(this.galaxy, env);
 		batch.render(this.skycap, env);
 		batch.render(this.skyring, env);
+		batch.render(this.sky, env);
 	}
 
 	public boolean isDay(float time) {
