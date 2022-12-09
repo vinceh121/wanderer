@@ -52,12 +52,12 @@ public class SkyboxRenderer {
 		this.move(this.galaxy, MathUtils.sin(time * MathUtils.PI2) / 5 + MathUtils.PI * 0.1f, MathUtils.HALF_PI, 1f, 0);
 
 		// skycap rotates counter clock-wise
-		this.skycap.transform.rotateRad(Vector3.Y, 0.05f * delta / 0.016666668f);
+		this.skycap.transform.rotateRad(Vector3.Y, 0.2f * delta / 0.016666668f);
 		// skycap bobs up and down
 		this.skycap.transform.translate(0, MathUtils.sin(time * MathUtils.PI2) / 1500, 0);
 
 		// skyring rotates clockwise
-		this.skyring.transform.rotateRad(Vector3.Y, -0.05f * delta / 0.016666668f);
+		this.skyring.transform.rotateRad(Vector3.Y, -0.1f * delta / 0.016666668f);
 	}
 
 	public void setSkycapTexture(String tex) {
