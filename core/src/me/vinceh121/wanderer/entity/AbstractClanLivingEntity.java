@@ -7,7 +7,7 @@ import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 
 public abstract class AbstractClanLivingEntity extends AbstractEntity implements ILivingEntity, IClanMember {
-	private float health = 1;
+	private float maxHealth = 1, health = 1;
 	private boolean invincible;
 	private Clan clan;
 
@@ -24,6 +24,17 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	public void setInvincible(final boolean invincible) {
 		this.invincible = invincible;
 		this.checkDeath();
+	}
+
+	@Override
+	public float getMaxHealth() {
+		return this.maxHealth;
+	}
+
+	@Override
+	public void setMaxHealth(float maxHealth) {
+		this.maxHealth = maxHealth;
+		this.setHealth(Math.min(this.maxHealth, this.health));
 	}
 
 	@Override
@@ -61,6 +72,7 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 		} else {
 			node.putNull("clan");
 		}
+		node.put("maxHealth", this.getMaxHealth());
 		node.put("health", this.getHealth());
 		node.put("invincible", this.isInvincible());
 	}
@@ -71,6 +83,7 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 		if (node.hasNonNull("clan")) {
 			this.onJoinClan(this.game.getClan(node.get("clan").asInt()));
 		}
+		this.setMaxHealth(node.get("maxHealth").floatValue());
 		this.setHealth(node.get("health").floatValue());
 		this.setInvincible(node.get("invincible").asBoolean());
 	}

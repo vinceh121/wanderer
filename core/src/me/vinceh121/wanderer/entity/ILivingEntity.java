@@ -1,6 +1,10 @@
 package me.vinceh121.wanderer.entity;
 
 public interface ILivingEntity {
+	float getMaxHealth();
+	
+	void setMaxHealth(float maxHealth);
+	
 	float getHealth();
 
 	void setHealth(float health);
