@@ -45,7 +45,7 @@ public class WandererShader extends DefaultShader {
 	}
 
 	public static String createPrefix(final Renderable renderable, final Config config) {
-		String prefix = DefaultShader.createPrefix(renderable, config); // sigh should've been local
+		String prefix = "#version 330\n" + DefaultShader.createPrefix(renderable, config); // sigh should've been local
 		for (final Attribute a : renderable.material) {
 			if (a.type == TiledMaterialAttribute.TiledMaterial) {
 				prefix += "#define tiledMaterialFlag\n";

@@ -13,7 +13,7 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 public class DebugOverlay extends Table {
 	private final Wanderer game;
 	private final Label lblFps = new Label("FPS", this.getSkin()), lblEntities = new Label("Entities", this.getSkin()),
-			lblCoords = new Label("Coords", this.getSkin());
+			lblCoords = new Label("Coords", this.getSkin()), lblTime = new Label("Time", this.getSkin());
 
 	public DebugOverlay(final Wanderer game) {
 		super(WandererConstants.getDevSkin());
@@ -23,6 +23,8 @@ public class DebugOverlay extends Table {
 		this.add(this.lblEntities).align(Align.left);
 		this.row();
 		this.add(this.lblCoords).align(Align.left);
+		this.row();
+		this.add(this.lblTime).align(Align.left);
 		this.align(Align.topLeft);
 	}
 
@@ -37,6 +39,7 @@ public class DebugOverlay extends Table {
 		} else {
 			this.lblCoords.setText("Coords (camera): " + this.game.getCamera().position);
 		}
+		this.lblTime.setText(String.format("Time: %.2f%%", this.game.getTimeOfDay() * 100));
 
 		// pin to the top left
 		this.setX(0, Align.topLeft);

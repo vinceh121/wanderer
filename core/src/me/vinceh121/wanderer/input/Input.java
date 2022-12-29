@@ -11,6 +11,7 @@ public enum Input {
 	SWITCH_CONTROLLED_VEHICLE("Switch controlled vehicle"),
 	DEBUG_BULLET("Physics Debug"),
 	DEBUG_GLX("Graphics Debug"),
+	DEBUG_TIMESCALE("Toggle Timescale"),
 	PAUSE_MENU("Pause"),
 	SCROLL_BELT_LEFT("Scroll Belt Left"),
 	SCROLL_BELT_RIGHT("Scroll Belt Right"),

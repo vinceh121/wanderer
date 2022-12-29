@@ -64,7 +64,7 @@ public class Wanderer extends ApplicationAdapter {
 	private ItemBar itemBar;
 	private EnergyBar energyBar;
 
-	private float timeOfDay;
+	private float timeOfDay, timeScale = 0.0005f;
 
 	@Override
 	public void create() {
@@ -126,6 +126,13 @@ public class Wanderer extends ApplicationAdapter {
 						showMessage("Quick loaded!");
 					} catch (IOException e) {
 						e.printStackTrace();
+					}
+					return true;
+				} else if (in == Input.DEBUG_TIMESCALE) {
+					if (timeScale == 0.0005f) {
+						timeScale = 0.05f;
+					} else {
+						timeScale = 0.0005f;
 					}
 					return true;
 				}
@@ -228,7 +235,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.inputManager.render();
 		this.physicsManager.render();
 
-		this.timeOfDay += Gdx.graphics.getDeltaTime() * 0.0005f;
+		this.timeOfDay += Gdx.graphics.getDeltaTime() * this.timeScale;
 		this.timeOfDay %= 1;
 
 		this.graphicsManager.clear();

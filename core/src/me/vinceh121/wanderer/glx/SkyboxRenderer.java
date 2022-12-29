@@ -1,8 +1,10 @@
 package me.vinceh121.wanderer.glx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -12,6 +14,8 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader.Config;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -23,7 +27,7 @@ public class SkyboxRenderer {
 	private float previous;
 
 	public void create() {
-		this.sky = this.makeStars("orig/lib/stars/texturenone.ktx");
+		this.sky = this.makeSphereSky();
 
 		this.sun = this.makePlaneOneOne("orig/lib/sun1/texturenone.ktx");
 		this.mars = this.makePlaneAlpha("orig/lib/mars/texturealpha.ktx");
@@ -98,6 +102,25 @@ public class SkyboxRenderer {
 
 	public boolean isNight(float time) {
 		return time > 0.5f && time <= 1;
+	}
+
+	private ModelInstance makeSphereSky() {
+		return this.makeSphere(new Material(new DepthTestAttribute(false),
+				IntAttribute.createCullFace(GL20.GL_FRONT),
+				new ShaderAttribute((r) -> {
+					SkyShader s = new SkyShader(r,
+							new Config(Gdx.files.internal("shaders/sky.vert").readString(),
+									Gdx.files.internal("shaders/sky.frag").readString()));
+					s.init();
+					s.setTimeOfDay(previous);
+					return s;
+				})));
+	}
+
+	private ModelInstance makeSphere(Material mat) {
+		ModelBuilder builder = new ModelBuilder();
+		Model model = builder.createSphere(10, 10, 10, 4, 4, mat, VertexAttributes.Usage.Position);
+		return new ModelInstance(model);
 	}
 
 	private ModelInstance makePlaneAlpha(String tex) {

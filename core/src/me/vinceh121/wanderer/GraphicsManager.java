@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import me.vinceh121.wanderer.entity.ParticleEmitter;
+import me.vinceh121.wanderer.glx.ShaderAttribute;
 import me.vinceh121.wanderer.glx.SkyboxRenderer;
 import me.vinceh121.wanderer.glx.WandererParticleShader;
 import me.vinceh121.wanderer.glx.WandererShader;
@@ -45,9 +46,22 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.modelBatch = new ModelBatch(new DefaultShaderProvider(Gdx.files.internal("shaders/default.vert"),
 				Gdx.files.internal("shaders/default.frag")) {
 			@Override
+			public Shader getShader(Renderable renderable) {
+				if (renderable.material.get(ShaderAttribute.TYPE_SHADER) != null) {
+					return this.createShader(renderable);
+				}
+				return super.getShader(renderable);
+			}
+
+			@Override
 			protected Shader createShader(final Renderable renderable) {
 				if (renderable.shader != null) {
 					return renderable.shader;
+				} else if (renderable.material.get(ShaderAttribute.TYPE_SHADER) != null) {
+					ShaderAttribute att = (ShaderAttribute) renderable.material.get(ShaderAttribute.TYPE_SHADER);
+					Shader shader = att.getShaderBuilder().build(renderable);
+					renderable.shader = shader;
+					return shader;
 				}
 				return new WandererShader(renderable, this.config);
 			}
