@@ -46,6 +46,8 @@ public class Wanderer extends ApplicationAdapter {
 	private final GraphicsManager graphicsManager = new GraphicsManager();
 	private final ScriptManager scriptManager = new ScriptManager();
 
+	private ConsoleHandler consoleHandler;
+
 	private Array<AbstractEntity> entities;
 	/**
 	 * List of entities that have been added this current tick. To be moved to
@@ -68,6 +70,14 @@ public class Wanderer extends ApplicationAdapter {
 
 	@Override
 	public void create() {
+		try {
+			this.consoleHandler = new ConsoleHandler(this);
+			this.consoleHandler.start();
+		} catch (IOException e2) {
+			System.err.println("Failed to init console");
+			e2.printStackTrace();
+		}
+
 		WandererConstants.ASSET_MANAGER.getLogger().setLevel(Logger.DEBUG);
 		WandererConstants.ASSET_MANAGER.setErrorListener((asset, t) -> {
 			System.err.println("Failed to load asset: " + asset);
@@ -134,6 +144,9 @@ public class Wanderer extends ApplicationAdapter {
 					} else {
 						timeScale = 0.0005f;
 					}
+					return true;
+				} else if (in == Input.CURSOR_CAPTURE) {
+					Gdx.input.setCursorCatched(!Gdx.input.isCursorCatched());
 					return true;
 				}
 				return false;
@@ -453,6 +466,14 @@ public class Wanderer extends ApplicationAdapter {
 		this.timeOfDay = timeOfDay;
 	}
 
+	public float getTimeScale() {
+		return timeScale;
+	}
+
+	public void setTimeScale(float timeScale) {
+		this.timeScale = timeScale;
+	}
+
 	public void showMessage(final String message) {
 		this.messageLabel.setColor(1f, 1f, 1f, 0f);
 		this.messageLabel.setText(message);
@@ -472,6 +493,13 @@ public class Wanderer extends ApplicationAdapter {
 		this.graphicsManager.dispose();
 		this.physicsManager.dispose();
 		WandererConstants.ASSET_MANAGER.dispose();
+		if (this.consoleHandler != null) {
+			try {
+				this.consoleHandler.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public btDiscreteDynamicsWorld getBtWorld() {

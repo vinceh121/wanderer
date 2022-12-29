@@ -27,6 +27,7 @@ allprojects {
         ashleyVersion = '1.7.3'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.1.0'
+        jlineVersion = '3.21.0'
     }
 
     repositories {
@@ -49,7 +50,7 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
-        
+        api "org.jline:jline-terminal-jansi:$jlineVersion"
     }
 }
 
@@ -88,5 +89,8 @@ project(":core") {
         api "org.mozilla:rhino:1.7.14"
         api "com.fasterxml.jackson.core:jackson-databind:2.13.3"
         api "org.apache.commons:commons-collections4:4.4"
+        api "org.jline:jline:$jlineVersion"
+        api "org.jline:jline-reader:$jlineVersion"
+        api "org.jline:jline-terminal:$jlineVersion"
     }
 }

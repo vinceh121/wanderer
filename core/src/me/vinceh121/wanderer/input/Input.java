@@ -12,6 +12,7 @@ public enum Input {
 	DEBUG_BULLET("Physics Debug"),
 	DEBUG_GLX("Graphics Debug"),
 	DEBUG_TIMESCALE("Toggle Timescale"),
+	CURSOR_CAPTURE("Toggle cursor capture"),
 	PAUSE_MENU("Pause"),
 	SCROLL_BELT_LEFT("Scroll Belt Left"),
 	SCROLL_BELT_RIGHT("Scroll Belt Right"),

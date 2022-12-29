@@ -52,11 +52,11 @@ public class ScriptManager {
 		Context.exit();
 	}
 
-	private static void fillStoryScope(final ScriptableObject scope) {
+	public static void fillStoryScope(final ScriptableObject scope) {
 		ScriptManager.fillStoryPartScope(scope);
 	}
 
-	private static void fillStoryPartScope(final ScriptableObject scope) {
+	public static void fillStoryPartScope(final ScriptableObject scope) {
 		new JsConsole().install(scope);
 		// Use a global JsTimers to avoid id-collision as much as possible
 		JsTimers.getInstance().install(scope);
