@@ -3,16 +3,17 @@ package me.vinceh121.wanderer.glx;
 import java.util.Objects;
 
 import com.badlogic.gdx.graphics.g3d.Attribute;
+import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 
 public class ShaderAttribute extends Attribute {
 	public static final String ALIAS_SHADER = "shader";
 	public static final long TYPE_SHADER = register(ALIAS_SHADER);
-	private final IShaderBuilder shaderBuilder;
+	private final ShaderProvider shaderProvider;
 
-	public ShaderAttribute(IShaderBuilder shaderBuilder) {
+	public ShaderAttribute(ShaderProvider shaderProvider) {
 		super(TYPE_SHADER);
-		Objects.requireNonNull(shaderBuilder);
-		this.shaderBuilder = shaderBuilder;
+		Objects.requireNonNull(shaderProvider);
+		this.shaderProvider = shaderProvider;
 	}
 
 	@Override
@@ -22,10 +23,10 @@ public class ShaderAttribute extends Attribute {
 
 	@Override
 	public Attribute copy() {
-		return new ShaderAttribute(this.shaderBuilder);
+		return new ShaderAttribute(this.shaderProvider);
 	}
 
-	public IShaderBuilder getShaderBuilder() {
-		return shaderBuilder;
+	public ShaderProvider getShaderProvider() {
+		return shaderProvider;
 	}
 }

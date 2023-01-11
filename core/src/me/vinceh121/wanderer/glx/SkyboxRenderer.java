@@ -10,11 +10,14 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader.Config;
+import com.badlogic.gdx.graphics.g3d.utils.BaseShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
@@ -25,6 +28,7 @@ import me.vinceh121.wanderer.WandererConstants;
 public class SkyboxRenderer {
 	private ModelInstance sky, stars, sun, mars, galaxy, skycap, skyring;
 	private float previous;
+	private SkyShader shader;
 
 	public void create() {
 		this.sky = this.makeSphereSky();
@@ -50,6 +54,10 @@ public class SkyboxRenderer {
 		}
 		final float delta = Math.max(time - this.previous, 0);
 		this.previous = time;
+
+		if (this.shader != null) {
+			this.shader.setTimeOfDay(time);
+		}
 
 		this.stars.transform.rotateRad(Vector3.Y, 0.02f * delta / 0.016666668f);
 
@@ -107,13 +115,16 @@ public class SkyboxRenderer {
 	private ModelInstance makeSphereSky() {
 		return this.makeSphere(new Material(new DepthTestAttribute(false),
 				IntAttribute.createCullFace(GL20.GL_FRONT),
-				new ShaderAttribute((r) -> {
-					SkyShader s = new SkyShader(r,
-							new Config(Gdx.files.internal("shaders/sky.vert").readString(),
-									Gdx.files.internal("shaders/sky.frag").readString()));
-					s.init();
-					s.setTimeOfDay(previous);
-					return s;
+				new ShaderAttribute(new BaseShaderProvider() {
+					@Override
+					protected Shader createShader(Renderable renderable) {
+						SkyShader s = new SkyShader(renderable,
+								new Config(Gdx.files.internal("shaders/sky.vert").readString(),
+										Gdx.files.internal("shaders/sky.frag").readString()));
+						s.setTimeOfDay(previous);
+						SkyboxRenderer.this.shader = s;
+						return s;
+					}
 				})));
 	}
 

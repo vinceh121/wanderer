@@ -243,7 +243,7 @@ public class GraphicsManager extends ApplicationAdapter {
 				return renderable.shader;
 			} else if (renderable.material.get(ShaderAttribute.TYPE_SHADER) != null) {
 				ShaderAttribute att = (ShaderAttribute) renderable.material.get(ShaderAttribute.TYPE_SHADER);
-				Shader shader = att.getShaderBuilder().build(renderable);
+				Shader shader = att.getShaderProvider().getShader(renderable);
 				renderable.shader = shader;
 				return shader;
 			}
