@@ -21,7 +21,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = "wanderer"
-        gdxVersion = '1.10.0'
+        gdxVersion = '1.11.0'
         roboVMVersion = '2.3.12'
         box2DLightsVersion = '1.5'
         ashleyVersion = '1.7.3'
@@ -37,6 +37,7 @@ allprojects {
         gradlePluginPortal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -92,5 +93,6 @@ project(":core") {
         api "org.jline:jline:$jlineVersion"
         api "org.jline:jline-reader:$jlineVersion"
         api "org.jline:jline-terminal:$jlineVersion"
+        api "com.github.mgsx-dev.gdx-gltf:gltf:227214de89923c7754406c68c1504e75ba087823"
     }
 }
