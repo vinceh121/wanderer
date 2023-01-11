@@ -11,6 +11,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -39,6 +42,8 @@ import me.vinceh121.wanderer.ui.BlinkLabel;
 import me.vinceh121.wanderer.ui.DebugOverlay;
 import me.vinceh121.wanderer.ui.EnergyBar;
 import me.vinceh121.wanderer.ui.ItemBar;
+import net.mgsx.gltf.loaders.gltf.GLTFLoader;
+import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 public class Wanderer extends ApplicationAdapter {
 	private final InputManager inputManager = new InputManager();
@@ -222,6 +227,9 @@ public class Wanderer extends ApplicationAdapter {
 		final CharacterW john = new CharacterW(this, johnMeta);
 		john.setBeltSize(5);
 		john.setTranslation(0.1f, 50f, 0.1f);
+
+//		SceneAsset scn = new GLTFLoader().load(Gdx.files.absolute("/tmp/owo.gltf"));
+//		john.getModels().get(0).setCacheDisplayModel(new ModelInstance(scn.scene.model));
 
 		this.itemBar.setCharacter(john);
 

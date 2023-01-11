@@ -43,29 +43,7 @@ public class GraphicsManager extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		this.modelBatch = new ModelBatch(new DefaultShaderProvider(Gdx.files.internal("shaders/default.vert"),
-				Gdx.files.internal("shaders/default.frag")) {
-			@Override
-			public Shader getShader(Renderable renderable) {
-				if (renderable.material.get(ShaderAttribute.TYPE_SHADER) != null) {
-					return this.createShader(renderable);
-				}
-				return super.getShader(renderable);
-			}
-
-			@Override
-			protected Shader createShader(final Renderable renderable) {
-				if (renderable.shader != null) {
-					return renderable.shader;
-				} else if (renderable.material.get(ShaderAttribute.TYPE_SHADER) != null) {
-					ShaderAttribute att = (ShaderAttribute) renderable.material.get(ShaderAttribute.TYPE_SHADER);
-					Shader shader = att.getShaderBuilder().build(renderable);
-					renderable.shader = shader;
-					return shader;
-				}
-				return new WandererShader(renderable, this.config);
-			}
-		});
+		this.modelBatch = new ModelBatch(new WandererShaderProvider());
 
 		this.env = new Environment();
 		this.env.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
@@ -242,5 +220,34 @@ public class GraphicsManager extends ApplicationAdapter {
 
 	public ParticleSystem getParticleSystem() {
 		return this.particleSystem;
+	}
+
+	private static class WandererShaderProvider extends DefaultShaderProvider {
+
+		public WandererShaderProvider() {
+			super(Gdx.files.internal("shaders/default.vert"), Gdx.files.internal("shaders/default.frag"));
+			this.config.numBones = 128;
+		}
+
+		@Override
+		public Shader getShader(Renderable renderable) {
+			if (renderable.material.get(ShaderAttribute.TYPE_SHADER) != null) {
+				return this.createShader(renderable);
+			}
+			return super.getShader(renderable);
+		}
+
+		@Override
+		protected Shader createShader(final Renderable renderable) {
+			if (renderable.shader != null) {
+				return renderable.shader;
+			} else if (renderable.material.get(ShaderAttribute.TYPE_SHADER) != null) {
+				ShaderAttribute att = (ShaderAttribute) renderable.material.get(ShaderAttribute.TYPE_SHADER);
+				Shader shader = att.getShaderBuilder().build(renderable);
+				renderable.shader = shader;
+				return shader;
+			}
+			return new WandererShader(renderable, this.config);
+		}
 	}
 }

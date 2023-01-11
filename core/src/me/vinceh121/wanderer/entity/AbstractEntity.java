@@ -112,6 +112,8 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 
 	public void render(final ModelBatch batch, final Environment env) {
 		for (final DisplayModel m : this.models) {
+			if (m.getCacheDisplayModel() != null)
+				m.getCacheDisplayModel().userData = m.getDisplayModel();
 			m.render(batch, env);
 		}
 		for (final ParticleEmitter e : this.particles) {
