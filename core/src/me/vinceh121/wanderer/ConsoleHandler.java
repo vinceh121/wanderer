@@ -14,6 +14,10 @@ import org.mozilla.javascript.EcmaError;
 import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.ScriptableObject;
 
+import com.badlogic.gdx.Gdx;
+
+import me.vinceh121.wanderer.script.JsUtils;
+
 public class ConsoleHandler implements AutoCloseable {
 	private final Wanderer game;
 	private final Terminal terminal;
@@ -48,7 +52,7 @@ public class ConsoleHandler implements AutoCloseable {
 		this.jsContext = ContextFactory.getGlobal().enterContext();
 		this.scope = this.jsContext.initSafeStandardObjects();
 		this.scope.putConst("game", this.scope, this.game);
-		ScriptManager.fillStoryScope(scope);
+		fillConsoleScope(scope);
 		while (!this.closed) {
 			try {
 				final String line = this.lineReader.readLine("Wanderer> ");
@@ -70,5 +74,12 @@ public class ConsoleHandler implements AutoCloseable {
 		this.closed = true;
 		this.terminal.close();
 		this.listenerThread.interrupt();
+	}
+
+	private void fillConsoleScope(ScriptableObject scope) {
+		ScriptManager.fillStoryScope(scope);
+
+		JsUtils.install(scope, "exit", (Object[] args) -> Gdx.app.postRunnable(() -> this.game.dispose()));
+		JsUtils.install(scope, "forceexit", (Object[] args) -> System.exit(-1));
 	}
 }
