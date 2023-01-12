@@ -3,8 +3,13 @@ package me.vinceh121.wanderer.glx;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Attributes;
 import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.shaders.BaseShader;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class WandererShader extends DefaultShader {
 	public static final Uniform tiledMaterialUniform = new Uniform("u_tiledMaterialTexture");
@@ -34,7 +39,39 @@ public class WandererShader extends DefaultShader {
 
 	@Override
 	protected void bindMaterial(final Attributes attributes) {
-		super.bindMaterial(attributes);
+		// start inline super.bindMaterial(attributes);
+		int cullFace = config.defaultCullFace == -1 ? defaultCullFace : config.defaultCullFace;
+		int depthFunc = config.defaultDepthFunc == -1 ? defaultDepthFunc : config.defaultDepthFunc;
+		float depthRangeNear = 0f;
+		float depthRangeFar = 1f;
+		boolean depthMask = true;
+
+		for (final Attribute attr : attributes) {
+			final long t = attr.type; // BAD BEHAVIOUR
+				// In the following, libgdx seems to consider t is a bitfield for the attributes array, and not a single type
+			if (BlendingAttribute.is(t)) {
+				context.setBlending(true,
+						((BlendingAttribute) attr).sourceFunction,
+						((BlendingAttribute) attr).destFunction);
+				set(u_opacity, ((BlendingAttribute) attr).opacity);
+			} else if ((t & IntAttribute.CullFace) == IntAttribute.CullFace)
+				cullFace = ((IntAttribute) attr).value;
+			else if ((t & FloatAttribute.AlphaTest) == FloatAttribute.AlphaTest)
+				set(u_alphaTest, ((FloatAttribute) attr).value);
+			else if ((t & DepthTestAttribute.Type) == DepthTestAttribute.Type) {
+				DepthTestAttribute dta = (DepthTestAttribute) attr;
+				depthFunc = dta.depthFunc;
+				depthRangeNear = dta.depthRangeNear;
+				depthRangeFar = dta.depthRangeFar;
+				depthMask = dta.depthMask;
+			} else if (!config.ignoreUnimplemented)
+				throw new GdxRuntimeException("Unknown material attribute: " + attr.toString());
+		}
+
+		context.setCullFace(cullFace);
+		context.setDepthTest(depthFunc, depthRangeNear, depthRangeFar);
+		context.setDepthMask(depthMask);
+		// end inline super.bindMaterial
 		for (final Attribute a : attributes) {
 			if (a.type == TiledMaterialAttribute.TiledMaterial) {
 				this.set(this.u_tiledMaterialOpacity, ((TiledMaterialAttribute) a).getOpacity());
@@ -49,7 +86,8 @@ public class WandererShader extends DefaultShader {
 		for (final Attribute a : renderable.material) {
 			if (a.type == TiledMaterialAttribute.TiledMaterial) {
 				prefix += "#define tiledMaterialFlag\n";
-				break;
+			} else if (a.type == NoLightningAttribute.NO_LIGHTNING) {
+				prefix += "#define noLightningFlag\n";
 			}
 		}
 		return prefix;

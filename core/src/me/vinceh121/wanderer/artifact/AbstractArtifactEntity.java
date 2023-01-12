@@ -23,6 +23,7 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.glx.NoLightningAttribute;
 import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
@@ -69,6 +70,7 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 				model.addTextureAttribute(ColorAttribute.createEmissive(meta.getArtifactColor()));
 			}
 			model.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_DST_COLOR, 0.5f));
+			model.addTextureAttribute(new NoLightningAttribute());
 			this.addModel(model);
 		}
 	}

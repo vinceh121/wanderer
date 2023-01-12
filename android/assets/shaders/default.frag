@@ -166,7 +166,7 @@ void main() {
 	vec4 emissive = vec4(0.0);
 #endif
 
-#if (!defined(lightingFlag))
+#if (!defined(lightingFlag)) || defined(noLightningFlag)
 	gl_FragColor.rgb = diffuse.rgb + emissive.rgb;
 #elif (!defined(specularFlag))
 		#if defined(ambientFlag) && defined(separateAmbientFlag)

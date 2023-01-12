@@ -16,6 +16,7 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.animation.TransformAnimation;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.glx.NoLightningAttribute;
 
 public class BeltSelection extends WandererWidget {
 	private final Array<ArtifactMeta> belt;
@@ -64,6 +65,7 @@ public class BeltSelection extends WandererWidget {
 			this.setModelTransform(i, trans, m);
 
 			m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
+			m.addTextureAttribute(new NoLightningAttribute());
 			m.render(this.game.getGraphicsManager().getModelBatch(), this.game.getGraphicsManager().getEnv());
 			if (scale.x < 2) {
 				scale.scl(1.1f);

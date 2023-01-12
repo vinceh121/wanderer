@@ -14,6 +14,7 @@ import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.glx.NoLightningAttribute;
 
 public class ItemBar extends WandererWidget {
 	private static final Texture TEX_SLOT = WandererConstants.ASSET_MANAGER
@@ -61,6 +62,7 @@ public class ItemBar extends WandererWidget {
 								new Vector3(1, 1, 1)));
 
 				m.addTextureAttribute(ColorAttribute.createEmissive(artifact.getArtifactColor()));
+				m.addTextureAttribute(new NoLightningAttribute());
 				m.render(this.game.getGraphicsManager().getModelBatch(), this.game.getGraphicsManager().getEnv());
 			}
 
