@@ -26,6 +26,7 @@ import com.badlogic.gdx.math.Vector3;
 import me.vinceh121.wanderer.WandererConstants;
 
 public class SkyboxRenderer {
+	private final Vector3 sunDir = new Vector3(), moonDir = new Vector3();
 	private ModelInstance sky, stars, sun, mars, galaxy, skycap, skyring;
 	private float previous;
 	private SkyShader shader;
@@ -62,6 +63,9 @@ public class SkyboxRenderer {
 		this.stars.transform.rotateRad(Vector3.Y, 0.02f * delta / 0.016666668f);
 
 		this.move(this.sun, MathUtils.PI * 0.65f, time * MathUtils.PI2, 0.6f, 0);
+		this.sunDir.setFromSpherical(MathUtils.PI * 0.65f, time * MathUtils.PI2);
+		this.sunDir.scl(-1);
+
 		this.move(this.mars, MathUtils.PI2 * time, 0.12f * MathUtils.PI2, 1f, 0);
 		this.move(this.galaxy, MathUtils.sin(time * MathUtils.PI2) / 5 + MathUtils.PI * 0.1f, MathUtils.HALF_PI, 1f, 0);
 
@@ -223,5 +227,13 @@ public class SkyboxRenderer {
 		ins.materials.get(0)
 			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex));
 		return ins;
+	}
+
+	public Vector3 getSunDir() {
+		return sunDir;
+	}
+
+	public Vector3 getMoonDir() {
+		return moonDir;
 	}
 }
