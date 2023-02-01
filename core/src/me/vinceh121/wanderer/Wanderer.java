@@ -466,6 +466,7 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public void setTimeOfDay(float timeOfDay) {
+		assert timeOfDay >= 0 && timeOfDay <= 1;
 		this.timeOfDay = timeOfDay;
 	}
 

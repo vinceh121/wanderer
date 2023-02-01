@@ -139,7 +139,8 @@ public class SkyboxRenderer {
 
 	private ModelInstance makeSphere(Material mat) {
 		ModelBuilder builder = new ModelBuilder();
-		Model model = builder.createSphere(10, 10, 10, 4, 4, mat, VertexAttributes.Usage.Position);
+		Model model = builder
+			.createSphere(10, 10, 10, 4, 4, mat, VertexAttributes.Usage.Position);
 		return new ModelInstance(model);
 	}
 
@@ -245,13 +246,13 @@ public class SkyboxRenderer {
 	public static String nameOfTime(float time) {
 		if (time <= 0.25f) {
 			return "MORNING";
-		} else if (time <= 0.25f) {
-			return "NOON";
 		} else if (time <= 0.375f) {
-			return "EVENING_START";
+			return "NOON";
 		} else if (time <= 0.4375f) {
-			return "EVENING_MID";
+			return "EVENING_START";
 		} else if (time <= 0.5f) {
+			return "EVENING_MID";
+		} else if (time <= 0.75f) {
 			return "EVENING_END";
 		} else if (time <= 0.75f) {
 			return "MIDNIGHT";

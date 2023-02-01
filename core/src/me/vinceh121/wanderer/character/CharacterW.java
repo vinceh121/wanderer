@@ -186,6 +186,15 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		return new InputListenerAdapter(50) {
 			@Override
 			public boolean inputDown(final Input in) {
+				if (in == Input.SCROLL_BELT_RIGHT) {
+					game.setTimeOfDay(game.getTimeOfDay() + 0.005f);
+					return true;
+				} else if (in == Input.SCROLL_BELT_LEFT) {
+					game.setTimeOfDay(game.getTimeOfDay() - 0.005f);
+					return true;
+				}
+				
+				
 				if (CharacterW.this.placing != null) {
 					if (in == Input.SCROLL_BELT_RIGHT) {
 						CharacterW.this.incrementPreviewSlot();

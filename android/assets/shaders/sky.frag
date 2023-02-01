@@ -29,41 +29,48 @@ float progress(float start, float end) {
 	return (time - start) / (end - start);
 }
 
+float angle;
+float sunSkyAngle;
+
+vec3 topMorning() {
+	return mix(skyTopNoon, skyMiddleNoon,
+			logFrac(angle) * progress(MORNING, NOON));
+}
+
+vec3 topNoon() {
+	return mix(skyTopNoon, skyMiddleNoon, logFrac(angle));
+}
+
+vec3 topEveningStart() {
+	return mix(skyTopEvening, skyMiddleEvening, angle);
+}
+
+vec3 topEveningMid() {
+	return mix(skyTopEvening, skyMiddleEvening, angle * progress(EVENING_MID,
+	EVENING_END) * (1 - logFrac(sunSkyAngle)));
+}
+
 void main() {
 	vec3 normVert = normalize(vertPos.xyz);
 	// [-1; 1]
-	float angle = dot(normVert, vec3(0, 1, 0));
-	float sunSkyAngle = dot(normVert, sunDir);
+	angle = dot(normVert, vec3(0, 1, 0));
+	sunSkyAngle = dot(normVert, sunDir);
 
 	if (angle > 0) { // top half
 		angle = 1 - angle;
 		sunSkyAngle = 1 - sunSkyAngle;
 		if (time > MORNING && time < NOON) {
-			gl_FragColor = vec4(
-					mix(skyTopNoon, skyMiddleNoon,
-							logFrac(angle) * progress(MORNING, NOON)), 1);
+			gl_FragColor = vec4(topMorning(), 1);
 		} else if (time > NOON && time < EVENING_START) {
-			gl_FragColor = vec4(
-					mix(skyTopNoon, skyMiddleNoon,
-							logFrac(angle) * logFrac(1 - progress(
-							NOON,
-							EVENING_START))), 1);
+			gl_FragColor = vec4(mix(topMorning(), topNoon(), progress(NOON, EVENING_START)), 1);
 		} else if (time > EVENING_START && time < EVENING_MID) {
 			gl_FragColor = vec4(
-					mix(
-							mix(skyTopNoon, skyMiddleNoon,
-									min(logFrac(angle), 0.3)),
-							mix(skyTopEvening, skyMiddleEvening,
-									angle * max(progress(EVENING_START,
-									EVENING_MID), 0.9)),
+					mix(topNoon(), topEveningStart(),
 							progress(EVENING_START, EVENING_MID)), 1);
 		} else if (time > EVENING_MID && time < EVENING_END) {
 			gl_FragColor = vec4(
-					mix(mix(skyTopEvening, skyMiddleEvening, angle * 0.9),
-							mix(skyTopEvening, skyMiddleEvening,
-									angle * progress(EVENING_START,
-									EVENING_MID) * (1 - logFrac(sunSkyAngle))),
-							progress(EVENING_START, EVENING_MID)), 1);
+					mix(topEveningStart(), topEveningMid(),
+							progress(EVENING_MID, EVENING_END)), 1);
 		}
 	} else { // bottom half
 		angle += 1;
