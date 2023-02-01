@@ -17,6 +17,7 @@ const vec3 skyTopEvening = skyTopNoon;
 const vec3 skyMiddleEvening = vec3(0.949, 0.851, 0.263);
 
 uniform float time;
+uniform vec3 sunDir;
 
 in vec4 vertPos;
 
@@ -29,11 +30,14 @@ float progress(float start, float end) {
 }
 
 void main() {
+	vec3 normVert = normalize(vertPos.xyz);
 	// [-1; 1]
-	float angle = dot(normalize(vertPos.xyz), vec3(0, 1, 0));
+	float angle = dot(normVert, vec3(0, 1, 0));
+	float sunSkyAngle = dot(normVert, sunDir);
 
 	if (angle > 0) { // top half
 		angle = 1 - angle;
+		sunSkyAngle = 1 - sunSkyAngle;
 		if (time > MORNING && time < NOON) {
 			gl_FragColor = vec4(
 					mix(skyTopNoon, skyMiddleNoon,
@@ -41,27 +45,24 @@ void main() {
 		} else if (time > NOON && time < EVENING_START) {
 			gl_FragColor = vec4(
 					mix(skyTopNoon, skyMiddleNoon,
-							logFrac(angle)
-									* (1 - progress(NOON, EVENING_START))), 1);
+							logFrac(angle) * logFrac(1 - progress(
+							NOON,
+							EVENING_START))), 1);
 		} else if (time > EVENING_START && time < EVENING_MID) {
 			gl_FragColor = vec4(
 					mix(
 							mix(skyTopNoon, skyMiddleNoon,
-									angle * (1 - progress(NOON,
-									EVENING_START))),
+									min(logFrac(angle), 0.3)),
 							mix(skyTopEvening, skyMiddleEvening,
 									angle * max(progress(EVENING_START,
 									EVENING_MID), 0.9)),
 							progress(EVENING_START, EVENING_MID)), 1);
 		} else if (time > EVENING_MID && time < EVENING_END) {
 			gl_FragColor = vec4(
-					mix(
-							mix(skyTopEvening, skyMiddleEvening,
-									angle * max(progress(EVENING_START,
-									EVENING_MID), 0.9)),
+					mix(mix(skyTopEvening, skyMiddleEvening, angle * 0.9),
 							mix(skyTopEvening, skyMiddleEvening,
 									angle * progress(EVENING_START,
-									EVENING_MID)),
+									EVENING_MID) * (1 - logFrac(sunSkyAngle))),
 							progress(EVENING_START, EVENING_MID)), 1);
 		}
 	} else { // bottom half

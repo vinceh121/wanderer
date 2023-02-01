@@ -64,6 +64,10 @@ public class SkyboxRenderer {
 
 		this.move(this.sun, MathUtils.PI * 0.65f, time * MathUtils.PI2, 0.6f, 0);
 		this.sunDir.setFromSpherical(MathUtils.PI * 0.65f, time * MathUtils.PI2);
+		if (this.shader != null) {
+			// shader needs sunDir to NOT be inverted
+			this.shader.setSunDir(this.sunDir);
+		}
 		this.sunDir.scl(-1);
 
 		this.move(this.mars, MathUtils.PI2 * time, 0.12f * MathUtils.PI2, 1f, 0);
@@ -72,7 +76,7 @@ public class SkyboxRenderer {
 		// skycap rotates counter clock-wise
 		this.skycap.transform.rotateRad(Vector3.Y, 0.2f * delta / 0.016666668f);
 		// skycap bobs up and down
-		this.skycap.transform.translate(0, MathUtils.sin(time * MathUtils.PI2) / 1500, 0);
+		this.skycap.transform.translate(0, MathUtils.sin((time * 2f - 1f) * MathUtils.PI2) / 300, 0);
 
 		// skyring rotates clockwise
 		this.skyring.transform.rotateRad(Vector3.Y, -0.1f * delta / 0.016666668f);
@@ -126,6 +130,7 @@ public class SkyboxRenderer {
 								new Config(Gdx.files.internal("shaders/sky.vert").readString(),
 										Gdx.files.internal("shaders/sky.frag").readString()));
 						s.setTimeOfDay(previous);
+						s.setSunDir(sunDir);
 						SkyboxRenderer.this.shader = s;
 						return s;
 					}
@@ -235,5 +240,23 @@ public class SkyboxRenderer {
 
 	public Vector3 getMoonDir() {
 		return moonDir;
+	}
+
+	public static String nameOfTime(float time) {
+		if (time <= 0.25f) {
+			return "MORNING";
+		} else if (time <= 0.25f) {
+			return "NOON";
+		} else if (time <= 0.375f) {
+			return "EVENING_START";
+		} else if (time <= 0.4375f) {
+			return "EVENING_MID";
+		} else if (time <= 0.5f) {
+			return "EVENING_END";
+		} else if (time <= 0.75f) {
+			return "MIDNIGHT";
+		} else {
+			return "INVALID TIME";
+		}
 	}
 }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.entity.AbstractEntity;
+import me.vinceh121.wanderer.glx.SkyboxRenderer;
 
 public class DebugOverlay extends Table {
 	private final Wanderer game;
@@ -39,7 +40,9 @@ public class DebugOverlay extends Table {
 		} else {
 			this.lblCoords.setText("Coords (camera): " + this.game.getCamera().position);
 		}
-		this.lblTime.setText(String.format("Time: %.2f%%", this.game.getTimeOfDay() * 100));
+		this.lblTime.setText(String.format("Time: %.2f%%    %s",
+				this.game.getTimeOfDay() * 100,
+				SkyboxRenderer.nameOfTime(this.game.getTimeOfDay())));
 
 		// pin to the top left
 		this.setX(0, Align.topLeft);

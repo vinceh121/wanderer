@@ -49,10 +49,10 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.modelBatch = new ModelBatch(new WandererShaderProvider());
 
 		this.ambiantLight = new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f);
-		this.sun = new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f);
+		this.sun = new DirectionalLight().set(0.8f, 0.8f, 0.8f, 1f, 0f, 0f);
 
 		this.env = new Environment();
-		this.env.set(ambiantLight);
+		this.env.set(this.ambiantLight);
 		this.env.add(this.sun);
 
 		this.cam = new PerspectiveCamera(90, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
