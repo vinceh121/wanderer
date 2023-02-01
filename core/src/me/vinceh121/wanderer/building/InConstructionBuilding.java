@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.glx.NoLightningAttribute;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
@@ -32,6 +33,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 		for (final DisplayModel m : this.getModels()) {
 			m.addTextureAttribute(ColorAttribute.createEmissive(new Color(0f, 0.8f, 1f, 0f)));
 			m.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_DST_COLOR, 0.5f));
+			m.addTextureAttribute(new NoLightningAttribute());
 
 			// FIXME use fixed curves
 			final Array<Vector3> points = new Array<>();

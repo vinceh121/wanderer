@@ -8,7 +8,6 @@ public class NoLightningAttribute extends Attribute {
 
 	public NoLightningAttribute() {
 		super(NO_LIGHTNING);
-		System.out.println(NO_LIGHTNING);
 	}
 
 	@Override
