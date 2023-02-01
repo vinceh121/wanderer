@@ -76,7 +76,7 @@ public class SkyboxRenderer {
 		// skycap rotates counter clock-wise
 		this.skycap.transform.rotateRad(Vector3.Y, 0.2f * delta / 0.016666668f);
 		// skycap bobs up and down
-		this.skycap.transform.translate(0, MathUtils.sin((time * 2f - 1f) * MathUtils.PI2) / 300, 0);
+		this.skycap.transform.setTranslation(0, MathUtils.sin(time * 32f * MathUtils.PI2) / 2 - 2, 0);
 
 		// skyring rotates clockwise
 		this.skyring.transform.rotateRad(Vector3.Y, -0.1f * delta / 0.016666668f);
