@@ -202,7 +202,7 @@ public class SkyboxRenderer {
 		final Model model = WandererConstants.ASSET_MANAGER.get("orig/lib/mars/plane.obj", Model.class);
 		final ModelInstance ins = new ModelInstance(model);
 		ins.materials.get(0)
-			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex));
+			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex), new NoLightningAttribute());
 		return ins;
 	}
 
@@ -211,7 +211,7 @@ public class SkyboxRenderer {
 		final Model model = WandererConstants.ASSET_MANAGER.get("orig/skybox01.n/model.obj", Model.class);
 		final ModelInstance ins = new ModelInstance(model);
 		ins.materials.get(0)
-			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex));
+			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex), new NoLightningAttribute());
 		return ins;
 	}
 
@@ -221,7 +221,7 @@ public class SkyboxRenderer {
 		final Model model = WandererConstants.ASSET_MANAGER.get("orig/skybox01.n/bgplane.obj", Model.class);
 		final ModelInstance ins = new ModelInstance(model);
 		ins.materials.get(0)
-			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex));
+			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex), new NoLightningAttribute());
 		return ins;
 	}
 
@@ -231,7 +231,7 @@ public class SkyboxRenderer {
 		final Model model = WandererConstants.ASSET_MANAGER.get("orig/lib/stars/stars.obj", Model.class);
 		final ModelInstance ins = new ModelInstance(model);
 		ins.materials.get(0)
-			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex));
+			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex), new NoLightningAttribute());
 		return ins;
 	}
 
