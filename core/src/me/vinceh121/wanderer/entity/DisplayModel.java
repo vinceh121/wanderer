@@ -12,8 +12,6 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Quaternion;
-import com.badlogic.gdx.math.Vector3;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.WandererConstants;
@@ -93,11 +91,7 @@ public class DisplayModel {
 	public void updateTransform(final Matrix4 entityTrans) {
 		this.absoluteTransform.set(entityTrans);
 
-		this.absoluteTransform.translate(this.relativeTransform.getTranslation(new Vector3()));
-
-		this.absoluteTransform.rotate(this.relativeTransform.getRotation(new Quaternion()));
-
-		this.absoluteTransform.scl(this.relativeTransform.getScale(new Vector3()));
+		this.absoluteTransform.mul(this.relativeTransform);
 
 		if (this.cacheDisplayModel != null) {
 			this.cacheDisplayModel.transform = this.absoluteTransform;

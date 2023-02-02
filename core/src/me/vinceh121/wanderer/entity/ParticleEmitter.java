@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Quaternion;
-import com.badlogic.gdx.math.Vector3;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.WandererConstants;
@@ -60,11 +58,7 @@ public class ParticleEmitter {
 	public void updateTransform(final Matrix4 emitterTrans) {
 		this.absoluteTransform.set(emitterTrans);
 
-		this.absoluteTransform.translate(this.relativeTransform.getTranslation(new Vector3()));
-
-		this.absoluteTransform.rotate(this.relativeTransform.getRotation(new Quaternion()));
-
-		this.absoluteTransform.scl(this.relativeTransform.getScale(new Vector3()));
+		this.absoluteTransform.mul(this.relativeTransform);
 
 		if (this.delegate != null) {
 			this.delegate.setTransform(this.absoluteTransform);
