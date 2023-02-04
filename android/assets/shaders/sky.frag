@@ -37,6 +37,11 @@ vec3 topMorning() {
 			logFrac(angle) * progress(MORNING, NOON));
 }
 
+vec3 bottomMorning() {
+	return mix(mix(skyTopNoon, skyBottomNoon, progress(MORNING, NOON)),
+			topMorning(), logFrac(angle));
+}
+
 vec3 topNoon() {
 	return mix(skyTopNoon, skyMiddleNoon, logFrac(angle));
 }
@@ -62,7 +67,9 @@ void main() {
 		if (time > MORNING && time < NOON) {
 			gl_FragColor = vec4(topMorning(), 1);
 		} else if (time > NOON && time < EVENING_START) {
-			gl_FragColor = vec4(mix(topMorning(), topNoon(), progress(NOON, EVENING_START)), 1);
+			gl_FragColor = vec4(
+					mix(topMorning(), topNoon(), progress(NOON, EVENING_START)),
+					1);
 		} else if (time > EVENING_START && time < EVENING_MID) {
 			gl_FragColor = vec4(
 					mix(topNoon(), topEveningStart(),
@@ -74,10 +81,9 @@ void main() {
 		}
 	} else { // bottom half
 		angle += 1;
+		sunSkyAngle += 1;
 		if (time > MORNING && time < NOON) {
-			gl_FragColor = vec4(
-					mix(skyMiddleNoon, skyBottomNoon,
-							angle * progress(MORNING, NOON)), 1);
+			gl_FragColor = vec4(bottomMorning(), 1);
 		}
 	}
 }
