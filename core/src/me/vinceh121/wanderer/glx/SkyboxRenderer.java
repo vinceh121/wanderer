@@ -50,9 +50,7 @@ public class SkyboxRenderer {
 	 * @param time Time of day, between 0 and 1
 	 */
 	public void update(float time) {
-		if (time < 0 || time > 1) {
-			throw new IllegalArgumentException("time must be between 0 and 1");
-		}
+		assert time >= 0 && time <= 1;
 		final float delta = Math.max(time - this.previous, 0);
 		this.previous = time;
 

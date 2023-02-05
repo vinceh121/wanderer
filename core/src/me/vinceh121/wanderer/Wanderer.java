@@ -66,7 +66,7 @@ public class Wanderer extends ApplicationAdapter {
 	private ItemBar itemBar;
 	private EnergyBar energyBar;
 
-	private float timeOfDay, timeScale = 0.0005f;
+	private float timeOfDay, elapsedTimeOfDay, dayDuration = 15800f;
 
 	@Override
 	public void create() {
@@ -139,10 +139,10 @@ public class Wanderer extends ApplicationAdapter {
 					}
 					return true;
 				} else if (in == Input.DEBUG_TIMESCALE) {
-					if (timeScale == 0.0005f) {
-						timeScale = 0.05f;
+					if (getDayDuration() == 15800f) {
+						setDayDuration(30f);
 					} else {
-						timeScale = 0.0005f;
+						setDayDuration(15800f);
 					}
 					return true;
 				} else if (in == Input.CURSOR_CAPTURE) {
@@ -251,20 +251,10 @@ public class Wanderer extends ApplicationAdapter {
 		this.inputManager.render();
 		this.physicsManager.render();
 
-		this.timeOfDay += Gdx.graphics.getDeltaTime() * this.timeScale;
+		this.elapsedTimeOfDay += Gdx.graphics.getDeltaTime();
+		this.elapsedTimeOfDay %= this.dayDuration;
+		this.timeOfDay = this.elapsedTimeOfDay / this.dayDuration;
 		this.timeOfDay %= 1;
-
-		this.graphicsManager.clear();
-		this.graphicsManager.renderSkybox(this.timeOfDay);
-
-		this.graphicsManager.begin();
-		for (int i = 0; i < this.entities.size; i++) {
-			final AbstractEntity entity = this.entities.get(i);
-			entity.updatePhysics(this.physicsManager.getBtWorld());
-			entity.render(this.graphicsManager.getModelBatch(), this.graphicsManager.getEnv());
-		}
-		this.graphicsManager.renderParticles(delta);
-		this.graphicsManager.end();
 
 		this.entities.removeAll(this.toRemove, true);
 		for (final AbstractEntity e : this.toRemove) {
@@ -283,6 +273,18 @@ public class Wanderer extends ApplicationAdapter {
 			e.enterBtWorld(this.physicsManager.getBtWorld());
 		}
 		this.toAdd.clear();
+
+		this.graphicsManager.clear();
+		this.graphicsManager.renderSkybox(this.timeOfDay);
+
+		this.graphicsManager.begin();
+		for (int i = 0; i < this.entities.size; i++) {
+			final AbstractEntity entity = this.entities.get(i);
+			entity.updatePhysics(this.physicsManager.getBtWorld());
+			entity.render(this.graphicsManager.getModelBatch(), this.graphicsManager.getEnv());
+		}
+		this.graphicsManager.renderParticles(delta);
+		this.graphicsManager.end();
 
 		if (this.debugBullet) {
 			this.physicsManager.getDebugDrawer().begin(this.graphicsManager.getViewport3d());
@@ -461,21 +463,44 @@ public class Wanderer extends ApplicationAdapter {
 		return this.interactingBuilding;
 	}
 
+	public float getElapsedTimeOfDay() {
+		return elapsedTimeOfDay;
+	}
+
+	public void setElapsedTimeOfDay(float elapsedTimeOfDay) {
+		this.elapsedTimeOfDay = elapsedTimeOfDay;
+	}
+
+	/**
+	 * @return progress through the day/night between 0 and 1
+	 */
 	public float getTimeOfDay() {
 		return timeOfDay;
 	}
 
+	/**
+	 * @param timeOfDay progress through the day/night between 0 and 1
+	 */
 	public void setTimeOfDay(float timeOfDay) {
-		assert timeOfDay >= 0 && timeOfDay <= 1;
 		this.timeOfDay = timeOfDay;
+
+		this.elapsedTimeOfDay = this.timeOfDay * this.dayDuration;
 	}
 
-	public float getTimeScale() {
-		return timeScale;
+	/**
+	 * @return number of seconds for a full day-night cycle
+	 */
+	public float getDayDuration() {
+		return dayDuration;
 	}
 
-	public void setTimeScale(float timeScale) {
-		this.timeScale = timeScale;
+	/**
+	 * @param dayDuration number of seconds for a full day-night cycle
+	 */
+	public void setDayDuration(float dayDuration) {
+		this.dayDuration = dayDuration;
+
+		this.elapsedTimeOfDay = this.dayDuration * this.timeOfDay;
 	}
 
 	public void showMessage(final String message) {
