@@ -187,9 +187,11 @@ public class InputManager extends ApplicationAdapter {
 
 				if (Gdx.input.isCursorCatched()) {
 					Gdx.input.setCursorPosition(centerX, centerY);
+					final boolean b = InputManager.this.fireMouseMoved(screenX - centerX, screenY - centerY);
+					return b;
+				} else {
+					return false;
 				}
-				final boolean b = InputManager.this.fireMouseMoved(screenX - centerX, screenY - centerY);
-				return b;
 			}
 		});
 	}
