@@ -1,6 +1,11 @@
 package me.vinceh121.wanderer.glx;
 
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -16,22 +21,37 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader.Config;
 import com.badlogic.gdx.graphics.g3d.utils.BaseShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import me.vinceh121.wanderer.WandererConstants;
 
 public class SkyboxRenderer {
 	private final Vector3 sunDir = new Vector3(), moonDir = new Vector3();
+	private final Map<String, SkyProperties> skies = new Hashtable<>();
 	private ModelInstance sky, stars, sun, mars, galaxy, skycap, skyring;
 	private float previous;
 	private SkyShader shader;
+	private DirectionalLight sunLight, moonLight;
+	private SkyProperties skyProperties;
 
 	public void create() {
+		try {
+			this.skies.putAll(WandererConstants.MAPPER.readValue(Gdx.files.internal("skies.json").read(),
+					new TypeReference<Map<String, SkyProperties>>() {
+					}));
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to load skies.json", e);
+		}
+
+		this.skyProperties = this.skies.get("normal");
+		
 		this.sky = this.makeSphereSky();
 
 		this.sun = this.makePlaneOneOne("orig/lib/sun1/texturenone.ktx");
@@ -44,6 +64,8 @@ public class SkyboxRenderer {
 		this.skyring = this.makeRingAlpha("orig/skybox02.n/texture2wow3.ktx");
 
 		this.stars = this.makeStarsOneOne("orig/lib/stars/texturenone.ktx");
+
+		this.sunLight = new DirectionalLight().set(0.8f, 0.8f, 0.8f, 1f, 0f, 0f);
 	}
 
 	/**
@@ -51,7 +73,7 @@ public class SkyboxRenderer {
 	 */
 	public void update(float time) {
 		assert time >= 0 && time <= 1;
-		final float delta = Math.max(time - this.previous, 0);
+		final float delta = time - this.previous;
 		this.previous = time;
 
 		if (this.shader != null) {
@@ -78,6 +100,25 @@ public class SkyboxRenderer {
 
 		// skyring rotates clockwise
 		this.skyring.transform.rotateRad(Vector3.Y, -0.1f * delta / 0.016666668f);
+
+		this.sunLight.setDirection(this.sunDir);
+		this.sunLight.setColor(interpolatedColor(time, this.skyProperties.getSunLightColor()));
+	}
+
+	private Color interpolatedColor(float time, Map<TimeRange, Color> colors) {
+		final TimeRange range = getTimeRange(time);
+		final TimeRange nextRange = TimeRange.values()[(range.ordinal() + 1) % TimeRange.values().length];
+
+		if (!colors.containsKey(range) || !colors.containsKey(nextRange)) {
+			return new Color();
+		}
+
+		float alpha = (time - range.getRangeStart()) / (range.getRangeEnd() - range.getRangeStart());
+
+		final Color c = colors.get(range).cpy();
+		c.lerp(colors.get(nextRange), alpha);
+
+		return c;
 	}
 
 	public void setSkycapTexture(String tex) {
@@ -244,6 +285,14 @@ public class SkyboxRenderer {
 		return ins;
 	}
 
+	public SkyProperties getSkyProperties() {
+		return skyProperties;
+	}
+
+	public void setSkyProperties(SkyProperties skyProperties) {
+		this.skyProperties = skyProperties;
+	}
+
 	public Vector3 getSunDir() {
 		return sunDir;
 	}
@@ -252,21 +301,46 @@ public class SkyboxRenderer {
 		return moonDir;
 	}
 
-	public static String nameOfTime(float time) {
-		if (time <= 0.25f) {
-			return "MORNING";
-		} else if (time <= 0.375f) {
-			return "NOON";
-		} else if (time <= 0.4375f) {
-			return "EVENING_START";
-		} else if (time <= 0.5f) {
-			return "EVENING_MID";
-		} else if (time <= 0.75f) {
-			return "EVENING_END";
-		} else if (time <= 0.75f) {
-			return "MIDNIGHT";
-		} else {
-			return "INVALID TIME";
+	public DirectionalLight getSunLight() {
+		return sunLight;
+	}
+
+	public DirectionalLight getMoonLight() {
+		return moonLight;
+	}
+
+	public static TimeRange getTimeRange(float time) {
+		for (TimeRange r : TimeRange.values()) {
+			if (time <= r.getRangeEnd()) {
+				return r;
+			}
+		}
+		return null;
+	}
+
+	public static enum TimeRange {
+		MORNING(0, 0.25f),
+		NOON(0.25f, 0.375f),
+		EVENING_START(0.375f, 0.4375f),
+		EVENING_MID(0.4375f, 0.5f),
+		EVENING_END(0.5f, 0.75f),
+		MIDNIGHT(0.75f, 0.875f),
+		/// ....
+		NIGHT_END(0.875f, 1f);
+
+		private final float rangeStart, rangeEnd;
+
+		private TimeRange(float rangeStart, float rangeEnd) {
+			this.rangeStart = rangeStart;
+			this.rangeEnd = rangeEnd;
+		}
+
+		public float getRangeStart() {
+			return rangeStart;
+		}
+
+		public float getRangeEnd() {
+			return rangeEnd;
 		}
 	}
 }

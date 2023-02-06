@@ -42,7 +42,7 @@ public class DebugOverlay extends Table {
 		}
 		this.lblTime.setText(String.format("Time: %.2f%%    %s",
 				this.game.getTimeOfDay() * 100,
-				SkyboxRenderer.nameOfTime(this.game.getTimeOfDay())));
+				SkyboxRenderer.getTimeRange(this.game.getTimeOfDay()).name()));
 
 		// pin to the top left
 		this.setX(0, Align.topLeft);

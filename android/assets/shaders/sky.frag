@@ -1,7 +1,5 @@
 precision highp float;
 
-#define PI 3.1415927
-
 #define MORNING 0.0
 #define NOON 0.25
 #define EVENING_START 0.375
