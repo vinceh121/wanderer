@@ -172,6 +172,9 @@ public class OpenAL3DSource implements SoundEmitter3D {
 
 	@Override
 	protected void finalize() throws Throwable {
+		if (this.disposed) {
+			return;
+		}
 		System.err.println("Garbaging " + this.source);
 		this.dispose();
 	}
