@@ -101,7 +101,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	}
 
 	public void leaveBtWorld(final btDiscreteDynamicsWorld world) {
-		if (this.getCollideObject() != null) {
+		if (this.getCollideObject() != null && !this.collideObject.isDisposed()) {
 			world.removeRigidBody(this.getCollideObject());
 		}
 	}

@@ -158,7 +158,9 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 	@Override
 	public void leaveBtWorld(final btDiscreteDynamicsWorld world) {
 		super.leaveBtWorld(world);
-		world.removeCollisionObject(this.interactZone);
+		if (this.interactZone != null && !this.interactZone.isDisposed()) {
+			world.removeCollisionObject(this.interactZone);
+		}
 	}
 
 	@Override
