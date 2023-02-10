@@ -73,11 +73,8 @@ public class CharacterWController extends CustomActionInterface {
 			return;
 		}
 		final Array<Vector3> points = new Array<>(3);
-		// starting point, character's translation, add half the height of the capsule
-		// to compensate for offset
-		points.add(this.character.getTransform()
-			.getTranslation(new Vector3())
-			.add(0, ((btCapsuleShape) this.ghostObj.getCollisionShape()).getHalfHeight(), 0));
+		// starting point, character's translation
+		points.add(this.getTranslation());
 		// high point, start with relative direction, rotate by global transform, add
 		// position offset
 		points.add(new Vector3(0, height, distance / 2).rot(this.getWorldTransform()).add(points.peek()));
@@ -273,11 +270,10 @@ public class CharacterWController extends CustomActionInterface {
 
 				if (dist >= 0) {
 					direction.nor();
-					final Vector3 reflectDir = direction.cpy()
-						.sub(hitNormal.cpy().scl(direction.dot(hitNormal) * 2))
-						.nor();
-					final Vector3 perpendicularDir = reflectDir.cpy()
-						.sub(hitNormal.cpy().scl(reflectDir.dot(hitNormal)));
+					final Vector3 reflectDir =
+							direction.cpy().sub(hitNormal.cpy().scl(direction.dot(hitNormal) * 2)).nor();
+					final Vector3 perpendicularDir =
+							reflectDir.cpy().sub(hitNormal.cpy().scl(reflectDir.dot(hitNormal)));
 					final Vector3 perpendicularComponent = reflectDir.cpy().sub(perpendicularDir);
 					this.setWorldTransform(
 							this.getWorldTransform().setTranslation(this.getTranslation().add(perpendicularComponent)));
