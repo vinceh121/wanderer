@@ -23,10 +23,8 @@ public class PhysicsManager extends ApplicationAdapter {
 	private final btBroadphaseInterface btInterface = new btDbvtBroadphase();
 	private final btSequentialImpulseConstraintSolver btSolver = new btSequentialImpulseConstraintSolver();
 	private final btGhostPairCallback ghostPairCallback = new btGhostPairCallback();
-	private final btDiscreteDynamicsWorld btWorld = new btDiscreteDynamicsWorld(this.btDispatch,
-			this.btInterface,
-			this.btSolver,
-			this.btConfig);
+	private final btDiscreteDynamicsWorld btWorld =
+			new btDiscreteDynamicsWorld(this.btDispatch, this.btInterface, this.btSolver, this.btConfig);
 	private ContactDispatcher contactDispatcher;
 	private DebugDrawer debugDrawer;
 
@@ -48,7 +46,7 @@ public class PhysicsManager extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		this.btWorld.stepSimulation(Gdx.graphics.getDeltaTime(), 10, Gdx.graphics.getDeltaTime());
+		this.btWorld.stepSimulation(Gdx.graphics.getDeltaTime(), 10, 1f / 60f);
 		this.btWorld.performDiscreteCollisionDetection();
 	}
 

@@ -16,11 +16,17 @@ public class MultiplexedAnimationController extends BaseAnimationController {
 	private static final String[] ANIM_TYPES = new String[] { "rot", "trans" };
 	private final Array<String> boneNames = new Array<>(false, 16);
 	private AnimationTrack current, previous;
+	private boolean doTransitions = true;
 	private float transitionTime = 0.1f;
 	/**
 	 * Time left for the smooth loop last frame to first frame transition
 	 */
 	private float smoothLoopTrans;
+	/**
+	 * Time left for the smooth transition between the current and previous
+	 * animation
+	 */
+	private float previousTrans;
 
 	public MultiplexedAnimationController(ModelInstance target) {
 		super(target);
@@ -78,6 +84,23 @@ public class MultiplexedAnimationController extends BaseAnimationController {
 			this.current.speed *= -1;
 		}
 
+		if (this.previous != null && this.previousTrans != 0) {
+			final float alpha = this.previousTrans / this.transitionTime;
+
+			for (int i = 0; i < Math.max(this.current.animations.size, this.current.animations.size); i++) {
+				this.begin();
+				if (i < this.current.animations.size) {
+					this.apply(this.current.animations.get(i), this.current.currentTime, 1);
+				}
+				if (i < this.previous.animations.size) {
+					this.apply(this.previous.animations.get(i), this.previous.currentTime, alpha);
+				}
+				this.end();
+			}
+			this.previousTrans = Math.max(0, this.previousTrans - delta);
+			return;
+		}
+
 		for (Animation anim : this.current.animations) {
 			this.applyAnimation(anim, this.current.currentTime);
 		}
@@ -106,6 +129,11 @@ public class MultiplexedAnimationController extends BaseAnimationController {
 			throw new IllegalStateException("No animation track & bone for state `" + state + "'");
 		}
 
+		if (this.doTransitions) {
+			this.previous = this.current;
+			this.previousTrans = this.transitionTime;
+		}
+
 		this.current = new AnimationTrack(state, anims);
 		this.current.playbackType = playbackType;
 		this.current.speed = speed;
@@ -117,6 +145,14 @@ public class MultiplexedAnimationController extends BaseAnimationController {
 
 	public AnimationTrack getPrevious() {
 		return previous;
+	}
+
+	public boolean isDoTransitions() {
+		return doTransitions;
+	}
+
+	public void setDoTransitions(boolean doTransitions) {
+		this.doTransitions = doTransitions;
 	}
 
 	public float getTransitionTime() {
