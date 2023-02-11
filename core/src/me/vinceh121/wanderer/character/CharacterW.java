@@ -121,15 +121,15 @@ public class CharacterW extends AbstractLivingControllableEntity {
 			} else if (this.controller.isJumping()) {
 				this.animController.playAnimationOptional("hop_hop", PlaybackType.NORMAL, 1);
 			} else if (this.justRan) {
-				this.animController.playAnimationOptional("boden_run", PlaybackType.LOOP, 1);
+				this.animController.playAnimationOptional("boden_run", PlaybackType.LOOP_SMOOTH, 1);
 			} else if (this.justTurnedLeft) {
 				this.animController.playAnimationOptional("boden_drehenlinks", PlaybackType.LOOP, 1);
 			} else if (this.justTurnedRight) {
 				this.animController.playAnimationOptional("boden_drehenrechts", PlaybackType.LOOP, 1);
 			} else if (this.justBackedUp) {
-				this.animController.playAnimationOptional("boden_laufzur", PlaybackType.LOOP, 1);
+				this.animController.playAnimationOptional("boden_laufzur", PlaybackType.LOOP_SMOOTH, 1);
 			} else {
-				this.animController.playAnimationOptional("boden_stehen", PlaybackType.LOOP, 1);
+				this.animController.playAnimationOptional("boden_stehen", PlaybackType.LOOP_SMOOTH, 1);
 			}
 		}
 
