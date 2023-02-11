@@ -29,6 +29,8 @@ import me.vinceh121.wanderer.character.CharacterWController.FallListener;
 import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.event.Event;
+import me.vinceh121.wanderer.glx.MultiplexedAnimationController;
+import me.vinceh121.wanderer.glx.MultiplexedAnimationController.PlaybackType;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
@@ -50,11 +52,12 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	private final Array<ArtifactMeta> belt = new Array<>();
 	private Island attachedIsland;
 	private int beltSize = 3, placingSlotIndex;
-	private boolean beltOpen;
+	private boolean beltOpen, justRan, justBackedUp, justTurnedLeft, justTurnedRight;
 	private BeltSelection beltWidget;
 	private AbstractBuildingMeta placing;
 	private PreviewBuilding previewBuilding;
 	private float cameraHeight = 0.5f;
+	private MultiplexedAnimationController animController;
 
 	public CharacterW(final Wanderer game, final CharacterMeta meta) {
 		super(game);
@@ -73,6 +76,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 					.playSource3D()
 					.setPosition(CharacterW.this.getTransform().getTranslation(new Vector3()));
 				CharacterW.this.eventDispatcher.dispatchEvent(new Event(EVENT_JUMP_END));
+				justRan = justBackedUp = justTurnedLeft = justTurnedRight = false;
 			}
 
 			@Override
@@ -102,6 +106,33 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 	@Override
 	public void render(final ModelBatch batch, final Environment env) {
+		if (this.animController == null && this.getModels().size > 0
+				&& this.getModels().get(0).getCacheDisplayModel() != null) {
+			this.animController = new MultiplexedAnimationController(this.getModels().get(0).getCacheDisplayModel());
+		}
+
+		if (this.animController != null) {
+			this.animController.update(Gdx.graphics.getDeltaTime());
+
+			if (this.controller.isFalling()) {
+				this.animController.playAnimationOptional("slitter_slitter", PlaybackType.LOOP, 1);
+			} else if (this.controller.isBigJump()) {
+				this.animController.playAnimationOptional("sprung_sprung", PlaybackType.NORMAL, 1);
+			} else if (this.controller.isJumping()) {
+				this.animController.playAnimationOptional("hop_hop", PlaybackType.NORMAL, 1);
+			} else if (this.justRan) {
+				this.animController.playAnimationOptional("boden_run", PlaybackType.LOOP, 1);
+			} else if (this.justTurnedLeft) {
+				this.animController.playAnimationOptional("boden_drehenlinks", PlaybackType.LOOP, 1);
+			} else if (this.justTurnedRight) {
+				this.animController.playAnimationOptional("boden_drehenrechts", PlaybackType.LOOP, 1);
+			} else if (this.justBackedUp) {
+				this.animController.playAnimationOptional("boden_laufzur", PlaybackType.LOOP, 1);
+			} else {
+				this.animController.playAnimationOptional("boden_stehen", PlaybackType.LOOP, 1);
+			}
+		}
+
 		super.render(batch, env);
 
 		if (this.isControlled()) {
@@ -113,7 +144,22 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	private void moveCamera() {
 		final PerspectiveCamera cam = this.game.getCamera();
 
-		if (this.placing != null) {
+		final Vector3 characterTransform = new Vector3();
+		this.getTransform().getTranslation(characterTransform);
+
+		final Quaternion characterRotation = new Quaternion();
+		this.getTransform().getRotation(characterRotation);
+
+		final float invertCameraHeight = 1f - this.cameraHeight;
+
+		final Vector3 aheadPoint =
+				new Vector3(0, 5 * invertCameraHeight, 5 * this.cameraHeight).rot(this.getTransform())
+					.add(characterTransform);
+
+		if (this.controller.isFalling()) {
+			cam.lookAt(aheadPoint);
+			cam.up.set(0, 1, 0); // should this be doable without this?
+		} else if (this.placing != null) {
 			if (this.attachedIsland == null) {
 				this.placing = null;
 				return;
@@ -129,23 +175,15 @@ public class CharacterW extends AbstractLivingControllableEntity {
 			} else {
 				cam.direction.set(this.attachedIsland.getPlaceCameraDirection());
 			}
+			cam.up.set(0, 1, 0); // should this be doable without this?
 		} else {
-			final Vector3 characterTransform = new Vector3();
-			this.getTransform().getTranslation(characterTransform);
-
-			final Quaternion characterRotation = new Quaternion();
-			this.getTransform().getRotation(characterRotation);
-
-			final float invertCameraHeight = 1f - this.cameraHeight;
-
 			final Vector3 pos = new Vector3(characterRotation
-				.transform(new Vector3(0, 5f * this.cameraHeight, -0.1f + -4f * invertCameraHeight))
+				.transform(new Vector3(0, 5f * this.cameraHeight, -0.1f + -6f * invertCameraHeight))
 				.add(characterTransform));
-			pos.lerp(cam.position, 0.6f);
+			pos.lerp(cam.position, 0.8f);
 			cam.position.set(pos);
 
-			cam.lookAt(new Vector3(0, 5 * invertCameraHeight, 5 * this.cameraHeight).rot(this.getTransform())
-				.add(characterTransform));
+			cam.lookAt(aheadPoint);
 			cam.up.set(0, 1, 0); // should this be doable without this?
 		}
 		cam.update(true);
@@ -164,18 +202,31 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 		if (this.game.getInputManager().isPressed(Input.WALK_LEFT)) {
 			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, 3f));
+			this.justTurnedLeft = true;
+		} else {
+			this.justTurnedLeft = false;
 		}
 		if (this.game.getInputManager().isPressed(Input.WALK_RIGHT)) {
 			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, -3f));
+			this.justTurnedRight = true;
+		} else {
+			this.justTurnedRight = false;
 		}
 		this.characterDirection.set(0, 0, 1).rot(this.getTransform()).nor();
 		this.walkDirection.set(0, 0, 0);
 
 		if (this.game.getInputManager().isPressed(Input.WALK_FORWARDS)) {
 			this.walkDirection.add(this.characterDirection);
+			this.justRan = true;
+		} else {
+			this.justRan = false;
 		}
 		if (this.game.getInputManager().isPressed(Input.WALK_BACKWARDS)) {
 			this.walkDirection.add(-this.characterDirection.x, -this.characterDirection.y, -this.characterDirection.z);
+			this.walkDirection.scl(0.15f);
+			this.justBackedUp = true;
+		} else {
+			this.justBackedUp = false;
 		}
 		this.walkDirection.scl(8f * Gdx.graphics.getDeltaTime());
 		this.controller.setWalkDirection(this.walkDirection);
@@ -192,6 +243,10 @@ public class CharacterW extends AbstractLivingControllableEntity {
 				} else if (in == Input.SCROLL_BELT_LEFT) {
 					game.setTimeOfDay(MathUtils.clamp(game.getTimeOfDay() - 0.005f, 0, 1));
 					return true;
+				}
+
+				if (controller.isJumping() || controller.isFalling()) {
+					return false;
 				}
 
 				if (CharacterW.this.placing != null) {
@@ -246,16 +301,20 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 			@Override
 			public boolean mouseMoved(final int x, final int y) {
-				final float lookSensY = Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay")
-					.getFloat("lookSensitivityY", 0.005f);
+				if (controller.isJumping() || controller.isFalling()) {
+					return false;
+				}
+
+				final float lookSensY =
+						Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay").getFloat("lookSensitivityY", 0.005f);
 				CharacterW.this.cameraHeight = MathUtils.clamp(CharacterW.this.cameraHeight + lookSensY * y, 0, 1);
 
 				if (!CharacterW.this.controller.canJump()) {
 					return false;
 				}
 
-				final float lookSensX = Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay")
-					.getFloat("lookSensitivityX", 0.2f);
+				final float lookSensX =
+						Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay").getFloat("lookSensitivityX", 0.2f);
 
 				CharacterW.this.controller.setWorldTransform(
 						CharacterW.this.controller.getWorldTransform().rotate(Vector3.Y, -lookSensX * x));

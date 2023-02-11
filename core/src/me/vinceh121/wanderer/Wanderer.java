@@ -216,15 +216,12 @@ public class Wanderer extends ApplicationAdapter {
 		this.addEntity(island);
 		playerClan.addMember(island);
 
-		final CharacterMeta johnMeta = MetaRegistry.getInstance().get("john");
+		final CharacterMeta johnMeta = MetaRegistry.getInstance().get("goliath");
 		johnMeta.ensureLoading();
 
 		final CharacterW john = new CharacterW(this, johnMeta);
 		john.setBeltSize(5);
 		john.setTranslation(0.1f, 50f, 0.1f);
-
-//		SceneAsset scn = new GLTFLoader().load(Gdx.files.absolute("/tmp/owo.gltf"));
-//		john.getModels().get(0).setCacheDisplayModel(new ModelInstance(scn.scene.model));
 
 		this.itemBar.setCharacter(john);
 

@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.glx;
 
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Attributes;
 import com.badlogic.gdx.graphics.g3d.Renderable;
@@ -52,6 +53,9 @@ public class WandererShader extends DefaultShader {
 			} else if (a.type == NoLightningAttribute.NO_LIGHTNING) {
 				prefix += "#define noLightningFlag\n";
 			}
+		}
+		if (renderable.meshPart.mesh.getVertexAttribute(Usage.BoneWeight)!=null) {
+			prefix += "#define skinningFlag\n";
 		}
 		return prefix;
 	}
