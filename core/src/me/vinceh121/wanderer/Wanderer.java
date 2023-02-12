@@ -55,6 +55,7 @@ public class Wanderer extends ApplicationAdapter {
 	 */
 	private Array<AbstractEntity> toAdd, toRemove;
 	private Array<Clan> clans;
+	private Clan playerClan;
 
 	private DebugOverlay debugOverlay;
 	private boolean debugBullet = false, glxDebug = false;
@@ -203,12 +204,11 @@ public class Wanderer extends ApplicationAdapter {
 		energyEntity.setTranslation(2, 34, 10);
 		this.addEntity(energyEntity);
 
-		final Clan playerClan = new Clan();
+		playerClan = new Clan();
 		playerClan.setColor(Color.BLUE);
 		playerClan.setName("player clan");
 		playerClan.setMaxEnergy(100);
 		this.clans.add(playerClan);
-		this.energyBar.setClan(playerClan);
 
 		final IslandMeta firstIsland = MetaRegistry.getInstance().get("first_island");
 		final Island island = new Island(this, firstIsland);
@@ -253,23 +253,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.timeOfDay = this.elapsedTimeOfDay / this.dayDuration;
 		this.timeOfDay %= 1;
 
-		this.entities.removeAll(this.toRemove, true);
-		for (final AbstractEntity e : this.toRemove) {
-			this.toAdd.removeValue(e, true);
-			e.leaveBtWorld(this.physicsManager.getBtWorld());
-			if (e instanceof IClanMember) {
-				for (final Clan c : this.clans) {
-					c.removeMember((IClanMember) e);
-				}
-			}
-		}
-		this.toRemove.clear();
-
-		this.entities.addAll(this.toAdd);
-		for (final AbstractEntity e : this.toAdd) {
-			e.enterBtWorld(this.physicsManager.getBtWorld());
-		}
-		this.toAdd.clear();
+		this.flushEntityQueue();
 
 		this.graphicsManager.clear();
 		this.graphicsManager.renderSkybox(this.timeOfDay);
@@ -292,6 +276,26 @@ public class Wanderer extends ApplicationAdapter {
 		this.scriptManager.update();
 
 		this.graphicsManager.renderUI();
+	}
+
+	private void flushEntityQueue() {
+		this.entities.removeAll(this.toRemove, true);
+		for (final AbstractEntity e : this.toRemove) {
+			this.toAdd.removeValue(e, true);
+			e.leaveBtWorld(this.physicsManager.getBtWorld());
+			if (e instanceof IClanMember) {
+				for (final Clan c : this.clans) {
+					c.removeMember((IClanMember) e);
+				}
+			}
+		}
+		this.toRemove.clear();
+
+		this.entities.addAll(this.toAdd);
+		for (final AbstractEntity e : this.toAdd) {
+			e.enterBtWorld(this.physicsManager.getBtWorld());
+		}
+		this.toAdd.clear();
 	}
 
 	public void addEntity(final AbstractEntity e) {
@@ -337,10 +341,29 @@ public class Wanderer extends ApplicationAdapter {
 		return null;
 	}
 
+	public Clan getPlayerClan() {
+		return playerClan;
+	}
+
+	public void setPlayerClan(Clan playerClan) {
+		this.playerClan = playerClan;
+		this.bindPlayerClan();
+	}
+
+	private void bindPlayerClan() {
+		this.energyBar.setClan(this.playerClan);
+	}
+
 	public void saveStateless(FileHandle dest) throws IOException {
 		MapW mapW = this.saveMap();
 
 		final Save save = new Save();
+		if (this.controlledEntity != null) {
+			save.setControlled(((AbstractEntity) this.controlledEntity).getId());
+		}
+		if (this.playerClan != null) {
+			save.setPlayerClan(this.playerClan.getId());
+		}
 		save.setMap(mapW);
 		try (OutputStream out = dest.write(false)) {
 			WandererConstants.SAVE_MAPPER.writeValue(out, save);
@@ -366,6 +389,23 @@ public class Wanderer extends ApplicationAdapter {
 			Save sav = WandererConstants.SAVE_MAPPER.readValue(in, Save.class);
 			MapW map = sav.getMap();
 			this.loadMap(map);
+			this.flushEntityQueue();
+
+			AbstractEntity contEnt = this.getEntity(sav.getControlled());
+			if (contEnt != null) {
+				if (contEnt instanceof IControllableEntity) {
+					this.controlEntity((IControllableEntity) contEnt);
+				} else {
+					throw new IllegalStateException("Cannot control entity from save " + contEnt);
+				}
+			} else {
+				Gdx.app.log("loadStateless", "No controlled entity in save");
+			}
+
+			Clan pClan = this.getClan(sav.getPlayerClan());
+			if (pClan != null) {
+				this.setPlayerClan(pClan);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
