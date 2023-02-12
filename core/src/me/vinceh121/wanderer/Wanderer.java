@@ -58,9 +58,13 @@ public class Wanderer extends ApplicationAdapter {
 	private Clan playerClan;
 
 	private DebugOverlay debugOverlay;
-	private boolean debugBullet = false, glxDebug = false;
+	private boolean debugBullet = false, glxDebug = false, paused;
 
 	private IControllableEntity controlledEntity;
+	/**
+	 * To store controlled entity before pause to remove control
+	 */
+	private IControllableEntity pauseControlledEntity;
 	private AbstractBuilding interactingBuilding;
 
 	private BlinkLabel messageLabel;
@@ -148,6 +152,13 @@ public class Wanderer extends ApplicationAdapter {
 					return true;
 				} else if (in == Input.CURSOR_CAPTURE) {
 					Gdx.input.setCursorCatched(!Gdx.input.isCursorCatched());
+					return true;
+				} else if (in == Input.PAUSE_MENU) {
+					if (paused) {
+						resume();
+					} else {
+						pause();
+					}
 					return true;
 				}
 				return false;
@@ -245,13 +256,14 @@ public class Wanderer extends ApplicationAdapter {
 
 		WandererConstants.ASSET_MANAGER.update(8);
 
-		this.inputManager.render();
-		this.physicsManager.render();
+		if (!this.paused) {
+			this.physicsManager.render();
 
-		this.elapsedTimeOfDay += Gdx.graphics.getDeltaTime();
-		this.elapsedTimeOfDay %= this.dayDuration;
-		this.timeOfDay = this.elapsedTimeOfDay / this.dayDuration;
-		this.timeOfDay %= 1;
+			this.elapsedTimeOfDay += Gdx.graphics.getDeltaTime();
+			this.elapsedTimeOfDay %= this.dayDuration;
+			this.timeOfDay = this.elapsedTimeOfDay / this.dayDuration;
+			this.timeOfDay %= 1;
+		}
 
 		this.flushEntityQueue();
 
@@ -262,6 +274,9 @@ public class Wanderer extends ApplicationAdapter {
 		for (int i = 0; i < this.entities.size; i++) {
 			final AbstractEntity entity = this.entities.get(i);
 			entity.updatePhysics(this.physicsManager.getBtWorld());
+			if (!this.paused) {
+				entity.tick(delta);
+			}
 			entity.render(this.graphicsManager.getModelBatch(), this.graphicsManager.getEnv());
 		}
 		this.graphicsManager.renderParticles(delta);
@@ -544,6 +559,26 @@ public class Wanderer extends ApplicationAdapter {
 		this.messageLabel.setColor(1f, 1f, 1f, 0f);
 		this.messageLabel.setText(message);
 		this.messageLabel.blink();
+	}
+
+	public boolean isPaused() {
+		return paused;
+	}
+
+	@Override
+	public void pause() {
+		System.out.println("Wanderer.pause()");
+		this.paused = true;
+		this.pauseControlledEntity = this.controlledEntity;
+		this.removeEntityControl();
+	}
+
+	@Override
+	public void resume() {
+		System.out.println("Wanderer.resume()");
+		this.paused = false;
+		this.controlEntity(this.pauseControlledEntity);
+		this.pauseControlledEntity = null;
 	}
 
 	@Override

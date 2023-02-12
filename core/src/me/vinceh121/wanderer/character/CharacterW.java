@@ -105,7 +105,9 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	}
 
 	@Override
-	public void render(final ModelBatch batch, final Environment env) {
+	public void tick(float delta) {
+		super.tick(delta);
+
 		if (this.animController == null && this.getModels().size > 0
 				&& this.getModels().get(0).getCacheDisplayModel() != null) {
 			this.animController = new MultiplexedAnimationController(this.getModels().get(0).getCacheDisplayModel());
@@ -133,12 +135,15 @@ public class CharacterW extends AbstractLivingControllableEntity {
 			}
 		}
 
-		super.render(batch, env);
-
 		if (this.isControlled()) {
 			this.processInput();
 			this.moveCamera();
 		}
+	}
+
+	@Override
+	public void render(final ModelBatch batch, final Environment env) {
+		super.render(batch, env);
 	}
 
 	private void moveCamera() {

@@ -50,6 +50,16 @@ public class InConstructionBuilding extends AbstractBuilding {
 	}
 
 	@Override
+	public void tick(float delta) {
+		super.tick(delta);
+
+		this.aliveTime += Gdx.graphics.getDeltaTime();
+		if (this.aliveTime > this.getMeta().getBuildTime()) {
+			this.build();
+		}
+	}
+
+	@Override
 	public void render(final ModelBatch batch, final Environment env) {
 		super.render(batch, env);
 
@@ -63,11 +73,6 @@ public class InConstructionBuilding extends AbstractBuilding {
 			v.add(model.getRelativeTransform().getTranslation(new Vector3()));
 			v.add(this.getTransform().getTranslation(new Vector3()));
 			model.getAbsoluteTransform().setTranslation(v);
-		}
-
-		this.aliveTime += Gdx.graphics.getDeltaTime();
-		if (this.aliveTime > this.getMeta().getBuildTime()) {
-			this.build();
 		}
 	}
 

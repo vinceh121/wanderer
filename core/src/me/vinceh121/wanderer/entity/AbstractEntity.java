@@ -109,6 +109,9 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	protected btMotionState createMotionState() {
 		return new btDefaultMotionState(this.transform);
 	}
+	
+	public void tick(float delta) {
+	}
 
 	public void render(final ModelBatch batch, final Environment env) {
 		for (final DisplayModel m : this.models) {
