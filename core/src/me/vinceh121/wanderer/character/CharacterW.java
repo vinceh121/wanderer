@@ -80,7 +80,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 			@Override
 			public void onEndFall() {
 			}
-			
+
 			@Override
 			public void shouldDie() {
 				onDeath();
@@ -125,13 +125,13 @@ public class CharacterW extends AbstractLivingControllableEntity {
 				this.animController.playAnimationOptional("sprung_sprung", PlaybackType.NORMAL, 1);
 			} else if (this.controller.isJumping()) {
 				this.animController.playAnimationOptional("hop_hop", PlaybackType.NORMAL, 1);
-			} else if (this.justRan) {
+			} else if (this.justRan && !this.justBackedUp) {
 				this.animController.playAnimationOptional("boden_run", PlaybackType.LOOP_SMOOTH, 1);
-			} else if (this.justTurnedLeft) {
+			} else if (this.justTurnedLeft && !this.justTurnedRight) {
 				this.animController.playAnimationOptional("boden_drehenlinks", PlaybackType.LOOP, 1);
-			} else if (this.justTurnedRight) {
+			} else if (this.justTurnedRight && !this.justTurnedLeft) {
 				this.animController.playAnimationOptional("boden_drehenrechts", PlaybackType.LOOP, 1);
-			} else if (this.justBackedUp) {
+			} else if (this.justBackedUp && !this.justRan) {
 				this.animController.playAnimationOptional("boden_laufzur", PlaybackType.LOOP_SMOOTH, 1);
 			} else {
 				this.animController.playAnimationOptional("boden_stehen", PlaybackType.LOOP_SMOOTH, 1);
@@ -321,13 +321,13 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 				CharacterW.this.controller.setWorldTransform(
 						CharacterW.this.controller.getWorldTransform().rotate(Vector3.Y, -lookSensX * x));
-				
+
 				if (x < 0) {
 					justTurnedLeft = true;
 				} else if (x > 0) {
 					justTurnedRight = true;
 				}
-				
+
 				return true;
 			}
 		};
@@ -337,8 +337,8 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		if (this.getClan().getEnergy() < this.placing.getEnergyRequired()) {
 			this.game.showMessage("Not enough energy!");
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class)
-			.playGeneral()
-			.setDisposeOnStop(true);
+				.playGeneral()
+				.setDisposeOnStop(true);
 			return;
 		}
 
