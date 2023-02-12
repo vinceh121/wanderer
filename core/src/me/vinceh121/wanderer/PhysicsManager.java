@@ -46,7 +46,7 @@ public class PhysicsManager extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		this.btWorld.stepSimulation(Gdx.graphics.getDeltaTime(), 10, 1f / 60f);
+		this.btWorld.stepSimulation(Gdx.graphics.getDeltaTime(), 10);
 		this.btWorld.performDiscreteCollisionDetection();
 	}
 
