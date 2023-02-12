@@ -321,6 +321,13 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 				CharacterW.this.controller.setWorldTransform(
 						CharacterW.this.controller.getWorldTransform().rotate(Vector3.Y, -lookSensX * x));
+				
+				if (x < 0) {
+					justTurnedLeft = true;
+				} else if (x > 0) {
+					justTurnedRight = true;
+				}
+				
 				return true;
 			}
 		};
