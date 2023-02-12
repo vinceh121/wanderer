@@ -25,7 +25,7 @@ public class CharacterWController extends CustomActionInterface {
 	private final Wanderer game;
 	private final CharacterW character;
 	private boolean jumping, bigJump, falling;
-	private float jumpProgress, stepHeight = 0.5f, fallSpeed = 0.2f;
+	private float jumpProgress, stepHeight = 0.5f, fallSpeed = 0.2f, fallTimeDeath = 3f, fallTime;
 	private Bezier<Vector3> jumpCurve;
 	private FallListener fallListener = new FallListener() {
 		@Override
@@ -38,6 +38,10 @@ public class CharacterWController extends CustomActionInterface {
 
 		@Override
 		public void onEndFall() {
+		}
+
+		@Override
+		public void shouldDie() {
 		}
 	};
 
@@ -109,6 +113,7 @@ public class CharacterWController extends CustomActionInterface {
 		} else if (this.falling) {
 			this.walkDirection.setZero();
 			this.stepDown();
+			this.checkFallDeath(deltaTimeStep);
 		} else {
 			final Vector3 origPos = this.getTranslation();
 			this.stepUp();
@@ -124,6 +129,28 @@ public class CharacterWController extends CustomActionInterface {
 //				break;
 //			}
 //		}
+	}
+
+	private void checkFallDeath(final float delta) {
+		this.fallTime += delta;
+		if (this.fallTime < this.fallTimeDeath) {
+			return;
+		}
+
+		// perform test to know if we can still land on something
+		final Matrix4 start = this.getWorldTransform().cpy();
+		final Matrix4 end = this.getWorldTransform().cpy();
+		end.trn(0, -100, 0);
+
+		final ClosestNotMeConvexResultCallback cb = new ClosestNotMeConvexResultCallback(this.ghostObj,
+				start.getTranslation(new Vector3()),
+				end.getTranslation(new Vector3()));
+		cb.setCollisionFilterGroup(this.ghostObj.getBroadphaseHandle().getCollisionFilterGroup());
+		cb.setCollisionFilterMask(this.ghostObj.getBroadphaseHandle().getCollisionFilterMask());
+		if (!cb.hasHit()) {
+			this.fallListener.shouldDie();
+		}
+		cb.dispose();
 	}
 
 	private void stepJump(final float delta) {
@@ -150,7 +177,7 @@ public class CharacterWController extends CustomActionInterface {
 
 			this.setWorldTransform(this.getWorldTransform().setTranslation(newPosition));
 			this.stopJump();
-			this.falling = true;
+			this.startFalling();
 		} else {
 			this.setWorldTransform(end);
 		}
@@ -158,9 +185,16 @@ public class CharacterWController extends CustomActionInterface {
 		if (this.jumpProgress >= this.getJumpTime()) {
 			// do no call #stopJump() as to not trigger onFall
 			this.stopJump0();
-			this.falling = true;
+			this.startFalling();
 		}
 		cb.dispose();
+	}
+
+	private void startFalling() {
+		if (!this.falling) {
+			this.falling = true;
+			this.fallTime = 0;
+		}
 	}
 
 	/**
@@ -213,7 +247,7 @@ public class CharacterWController extends CustomActionInterface {
 		if (!cb.hasHit()) {
 			this.setWorldTransform(this.getWorldTransform()
 				.setTranslation(this.getTranslation().add(new Vector3(0, -1, 0).scl(this.fallSpeed))));
-			this.falling = true;
+			this.startFalling();
 			cb.dispose();
 			return;
 		}
@@ -517,5 +551,7 @@ public class CharacterWController extends CustomActionInterface {
 		void onEndFall();
 
 		void onJumpEnd(boolean bigJump);
+
+		void shouldDie();
 	}
 }

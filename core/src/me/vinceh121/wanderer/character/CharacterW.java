@@ -2,8 +2,6 @@ package me.vinceh121.wanderer.character;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
@@ -82,6 +80,11 @@ public class CharacterW extends AbstractLivingControllableEntity {
 			@Override
 			public void onEndFall() {
 			}
+			
+			@Override
+			public void shouldDie() {
+				onDeath();
+			}
 		});
 		this.getGhostObject().setUserIndex(this.getId().getValue());
 		game.getBtWorld().addAction(this.controller);
@@ -139,11 +142,6 @@ public class CharacterW extends AbstractLivingControllableEntity {
 			this.processInput();
 			this.moveCamera();
 		}
-	}
-
-	@Override
-	public void render(final ModelBatch batch, final Environment env) {
-		super.render(batch, env);
 	}
 
 	private void moveCamera() {
