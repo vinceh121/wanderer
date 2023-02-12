@@ -239,6 +239,8 @@ public class Wanderer extends ApplicationAdapter {
 		playerClan.addMember(john);
 		this.addEntity(john);
 
+		this.setPlayerClan(playerClan);
+
 		this.controlEntity(john);
 
 		// GAMEPLAY SCRIPTS
