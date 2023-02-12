@@ -1,4 +1,4 @@
-package me.vinceh121.wanderer.glx;
+package me.vinceh121.wanderer.animation;
 
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.Animation;
