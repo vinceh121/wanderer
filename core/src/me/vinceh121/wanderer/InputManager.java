@@ -11,6 +11,7 @@ import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Preferences;
@@ -86,6 +87,7 @@ public class InputManager extends ApplicationAdapter {
 				new Binding(MouseWheelScroll.RIGHT.ordinal(), DeviceType.MOUSE_WHEEL));
 
 		this.bindings.put(Input.OPEN_BELT, new Binding(Keys.ENTER, DeviceType.KEYBOARD));
+		this.bindings.put(Input.OPEN_BELT, new Binding(Buttons.LEFT, DeviceType.MOUSE));
 
 		this.bindings.put(Input.PAUSE_MENU, new Binding(Keys.ESCAPE, DeviceType.KEYBOARD));
 		this.bindings.put(Input.PAUSE_MENU, new Binding(Keys.F1, DeviceType.KEYBOARD));

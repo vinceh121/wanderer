@@ -50,6 +50,11 @@ public class Binding {
 		return this.deviceType == other.deviceType && this.key == other.key;
 	}
 
+	@Override
+	public String toString() {
+		return "Binding [key=" + key + ", deviceType=" + deviceType + "]";
+	}
+
 	public enum DeviceType {
 		KEYBOARD, MOUSE, MOUSE_WHEEL, CONTROLLER;
 	}

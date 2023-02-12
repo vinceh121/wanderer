@@ -267,7 +267,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 						CharacterW.this.game.removeEntity(CharacterW.this.previewBuilding);
 						CharacterW.this.previewBuilding.dispose();
 						return true;
-					} else if (in == Input.UI_VALIDATE) {
+					} else if (in == Input.OPEN_BELT) {
 						CharacterW.this.placeBuilding();
 						return true;
 					}
@@ -284,7 +284,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 					} else if (in == Input.PAUSE_MENU) {
 						CharacterW.this.closeBelt();
 						return true;
-					} else if (in == Input.UI_VALIDATE) {
+					} else if (in == Input.OPEN_BELT) {
 						CharacterW.this.selectBuilding();
 						return true;
 					}
