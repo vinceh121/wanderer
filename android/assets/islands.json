@@ -74,8 +74,8 @@
 						"@class": "BlendingAttribute",
 						"type": "blended",
 						"blended": true,
-						"sourceFunction": 770,
-						"destFunction": 771,
+						"sourceFunction": "GL_SRC_ALPHA",
+						"destFunction": "GL_ONE_MINUS_SRC_ALPHA",
 						"opacity": 1.0
 					}
 				],

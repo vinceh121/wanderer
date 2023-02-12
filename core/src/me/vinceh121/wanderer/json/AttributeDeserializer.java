@@ -1,7 +1,10 @@
 package me.vinceh121.wanderer.json;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
@@ -14,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -22,6 +26,7 @@ import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
 
 public class AttributeDeserializer extends StdDeserializer<Attribute> {
 	private static final long serialVersionUID = -4897698306503294306L;
+	private static final Map<String, Integer> DEPTH_FUNCS = new HashMap<>();
 
 	public AttributeDeserializer() {
 		super(Attribute.class);
@@ -62,12 +67,37 @@ public class AttributeDeserializer extends StdDeserializer<Attribute> {
 			att = TiledMaterialAttribute.create(texture, n.get("opacity").floatValue(), ratio);
 		} else if (BlendingAttribute.class.getSimpleName().equals(clazz) && BlendingAttribute.Alias.equals(type)) {
 			att = new BlendingAttribute(n.get("blended").asBoolean(),
-					n.get("sourceFunction").asInt(),
-					n.get("destFunction").asInt(),
+					getFunc(n.get("sourceFunction")),
+					getFunc(n.get("destFunction")),
 					n.get("opacity").floatValue());
 		} else {
 			throw new IllegalStateException("Cannot deser Attribute of class " + clazz + " and type " + type);
 		}
 		return att;
+	}
+	
+	private static int getFunc(JsonNode n) {
+		if (n.isInt()) {
+			return n.asInt();
+		} else if (n.isTextual()) {
+			return DEPTH_FUNCS.get(n.asText());
+		} else {
+			throw new IllegalArgumentException("Invalid value for blend function " + n);
+		}
+	}
+
+	static {
+		final String[] funcs = { "GL_ZERO", "GL_ONE", "GL_SRC_COLOR", "GL_ONE_MINUS_SRC_COLOR", "GL_DST_COLOR",
+				"GL_ONE_MINUS_DST_COLOR", "GL_SRC_ALPHA", "GL_ONE_MINUS_SRC_ALPHA", "GL_DST_ALPHA",
+				"GL_ONE_MINUS_DST_ALPHA", "GL_CONSTANT_COLOR", "GL_ONE_MINUS_CONSTANT_COLOR", "GL_CONSTANT_ALPHA",
+				"GL_ONE_MINUS_CONSTANT_ALPHA", "GL_SRC_ALPHA_SATURATE" };
+
+		try {
+			for (String f : funcs) {
+				DEPTH_FUNCS.put(f, GL20.class.getDeclaredField(f).getInt(null));
+			}
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+			e.printStackTrace();
+		}
 	}
 }
