@@ -281,6 +281,9 @@ public class Wanderer extends ApplicationAdapter {
 			}
 			entity.render(this.graphicsManager.getModelBatch(), this.graphicsManager.getEnv());
 		}
+		this.graphicsManager.end();
+
+		this.graphicsManager.begin();
 		this.graphicsManager.renderParticles(delta);
 		this.graphicsManager.end();
 
