@@ -331,6 +331,17 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	private void placeBuilding() {
 		if (this.getClan().getEnergy() < this.placing.getEnergyRequired()) {
 			this.game.showMessage("Not enough energy!");
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class)
+			.playGeneral()
+			.setDisposeOnStop(true);
+			return;
+		}
+
+		if (this.previewBuilding.isBlocked()) {
+			this.game.showMessage("Slot blocked!");
+			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound3D.class)
+				.playGeneral()
+				.setDisposeOnStop(true);
 			return;
 		}
 
