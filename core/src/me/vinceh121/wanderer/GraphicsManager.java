@@ -1,5 +1,11 @@
 package me.vinceh121.wanderer;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -88,7 +94,7 @@ public class GraphicsManager extends ApplicationAdapter {
 
 		this.skybox = new SkyboxRenderer();
 		this.skybox.create();
-		
+
 		this.env.add(this.skybox.getSunLight());
 	}
 
@@ -253,5 +259,39 @@ public class GraphicsManager extends ApplicationAdapter {
 			}
 			return new WandererShader(renderable, this.config);
 		}
+	}
+
+	private static final Pattern PAT_ANNOTATION = Pattern.compile("[0-9]+\\(([0-9]+)\\) : (.+)");
+
+	public static String shaderDebug(String glLog, String fragCode, String vertCode) {
+		String[] logLines = glLog.split("\n");
+		MultiValuedMap<Integer, String> annotations = new ArrayListValuedHashMap<>();
+		StringBuilder out = new StringBuilder();
+
+		// read GL error log
+		for (int i = 1; i < logLines.length; i++) { // FIXME ignore "Fragment shader:", "Vertex shader:" line
+			Matcher m = PAT_ANNOTATION.matcher(logLines[i]);
+			if (m.find()) {
+				annotations.put(Integer.parseInt(m.group(1)), m.group(2));
+			}
+		}
+
+		String[] fragLines = fragCode.split("\n");
+		out.append("\n");
+		for (int i = 0; i < fragLines.length; i++) {
+			out.append(String.format("%4d", i + 1));
+			out.append("  ");
+			out.append(fragLines[i]);
+			out.append("\n");
+			if (annotations.containsKey(i + 1)) {
+				for (String a : annotations.get(i + 1)) {
+					out.append("        ^ ");
+					out.append(a);
+					out.append("\n\n");
+				}
+			}
+		}
+
+		return out.toString();
 	}
 }

@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g3d.Attributes;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.shaders.BaseShader;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+
+import me.vinceh121.wanderer.GraphicsManager;
 
 public class WandererShader extends DefaultShader {
 	public static final Uniform tiledMaterialUniform = new Uniform("u_tiledMaterialTexture");
@@ -27,10 +31,20 @@ public class WandererShader extends DefaultShader {
 	public WandererShader(final Renderable renderable, final Config config) {
 		super(renderable, config, WandererShader.createPrefix(renderable, config));
 
-		this.u_tiledMaterialTexture = this.register(WandererShader.tiledMaterialUniform,
-				WandererShader.tiledMaterialTextureSetter);
+		this.u_tiledMaterialTexture =
+				this.register(WandererShader.tiledMaterialUniform, WandererShader.tiledMaterialTextureSetter);
 		this.u_tiledMaterialOpacity = this.register(WandererShader.tiledMaterialOpacityUniform);
 		this.u_tiledMaterialRatio = this.register(WandererShader.tiledMaterialRatioUniform);
+	}
+
+	@Override
+	public void init(ShaderProgram program, Renderable renderable) {
+		try {
+			super.init(program, renderable);
+		} catch (GdxRuntimeException e) {
+			throw new IllegalStateException(GraphicsManager
+				.shaderDebug(e.getMessage(), program.getFragmentShaderSource(), program.getVertexShaderSource()));
+		}
 	}
 
 	@Override
@@ -54,7 +68,7 @@ public class WandererShader extends DefaultShader {
 				prefix += "#define noLightningFlag\n";
 			}
 		}
-		if (renderable.meshPart.mesh.getVertexAttribute(Usage.BoneWeight)!=null) {
+		if (renderable.meshPart.mesh.getVertexAttribute(Usage.BoneWeight) != null) {
 			prefix += "#define skinningFlag\n";
 		}
 		return prefix;
