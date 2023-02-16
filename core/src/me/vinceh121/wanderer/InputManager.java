@@ -76,6 +76,7 @@ public class InputManager extends ApplicationAdapter {
 		this.bindings.put(Input.WALK_BACKWARDS, new Binding(Keys.DOWN, DeviceType.KEYBOARD));
 		this.bindings.put(Input.WALK_BACKWARDS, new Binding(Keys.S, DeviceType.KEYBOARD));
 		this.bindings.put(Input.JUMP, new Binding(Keys.SPACE, DeviceType.KEYBOARD));
+		this.bindings.put(Input.JUMP, new Binding(Buttons.RIGHT, DeviceType.MOUSE));
 
 		this.bindings.put(Input.SCROLL_BELT_LEFT, new Binding(Keys.LEFT, DeviceType.KEYBOARD));
 		this.bindings.put(Input.SCROLL_BELT_LEFT, new Binding(MouseWheelScroll.UP.ordinal(), DeviceType.MOUSE_WHEEL));
