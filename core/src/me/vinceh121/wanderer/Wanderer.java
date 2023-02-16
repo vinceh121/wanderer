@@ -384,6 +384,7 @@ public class Wanderer extends ApplicationAdapter {
 		if (this.playerClan != null) {
 			save.setPlayerClan(this.playerClan.getId());
 		}
+		save.setTime(this.timeOfDay);
 		save.setMap(mapW);
 		try (OutputStream out = dest.write(false)) {
 			WandererConstants.SAVE_MAPPER.writeValue(out, save);
@@ -408,6 +409,7 @@ public class Wanderer extends ApplicationAdapter {
 		try (InputStream in = src.read()) {
 			Save sav = WandererConstants.SAVE_MAPPER.readValue(in, Save.class);
 			MapW map = sav.getMap();
+			this.setTimeOfDay(sav.getTime());
 			this.loadMap(map);
 			this.flushEntityQueue();
 

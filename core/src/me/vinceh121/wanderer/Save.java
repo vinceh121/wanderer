@@ -6,6 +6,7 @@ public class Save {
 	private String storyBook;
 	private ID controlled, playerClan;
 	private int chapter = -1, part = -1;
+	private float time;
 	private Map<String, Object> partState;
 	private MapW map;
 
@@ -47,6 +48,14 @@ public class Save {
 
 	public void setPart(int part) {
 		this.part = part;
+	}
+
+	public float getTime() {
+		return time;
+	}
+
+	public void setTime(float time) {
+		this.time = time;
 	}
 
 	public Map<String, Object> getPartState() {
