@@ -5,6 +5,7 @@ precision highp float;
 #define EVENING_START 0.375
 #define EVENING_MID 0.4375
 #define EVENING_END 0.5
+#define MIDNIGHT_START 0.625
 #define MIDNIGHT 0.75
 
 const vec3 skyTopNoon = vec3(0.09, 0.106, 0.129);
@@ -14,6 +15,10 @@ const vec3 skyBottomNoon = vec3(0.62, 0.663, 0.627);
 const vec3 skyTopEvening = skyTopNoon;
 const vec3 skyMiddleEvening = vec3(0.949, 0.851, 0.263);
 const vec3 skyBottomEvening = skyBottomNoon;
+
+const vec3 skyTopMidnight = vec3(0.054902, 0.086275, 0.121569);
+const vec3 skyMiddleMidnight = vec3(0.266667, 0.321569, 0.337255);
+const vec3 skyBottomMidnight = vec3(0.141176, 0.145098, 0.149020);
 
 uniform float time;
 uniform vec3 sunDir;
@@ -63,8 +68,23 @@ vec3 topEveningMid() {
 }
 
 vec3 bottomEveningMid() {
-	return mix(skyTopEvening, skyMiddleEvening, angle * progress(EVENING_MID,
-	EVENING_END) * (1 - logFrac(sunSkyAngle)));
+	return mix(skyBottomEvening, topEveningMid(), angle);
+}
+
+vec3 topMidnightStart() {
+	return mix(skyTopMidnight, skyMiddleMidnight, 1 - sunSkyAngle);
+}
+
+vec3 bottomMidnightStart() {
+	return mix(skyBottomMidnight, topMidnightStart(), angle);
+}
+
+vec3 topMidnight() {
+	return mix(skyTopMidnight, skyMiddleMidnight, angle);
+}
+
+vec3 bottomMidnight() {
+	return mix(skyBottomMidnight, skyMiddleMidnight, angle);
 }
 
 void main() {
@@ -90,6 +110,14 @@ void main() {
 			gl_FragColor = vec4(
 					mix(topEveningStart(), topEveningMid(),
 							progress(EVENING_MID, EVENING_END)), 1);
+		} else if (time > EVENING_END && time < MIDNIGHT_START) {
+			gl_FragColor = vec4(
+					mix(topEveningMid(), topMidnightStart(),
+							progress(EVENING_END, MIDNIGHT_START)), 1);
+		} else if (time > MIDNIGHT_START && time < MIDNIGHT) {
+			gl_FragColor = vec4(
+					mix(topMidnightStart(), topMidnight(),
+							progress(MIDNIGHT_START, MIDNIGHT)), 1);
 		}
 	} else { // bottom half
 		angle += 1;
@@ -110,6 +138,14 @@ void main() {
 			gl_FragColor = vec4(
 					mix(bottomEveningStart(), bottomEveningMid(),
 							progress(EVENING_MID, EVENING_END)), 1);
+		} else if (time > EVENING_END && time < MIDNIGHT_START) {
+			gl_FragColor = vec4(
+					mix(bottomEveningMid(), bottomMidnightStart(),
+							progress(EVENING_END, MIDNIGHT_START)), 1);
+		} else if (time > MIDNIGHT_START && time < MIDNIGHT) {
+			gl_FragColor = vec4(
+					mix(bottomMidnightStart(), bottomMidnight(),
+							progress(MIDNIGHT_START, MIDNIGHT)), 1);
 		}
 	}
 }
