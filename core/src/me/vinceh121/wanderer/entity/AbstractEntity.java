@@ -109,7 +109,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	protected btMotionState createMotionState() {
 		return new btDefaultMotionState(this.transform);
 	}
-	
+
 	public void tick(float delta) {
 	}
 

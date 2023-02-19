@@ -1,0 +1,57 @@
+{
+	"rock1": {
+		// island_fels1
+		"displayModel": "orig/island_fels1.n/defaultshape.obj",
+		"collideModel": "orig/island_fels1.n/collide.obj",
+		"texture": "orig/lib/textures/island_fels_texturenone.ktx",
+		"detailMapTexture": "orig/lib/textures/island_fels_detailmapnone.ktx"
+	},
+	"rock2": {
+		// island_fels2
+		"displayModel": "orig/island_fels2.n/terrain.obj",
+		"collideModel": "orig/island_fels2.n/collide.obj",
+		"texture": "orig/lib/textures/island_fels_texturenone.ktx",
+		"detailMapTexture": "orig/lib/textures/island_fels_detailmapnone.ktx"
+	},
+	"rock3": {
+		// island_fels3
+		"displayModel": "orig/island_fels3.n/terrain.obj",
+		"collideModel": "orig/island_fels3.n/collide.obj",
+		"texture": "orig/island_fels3.n/texturenone.ktx",
+		"detailMapTexture": "orig/lib/lscaptxt7/detailmapnone.ktx"
+	},
+	"rock4": {
+		// island_fels4
+		"displayModel": "orig/island_fels4.n/defaultshape.obj",
+		"collideModel": "orig/island_fels4.n/collide.obj",
+		"texture": "orig/lib/textures/island_fels_texturenone.ktx",
+		"detailMapTexture": "orig/lib/textures/island_fels_detailmapnone.ktx"
+	},
+	"rock5": {
+		// island_fels5
+		"displayModel": "orig/island_fels5.n/terrain.obj",
+		"collideModel": "orig/island_fels5.n/collide.obj",
+		"texture": "orig/island_fels5.n/texturenone.ktx",
+		"detailMapTexture": "orig/lib/lscaptxt7/detailmapnone.ktx"
+	},
+	"rock6": {
+		// island_fels6
+		"displayModel": "orig/island_fels6.n/terrain.obj",
+		"collideModel": "orig/island_fels6.n/collide.obj",
+		"texture": "orig/lib/textures/island_fels_texturenone.ktx",
+		"detailMapTexture": "orig/lib/textures/island_fels_detailmapnone.ktx"
+	},
+	"rock7": {
+		// island_fels7
+		"displayModel": "orig/island_fels7.n/island_fels0shape7.obj",
+		"collideModel": "orig/island_fels7.n/collide.obj",
+		"texture": "orig/lib/textures/island_fels_texturenone.ktx",
+		"detailMapTexture": "orig/lib/textures/island_fels_detailmapnone.ktx"
+	},
+	"rock8": {
+		// island_fels09 this one's natively broken, but still used in the early chapters
+		"displayModel": "orig/island_fels09.n/terrain.obj",
+		"collideModel": "orig/island_fels09.n/collide.obj",
+		"texture": "orig/island_fels09.n/texturenone.ktx"
+	}
+}

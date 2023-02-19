@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import me.vinceh121.wanderer.building.IslandMeta;
 import me.vinceh121.wanderer.building.LighthouseMeta;
 import me.vinceh121.wanderer.character.CharacterMeta;
+import me.vinceh121.wanderer.entity.PropMeta;
 
 public final class MetaRegistry {
 	private static final MetaRegistry INSTANCE = new MetaRegistry();
@@ -36,6 +37,7 @@ public final class MetaRegistry {
 		this.readMetas(Gdx.files.internal("lighthouses.json"), LighthouseMeta.class);
 		this.readMetas(Gdx.files.internal("islands.json"), IslandMeta.class);
 		this.readMetas(Gdx.files.internal("characters.json"), CharacterMeta.class);
+		this.readMetas(Gdx.files.internal("props.json"), PropMeta.class);
 	}
 
 	public void clear() {

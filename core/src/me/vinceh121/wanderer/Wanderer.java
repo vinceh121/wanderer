@@ -5,12 +5,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -32,6 +36,7 @@ import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.IControllableEntity;
+import me.vinceh121.wanderer.entity.Prop;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
@@ -198,6 +203,19 @@ public class Wanderer extends ApplicationAdapter {
 		}
 
 		///// GAMEPLAY
+
+		Random islandRng = new Random(69420L);
+		for (int i = 0; i < 90; i++) {
+			Vector3 pos = new Vector3()
+				.setFromSpherical(0, islandRng.nextFloat() * MathUtils.PI2 * 0.7f + 2f * (MathUtils.PI2 * 0.3f))
+				.scl(1000);
+			Quaternion rot = new Quaternion(Vector3.Y, islandRng.nextFloat() * 360f);
+
+			Prop isl = new Prop(this, MetaRegistry.getInstance().get("rock" + (islandRng.nextInt(7) + 1)));
+			isl.setTranslation(pos);
+			isl.rotate(rot);
+			this.addEntity(isl);
+		}
 
 		final BackpackArtifact backpack = new BackpackArtifact(this);
 		backpack.setTranslation(-5, 34, 10);
