@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
@@ -39,6 +40,7 @@ public class SkyboxRenderer {
 	private ModelInstance sky, stars, sun, mars, galaxy, skycap, skyring;
 	private float previous;
 	private SkyShader shader;
+	private ColorAttribute ambiantLight;
 	private DirectionalLight sunLight, moonLight;
 	private SkyProperties skyProperties;
 
@@ -66,6 +68,7 @@ public class SkyboxRenderer {
 
 		this.stars = this.makeStarsOneOne("orig/lib/stars/texturenone.ktx");
 
+		this.ambiantLight = new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f);
 		this.sunLight = new DirectionalLight().set(0.8f, 0.8f, 0.8f, 1f, 0f, 0f);
 	}
 
@@ -104,6 +107,7 @@ public class SkyboxRenderer {
 
 		this.sunLight.setDirection(this.sunDir);
 		this.sunLight.setColor(interpolatedColor(time, this.skyProperties.getSunLightColor()));
+		this.ambiantLight.color.set(interpolatedColor(time, this.skyProperties.getAmbLightColor()));
 	}
 
 	private Color interpolatedColor(float time, Map<TimeRange, Color> colors) {
@@ -130,7 +134,7 @@ public class SkyboxRenderer {
 		if (ranges.contains(range)) {
 			return range;
 		}
-		for (int i = range.ordinal()-1; i >= 0; i--) {
+		for (int i = range.ordinal() - 1; i >= 0; i--) {
 			final TimeRange t = TimeRange.values()[i];
 			if (ranges.contains(t)) {
 				return t;
@@ -138,7 +142,7 @@ public class SkyboxRenderer {
 		}
 		return null;
 	}
-	
+
 	private TimeRange nextTimeRange(int start, Collection<TimeRange> ranges) {
 		for (int i = start + 1; i < TimeRange.values().length + 1; i++) {
 			final TimeRange r = TimeRange.values()[i % TimeRange.values().length];
@@ -327,6 +331,10 @@ public class SkyboxRenderer {
 
 	public Vector3 getMoonDir() {
 		return moonDir;
+	}
+
+	public ColorAttribute getAmbiantLight() {
+		return ambiantLight;
 	}
 
 	public DirectionalLight getSunLight() {

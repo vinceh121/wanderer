@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleShader.AlignMode;
@@ -46,16 +45,11 @@ public class GraphicsManager extends ApplicationAdapter {
 
 	private SkyboxRenderer skybox;
 
-	private ColorAttribute ambiantLight;
-
 	@Override
 	public void create() {
 		this.modelBatch = new ModelBatch(new WandererShaderProvider());
 
-		this.ambiantLight = new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f);
-
 		this.env = new Environment();
-		this.env.set(this.ambiantLight);
 
 		this.cam = new PerspectiveCamera(90, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		this.cam.position.set(3f, 50f, 0f);
@@ -95,6 +89,7 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.skybox = new SkyboxRenderer();
 		this.skybox.create();
 
+		this.env.set(this.skybox.getAmbiantLight());
 		this.env.add(this.skybox.getSunLight());
 	}
 
