@@ -150,7 +150,7 @@ public class Wanderer extends ApplicationAdapter {
 					return true;
 				} else if (in == Input.DEBUG_TIMESCALE) {
 					if (getDayDuration() == 15800f) {
-						setDayDuration(10f);
+						setDayDuration(30f);
 					} else {
 						setDayDuration(15800f);
 					}

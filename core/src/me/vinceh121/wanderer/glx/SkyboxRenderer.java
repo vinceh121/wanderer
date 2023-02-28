@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.glx;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -51,7 +52,7 @@ public class SkyboxRenderer {
 		}
 
 		this.skyProperties = this.skies.get("normal");
-		
+
 		this.sky = this.makeSphereSky();
 
 		this.sun = this.makePlaneOneOne("orig/lib/sun1/texturenone.ktx");
@@ -106,10 +107,13 @@ public class SkyboxRenderer {
 	}
 
 	private Color interpolatedColor(float time, Map<TimeRange, Color> colors) {
-		final TimeRange range = getTimeRange(time);
-		final TimeRange nextRange = TimeRange.values()[(range.ordinal() + 1) % TimeRange.values().length];
+		final TimeRange range = currentTimeRange(time, colors.keySet());
+		if (range == null) {
+			return new Color();
+		}
 
-		if (!colors.containsKey(range) || !colors.containsKey(nextRange)) {
+		final TimeRange nextRange = nextTimeRange(range.ordinal(), colors.keySet());
+		if (nextRange == null) {
 			return new Color();
 		}
 
@@ -119,6 +123,30 @@ public class SkyboxRenderer {
 		c.lerp(colors.get(nextRange), alpha);
 
 		return c;
+	}
+
+	private TimeRange currentTimeRange(float time, Collection<TimeRange> ranges) {
+		TimeRange range = getTimeRange(time);
+		if (ranges.contains(range)) {
+			return range;
+		}
+		for (int i = range.ordinal()-1; i >= 0; i--) {
+			final TimeRange t = TimeRange.values()[i];
+			if (ranges.contains(t)) {
+				return t;
+			}
+		}
+		return null;
+	}
+	
+	private TimeRange nextTimeRange(int start, Collection<TimeRange> ranges) {
+		for (int i = start + 1; i < TimeRange.values().length + 1; i++) {
+			final TimeRange r = TimeRange.values()[i % TimeRange.values().length];
+			if (ranges.contains(r)) {
+				return r;
+			}
+		}
+		return null;
 	}
 
 	public void setSkycapTexture(String tex) {
@@ -323,7 +351,8 @@ public class SkyboxRenderer {
 		NOON(0.25f, 0.375f),
 		EVENING_START(0.375f, 0.4375f),
 		EVENING_MID(0.4375f, 0.5f),
-		EVENING_END(0.5f, 0.75f),
+		EVENING_END(0.5f, 0.625f),
+		MIDNIGHT_START(0.625f, 0.75f),
 		MIDNIGHT(0.75f, 0.875f),
 		/// ....
 		NIGHT_END(0.875f, 1f);
