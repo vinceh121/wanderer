@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.ClosestNotMeRayResultCallback;
 import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Array;
@@ -184,6 +185,16 @@ public class CharacterW extends AbstractLivingControllableEntity {
 				.transform(new Vector3(0, 5f * this.cameraHeight, -0.1f + -6f * invertCameraHeight))
 				.add(characterTransform));
 			pos.lerp(cam.position, 0.8f);
+
+			final Vector3 characterCenter = characterTransform.cpy().add(0, this.meta.getCapsuleHeight() / 2, 0);
+			
+			ClosestNotMeRayResultCallback cb = new ClosestNotMeRayResultCallback(getGhostObject());
+			this.game.getBtWorld().rayTest(characterCenter, pos, cb);
+			if (cb.hasHit()) {
+				pos.lerp(characterCenter, 1 - cb.getClosestHitFraction());
+			}
+			cb.dispose();
+
 			cam.position.set(pos);
 
 			cam.lookAt(aheadPoint);
