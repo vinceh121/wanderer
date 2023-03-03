@@ -4,6 +4,7 @@ import java.net.URI;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaClass;
+import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.commonjs.module.Require;
@@ -23,6 +24,7 @@ import me.vinceh121.wanderer.story.StoryBook;
 
 public class ScriptManager {
 	private final Context ctx = Context.enter();
+	private final ScriptableObject baseScope = new NativeObject();
 
 	public ScriptManager() {
 		this.ctx.setLanguageVersion(Context.VERSION_ES6);
@@ -38,6 +40,7 @@ public class ScriptManager {
 		reqBuild.setSandboxed(true);
 		reqBuild.setModuleScriptProvider(new SoftCachingModuleScriptProvider(new FileHandleModuleSourceProvider(base)));
 		final ScriptableObject scope = this.ctx.initSafeStandardObjects();
+		ScriptManager.copyObject(this.baseScope, scope);
 		ScriptManager.fillStoryScope(scope);
 		final Require req = reqBuild.createRequire(this.ctx, scope);
 		final Scriptable exports = req.requireMain(this.ctx, src.toString());
@@ -50,6 +53,20 @@ public class ScriptManager {
 
 	public void dispose() {
 		Context.exit();
+	}
+
+	public ScriptableObject getBaseScope() {
+		return this.baseScope;
+	}
+
+	public static void copyObject(final Scriptable from, final Scriptable to) {
+		for (Object id : from.getIds()) {
+			if (id instanceof Integer) {
+				to.put((int) id, to, from.get((int) id, from));
+			} else if (id instanceof String) {
+				to.put((String) id, to, from.get((String) id, from));
+			}
+		}
 	}
 
 	public static void fillStoryScope(final ScriptableObject scope) {

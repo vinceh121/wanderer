@@ -97,6 +97,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.inputManager.create();
 		this.physicsManager.create();
 		this.graphicsManager.create();
+		this.scriptManager.getBaseScope().putConst("game", this.scriptManager.getBaseScope(), this);
 
 		try {
 			this.inputManager.loadOrDefaults();
@@ -260,10 +261,6 @@ public class Wanderer extends ApplicationAdapter {
 		this.setPlayerClan(playerClan);
 
 		this.controlEntity(john);
-
-		// GAMEPLAY SCRIPTS
-
-		this.scriptManager.loadChapter(Gdx.files.internal("story/singleplayer.js"), Gdx.files.internal("story/"));
 	}
 
 	@Override
@@ -501,6 +498,10 @@ public class Wanderer extends ApplicationAdapter {
 
 	public GraphicsManager getGraphicsManager() {
 		return this.graphicsManager;
+	}
+
+	public ScriptManager getScriptManager() {
+		return this.scriptManager;
 	}
 
 	public void controlEntity(final IControllableEntity e) {

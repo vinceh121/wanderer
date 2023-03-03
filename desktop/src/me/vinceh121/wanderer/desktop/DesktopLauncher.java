@@ -4,7 +4,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.audio.Lwjgl3Audio;
 
-import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.ApplicationMultiplexer;
+import me.vinceh121.wanderer.StoryWanderer;
 import me.vinceh121.wanderer.desktop.audio.OpenAL3DAudio;
 import me.vinceh121.wanderer.desktop.audio.OpenALException;
 
@@ -14,7 +15,7 @@ public class DesktopLauncher {
 		config.enableGLDebugOutput(true, System.out);
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4); // all default except for 4× anti aliasing
 		try {
-			new Lwjgl3Application(new Wanderer(), config) {
+			new Lwjgl3Application(new ApplicationMultiplexer(new StoryWanderer()), config) {
 				@Override
 				public Lwjgl3Audio createAudio(final Lwjgl3ApplicationConfiguration config) {
 					try {
