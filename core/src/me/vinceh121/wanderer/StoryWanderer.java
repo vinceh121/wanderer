@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Align;
 
+import me.vinceh121.wanderer.event.Event;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.story.Chapter;
@@ -71,6 +72,13 @@ public class StoryWanderer extends Wanderer {
 
 		this.objectivesView.setTitle(this.part.getTitle());
 		this.objectivesView.setObjectives(this.part.getObjectives());
+
+		this.part.addEventListener("objectivesCompleted", this::onObjectivesCompleted);
+		this.part.getPartStart().run();
+	}
+
+	private void onObjectivesCompleted(Event e) {
+		this.objectivesView.setObjectivesCompleted(this.part.getObjectivesCompleted());
 	}
 
 	public StoryBook getStoryBook() {

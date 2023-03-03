@@ -4,7 +4,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-public class Part {
+import me.vinceh121.wanderer.event.Event;
+import me.vinceh121.wanderer.event.EventDispatcher;
+
+public class Part extends EventDispatcher {
 	private final Map<String, Object> state = new Hashtable<>();
 	private List<String> objectives;
 	private String title;
@@ -16,6 +19,15 @@ public class Part {
 	public Part(final String title, final List<String> objectives) {
 		this.title = title;
 		this.objectives = objectives;
+	}
+
+	public int getObjectivesCompleted() {
+		return (int) this.state.get("objectivesCompleted");
+	}
+
+	public void setObjectivesCompleted(int objectivesCompleted) {
+		this.state.put("objectivesCompleted", objectivesCompleted);
+		this.dispatchEvent(new Event("objectivesCompleted"));
 	}
 
 	public Map<String, Object> getState() {
