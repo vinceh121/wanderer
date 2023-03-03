@@ -74,6 +74,7 @@ public class StoryWanderer extends Wanderer {
 		this.objectivesView.setObjectives(this.part.getObjectives());
 
 		this.part.addEventListener("objectivesCompleted", this::onObjectivesCompleted);
+		this.flushEntityQueue(); // FIXME shouldn't be here
 		this.part.getPartStart().run();
 	}
 

@@ -94,5 +94,6 @@ project(":core") {
         api "org.jline:jline-reader:$jlineVersion"
         api "org.jline:jline-terminal:$jlineVersion"
         api "com.github.mgsx-dev.gdx-gltf:gltf:227214de89923c7754406c68c1504e75ba087823"
+        api "org.reflections:reflections:0.10.2"
     }
 }

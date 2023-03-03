@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -226,7 +227,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		for (int i = 0; i < 5; i++) {
 			final AbstractArtifactEntity artifactEntity = new BuildingArtifactEntity(this, lighthouseArtifactMeta);
-			artifactEntity.setTranslation(5, 34, 10);
+			artifactEntity.setTranslation(5*i, 34, 10);
 			this.addEntity(artifactEntity);
 		}
 
@@ -313,7 +314,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.graphicsManager.renderUI();
 	}
 
-	private void flushEntityQueue() {
+	protected void flushEntityQueue() {
 		this.entities.removeAll(this.toRemove, true);
 		for (final AbstractEntity e : this.toRemove) {
 			this.toAdd.removeValue(e, true);
@@ -385,7 +386,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.bindPlayerClan();
 	}
 
-	private void bindPlayerClan() {
+	protected void bindPlayerClan() {
 		this.energyBar.setClan(this.playerClan);
 	}
 
@@ -579,6 +580,18 @@ public class Wanderer extends ApplicationAdapter {
 		this.dayDuration = dayDuration;
 
 		this.elapsedTimeOfDay = this.dayDuration * this.timeOfDay;
+	}
+
+	public AbstractEntity findFirstEntityByClass(Class<? extends AbstractEntity> cls) {
+		return this.findEntitiesByClass(cls).findFirst().orElse(null);
+	}
+
+	public Stream<AbstractEntity> findEntitiesByClass(Class<? extends AbstractEntity> cls) {
+		// This game of casts looks redundant but it's not!
+		// Using Stream.of(this.entities.items) causes a ClassCastException
+		// This is due to an implicit (AbtractEntity[]) this.entities.items added by the compiler that will always fail!
+		// GDX's Array<T>#items has a T[] type, which the compiler will always compile as Object[]
+		return Stream.of((Object[]) this.entities.items).filter(e -> cls.isInstance(e)).map(e -> (AbstractEntity) e);
 	}
 
 	public void showMessage(final String message) {

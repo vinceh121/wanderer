@@ -1,6 +1,9 @@
 package me.vinceh121.wanderer;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaClass;
@@ -10,10 +13,13 @@ import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.commonjs.module.Require;
 import org.mozilla.javascript.commonjs.module.RequireBuilder;
 import org.mozilla.javascript.commonjs.module.provider.SoftCachingModuleScriptProvider;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
+import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.script.FileHandleModuleSourceProvider;
 import me.vinceh121.wanderer.script.JsAudio;
 import me.vinceh121.wanderer.script.JsConsole;
@@ -23,6 +29,7 @@ import me.vinceh121.wanderer.story.Part;
 import me.vinceh121.wanderer.story.StoryBook;
 
 public class ScriptManager {
+	private static final List<Class<?>> PART_SCOPE_CLASSES = new ArrayList<>();
 	private final Context ctx = Context.enter();
 	private final ScriptableObject baseScope = new NativeObject();
 
@@ -78,10 +85,20 @@ public class ScriptManager {
 		// Use a global JsTimers to avoid id-collision as much as possible
 		JsTimers.getInstance().install(scope);
 		JsAudio.install(scope);
-		final Class<?>[] classesToImport = { StoryBook.class, Chapter.class, Part.class };
 
-		for (final Class<?> cls : classesToImport) {
+		for (final Class<?> cls : PART_SCOPE_CLASSES) {
 			scope.put(cls.getSimpleName(), scope, new NativeJavaClass(scope, cls));
 		}
+	}
+
+	static {
+		PART_SCOPE_CLASSES.addAll(Arrays.asList(
+				// .story
+				StoryBook.class,
+				Chapter.class,
+				Part.class));
+
+		Reflections entityRef = new Reflections("me.vinceh121.wanderer");
+		PART_SCOPE_CLASSES.addAll(entityRef.get(Scanners.SubTypes.of(AbstractEntity.class).asClass()));
 	}
 }

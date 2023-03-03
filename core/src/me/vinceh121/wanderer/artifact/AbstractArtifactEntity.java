@@ -23,6 +23,7 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.event.Event;
 import me.vinceh121.wanderer.glx.NoLightningAttribute;
 import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
@@ -56,6 +57,7 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 						|| colObj1.getCPointer() == AbstractArtifactEntity.this.pickupZone.getCPointer()
 								&& colObj0.getCPointer() == chara.getGhostObject().getCPointer()) {
 					if (AbstractArtifactEntity.this.onPickUp(game, chara)) {
+						AbstractArtifactEntity.this.eventDispatcher.dispatchEvent(new Event("pickedUp"));
 						game.removeEntity(AbstractArtifactEntity.this);
 						AbstractArtifactEntity.this.dispose();
 					}

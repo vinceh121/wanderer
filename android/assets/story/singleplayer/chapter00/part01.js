@@ -5,8 +5,10 @@ const part = new Part("The Old Master Builder", [
 ]);
 
 part.setPartStart(() => {
-	console.log("aa", "a");
-	part.setObjectivesCompleted(1);
+	const artifact = this.game.findFirstEntityByClass(BackpackArtifact.__javaObject__);
+	artifact.addEventListener("pickedUp", e => {
+		this.part.setObjectivesCompleted(1);
+	});
 });
 
 exports.part = part;
