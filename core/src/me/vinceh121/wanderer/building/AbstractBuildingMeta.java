@@ -3,7 +3,6 @@ package me.vinceh121.wanderer.building;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 
-import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
 import me.vinceh121.wanderer.entity.DisplayModel;
 
@@ -125,6 +124,4 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	public void setSlotType(final SlotType slotType) {
 		this.slotType = slotType;
 	}
-
-	public abstract AbstractBuilding createBuilding(Wanderer game);
 }

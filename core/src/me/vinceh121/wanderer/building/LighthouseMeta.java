@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.building;
 
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.entity.AbstractEntity;
 
 public class LighthouseMeta extends AbstractBuildingMeta {
 	public LighthouseMeta() {
@@ -14,7 +15,7 @@ public class LighthouseMeta extends AbstractBuildingMeta {
 	}
 
 	@Override
-	public AbstractBuilding createBuilding(final Wanderer game) {
+	public AbstractEntity create(final Wanderer game) {
 		return new Lighthouse(game, this);
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -48,7 +49,7 @@ import me.vinceh121.wanderer.ui.EnergyBar;
 import me.vinceh121.wanderer.ui.ItemBar;
 
 public class Wanderer extends ApplicationAdapter {
-	private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(Wanderer.class);
+	private static final Logger LOG = LogManager.getLogger(Wanderer.class);
 	private final InputManager inputManager = new InputManager();
 	private final PhysicsManager physicsManager = new PhysicsManager();
 	private final GraphicsManager graphicsManager = new GraphicsManager();

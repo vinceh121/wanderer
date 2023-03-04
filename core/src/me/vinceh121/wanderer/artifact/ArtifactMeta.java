@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import me.vinceh121.wanderer.IMeta;
 
-public class ArtifactMeta implements IMeta {
+public abstract class ArtifactMeta implements IMeta {
 	private String artifactModel, artifactTexture;
 	private Color artifactColor = new Color(0f, 0.8f, 1f, 0f);
 	private boolean rotate = true;

@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector3;
 
 import me.vinceh121.wanderer.IMeta;
+import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 
 public class CharacterMeta implements IMeta {
@@ -154,6 +156,11 @@ public class CharacterMeta implements IMeta {
 		for (final String s : this.stepsSide) {
 			WandererConstants.ASSET_MANAGER.load(s, Sound3D.class);
 		}
+	}
+
+	@Override
+	public AbstractEntity create(Wanderer game) {
+		return new CharacterW(game, this);
 	}
 
 	@Override

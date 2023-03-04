@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.IMeta;
+import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 
 public class IslandMeta implements IMeta {
@@ -73,5 +75,10 @@ public class IslandMeta implements IMeta {
 
 	public void setPlaceCameraDirection(final Vector3 placeCameraDirection) {
 		this.placeCameraDirection = placeCameraDirection;
+	}
+
+	@Override
+	public AbstractEntity create(Wanderer game) {
+		return new Island(game, this);
 	}
 }

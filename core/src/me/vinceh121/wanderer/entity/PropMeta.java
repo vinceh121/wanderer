@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.entity;
 
 import me.vinceh121.wanderer.IMeta;
+import me.vinceh121.wanderer.Wanderer;
 
 public class PropMeta implements IMeta {
 	private String displayModel, collideModel, texture, detailMapTexture;
@@ -44,5 +45,10 @@ public class PropMeta implements IMeta {
 
 	public void setMass(float mass) {
 		this.mass = mass;
+	}
+
+	@Override
+	public AbstractEntity create(Wanderer game) {
+		return new Prop(game, this);
 	}
 }

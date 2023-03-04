@@ -3,10 +3,16 @@ package me.vinceh121.wanderer.artifact;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.character.CharacterW;
+import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 
 public class BackpackArtifact extends AbstractArtifactEntity {
-	private static final ArtifactMeta BACKPACK_META = new ArtifactMeta();
+	private static final ArtifactMeta BACKPACK_META = new ArtifactMeta() { // FIXME move to a JSON
+		@Override
+		public AbstractEntity create(Wanderer game) {
+			return new BackpackArtifact(game);
+		}
+	};
 
 	public BackpackArtifact(final Wanderer game) {
 		super(game, BackpackArtifact.BACKPACK_META);
