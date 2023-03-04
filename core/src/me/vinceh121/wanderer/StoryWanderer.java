@@ -25,7 +25,7 @@ public class StoryWanderer extends Wanderer {
 	@Override
 	public void create() {
 		super.create();
-		StoryWanderer.STORY_SCRIPTS_ROOT = Gdx.files.internal("story");
+		StoryWanderer.STORY_SCRIPTS_ROOT = Gdx.files.internal("story"); // FIXME this could and should be purely static
 		this.objectivesView = new ObjectivesView();
 		this.objectivesView.setVisible(false);
 		this.objectivesView.align(Align.center);
@@ -65,7 +65,7 @@ public class StoryWanderer extends Wanderer {
 
 	public void startStory(String name, int chapter, int part) {
 		Scriptable exports =
-				this.getScriptManager().loadChapter(STORY_SCRIPTS_ROOT.child(name + ".js"), STORY_SCRIPTS_ROOT);
+				this.getScriptManager().loadModule(STORY_SCRIPTS_ROOT.child(name + ".js"), STORY_SCRIPTS_ROOT);
 		this.storyBook = (StoryBook) ((NativeJavaObject) exports.get("storyBook", exports)).unwrap();
 		this.chapter = this.storyBook.getChapters().get(chapter);
 		this.part = this.chapter.getParts().get(part);
@@ -73,12 +73,12 @@ public class StoryWanderer extends Wanderer {
 		this.objectivesView.setTitle(this.part.getTitle());
 		this.objectivesView.setObjectives(this.part.getObjectives());
 
-		this.part.addEventListener("objectivesCompleted", this::onObjectivesCompleted);
+		this.part.addEventListener("objectiveCompleted", this::onObjectiveCompleted);
 		this.flushEntityQueue(); // FIXME shouldn't be here
 		this.part.getPartStart().run();
 	}
 
-	private void onObjectivesCompleted(Event e) {
+	private void onObjectiveCompleted(Event e) {
 		this.objectivesView.setObjectivesCompleted(this.part.getObjectivesCompleted());
 	}
 

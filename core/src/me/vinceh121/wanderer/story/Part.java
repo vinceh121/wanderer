@@ -1,8 +1,10 @@
 package me.vinceh121.wanderer.story;
 
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import me.vinceh121.wanderer.event.Event;
 import me.vinceh121.wanderer.event.EventDispatcher;
@@ -14,20 +16,25 @@ public class Part extends EventDispatcher {
 	private Runnable partStart;
 
 	public Part() {
+		this.state.put("objectivesCompleted", new HashSet<Integer>());
 	}
 
 	public Part(final String title, final List<String> objectives) {
+		this();
 		this.title = title;
 		this.objectives = objectives;
 	}
 
-	public int getObjectivesCompleted() {
-		return (int) this.state.get("objectivesCompleted");
+	@SuppressWarnings("unchecked")
+	public Set<Integer> getObjectivesCompleted() {
+		return (Set<Integer>) this.state.get("objectivesCompleted");
 	}
 
-	public void setObjectivesCompleted(int objectivesCompleted) {
-		this.state.put("objectivesCompleted", objectivesCompleted);
-		this.dispatchEvent(new Event("objectivesCompleted"));
+	public void addObjectiveCompleted(int objectiveCompleted) {
+		assert objectiveCompleted < this.objectives.size() : "objectiveCompleted " + objectiveCompleted
+				+ " out of bounds for " + this.objectives.size() + " objectives";
+		this.getObjectivesCompleted().add(objectiveCompleted);
+		this.dispatchEvent(new ObjectiveCompletedEvent(objectiveCompleted));
 	}
 
 	public Map<String, Object> getState() {
@@ -61,5 +68,18 @@ public class Part extends EventDispatcher {
 	@Override
 	public String toString() {
 		return "Part [objectives=" + this.objectives + ", title=" + this.title + "]";
+	}
+
+	public static class ObjectiveCompletedEvent extends Event {
+		private final int objectiveCompleted;
+
+		public ObjectiveCompletedEvent(int objectiveCompleted) {
+			super("objectiveCompleted");
+			this.objectiveCompleted = objectiveCompleted;
+		}
+
+		public int getObjectiveCompleted() {
+			return objectiveCompleted;
+		}
 	}
 }

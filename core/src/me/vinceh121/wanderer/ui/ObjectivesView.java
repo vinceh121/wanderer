@@ -2,6 +2,7 @@ package me.vinceh121.wanderer.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -14,7 +15,7 @@ import me.vinceh121.wanderer.WandererConstants;
 public class ObjectivesView extends Table {
 	private final Label title = new Label("", this.getSkin());
 	private final List<Cell<Label>> objectives = new ArrayList<>();
-	private int objectivesComplete;
+	private Set<Integer> objectivesComplete;
 
 	public ObjectivesView() {
 		super(WandererConstants.getDevSkin());
@@ -47,23 +48,22 @@ public class ObjectivesView extends Table {
 		}
 	}
 
-	public int getObjectivesCompleted() {
+	public Set<Integer> getObjectivesCompleted() {
 		return objectivesComplete;
 	}
 
-	public void setObjectivesCompleted(int completedObjectives) {
+	public void setObjectivesCompleted(Set<Integer> completedObjectives) {
 		this.objectivesComplete = completedObjectives;
 		this.updateObjectivesFormatting();
 	}
 
 	private void updateObjectivesFormatting() {
-		int i = 0;
-		for (; i < this.objectivesComplete; i++) {
-			this.objectives.get(i).getActor().setColor(Color.GREEN);
-		}
-
-		for (; i < this.objectives.size(); i++) {
+		for (int i = 0; i < this.objectives.size(); i++) {
 			this.objectives.get(i).getActor().setColor(Color.WHITE);
+		}
+		
+		for (int obj : this.objectivesComplete) {
+			this.objectives.get(obj).getActor().setColor(Color.GREEN);
 		}
 	}
 }

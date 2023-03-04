@@ -5,7 +5,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
+import me.vinceh121.wanderer.StoryWanderer;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.entity.AbstractEntity;
@@ -15,6 +17,7 @@ public class DebugOverlay extends Table {
 	private final Wanderer game;
 	private final Label lblFps = new Label("FPS", this.getSkin()), lblEntities = new Label("Entities", this.getSkin()),
 			lblCoords = new Label("Coords", this.getSkin()), lblTime = new Label("Time", this.getSkin());
+	private final Label txtPartState = new Label("Part state", this.getSkin());
 
 	public DebugOverlay(final Wanderer game) {
 		super(WandererConstants.getDevSkin());
@@ -26,6 +29,8 @@ public class DebugOverlay extends Table {
 		this.add(this.lblCoords).align(Align.left);
 		this.row();
 		this.add(this.lblTime).align(Align.left);
+		this.row();
+		this.add(this.txtPartState).align(Align.left);
 		this.align(Align.topLeft);
 	}
 
@@ -43,6 +48,17 @@ public class DebugOverlay extends Table {
 		this.lblTime.setText(String.format("Time: %.2f%%    %s",
 				this.game.getTimeOfDay() * 100,
 				SkyboxRenderer.getTimeRange(this.game.getTimeOfDay()).name()));
+
+		if (this.game instanceof StoryWanderer) {
+			try {
+				this.txtPartState.setText("Part state: " + WandererConstants.MAPPER
+					.writeValueAsString(((StoryWanderer) this.game).getPart().getState()));
+			} catch (JsonProcessingException e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			this.txtPartState.setText("Part state: not in story mode");
+		}
 
 		// pin to the top left
 		this.setX(0, Align.topLeft);

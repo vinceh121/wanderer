@@ -225,9 +225,9 @@ public class Wanderer extends ApplicationAdapter {
 
 		final LighthouseMeta lighthouseArtifactMeta = MetaRegistry.getInstance().get("j_lighthouse01");
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 3; i++) {
 			final AbstractArtifactEntity artifactEntity = new BuildingArtifactEntity(this, lighthouseArtifactMeta);
-			artifactEntity.setTranslation(5*i, 34, 10);
+			artifactEntity.setTranslation(5, 34, 4 * i + 10);
 			this.addEntity(artifactEntity);
 		}
 
@@ -589,8 +589,10 @@ public class Wanderer extends ApplicationAdapter {
 	public Stream<AbstractEntity> findEntitiesByClass(Class<? extends AbstractEntity> cls) {
 		// This game of casts looks redundant but it's not!
 		// Using Stream.of(this.entities.items) causes a ClassCastException
-		// This is due to an implicit (AbtractEntity[]) this.entities.items added by the compiler that will always fail!
-		// GDX's Array<T>#items has a T[] type, which the compiler will always compile as Object[]
+		// This is due to an implicit (AbtractEntity[]) this.entities.items added by the
+		// compiler that will always fail!
+		// GDX's Array<T>#items has a T[] type, which the compiler will always compile
+		// as Object[]
 		return Stream.of((Object[]) this.entities.items).filter(e -> cls.isInstance(e)).map(e -> (AbstractEntity) e);
 	}
 

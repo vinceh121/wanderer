@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.NativeJavaClass;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
@@ -24,25 +25,28 @@ import me.vinceh121.wanderer.script.FileHandleModuleSourceProvider;
 import me.vinceh121.wanderer.script.JsAudio;
 import me.vinceh121.wanderer.script.JsConsole;
 import me.vinceh121.wanderer.script.JsTimers;
+import me.vinceh121.wanderer.script.WandererContextFactory;
 import me.vinceh121.wanderer.story.Chapter;
 import me.vinceh121.wanderer.story.Part;
 import me.vinceh121.wanderer.story.StoryBook;
 
 public class ScriptManager {
 	private static final List<Class<?>> PART_SCOPE_CLASSES = new ArrayList<>();
-	private final Context ctx = Context.enter();
+	private final Context ctx;
 	private final ScriptableObject baseScope = new NativeObject();
 
 	public ScriptManager() {
+		ContextFactory.initGlobal(new WandererContextFactory());
+		this.ctx = Context.enter();
 		this.ctx.setLanguageVersion(Context.VERSION_ES6);
 	}
 
-	public Scriptable loadChapter(final FileHandle src, final FileHandle base) {
-		return this.loadChapter(FileHandleModuleSourceProvider.fromFileHandle(src),
+	public Scriptable loadModule(final FileHandle src, final FileHandle base) {
+		return this.loadModule(FileHandleModuleSourceProvider.fromFileHandle(src),
 				FileHandleModuleSourceProvider.fromFileHandle(base));
 	}
 
-	public Scriptable loadChapter(final URI src, final URI base) {
+	public Scriptable loadModule(final URI src, final URI base) {
 		final RequireBuilder reqBuild = new RequireBuilder();
 		reqBuild.setSandboxed(true);
 		reqBuild.setModuleScriptProvider(new SoftCachingModuleScriptProvider(new FileHandleModuleSourceProvider(base)));
@@ -64,6 +68,10 @@ public class ScriptManager {
 
 	public ScriptableObject getBaseScope() {
 		return this.baseScope;
+	}
+
+	public Context getContext() {
+		return this.ctx;
 	}
 
 	public static void copyObject(final Scriptable from, final Scriptable to) {
