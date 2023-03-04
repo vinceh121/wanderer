@@ -1,14 +1,16 @@
 package me.vinceh121.wanderer.script;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Undefined;
 import org.mozilla.javascript.commonjs.module.ModuleScope;
 
-import com.badlogic.gdx.Gdx;
-
 public class JsConsole {
+	private static final Logger LOG = LogManager.getLogger(JsConsole.class);
+
 	public void install(final Scriptable scope) {
 		final Scriptable console = this.buildConsoleObject(scope);
 		scope.put("console", scope, console);
@@ -26,11 +28,11 @@ public class JsConsole {
 	}
 
 	private Object log(final Context lcx, final Scriptable lscope, final Scriptable thisObj, final Object[] args) {
-		String tag = "JS";
+		Logger tag = LOG;
 		if (lscope instanceof ModuleScope) {
-			tag = ((ModuleScope) lscope).getUri().toString();
+			tag = LogManager.getLogger(((ModuleScope) lscope).getUri().toString());
 		}
-		Gdx.app.log(tag, this.buildOutput(args));
+		tag.info(this.buildOutput(args));
 		return Undefined.instance;
 	}
 

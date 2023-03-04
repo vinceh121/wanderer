@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.LogManager;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -19,7 +21,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -47,6 +48,7 @@ import me.vinceh121.wanderer.ui.EnergyBar;
 import me.vinceh121.wanderer.ui.ItemBar;
 
 public class Wanderer extends ApplicationAdapter {
+	private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(Wanderer.class);
 	private final InputManager inputManager = new InputManager();
 	private final PhysicsManager physicsManager = new PhysicsManager();
 	private final GraphicsManager graphicsManager = new GraphicsManager();
@@ -85,15 +87,8 @@ public class Wanderer extends ApplicationAdapter {
 			this.consoleHandler = new ConsoleHandler(this);
 			this.consoleHandler.start();
 		} catch (IOException e2) {
-			System.err.println("Failed to init console");
-			e2.printStackTrace();
+			LOG.error("Failed to init console", e2);
 		}
-
-		WandererConstants.ASSET_MANAGER.getLogger().setLevel(Logger.DEBUG);
-		WandererConstants.ASSET_MANAGER.setErrorListener((asset, t) -> {
-			System.err.println("Failed to load asset: " + asset);
-			t.printStackTrace();
-		});
 
 		this.inputManager.create();
 		this.physicsManager.create();
@@ -103,8 +98,7 @@ public class Wanderer extends ApplicationAdapter {
 		try {
 			this.inputManager.loadOrDefaults();
 		} catch (final JsonProcessingException e) {
-			System.err.println("Failed to load key bindings");
-			e.printStackTrace();
+			LOG.error("Failed to load key bindings", e);
 		}
 		this.inputManager.addListener(new InputListenerAdapter(0) {
 			@Override
@@ -124,13 +118,13 @@ public class Wanderer extends ApplicationAdapter {
 					if (Wanderer.this.controlledEntity == null) {
 						for (final AbstractEntity e : Wanderer.this.entities) {
 							if (e instanceof IControllableEntity) {
-								System.out.println("Controlling " + e);
+								LOG.info("Controlling {}", e);
 								Wanderer.this.controlEntity((IControllableEntity) e);
 								return true;
 							}
 						}
 					} else {
-						System.out.println("Remove control");
+						LOG.info("Remove control");
 						Wanderer.this.removeEntityControl();
 					}
 					return true;
@@ -437,7 +431,7 @@ public class Wanderer extends ApplicationAdapter {
 					throw new IllegalStateException("Cannot control entity from save " + contEnt);
 				}
 			} else {
-				Gdx.app.log("loadStateless", "No controlled entity in save");
+				LOG.info("No controlled entity in save");
 			}
 
 			Clan pClan = this.getClan(sav.getPlayerClan());
@@ -465,8 +459,7 @@ public class Wanderer extends ApplicationAdapter {
 				if (c.getParameterTypes().length == 2 && c.getParameterTypes()[0] == Wanderer.class
 						&& IMeta.class.isAssignableFrom(c.getParameterTypes()[1])) {
 					if (n.get("meta") == null) {
-						System.err
-							.println("Entity " + cls + " has constructor w/ meta but save is missing meta property");
+						LOG.error("Entity {} has constructor w/ meta but save is missing meta property", cls);
 						continue;
 					}
 					ent = (AbstractEntity) c.newInstance(this, MetaRegistry.getInstance().get(n.get("meta").asText()));
@@ -608,7 +601,6 @@ public class Wanderer extends ApplicationAdapter {
 
 	@Override
 	public void pause() {
-		System.out.println("Wanderer.pause()");
 		this.paused = true;
 		this.pauseControlledEntity = this.controlledEntity;
 		this.removeEntityControl();
@@ -616,7 +608,6 @@ public class Wanderer extends ApplicationAdapter {
 
 	@Override
 	public void resume() {
-		System.out.println("Wanderer.resume()");
 		this.paused = false;
 		this.controlEntity(this.pauseControlledEntity);
 		this.pauseControlledEntity = null;

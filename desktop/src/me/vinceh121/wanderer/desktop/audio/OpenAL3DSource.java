@@ -2,6 +2,8 @@ package me.vinceh121.wanderer.desktop.audio;
 
 import static org.lwjgl.openal.AL10.*;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.openal.ALC11;
 
 import com.badlogic.gdx.math.Vector3;
@@ -9,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
 public class OpenAL3DSource implements SoundEmitter3D {
+	private static final Logger LOG = LogManager.getLogger(OpenAL3DAudio.class);
 	private final OpenAL3DAudio audio;
 	private final int source;
 	private final long context;
@@ -175,7 +178,7 @@ public class OpenAL3DSource implements SoundEmitter3D {
 		if (this.disposed) {
 			return;
 		}
-		System.err.println("Garbaging " + this.source);
+		LOG.error("Garbaging {}", this.source);
 		this.dispose();
 	}
 

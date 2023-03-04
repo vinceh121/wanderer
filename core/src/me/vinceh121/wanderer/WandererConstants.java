@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.Logger;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,6 +50,9 @@ public final class WandererConstants {
 		WandererJsonModule.registerModules(WandererConstants.SAVE_MAPPER);
 		WandererConstants.SAVE_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
+		// need to do this so Log4J can choose the
+		// actual log level
+		WandererConstants.ASSET_MANAGER.getLogger().setLevel(Logger.DEBUG);
 		WandererConstants.ASSET_MANAGER.setLoader(Sound3D.class,
 				new Sound3DLoader(WandererConstants.ASSET_MANAGER.getFileHandleResolver()));
 		WandererConstants.ASSET_MANAGER.setLoader(Model.class, ".gltf", new GLTFModelLoader());

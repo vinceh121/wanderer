@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -29,10 +31,11 @@ import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.MouseWheelScroll;
 
 public class InputManager extends ApplicationAdapter {
+	private static final Logger LOG = LogManager.getLogger(InputManager.class);
 	private static final String PREF_NAME = "me.vinceh121.wanderer.inputs";
 	private final HashSetValuedHashMap<Input, Binding> bindings = new HashSetValuedHashMap<>();
-	private final PriorityQueue<InputListener> listeners = new PriorityQueue<>(
-			(o1, o2) -> Integer.compare(o2.getPriority(), o1.getPriority())); // reverse sort order
+	private final PriorityQueue<InputListener> listeners =
+			new PriorityQueue<>((o1, o2) -> Integer.compare(o2.getPriority(), o1.getPriority())); // reverse sort order
 	private boolean controllersReady;
 
 	public void loadOrDefaults() throws JsonProcessingException {
@@ -170,12 +173,12 @@ public class InputManager extends ApplicationAdapter {
 				} else if (amountX < 0) {
 					scroll = MouseWheelScroll.LEFT;
 				} else {
-					Gdx.app.log(this.getClass().getName(), "Couldn't figure out a mouse scroll value");
+					LOG.error("Couldn't figure out a mouse scroll value");
 					return false;
 				}
 
-				final Collection<Input> in = InputManager.this
-					.inputsForBinding(new Binding(scroll.ordinal(), DeviceType.MOUSE_WHEEL));
+				final Collection<Input> in =
+						InputManager.this.inputsForBinding(new Binding(scroll.ordinal(), DeviceType.MOUSE_WHEEL));
 				if (!in.isEmpty()) {
 					InputManager.this.fireInputDown(in);
 					return true;
@@ -228,12 +231,12 @@ public class InputManager extends ApplicationAdapter {
 
 			@Override
 			public void connected(final Controller controller) {
-				System.out.println(controller.getName() + " connected");
+				LOG.info("{} connected", controller.getName());
 			}
 
 			@Override
 			public void disconnected(final Controller controller) {
-				System.out.println(controller.getName() + " disconnected");
+				LOG.info("{} disconnected", controller.getName());
 			}
 		});
 

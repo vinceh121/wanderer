@@ -1,7 +1,9 @@
 package me.vinceh121.wanderer.entity;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Logger;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.MetaRegistry;
@@ -13,7 +15,7 @@ import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
  * A prop is the simplest entity. Just a collidable object in the world.
  */
 public class Prop extends AbstractEntity {
-	private static final Logger LOG = new Logger(Prop.class.getCanonicalName());
+	private static final Logger LOG = LogManager.getLogger(Prop.class);
 	private final PropMeta meta;
 
 	public Prop(final Wanderer game, PropMeta meta) {
@@ -27,7 +29,7 @@ public class Prop extends AbstractEntity {
 
 		if (meta.getDetailMapTexture() != null) {
 			if (!WandererConstants.ASSET_MANAGER.isLoaded(meta.getDetailMapTexture(), Texture.class)) {
-				LOG.error("Hot loading tiled texture " + meta.getDetailMapTexture());
+				LOG.error("Hot loading tiled texture {}", meta.getDetailMapTexture());
 				WandererConstants.ASSET_MANAGER
 					.load(meta.getDetailMapTexture(), Texture.class, WandererConstants.MIPMAPS);
 				WandererConstants.ASSET_MANAGER.finishLoadingAsset(meta.getDetailMapTexture());

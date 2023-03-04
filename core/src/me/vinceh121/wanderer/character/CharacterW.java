@@ -1,5 +1,8 @@
 package me.vinceh121.wanderer.character;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
@@ -42,6 +45,7 @@ import me.vinceh121.wanderer.ui.BeltSelection;
  * Named like that to differentiate with java.lang.Character
  */
 public class CharacterW extends AbstractLivingControllableEntity {
+	private static final Logger LOG = LogManager.getLogger(CharacterW.class);
 	public static final String EVENT_START_FALL = "START_FALL", EVENT_END_FALL = "END_FALL",
 			EVENT_JUMP_END = "JUMP_END";
 	private final CharacterMeta meta;
@@ -206,7 +210,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	@Override
 	public void onDeath() {
 		// TODO
-		System.out.println("Dead!");
+		LOG.debug("Dead!");
 	}
 
 	public void processInput() {

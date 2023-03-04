@@ -1,33 +1,26 @@
 package me.vinceh121.wanderer.desktop;
 
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.system.Configuration;
+
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl3.audio.Lwjgl3Audio;
 
 import me.vinceh121.wanderer.ApplicationMultiplexer;
 import me.vinceh121.wanderer.StoryWanderer;
-import me.vinceh121.wanderer.desktop.audio.OpenAL3DAudio;
-import me.vinceh121.wanderer.desktop.audio.OpenALException;
 
 public class DesktopLauncher {
+	private static final Logger LOG = LogManager.getLogger(DesktopLauncher.class);
+
 	public static void main(final String[] arg) {
 		final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.enableGLDebugOutput(true, System.out);
+		Configuration.DEBUG.set(true);
+		config.enableGLDebugOutput(true, System.err);
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4); // all default except for 4× anti aliasing
 		try {
-			new Lwjgl3Application(new ApplicationMultiplexer(new StoryWanderer()), config) {
-				@Override
-				public Lwjgl3Audio createAudio(final Lwjgl3ApplicationConfiguration config) {
-					try {
-						return new OpenAL3DAudio();
-					} catch (final OpenALException e) {
-						throw new RuntimeException(e);
-					}
-				}
-			};
+			new WandererDesktopApplication(new ApplicationMultiplexer(new StoryWanderer()), config);
 		} catch (Exception e) {
-			System.err.println("Uncaught braught back up to main!");
-			e.printStackTrace();
+			LOG.error("Uncaught braught back up to main!", e);
 			System.exit(-1);
 		}
 	}

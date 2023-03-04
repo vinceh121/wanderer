@@ -1,17 +1,18 @@
 package me.vinceh121.wanderer.script;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Logger;
 
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
 public final class JsAudio {
-	private static final Logger LOG = new Logger("JsAudio");
+	private static final Logger LOG = LogManager.getLogger(JsAudio.class);
 
 	public static void install(final Scriptable scope) {
 		JsUtils.install(scope, "play", JsAudio::play);
