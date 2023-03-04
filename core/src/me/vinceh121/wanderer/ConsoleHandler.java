@@ -16,6 +16,7 @@ import org.mozilla.javascript.ScriptableObject;
 
 import com.badlogic.gdx.Gdx;
 
+import me.vinceh121.wanderer.script.JsGame;
 import me.vinceh121.wanderer.script.JsUtils;
 
 public class ConsoleHandler implements AutoCloseable {
@@ -51,7 +52,7 @@ public class ConsoleHandler implements AutoCloseable {
 	private void run() {
 		this.jsContext = ContextFactory.getGlobal().enterContext();
 		this.scope = this.jsContext.initSafeStandardObjects();
-		this.scope.putConst("game", this.scope, this.game);
+		new JsGame(this.game);
 		fillConsoleScope(scope);
 		while (!this.closed) {
 			try {
@@ -79,7 +80,7 @@ public class ConsoleHandler implements AutoCloseable {
 	private void fillConsoleScope(ScriptableObject scope) {
 		ScriptManager.fillStoryScope(scope);
 
-		JsUtils.install(scope, "exit", (Object[] args) -> Gdx.app.postRunnable(() -> this.game.dispose()));
-		JsUtils.install(scope, "forceexit", (Object[] args) -> System.exit(-1));
+		JsUtils.install(scope, "exit", () -> Gdx.app.postRunnable(() -> this.game.dispose()));
+		JsUtils.install(scope, "forceexit", () -> System.exit(-1));
 	}
 }

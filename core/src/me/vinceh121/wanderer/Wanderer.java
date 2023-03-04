@@ -43,6 +43,7 @@ import me.vinceh121.wanderer.entity.Prop;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
+import me.vinceh121.wanderer.script.JsGame;
 import me.vinceh121.wanderer.ui.BlinkLabel;
 import me.vinceh121.wanderer.ui.DebugOverlay;
 import me.vinceh121.wanderer.ui.EnergyBar;
@@ -94,7 +95,7 @@ public class Wanderer extends ApplicationAdapter {
 		this.inputManager.create();
 		this.physicsManager.create();
 		this.graphicsManager.create();
-		this.scriptManager.getBaseScope().putConst("game", this.scriptManager.getBaseScope(), this);
+		new JsGame(this).install(this.scriptManager.getBaseScope());
 
 		try {
 			this.inputManager.loadOrDefaults();
