@@ -71,7 +71,7 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 			if (meta.getArtifactColor() != null) {
 				model.addTextureAttribute(ColorAttribute.createEmissive(meta.getArtifactColor()));
 			}
-			model.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_DST_COLOR, 0.5f));
+			model.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_DST_COLOR, 0.75f));
 			model.addTextureAttribute(new NoLightningAttribute());
 			this.addModel(model);
 		}
