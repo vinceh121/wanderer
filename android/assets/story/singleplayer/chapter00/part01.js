@@ -10,6 +10,7 @@ part.setPartStart(() => {
 	const backpack = findFirstEntityByClass(BackpackArtifact);
 	backpack.addEventListener("pickedUp", e => {
 		part.addObjectiveCompleted(0);
+		console.log("Picked up boosterpack");
 	});
 
 	findEntitiesByClass(BuildingArtifactEntity).forEach(building => {
@@ -17,6 +18,7 @@ part.setPartStart(() => {
 			part.state.collectedBuildings++;
 			if (part.state.collectedBuildings == 3) {
 				part.addObjectiveCompleted(1);
+				console.log("Picked up lighthouses");
 			}
 		});
 	});

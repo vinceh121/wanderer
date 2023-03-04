@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -26,6 +29,7 @@ import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
 
 public class AttributeDeserializer extends StdDeserializer<Attribute> {
 	private static final long serialVersionUID = -4897698306503294306L;
+	private static final Logger LOG = LogManager.getLogger(AttributeDeserializer.class);
 	private static final Map<String, Integer> DEPTH_FUNCS = new HashMap<>();
 
 	public AttributeDeserializer() {
@@ -53,7 +57,7 @@ public class AttributeDeserializer extends StdDeserializer<Attribute> {
 				&& TiledMaterialAttribute.TiledMaterialAlias.equals(type)) {
 			final String textureName = n.get("texture").asText();
 			if (!WandererConstants.ASSET_MANAGER.isLoaded(textureName, Texture.class)) {
-				System.err.println("Hot-loading TiledMaterial texture " + textureName);
+				LOG.error("Hot-loading TiledMaterial texture {}", textureName);
 				WandererConstants.ASSET_MANAGER.load(textureName, Texture.class);
 				WandererConstants.ASSET_MANAGER.finishLoadingAsset(textureName);
 			}
@@ -75,7 +79,7 @@ public class AttributeDeserializer extends StdDeserializer<Attribute> {
 		}
 		return att;
 	}
-	
+
 	private static int getFunc(JsonNode n) {
 		if (n.isInt()) {
 			return n.asInt();

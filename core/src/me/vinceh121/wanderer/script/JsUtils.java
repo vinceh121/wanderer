@@ -10,6 +10,7 @@ import org.mozilla.javascript.LambdaFunction;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Undefined;
+import org.mozilla.javascript.commonjs.module.ModuleScope;
 
 public final class JsUtils {
 
@@ -60,6 +61,16 @@ public final class JsUtils {
 			return ((NativeJavaObject) in).unwrap();
 		} else {
 			return in;
+		}
+	}
+	
+	public static ModuleScope getModuleScope(Scriptable scope) {
+		if (scope instanceof ModuleScope) {
+			return (ModuleScope) scope;
+		} else if (scope.getParentScope() != null) {
+			return getModuleScope(scope.getParentScope());
+		} else {
+			return null;
 		}
 	}
 }

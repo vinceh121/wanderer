@@ -2,6 +2,8 @@ package me.vinceh121.wanderer;
 
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
@@ -20,6 +22,7 @@ import me.vinceh121.wanderer.script.JsGame;
 import me.vinceh121.wanderer.script.JsUtils;
 
 public class ConsoleHandler implements AutoCloseable {
+	private final Logger LOG = LogManager.getLogger(ConsoleHandler.class);
 	private final Wanderer game;
 	private final Terminal terminal;
 	private final LineReader lineReader;
@@ -60,12 +63,11 @@ public class ConsoleHandler implements AutoCloseable {
 				Object res = this.jsContext.evaluateString(this.scope, line, "<stdin>", -1, null);
 				System.out.println(ScriptRuntime.toString(res));
 			} catch (EcmaError e) {
-				System.err.println(e.getMessage());
+				LOG.error("", e);
 			} catch (UserInterruptException e) {
 				// ignore
 			} catch (Exception e) {
-				System.err.println("Unhandled exception in console");
-				e.printStackTrace();
+				LOG.error("Unhandled exception in console", e);
 			}
 		}
 	}
