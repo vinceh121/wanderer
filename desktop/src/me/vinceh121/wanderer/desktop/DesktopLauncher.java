@@ -15,6 +15,7 @@ public class DesktopLauncher {
 	public static void main(final String[] arg) {
 		final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		Configuration.DEBUG.set(true);
+		config.setTitle("Wanderer");
 		config.enableGLDebugOutput(true, System.err);
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4); // all default except for 4× anti aliasing
 		try {
