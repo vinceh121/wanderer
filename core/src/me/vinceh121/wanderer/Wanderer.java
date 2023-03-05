@@ -45,6 +45,7 @@ import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.script.JsGame;
 import me.vinceh121.wanderer.ui.BlinkLabel;
+import me.vinceh121.wanderer.ui.CutsceneOverlay;
 import me.vinceh121.wanderer.ui.DebugOverlay;
 import me.vinceh121.wanderer.ui.EnergyBar;
 import me.vinceh121.wanderer.ui.ItemBar;
@@ -80,6 +81,7 @@ public class Wanderer extends ApplicationAdapter {
 	private BlinkLabel messageLabel;
 	private ItemBar itemBar;
 	private EnergyBar energyBar;
+	private CutsceneOverlay cutsceneOverlay;
 
 	private float timeOfDay, elapsedTimeOfDay, dayDuration = 15800f;
 
@@ -194,6 +196,9 @@ public class Wanderer extends ApplicationAdapter {
 		this.energyBar.setY(10);
 		this.graphicsManager.getStage().addActor(this.energyBar);
 
+		this.cutsceneOverlay = new CutsceneOverlay();
+		this.graphicsManager.getStage().addActor(this.cutsceneOverlay);
+
 		try {
 			MetaRegistry.getInstance().loadDefaults();
 		} catch (final IOException e1) {
@@ -280,6 +285,14 @@ public class Wanderer extends ApplicationAdapter {
 		}
 
 		this.flushEntityQueue();
+		
+		for (int i = 0; i < this.entities.size; i++) {
+			final AbstractEntity entity = this.entities.get(i);
+			entity.updatePhysics(this.physicsManager.getBtWorld());
+			if (!this.paused) {
+				entity.tick(delta);
+			}
+		}
 
 		this.graphicsManager.clear();
 		this.graphicsManager.renderSkybox(this.timeOfDay);
@@ -287,10 +300,6 @@ public class Wanderer extends ApplicationAdapter {
 		this.graphicsManager.begin();
 		for (int i = 0; i < this.entities.size; i++) {
 			final AbstractEntity entity = this.entities.get(i);
-			entity.updatePhysics(this.physicsManager.getBtWorld());
-			if (!this.paused) {
-				entity.tick(delta);
-			}
 			entity.render(this.graphicsManager.getModelBatch(), this.graphicsManager.getEnv());
 		}
 		this.graphicsManager.end();
