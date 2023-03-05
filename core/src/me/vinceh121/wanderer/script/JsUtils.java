@@ -63,7 +63,7 @@ public final class JsUtils {
 			return in;
 		}
 	}
-	
+
 	public static ModuleScope getModuleScope(Scriptable scope) {
 		if (scope instanceof ModuleScope) {
 			return (ModuleScope) scope;
