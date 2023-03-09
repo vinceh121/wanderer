@@ -9,14 +9,14 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.FloatAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 
-public class CutsceneOverlay extends Widget {
+public class LetterboxOverlay extends Widget {
 	private static final Texture BLACK_PIXEL;
 	private final FloatAction fadeIn = new FloatAction(0, 1, 2, Interpolation.smooth);
 	private final FloatAction fadeOut = new FloatAction(1, 0, 2, Interpolation.smooth);
 	private float progress;
 	private boolean started;
 
-	public CutsceneOverlay() {
+	public LetterboxOverlay() {
 		this.fadeOut.finish();
 	}
 
