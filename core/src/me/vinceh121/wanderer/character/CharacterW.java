@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import me.vinceh121.wanderer.MetaRegistry;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
-import me.vinceh121.wanderer.animation.MultiplexedAnimationController;
-import me.vinceh121.wanderer.animation.MultiplexedAnimationController.PlaybackType;
+import me.vinceh121.wanderer.animation.MultiplexedSkinAnimationController;
+import me.vinceh121.wanderer.animation.MultiplexedSkinAnimationController.PlaybackType;
 import me.vinceh121.wanderer.artifact.ArtifactMeta;
 import me.vinceh121.wanderer.building.AbstractBuildingMeta;
 import me.vinceh121.wanderer.building.InConstructionBuilding;
@@ -60,7 +60,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	private AbstractBuildingMeta placing;
 	private PreviewBuilding previewBuilding;
 	private float cameraHeight = 0.5f;
-	private MultiplexedAnimationController animController;
+	private MultiplexedSkinAnimationController animController;
 
 	public CharacterW(final Wanderer game, final CharacterMeta meta) {
 		super(game);
@@ -118,7 +118,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 		if (this.animController == null && this.getModels().size > 0
 				&& this.getModels().get(0).getCacheDisplayModel() != null) {
-			this.animController = new MultiplexedAnimationController(this.getModels().get(0).getCacheDisplayModel());
+			this.animController = new MultiplexedSkinAnimationController(this.getModels().get(0).getCacheDisplayModel());
 		}
 
 		if (this.animController != null) {

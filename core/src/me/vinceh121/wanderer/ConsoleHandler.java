@@ -55,7 +55,7 @@ public class ConsoleHandler implements AutoCloseable {
 	private void run() {
 		this.jsContext = ContextFactory.getGlobal().enterContext();
 		this.scope = this.jsContext.initSafeStandardObjects();
-		new JsGame(this.game);
+		new JsGame(this.game).install(this.scope);
 		fillConsoleScope(scope);
 		while (!this.closed) {
 			try {

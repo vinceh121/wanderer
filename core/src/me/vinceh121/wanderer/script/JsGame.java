@@ -1,8 +1,14 @@
 package me.vinceh121.wanderer.script;
 
+import java.io.IOException;
+
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Undefined;
+import org.mozilla.javascript.commonjs.module.ModuleScope;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 
 import me.vinceh121.wanderer.IMeta;
 import me.vinceh121.wanderer.MetaRegistry;
@@ -34,7 +40,29 @@ public class JsGame {
 		JsUtils.install(scope, "findFirstEntityByClass", this.game::findFirstEntityByClass);
 		JsUtils.install(scope, "findEntitiesByClass", this.game::findEntitiesByClass);
 
+		JsUtils.install(scope, "playCinematic", this::playCinematic);
 		JsUtils.install(scope, "spawn", this::spawn);
+	}
+
+	private Object playCinematic(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+		if (args.length != 1) {
+			throw new IllegalArgumentException("playCinematic needs 1 argument");
+		}
+
+		String pathStr = (String) args[0];
+		if (pathStr.startsWith("./")) {
+			ModuleScope module = JsUtils.getModuleScope(thisObj);
+			FileHandle parent = FileHandleModuleSourceProvider.fromURI(module.getUri()).parent();
+			pathStr = parent + pathStr.substring(1);
+		}
+		FileHandle path = Gdx.files.internal(pathStr);
+
+		try {
+			this.game.startCinematic(path);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return Undefined.instance;
 	}
 
 	private Object spawn(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {

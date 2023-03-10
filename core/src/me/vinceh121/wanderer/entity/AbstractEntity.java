@@ -38,7 +38,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	// note: ID can't be final to be able to set explicit values when loading a save
 	private ID id = new ID();
 	private Matrix4 transform = new Matrix4();
-	private String collideModel;
+	private String collideModel, symbolicName;
 	private btRigidBody collideObject;
 	private float mass;
 	private boolean exactCollideModel = true;
@@ -131,6 +131,14 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	public void setCollideModel(final String collideModel) {
 		this.collideModel = collideModel;
 		this.collideObject = null; // trigger collide model reload
+	}
+
+	public String getSymbolicName() {
+		return symbolicName;
+	}
+
+	public void setSymbolicName(String symbolicName) {
+		this.symbolicName = symbolicName;
 	}
 
 	public btRigidBody getCollideObject() {

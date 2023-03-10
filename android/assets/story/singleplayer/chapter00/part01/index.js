@@ -22,6 +22,8 @@ part.setPartStart(() => {
 			}
 		});
 	});
+
+	playCinematic("./cinIntro.json");
 });
 
 exports.part = part;

@@ -1,7 +1,7 @@
 
 const storyBook = new StoryBook([
 	new Chapter([
-		require("./singleplayer/chapter00/part01").part
+		require("./singleplayer/chapter00/part01/index").part
 	])
 ]);
 

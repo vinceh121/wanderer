@@ -35,11 +35,11 @@ public class TransformAnimation {
 	public Matrix4 valueAt(final float time) {
 		final TransformKeyFrame first = this.keys.first();
 		if (first.getTime() >= time) {
-			return first.getTransform().cpy();
+			return first.getValue().cpy();
 		}
 		final TransformKeyFrame last = this.keys.last();
 		if (last.getTime() <= time) {
-			return last.getTransform().cpy();
+			return last.getValue().cpy();
 		}
 
 		TransformKeyFrame prev = first;
@@ -55,8 +55,8 @@ public class TransformAnimation {
 			// shouldn't happen
 			throw new IllegalStateException("Couldn't find valid key");
 		}
-		return TransformAnimation.interpolate(prev.getTransform(),
-				next.getTransform(),
+		return TransformAnimation.interpolate(prev.getValue(),
+				next.getValue(),
 				MathUtils.norm(prev.getTime(), next.getTime(), time),
 				this.inter);
 	}
@@ -65,7 +65,7 @@ public class TransformAnimation {
 		final TransformAnimation anim = new TransformAnimation();
 		for (int i = 0; i < transforms.length; i++) {
 			final TransformKeyFrame key = new TransformKeyFrame();
-			key.setTransform(transforms[i]);
+			key.setValue(transforms[i]);
 			key.setTime(i * totalTime / transforms.length);
 			anim.add(key);
 		}

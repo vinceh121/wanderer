@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -23,6 +24,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.artifact.AbstractArtifactEntity;
@@ -35,6 +37,8 @@ import me.vinceh121.wanderer.building.IslandMeta;
 import me.vinceh121.wanderer.building.LighthouseMeta;
 import me.vinceh121.wanderer.character.CharacterMeta;
 import me.vinceh121.wanderer.character.CharacterW;
+import me.vinceh121.wanderer.cinematic.CinematicController;
+import me.vinceh121.wanderer.cinematic.CinematicData;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
@@ -45,10 +49,10 @@ import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.script.JsGame;
 import me.vinceh121.wanderer.ui.BlinkLabel;
-import me.vinceh121.wanderer.ui.LetterboxOverlay;
 import me.vinceh121.wanderer.ui.DebugOverlay;
 import me.vinceh121.wanderer.ui.EnergyBar;
 import me.vinceh121.wanderer.ui.ItemBar;
+import me.vinceh121.wanderer.ui.LetterboxOverlay;
 
 public class Wanderer extends ApplicationAdapter {
 	private static final Logger LOG = LogManager.getLogger(Wanderer.class);
@@ -77,6 +81,8 @@ public class Wanderer extends ApplicationAdapter {
 	 */
 	private IControllableEntity pauseControlledEntity;
 	private AbstractBuilding interactingBuilding;
+
+	private CinematicController cinematicController;
 
 	private BlinkLabel messageLabel;
 	private ItemBar itemBar;
@@ -252,6 +258,7 @@ public class Wanderer extends ApplicationAdapter {
 		johnMeta.ensureLoading();
 
 		final CharacterW john = new CharacterW(this, johnMeta);
+		john.setSymbolicName("player");
 		john.setBeltSize(5);
 		john.setTranslation(0.1f, 50f, 0.1f);
 
@@ -291,6 +298,13 @@ public class Wanderer extends ApplicationAdapter {
 			entity.updatePhysics(this.physicsManager.getBtWorld());
 			if (!this.paused) {
 				entity.tick(delta);
+			}
+		}
+
+		if (this.cinematicController != null && !this.paused) {
+			this.cinematicController.update(delta);
+			if (this.cinematicController.isOver()) {
+				this.stopCinematic();
 			}
 		}
 
@@ -361,6 +375,7 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public AbstractEntity getEntity(final String symbolicName) {
+		assert symbolicName != null : "symbolicName cannot be null";
 		for (final AbstractEntity e : this.entities) {
 			if (symbolicName.equals(e.getSymbolicName())) {
 				return e;
@@ -496,6 +511,24 @@ public class Wanderer extends ApplicationAdapter {
 			this.addEntity(ent);
 		}
 		this.clans.addAll(map.getClans());
+	}
+
+	public void startCinematic(FileHandle fh) throws IOException {
+		List<CinematicData> datas =
+				WandererConstants.MAPPER.readValue(fh.read(), new TypeReference<List<CinematicData>>() {
+				});
+		this.startCinematic(datas);
+	}
+
+	public void startCinematic(List<CinematicData> data) {
+		this.cinematicController = new CinematicController(this);
+		this.cinematicController.setCinematicDatas(data);
+		this.cutsceneOverlay.start();
+	}
+
+	public void stopCinematic() {
+		this.cinematicController = null;
+		this.cutsceneOverlay.stop();
 	}
 
 	public Array<AbstractEntity> getEntities() {

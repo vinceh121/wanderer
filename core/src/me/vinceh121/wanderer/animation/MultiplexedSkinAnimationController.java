@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
  * for each bone, [rot, trans] the animation with ID
  * "[characterState]_[rot|trans]_[bone]" is played
  */
-public class MultiplexedAnimationController extends BaseAnimationController {
+public class MultiplexedSkinAnimationController extends BaseAnimationController {
 	private static final String[] ANIM_TYPES = new String[] { "rot", "trans" };
 	private final Array<String> boneNames = new Array<>(false, 16);
 	private AnimationTrack current, previous;
@@ -28,7 +28,7 @@ public class MultiplexedAnimationController extends BaseAnimationController {
 	 */
 	private float previousTrans;
 
-	public MultiplexedAnimationController(ModelInstance target) {
+	public MultiplexedSkinAnimationController(ModelInstance target) {
 		super(target);
 		for (Node node : flattenNodes(target.nodes)) {
 			// bone nodes do not have NodeParts, only meshes do
