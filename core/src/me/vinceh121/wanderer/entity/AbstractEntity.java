@@ -35,9 +35,9 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	private final Vector3 collideObjectOffset = new Vector3();
 	private final Array<DisplayModel> models = new Array<>();
 	private final Array<ParticleEmitter> particles = new Array<>();
+	private final Matrix4 transform = new Matrix4();
 	// note: ID can't be final to be able to set explicit values when loading a save
 	private ID id = new ID();
-	private Matrix4 transform = new Matrix4();
 	private String collideModel, symbolicName;
 	private btRigidBody collideObject;
 	private float mass;
@@ -236,7 +236,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 
 	public void setTransform(final Matrix4 transform) {
 		Objects.nonNull(transform);
-		this.transform = transform;
+		this.transform.set(transform);
 		this.updateTransform();
 	}
 
