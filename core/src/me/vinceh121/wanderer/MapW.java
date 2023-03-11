@@ -6,17 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import me.vinceh121.wanderer.clan.Clan;
 
 public class MapW {
-	private boolean loadPlayerIsland;
 	private Array<ObjectNode> entities;
 	private Array<Clan> clans;
-
-	public boolean isLoadPlayerIsland() {
-		return loadPlayerIsland;
-	}
-
-	public void setLoadPlayerIsland(boolean loadPlayerIsland) {
-		this.loadPlayerIsland = loadPlayerIsland;
-	}
 
 	public Array<ObjectNode> getEntities() {
 		return entities;

@@ -40,9 +40,19 @@ public class JsGame {
 		JsUtils.install(scope, "findFirstEntityByClass", this.game::findFirstEntityByClass);
 		JsUtils.install(scope, "findEntitiesByClass", this.game::findEntitiesByClass);
 
+		JsUtils.install(scope, "loadMapFragment", this::loadMapFragment);
 		JsUtils.install(scope, "setDayTime", this::setDayTime);
 		JsUtils.install(scope, "playCinematic", this::playCinematic);
 		JsUtils.install(scope, "spawn", this::spawn);
+	}
+
+	private Object loadMapFragment(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+		FileHandle path = resolveMaybeRalativePath((String) args[0], thisObj);
+		try {
+			return this.game.loadMapFragment(path);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void setDayTime(int hours, int mins) {
@@ -54,16 +64,8 @@ public class JsGame {
 			throw new IllegalArgumentException("playCinematic needs 1 argument");
 		}
 
-		String pathStr = (String) args[0];
-		if (pathStr.startsWith("./")) {
-			ModuleScope module = JsUtils.getModuleScope(thisObj);
-			FileHandle parent = FileHandleModuleSourceProvider.fromURI(module.getUri()).parent();
-			pathStr = parent + pathStr.substring(1);
-		}
-		FileHandle path = Gdx.files.internal(pathStr);
-
 		try {
-			this.game.startCinematic(path);
+			this.game.startCinematic(resolveMaybeRalativePath((String) args[0], thisObj));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -85,5 +87,14 @@ public class JsGame {
 		this.game.addEntity(ent);
 
 		return ent;
+	}
+
+	private static FileHandle resolveMaybeRalativePath(String path, Scriptable thisObj) {
+		if (path.startsWith("./")) {
+			ModuleScope module = JsUtils.getModuleScope(thisObj);
+			FileHandle parent = FileHandleModuleSourceProvider.fromURI(module.getUri()).parent();
+			path = parent + path.substring(1);
+		}
+		return Gdx.files.internal(path);
 	}
 }

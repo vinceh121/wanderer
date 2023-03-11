@@ -1,0 +1,19 @@
+{
+	"entities": [
+		{
+			"@class": "me.vinceh121.wanderer.entity.Prop",
+			"meta": "a_j_scout01",
+			"symbolicName": "j_scout"
+		},
+		{
+			"@class": "me.vinceh121.wanderer.entity.Prop",
+			"meta": "a_flieger01",
+			"symbolicName": "flieger01"
+		},
+		{
+			"@class": "me.vinceh121.wanderer.entity.Prop",
+			"meta": "a_dd",
+			"symbolicName": "dd"
+		}
+	]
+}

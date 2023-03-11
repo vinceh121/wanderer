@@ -425,6 +425,14 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public void saveStateless(FileHandle dest) throws IOException {
+		final Save save = this.saveStateless();
+
+		try (OutputStream out = dest.write(false)) {
+			WandererConstants.SAVE_MAPPER.writeValue(out, save);
+		}
+	}
+
+	public Save saveStateless() {
 		MapW mapW = this.saveMap();
 
 		final Save save = new Save();
@@ -436,9 +444,7 @@ public class Wanderer extends ApplicationAdapter {
 		}
 		save.setTime(this.timeOfDay);
 		save.setMap(mapW);
-		try (OutputStream out = dest.write(false)) {
-			WandererConstants.SAVE_MAPPER.writeValue(out, save);
-		}
+		return save;
 	}
 
 	public MapW saveMap() {
@@ -479,7 +485,7 @@ public class Wanderer extends ApplicationAdapter {
 				this.setPlayerClan(pClan);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error("Failed to load stateless save", e);
 			System.exit(-1);
 		}
 	}
@@ -492,6 +498,22 @@ public class Wanderer extends ApplicationAdapter {
 		}
 		this.entities.clear();
 		this.clans.clear();
+		this.loadMapFragment(map);
+	}
+
+	public MapW loadMapFragment(FileHandle fh) throws ReflectiveOperationException {
+		try (InputStream in = fh.read()) {
+			MapW map = WandererConstants.MAPPER.readValue(in, MapW.class);
+			this.loadMapFragment(map);
+			return map;
+		} catch (IOException e) {
+			LOG.error("Failed to load map fragment", e);
+			System.exit(-1);
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void loadMapFragment(MapW map) throws ReflectiveOperationException {
 		for (ObjectNode n : map.getEntities()) {
 			AbstractEntity ent = null;
 			final Class<?> cls = Class.forName(n.get("@class").asText());
@@ -515,7 +537,9 @@ public class Wanderer extends ApplicationAdapter {
 			ent.readState(n);
 			this.addEntity(ent);
 		}
-		this.clans.addAll(map.getClans());
+		if (map.getClans() != null) {
+			this.clans.addAll(map.getClans());
+		}
 	}
 
 	public void startCinematic(FileHandle fh) throws IOException {

@@ -25,10 +25,7 @@ part.setPartStart(() => {
 		});
 	});
 
-	spawn("a_dd").setSymbolicName("dd");
-	spawn("a_flieger01").setSymbolicName("flieger01");
-	spawn("a_j_scout01").setSymbolicName("j_scout");
-
+	loadMapFragment("./fragIntro.json");
 	play("orig/book/music/native44a.wav");
 	playCinematic("./cinIntro.json");
 });

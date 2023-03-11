@@ -413,9 +413,18 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	@Override
 	public void readState(ObjectNode node) {
 		assert this.getClass().getCanonicalName().equals(node.get("@class").asText());
-		this.id = new ID(node.required("id").asInt());
-		this.setTransform(WandererConstants.MAPPER.convertValue(node.get("transform"), Matrix4.class));
-		this.setMass(node.get("mass").floatValue());
+		if (node.has("id")) {
+			this.id = new ID(node.required("id").asInt());
+		}
+		if (node.has("transform")) {
+			this.setTransform(WandererConstants.MAPPER.convertValue(node.get("transform"), Matrix4.class));
+		}
+		if (node.has("mass")) {
+			this.setMass(node.get("mass").floatValue());
+		}
+		if (node.has("symbolicName")) {
+			this.setSymbolicName(node.required("symbolicName").asText());
+		}
 	}
 
 	public ID getId() {
