@@ -17,16 +17,18 @@ import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class CinematicController {
 	private static final Logger LOG = LogManager.getLogger(CinematicController.class);
+	public static final String CAMERA_SYMBOLIC_NAME = "_camera";
 	private final Wanderer game;
 	private final List<CinematicData> cinematicDatas = new ArrayList<>();
-	private float time, start, end;
+	private float time, startTime, endTime, rate = 1;
+	private boolean hasCamera;
 
 	public CinematicController(Wanderer game) {
 		this.game = game;
 	}
 
 	public void update(float delta) {
-		final float newTime = this.time + delta;
+		final float newTime = this.time + delta * rate;
 		for (CinematicData d : this.cinematicDatas) {
 			this.updateTrack(delta, newTime, d);
 		}
@@ -34,7 +36,13 @@ public class CinematicController {
 	}
 
 	private void updateTrack(float delta, float newTime, CinematicData data) {
-		if (data.getCacheEntity() == null && data.getSymbolicName() != null) {
+		final boolean isCamera = CAMERA_SYMBOLIC_NAME.equals(data.getSymbolicName());
+
+		if (this.time > data.getEndTime()) {
+			return;
+		}
+
+		if (data.getCacheEntity() == null && data.getSymbolicName() != null && !isCamera) {
 			AbstractEntity ent = this.game.getEntity(data.getSymbolicName());
 			if (ent == null) {
 				LOG.error("No entity goes by symbolicName {}", data.getSymbolicName());
@@ -44,13 +52,32 @@ public class CinematicController {
 		}
 
 		// process positional tracks only if we have an entity linked
-		if (data.getCacheEntity() != null) {
-			Vector3 pos = data.getPosition().interpolate(newTime);
+		Vector3 pos = data.getPosition().interpolate(newTime);
+		if (pos != null) {
 			MathUtilsW.fixNaN(pos, 0);
+		}
 
-			Quaternion rot = data.getRotation().interpolate(newTime);
-			Vector3 scl = data.getScale().interpolate(newTime);
+		Quaternion rot = data.getRotation().interpolate(newTime);
+		if (rot != null) {
+			MathUtilsW.fixNaNIdt(rot);
+			rot.conjugate();
+		}
 
+		Vector3 scl = data.getScale().interpolate(newTime);
+		if (scl != null) {
+			MathUtilsW.fixNaN(scl, 0);
+		}
+
+		if (isCamera) {
+			if (pos != null)
+				this.game.getCamera().position.set(pos);
+			if (rot != null)
+				// is the up vector of nebula really this?
+				this.game.getCamera().direction.set(rot.transform(new Vector3(0, 0, -1)));
+
+			this.game.getCamera().up.set(Vector3.Y);
+			this.game.getCamera().update();
+		} else if (data.getCacheEntity() != null) {
 			Matrix4 trans = new Matrix4(pos == null ? new Vector3() : pos,
 					rot == null ? new Quaternion() : rot,
 					scl == null ? new Vector3(1, 1, 1) : scl);
@@ -67,24 +94,31 @@ public class CinematicController {
 	}
 
 	private void updateStartEnd() {
-		this.start = this.cinematicDatas.stream()
+		this.startTime = this.cinematicDatas.stream()
 			.map(CinematicData::getStartTime)
 			.filter(t -> !Float.isNaN(t))
 			.min(Float::compareTo)
 			.get();
-		this.end = this.cinematicDatas.stream()
+		this.endTime = this.cinematicDatas.stream()
 			.map(CinematicData::getEndTime)
 			.filter(t -> !Float.isNaN(t))
 			.max(Float::compareTo)
 			.get();
+
+		this.hasCamera =
+				this.cinematicDatas.stream().anyMatch(data -> CAMERA_SYMBOLIC_NAME.equals(data.getSymbolicName()));
 	}
 
 	public float getStartTime() {
-		return start;
+		return startTime;
 	}
 
 	public float getEndTime() {
-		return end;
+		return endTime;
+	}
+
+	public boolean hasCamera() {
+		return this.hasCamera;
 	}
 
 	public boolean isOver() {
@@ -107,5 +141,13 @@ public class CinematicController {
 
 	public void setTime(float time) {
 		this.time = time;
+	}
+
+	public float getRate() {
+		return rate;
+	}
+
+	public void setRate(float rate) {
+		this.rate = rate;
 	}
 }

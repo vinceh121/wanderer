@@ -6,12 +6,11 @@ buildscript {
         mavenCentral()
         gradlePluginPortal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://maven.vinceh121.me/snapshots" }
         google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.4'
-        
-
     }
 }
 
@@ -75,6 +74,17 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-x86_64"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
         
+    }
+}
+
+project(":tools") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+
+        api "info.picocli:picocli:4.7.1"
+        api "me.vinceh121.wanderer:nebula2-assets-extractor:0.5.0-SNAPSHOT"
     }
 }
 

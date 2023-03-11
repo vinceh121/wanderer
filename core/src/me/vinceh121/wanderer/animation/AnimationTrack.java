@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.animation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
@@ -9,12 +10,17 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import me.vinceh121.wanderer.util.InterpolationW;
 
 public class AnimationTrack<T extends KeyFrame<V>, V> {
+	@JsonIgnore
 	private final NavigableMap<Float, T> keyFrames = new TreeMap<>();
+	@JsonInclude(value = Include.NON_NULL)
 	private EnumInterpolation interpolation;
 
 	public AnimationTrack() {
@@ -23,12 +29,22 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 	@JsonCreator
 	public AnimationTrack(@JsonProperty("keys") List<T> list, @JsonProperty("interpolation") EnumInterpolation inter) {
 		for (T frame : list) {
-			this.keyFrames.put(frame.getTime(), frame);
+			this.addKeyframe(frame);
 		}
 		this.interpolation = inter;
 	}
 
-	public NavigableMap<Float, T> getKeyFrames() {
+	public void addKeyframe(T frame) {
+		this.keyFrames.put(frame.getTime(), frame);
+	}
+
+	@JsonProperty("keys")
+	public List<T> getKeyFrames() {
+		return new ArrayList<>(this.keyFrames.values());
+	}
+
+	@JsonIgnore
+	public NavigableMap<Float, T> getKeyFramesMap() {
 		return keyFrames;
 	}
 
@@ -76,6 +92,7 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 					getAlpha(pair, time));
 	}
 
+	@JsonIgnore
 	public float getStartTime() {
 		if (this.keyFrames.size() == 0) {
 			return Float.NaN;
@@ -83,6 +100,7 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 		return this.keyFrames.firstKey();
 	}
 
+	@JsonIgnore
 	public float getEndTime() {
 		if (this.keyFrames.size() == 0) {
 			return Float.NaN;

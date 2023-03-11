@@ -13,6 +13,7 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 
 public class CinematicData {
 	private String symbolicName;
+	@JsonIgnore
 	private AbstractEntity cacheEntity;
 	private AnimationTrack<Vector3KeyFrame, Vector3> position = new AnimationTrack<>();
 	private AnimationTrack<QuaternionKeyFrame, Quaternion> rotation = new AnimationTrack<>();

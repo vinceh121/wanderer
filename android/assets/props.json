@@ -53,5 +53,20 @@
 		"displayModel": "orig/island_fels09.n/terrain.obj",
 		"collideModel": "orig/island_fels09.n/collide.obj",
 		"texture": "orig/island_fels09.n/texturenone.ktx"
+	},
+	"a_dd": {
+		"displayModel": "orig/dd.n/dd.obj",
+		"collideModel": "orig/dd.n/collide.obj",
+		"texture": "orig/dd.n/texturenone.ktx"
+	},
+	"a_flieger01": {
+		"displayModel": "orig/flieger01.n/flieger01.obj",
+		"collideModel": "orig/flieger01.n/collide.obj",
+		"texture": "orig/flieger01.n/texturealpha.ktx"
+	},
+	"a_j_scout01": {
+		"displayModel": "orig/j_scout01.n/j_scout01.obj",
+		"collideModel": "orig/j_scout01.n/collide.obj",
+		"texture": "orig/j_scout01.n/texturenone.ktx"
 	}
 }

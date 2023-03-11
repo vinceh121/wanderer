@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.util;
 
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 
 public final class MathUtilsW {
@@ -11,5 +12,12 @@ public final class MathUtilsW {
 		if (Float.isNaN(v.z))
 			v.z = val;
 		return v;
+	}
+
+	public static Quaternion fixNaNIdt(Quaternion q) {
+		if (Float.isNaN(q.w) || Float.isNaN(q.x) || Float.isNaN(q.y) || Float.isNaN(q.z)) {
+			q.idt();
+		}
+		return q;
 	}
 }

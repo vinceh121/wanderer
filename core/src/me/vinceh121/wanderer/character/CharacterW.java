@@ -118,7 +118,8 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 		if (this.animController == null && this.getModels().size > 0
 				&& this.getModels().get(0).getCacheDisplayModel() != null) {
-			this.animController = new MultiplexedSkinAnimationController(this.getModels().get(0).getCacheDisplayModel());
+			this.animController =
+					new MultiplexedSkinAnimationController(this.getModels().get(0).getCacheDisplayModel());
 		}
 
 		if (this.animController != null) {
@@ -150,6 +151,10 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	}
 
 	private void moveCamera() {
+		if (this.game.getCinematicController() != null && this.game.getCinematicController().hasCamera()) {
+			return;
+		}
+
 		final PerspectiveCamera cam = this.game.getCamera();
 
 		final Vector3 characterTransform = new Vector3();
@@ -191,7 +196,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 			pos.lerp(cam.position, 0.8f);
 
 			final Vector3 characterCenter = characterTransform.cpy().add(0, this.meta.getCapsuleHeight() / 2, 0);
-			
+
 			ClosestNotMeRayResultCallback cb = new ClosestNotMeRayResultCallback(getGhostObject());
 			this.game.getBtWorld().rayTest(characterCenter, pos, cb);
 			if (cb.hasHit()) {

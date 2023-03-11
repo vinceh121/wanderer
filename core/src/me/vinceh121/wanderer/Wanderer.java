@@ -628,6 +628,10 @@ public class Wanderer extends ApplicationAdapter {
 		this.elapsedTimeOfDay = this.dayDuration * this.timeOfDay;
 	}
 
+	public CinematicController getCinematicController() {
+		return cinematicController;
+	}
+
 	public AbstractEntity findFirstEntityByClass(Class<? extends AbstractEntity> cls) {
 		return this.findEntitiesByClass(cls).findFirst().orElse(null);
 	}
