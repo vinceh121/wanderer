@@ -1,10 +1,18 @@
 package me.vinceh121.wanderer.tools;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
+import javax.imageio.ImageIO;
 
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -43,6 +51,9 @@ public class CinematicCommand implements Callable<Integer> {
 
 	@Option(names = { "-m", "--model" })
 	private File model;
+
+	@Option(names = { "-t", "--tesseract" })
+	private boolean tesseract;
 
 	@Override
 	public Integer call() throws Exception {
@@ -107,7 +118,7 @@ public class CinematicCommand implements Callable<Integer> {
 		return "orig/" + path.toLowerCase();
 	}
 
-	private void addVisual(Object[] args, CinematicData data) {
+	private void addVisual(Object[] args, CinematicData data) throws IOException, InterruptedException {
 		final String visName = (String) args[1];
 
 		// special case for subtitles
@@ -115,7 +126,10 @@ public class CinematicCommand implements Callable<Integer> {
 			final String text;
 			if ("book:nix.bmp".equals(visName)) {
 				text = null;
-			} else {
+			} else if (this.tesseract) {
+				Path path = this.input.toPath().getParent().getParent().resolve("subtitle").resolve(Paths.get(this.convertPath(visName)).getFileName());
+				text = this.getSubtitleText(path.toFile()).strip();
+			} else{
 				text = visName;
 			}
 
@@ -137,5 +151,18 @@ public class CinematicCommand implements Callable<Integer> {
 			System.err.println("Warning: Unknown visual " + visName);
 			break;
 		}
+	}
+
+	private String getSubtitleText(File bmp) throws IOException, InterruptedException {
+		BufferedImage img = ImageIO.read(bmp);
+		File png = File.createTempFile("subTxt", ".png");
+		ImageIO.write(img, "png", png);
+
+		Process p = Runtime.getRuntime().exec(new String[] { "tesseract", png.getAbsolutePath(), "-" });
+		p.waitFor();
+
+		StringWriter str = new StringWriter();
+		new InputStreamReader(p.getInputStream()).transferTo(str);
+		return str.toString();
 	}
 }
