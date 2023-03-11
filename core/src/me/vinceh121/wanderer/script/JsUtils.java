@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.script;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -13,6 +14,18 @@ import org.mozilla.javascript.Undefined;
 import org.mozilla.javascript.commonjs.module.ModuleScope;
 
 public final class JsUtils {
+
+	@SuppressWarnings("unchecked")
+	public static <T, U> void install(final Scriptable scope, final String propName, final BiConsumer<T, U> function) {
+		install(scope, propName, (Context cx, Scriptable s, Scriptable thisObj, Object[] args) -> {
+			if (args.length < 1) {
+				function.accept(null, null);
+			} else {
+				function.accept((T) maybeUnwrap(args[0]), (U) maybeUnwrap(args[1]));
+			}
+			return Undefined.instance;
+		});
+	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> void install(final Scriptable scope, final String propName, final Consumer<T> function) {

@@ -7,6 +7,8 @@ const part = new Part("The Old Master Builder", [
 part.state.collectedBuildings = 0;
 
 part.setPartStart(() => {
+	setDayTime(3, 15);
+
 	const backpack = findFirstEntityByClass(BackpackArtifact);
 	backpack.addEventListener("pickedUp", e => {
 		part.addObjectiveCompleted(0);

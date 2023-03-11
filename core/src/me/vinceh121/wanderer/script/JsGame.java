@@ -40,8 +40,13 @@ public class JsGame {
 		JsUtils.install(scope, "findFirstEntityByClass", this.game::findFirstEntityByClass);
 		JsUtils.install(scope, "findEntitiesByClass", this.game::findEntitiesByClass);
 
+		JsUtils.install(scope, "setDayTime", this::setDayTime);
 		JsUtils.install(scope, "playCinematic", this::playCinematic);
 		JsUtils.install(scope, "spawn", this::spawn);
+	}
+
+	private void setDayTime(int hours, int mins) {
+		this.game.setElapsedTimeOfDay(hours * 3600 + mins * 60);
 	}
 
 	private Object playCinematic(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
