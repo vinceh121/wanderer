@@ -44657,6 +44657,11 @@
 					"text": null
 				},
 				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 3.6,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker01.bmp"
+				},
+				{
 					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
 					"time": 3.6,
 					"sound": "orig/book/chapter00/part01/sound/c00p01spr01.wav"
@@ -44705,6 +44710,11 @@
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 33.4,
 					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 38.6,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker06.bmp"
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
@@ -44795,6 +44805,11 @@
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 80.6,
 					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 102.2,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker15.bmp"
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",

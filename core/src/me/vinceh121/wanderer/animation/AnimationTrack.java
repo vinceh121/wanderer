@@ -19,7 +19,7 @@ import me.vinceh121.wanderer.util.InterpolationW;
 
 public class AnimationTrack<T extends KeyFrame<V>, V> {
 	@JsonIgnore
-	private final NavigableMap<Float, T> keyFrames = new TreeMap<>();
+	private final NavigableMap<Float, T> keyFrames = new TreeMap<>(AnimationTrack::compareKeys);
 	@JsonInclude(value = Include.NON_NULL)
 	private EnumInterpolation interpolation;
 
@@ -106,6 +106,17 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 			return Float.NaN;
 		}
 		return this.keyFrames.lastKey();
+	}
+
+	// HACK: we don't want to prevent keys being removed on duplicate timings, so we
+	// make a float comparator that cannot return 0
+	private static int compareKeys(Float f1, Float f2) {
+		int fc = Float.compare(f1, f2);
+		if (fc == 0) {
+			// can't return 1 here! otherwise we get submaps where fromKey > toKey
+			return -1;
+		}
+		return fc;
 	}
 
 	public enum EnumInterpolation {

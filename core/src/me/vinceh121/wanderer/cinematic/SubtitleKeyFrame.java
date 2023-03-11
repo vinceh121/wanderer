@@ -22,7 +22,6 @@ public class SubtitleKeyFrame extends ActionKeyFrame {
 	@Override
 	public void action(Wanderer game, AbstractEntity target, float time) {
 		game.getSubtitle().setText(this.text);
-		System.out.println(this.text);
 	}
 
 	public String getText() {
