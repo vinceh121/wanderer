@@ -3,7 +3,9 @@ package me.vinceh121.wanderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonReader;
@@ -26,6 +28,7 @@ public final class WandererConstants {
 	public static final TextureParameter MIPMAPS = new TextureParameter();
 	public static final ObjectMapper MAPPER = new ObjectMapper(), SAVE_MAPPER;
 	public static final AudioSystem3D AUDIO = (AudioSystem3D) Gdx.audio;
+	public static final Texture BLACK_PIXEL;
 
 	public static Skin getDevSkin() {
 		return WandererConstants.ASSET_MANAGER.get("skins/default/uiskin.json", Skin.class);
@@ -75,5 +78,8 @@ public final class WandererConstants {
 			WandererConstants.ASSET_MANAGER.load(model, Model.class);
 		}
 		WandererConstants.ASSET_MANAGER.finishLoading();
+
+		Pixmap blkPix = new Pixmap(1, 1, Format.RGB565);
+		BLACK_PIXEL = new Texture(blkPix);
 	}
 }

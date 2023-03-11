@@ -21,6 +21,7 @@ import me.vinceh121.wanderer.cinematic.AudioKeyFrame;
 import me.vinceh121.wanderer.cinematic.CinematicData;
 import me.vinceh121.wanderer.cinematic.InvisibleKey;
 import me.vinceh121.wanderer.cinematic.LetterBoxFadeOutKey;
+import me.vinceh121.wanderer.cinematic.SubtitleKeyFrame;
 import me.vinceh121.wanderer.cinematic.VisibleKey;
 import me.vinceh121.wanderer.json.WandererJsonModule;
 import picocli.CommandLine.Command;
@@ -82,6 +83,9 @@ public class CinematicCommand implements Callable<Integer> {
 				this.addVisual(args, data);
 				break;
 			case "addaudio":
+				if ("book:nix.wav".equals(args[1])) {
+					break;
+				}
 				data.getActions().addKeyframe(new AudioKeyFrame((float) args[0], this.convertPath((String) args[1])));
 				break;
 			}
@@ -105,6 +109,20 @@ public class CinematicCommand implements Callable<Integer> {
 
 	private void addVisual(Object[] args, CinematicData data) {
 		final String visName = (String) args[1];
+
+		// special case for subtitles
+		if (visName.startsWith("book:") && visName.endsWith(".bmp")) {
+			final String text;
+			if ("book:nix.bmp".equals(visName)) {
+				text = null;
+			} else {
+				text = visName;
+			}
+
+			data.getActions().addKeyframe(new SubtitleKeyFrame((float) args[0], text));
+			return;
+		}
+
 		switch (visName) {
 		case "visual/16zu9_out":
 			data.getActions().addKeyframe(new LetterBoxFadeOutKey((float) args[0]));

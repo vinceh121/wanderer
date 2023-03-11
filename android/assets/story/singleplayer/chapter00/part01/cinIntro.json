@@ -44652,9 +44652,9 @@
 		"actions": {
 			"keys": [
 				{
-					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 0.0,
-					"sound": "orig/book/nix.wav"
+					"text": null
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
@@ -44662,14 +44662,164 @@
 					"sound": "orig/book/chapter00/part01/sound/c00p01spr01.wav"
 				},
 				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 10.6,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 11.2,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker02.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 17.2,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 17.6,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker03.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 22.8,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 23.0,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker04.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 27.0,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 27.4,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker05.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 33.4,
+					"text": null
+				},
+				{
 					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
 					"time": 38.6,
 					"sound": "orig/book/chapter00/part01/sound/c00p01spr02.wav"
 				},
 				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 43.8,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 44.2,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker07.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 50.8,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 51.4,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker08.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 55.0,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 55.4,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker09.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 58.2,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 58.4,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker10.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 63.2,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 63.8,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker11.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 66.4,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 66.6,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker12.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 69.8,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 70.2,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker13.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 74.2,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 74.6,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker14.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 80.6,
+					"text": null
+				},
+				{
 					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
 					"time": 102.2,
 					"sound": "orig/book/chapter00/part01/sound/c00p01spr03.wav"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 107.2,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 107.6,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker16.bmp"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 112.8,
+					"text": null
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 113.0,
+					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker17.bmp"
 				}
 			]
 		}

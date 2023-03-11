@@ -53,6 +53,7 @@ import me.vinceh121.wanderer.ui.DebugOverlay;
 import me.vinceh121.wanderer.ui.EnergyBar;
 import me.vinceh121.wanderer.ui.ItemBar;
 import me.vinceh121.wanderer.ui.LetterboxOverlay;
+import me.vinceh121.wanderer.ui.Subtitle;
 
 public class Wanderer extends ApplicationAdapter {
 	private static final Logger LOG = LogManager.getLogger(Wanderer.class);
@@ -88,6 +89,7 @@ public class Wanderer extends ApplicationAdapter {
 	private ItemBar itemBar;
 	private EnergyBar energyBar;
 	private LetterboxOverlay letterboxOverlay;
+	private Subtitle subtitle;
 
 	private float timeOfDay, elapsedTimeOfDay, dayDuration = 15800f;
 
@@ -204,6 +206,9 @@ public class Wanderer extends ApplicationAdapter {
 
 		this.letterboxOverlay = new LetterboxOverlay();
 		this.graphicsManager.getStage().addActor(this.letterboxOverlay);
+
+		this.subtitle = new Subtitle();
+		this.graphicsManager.getStage().addActor(this.subtitle);
 
 		try {
 			MetaRegistry.getInstance().loadDefaults();
@@ -654,6 +659,10 @@ public class Wanderer extends ApplicationAdapter {
 
 	public LetterboxOverlay getLetterboxOverlay() {
 		return letterboxOverlay;
+	}
+
+	public Subtitle getSubtitle() {
+		return subtitle;
 	}
 
 	public boolean isPaused() {
