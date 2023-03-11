@@ -44659,7 +44659,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 3.6,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker01.bmp"
+					"text": "In the chaos of war, the world was split asunder and the sancient civilization of the master builders came to an end."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
@@ -44674,7 +44674,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 11.2,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker02.bmp"
+					"text": "Today, long after the catastrophe, the old world is but a legend."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44684,7 +44684,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 17.6,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker03.bmp"
+					"text": "Those few who survived settled on the drifting ruins of the planet..."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44694,7 +44694,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 23.0,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker04.bmp"
+					"text": "...that wander slowly through the endless sea of clouds."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44704,7 +44704,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 27.4,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker05.bmp"
+					"text": "They are nomads, restless adventurers seeking their fate..."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44714,7 +44714,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 38.6,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker06.bmp"
+					"text": "They came from the Grey Market.\nThree friends, nomads, adventurers."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
@@ -44729,7 +44729,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 44.2,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker07.bmp"
+					"text": "Susie, Goliath and John - They were far and away the best when it came to difficult missions."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44739,7 +44739,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 51.4,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker08.bmp"
+					"text": "The old cutthroat Trevayne had told them .."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44749,7 +44749,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 55.4,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker09.bmp"
+					"text": "...Of a mysterious island in the territory of the Sentinels"
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44759,7 +44759,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 58.4,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker10.bmp"
+					"text": "Heavily guarded and extremely dangerous.\nHowever, rich rewards beckoned..."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44769,7 +44769,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 63.8,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker11.bmp"
+					"text": "..a cache of master builders' artifacts!"
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44779,7 +44779,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 66.6,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker12.bmp"
+					"text": "With this the three adventurers would be comfortable for the rest of their days."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44789,7 +44789,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 70.2,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker13.bmp"
+					"text": "..although Trevayne would of course take his usual cut of the haul."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44799,7 +44799,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 74.6,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker14.bmp"
+					"text": "All went according to plan, until suddenly a wing of fighters emerged from the clouds ..."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44809,7 +44809,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 102.2,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker15.bmp"
+					"text": "They didn't stand a chance. Two of the friends were captured immediately by the Sentinels."
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
@@ -44824,7 +44824,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 107.6,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker16.bmp"
+					"text": "One was left for dead when his aircraft, followed by the fighter wing"
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44834,7 +44834,7 @@
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 113.0,
-					"text": "book:chapter00/part01/subtitle/omu_c00p01_speaker17.bmp"
+					"text": "crashed into the rocks of a lonely island..."
 				}
 			]
 		}
