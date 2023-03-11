@@ -87,7 +87,7 @@ public class Wanderer extends ApplicationAdapter {
 	private BlinkLabel messageLabel;
 	private ItemBar itemBar;
 	private EnergyBar energyBar;
-	private LetterboxOverlay cutsceneOverlay;
+	private LetterboxOverlay letterboxOverlay;
 
 	private float timeOfDay, elapsedTimeOfDay, dayDuration = 15800f;
 
@@ -202,8 +202,8 @@ public class Wanderer extends ApplicationAdapter {
 		this.energyBar.setY(10);
 		this.graphicsManager.getStage().addActor(this.energyBar);
 
-		this.cutsceneOverlay = new LetterboxOverlay();
-		this.graphicsManager.getStage().addActor(this.cutsceneOverlay);
+		this.letterboxOverlay = new LetterboxOverlay();
+		this.graphicsManager.getStage().addActor(this.letterboxOverlay);
 
 		try {
 			MetaRegistry.getInstance().loadDefaults();
@@ -523,12 +523,12 @@ public class Wanderer extends ApplicationAdapter {
 	public void startCinematic(List<CinematicData> data) {
 		this.cinematicController = new CinematicController(this);
 		this.cinematicController.setCinematicDatas(data);
-		this.cutsceneOverlay.start();
+		this.letterboxOverlay.start();
 	}
 
 	public void stopCinematic() {
 		this.cinematicController = null;
-		this.cutsceneOverlay.stop();
+		this.letterboxOverlay.stop();
 	}
 
 	public Array<AbstractEntity> getEntities() {
@@ -650,6 +650,10 @@ public class Wanderer extends ApplicationAdapter {
 		this.messageLabel.setColor(1f, 1f, 1f, 0f);
 		this.messageLabel.setText(message);
 		this.messageLabel.blink();
+	}
+
+	public LetterboxOverlay getLetterboxOverlay() {
+		return letterboxOverlay;
 	}
 
 	public boolean isPaused() {

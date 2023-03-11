@@ -18,6 +18,7 @@ import me.vinceh121.n2ae.script.tcl.TCLParser;
 import me.vinceh121.wanderer.animation.QuaternionKeyFrame;
 import me.vinceh121.wanderer.animation.Vector3KeyFrame;
 import me.vinceh121.wanderer.cinematic.CinematicData;
+import me.vinceh121.wanderer.cinematic.LetterBoxFadeOutKey;
 import me.vinceh121.wanderer.json.WandererJsonModule;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -74,11 +75,26 @@ public class CinematicCommand implements Callable<Integer> {
 				Quaternion q = new Quaternion((float) args[1], (float) args[2], (float) args[3], (float) args[4]);
 				data.getRotation().addKeyframe(new QuaternionKeyFrame((float) args[0], q));
 				break;
+			case "addvisual":
+				this.addVisual(args, data);
+				break;
 			}
 		}
 
 		mapper.writerWithDefaultPrettyPrinter().writeValue(System.out, data);
 
 		return 0;
+	}
+
+	private void addVisual(Object[] args, CinematicData data) {
+		final String visName = (String) args[1];
+		switch (visName) {
+		case "visual/16zu9_out":
+			data.getActions().addKeyframe(new LetterBoxFadeOutKey((float) args[0]));
+			break;
+		default:
+			System.err.println("Warning: Unknown visual " + visName);
+			break;
+		}
 	}
 }

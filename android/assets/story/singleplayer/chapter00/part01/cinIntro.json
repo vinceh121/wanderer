@@ -24378,6 +24378,11 @@
 		},
 		"actions": {
 			"keys": [
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.LetterBoxFadeOutKey",
+					"time": 134.0,
+					"value": null
+				}
 			]
 		}
 	},
