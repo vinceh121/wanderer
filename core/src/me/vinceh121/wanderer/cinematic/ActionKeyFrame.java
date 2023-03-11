@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.cinematic;
 
 import com.badlogic.gdx.math.Interpolation;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import me.vinceh121.wanderer.Wanderer;
@@ -9,7 +10,7 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 public abstract class ActionKeyFrame extends KeyFrame<Void> {
-	
+
 	public ActionKeyFrame() {
 	}
 
@@ -19,6 +20,18 @@ public abstract class ActionKeyFrame extends KeyFrame<Void> {
 
 	public abstract void action(Wanderer game, AbstractEntity target, float time);
 
+	@JsonIgnore
+	@Override
+	public Void getValue() {
+		return super.getValue();
+	}
+	
+	@JsonIgnore
+	@Override
+	public void setValue(Void value) {
+		super.setValue(value);
+	}
+	
 	@Override
 	public Void interpolate(Void other, Interpolation inter, float alpha) {
 		return null;

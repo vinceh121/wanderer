@@ -44619,5 +44619,31 @@
 			"keys": [
 			]
 		}
+	},
+	{
+		"actions": {
+			"keys": [
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
+					"time": 0.0,
+					"sound": "orig/book/nix.wav"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
+					"time": 3.6,
+					"sound": "orig/book/chapter00/part01/sound/c00p01spr01.wav"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
+					"time": 38.6,
+					"sound": "orig/book/chapter00/part01/sound/c00p01spr02.wav"
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
+					"time": 102.2,
+					"sound": "orig/book/chapter00/part01/sound/c00p01spr03.wav"
+				}
+			]
+		}
 	}
 ]

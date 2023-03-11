@@ -17,6 +17,7 @@ import me.vinceh121.n2ae.script.NOBClazz;
 import me.vinceh121.n2ae.script.tcl.TCLParser;
 import me.vinceh121.wanderer.animation.QuaternionKeyFrame;
 import me.vinceh121.wanderer.animation.Vector3KeyFrame;
+import me.vinceh121.wanderer.cinematic.AudioKeyFrame;
 import me.vinceh121.wanderer.cinematic.CinematicData;
 import me.vinceh121.wanderer.cinematic.LetterBoxFadeOutKey;
 import me.vinceh121.wanderer.json.WandererJsonModule;
@@ -78,12 +79,26 @@ public class CinematicCommand implements Callable<Integer> {
 			case "addvisual":
 				this.addVisual(args, data);
 				break;
+			case "addaudio":
+				data.getActions().addKeyframe(new AudioKeyFrame((float) args[0], this.convertPath((String) args[1])));
+				break;
 			}
 		}
 
 		mapper.writerWithDefaultPrettyPrinter().writeValue(System.out, data);
 
 		return 0;
+	}
+
+	private String convertPath(String path) {
+		if (path.startsWith("data:")) {
+			return "orig/" + path.replace("data:", "").toLowerCase();
+		} else if (path.startsWith("book:")) {
+			return "orig/" + path.replace("book:", "book/").toLowerCase();
+		} else if (path.startsWith("lib:")) {
+			return "orig/" + path.replace("lib:", "lib/").toLowerCase();
+		}
+		return "orig/" + path.toLowerCase();
 	}
 
 	private void addVisual(Object[] args, CinematicData data) {
