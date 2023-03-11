@@ -41,7 +41,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	private String collideModel, symbolicName;
 	private btRigidBody collideObject;
 	private float mass;
-	private boolean exactCollideModel = true;
+	private boolean exactCollideModel = true, invisible = false;
 	private int collisionGroup = CollisionFilterGroups.DefaultFilter, collisionMask = CollisionFilterGroups.AllFilter;
 
 	public AbstractEntity(final Wanderer game) {
@@ -114,6 +114,9 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	}
 
 	public void render(final ModelBatch batch, final Environment env) {
+		if (this.invisible) {
+			return;
+		}
 		for (final DisplayModel m : this.models) {
 			if (m.getCacheDisplayModel() != null)
 				m.getCacheDisplayModel().userData = m.getDisplayModel();
@@ -122,6 +125,14 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		for (final ParticleEmitter e : this.particles) {
 			e.updateLoading();
 		}
+	}
+
+	public boolean isInvisible() {
+		return invisible;
+	}
+
+	public void setInvisible(boolean invisible) {
+		this.invisible = invisible;
 	}
 
 	public String getCollideModel() {

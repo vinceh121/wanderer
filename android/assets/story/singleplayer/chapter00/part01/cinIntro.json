@@ -1,6 +1,22 @@
 [
 	{
 		"symbolicName": "dd",
+		"actions": {
+			"keys": [
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.InvisibleKey",
+					"time": 0.0
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.VisibleKey",
+					"time": 30.0
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.InvisibleKey",
+					"time": 121.0
+				}
+			]
+		},
 		"position": {
 			"keys": [
 				{
@@ -12694,10 +12710,6 @@
 		"scale": {
 			"keys": [
 			]
-		},
-		"actions": {
-			"keys": [
-			]
 		}
 	},
 	{
@@ -24388,6 +24400,18 @@
 	},
 	{
 		"symbolicName": "flieger01",
+		"actions": {
+			"keys": [
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.InvisibleKey",
+					"time": 0.0
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.VisibleKey",
+					"time": 29.8
+				}
+			]
+		},
 		"position": {
 			"keys": [
 				{
@@ -34463,14 +34487,22 @@
 		"scale": {
 			"keys": [
 			]
-		},
-		"actions": {
-			"keys": [
-			]
 		}
 	},
 	{
 		"symbolicName": "j_scout",
+		"actions": {
+			"keys": [
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.InvisibleKey",
+					"time": 0.0
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.VisibleKey",
+					"time": 30.0
+				}
+			]
+		},
 		"position": {
 			"keys": [
 				{
@@ -44612,10 +44644,6 @@
 			]
 		},
 		"scale": {
-			"keys": [
-			]
-		},
-		"actions": {
 			"keys": [
 			]
 		}

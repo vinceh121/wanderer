@@ -19,7 +19,9 @@ import me.vinceh121.wanderer.animation.QuaternionKeyFrame;
 import me.vinceh121.wanderer.animation.Vector3KeyFrame;
 import me.vinceh121.wanderer.cinematic.AudioKeyFrame;
 import me.vinceh121.wanderer.cinematic.CinematicData;
+import me.vinceh121.wanderer.cinematic.InvisibleKey;
 import me.vinceh121.wanderer.cinematic.LetterBoxFadeOutKey;
+import me.vinceh121.wanderer.cinematic.VisibleKey;
 import me.vinceh121.wanderer.json.WandererJsonModule;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -106,6 +108,12 @@ public class CinematicCommand implements Callable<Integer> {
 		switch (visName) {
 		case "visual/16zu9_out":
 			data.getActions().addKeyframe(new LetterBoxFadeOutKey((float) args[0]));
+			break;
+		case "visual/invis":
+			data.getActions().addKeyframe(new InvisibleKey((float) args[0]));
+			break;
+		case "visual/normal":
+			data.getActions().addKeyframe(new VisibleKey((float) args[0]));
 			break;
 		default:
 			System.err.println("Warning: Unknown visual " + visName);

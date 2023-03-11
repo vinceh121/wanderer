@@ -57,7 +57,7 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 	}
 
 	public NavigableMap<Float, T> inBetween(float startTime, float endTime) {
-		return this.keyFrames.subMap(startTime, false, endTime, false);
+		return this.keyFrames.subMap(startTime, true, endTime, false);
 	}
 
 	public Pair<T, T> getKeyFramesAt(float time) {
