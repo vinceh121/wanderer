@@ -44652,6 +44652,11 @@
 		"actions": {
 			"keys": [
 				{
+					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
+					"time": 0.0,
+					"sound": "orig/book/music/native44a.wav"
+				},
+				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 0.0,
 					"text": null

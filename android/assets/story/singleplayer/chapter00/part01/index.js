@@ -26,7 +26,6 @@ part.setPartStart(() => {
 	});
 
 	loadMapFragment("./fragIntro.json");
-	play("orig/book/music/native44a.wav");
 	playCinematic("./cinIntro.json").addEventListener("over", () => {
 		console.log("over");
 	});
