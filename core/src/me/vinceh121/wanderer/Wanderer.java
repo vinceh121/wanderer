@@ -162,8 +162,14 @@ public class Wanderer extends ApplicationAdapter {
 				} else if (in == Input.DEBUG_TIMESCALE) {
 					if (getDayDuration() == 15800f) {
 						setDayDuration(30f);
+						if (cinematicController != null) {
+							cinematicController.setRate(5);
+						}
 					} else {
 						setDayDuration(15800f);
+						if (cinematicController != null) {
+							cinematicController.setRate(1);
+						}
 					}
 					return true;
 				} else if (in == Input.CURSOR_CAPTURE) {

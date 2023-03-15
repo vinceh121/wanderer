@@ -260,14 +260,6 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		return new InputListenerAdapter(50) {
 			@Override
 			public boolean inputDown(final Input in) {
-				if (in == Input.SCROLL_BELT_RIGHT) {
-					game.setTimeOfDay(MathUtils.clamp(game.getTimeOfDay() + 0.005f, 0, 1));
-					return true;
-				} else if (in == Input.SCROLL_BELT_LEFT) {
-					game.setTimeOfDay(MathUtils.clamp(game.getTimeOfDay() - 0.005f, 0, 1));
-					return true;
-				}
-
 				if (controller.isJumping() || controller.isFalling()) {
 					return false;
 				}

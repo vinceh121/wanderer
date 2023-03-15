@@ -44840,6 +44840,11 @@
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
 					"time": 113.0,
 					"text": "crashed into the rocks of a lonely island..."
+				},
+				{
+					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
+					"time": 117.0,
+					"text": null
 				}
 			]
 		}

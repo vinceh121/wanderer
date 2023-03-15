@@ -201,6 +201,11 @@ public class CinematicController {
 
 	public void setRate(float rate) {
 		this.rate = rate;
+		for (SoundEmitter3D e : this.sounds) {
+			if (!e.isDisposed()) {
+				e.setPitch(rate);
+			}
+		}
 	}
 
 	public void addEventListener(String type, IEventListener l) {
