@@ -13,6 +13,7 @@ public class Subtitle extends Label {
 	public Subtitle() {
 		super("", WandererConstants.getDevSkin());
 		this.setAlignment(Align.center);
+		this.setWrap(true);
 	}
 
 	@Override
