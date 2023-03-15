@@ -13,15 +13,19 @@ import com.badlogic.gdx.math.Vector3;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.entity.AbstractEntity;
+import me.vinceh121.wanderer.event.Event;
+import me.vinceh121.wanderer.event.EventDispatcher;
+import me.vinceh121.wanderer.event.IEventListener;
 import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class CinematicController {
 	private static final Logger LOG = LogManager.getLogger(CinematicController.class);
 	public static final String CAMERA_SYMBOLIC_NAME = "_camera";
+	private final EventDispatcher eventDispatcher = new EventDispatcher();
 	private final Wanderer game;
 	private final List<CinematicData> cinematicDatas = new ArrayList<>();
-	private float time, startTime, endTime, rate = 1;
-	private boolean hasCamera;
+	private float time, startTime, endTime, rate = 10;
+	private boolean hasCamera, hasControlTaken, overTriggered;
 
 	public CinematicController(Wanderer game) {
 		this.game = game;
@@ -33,6 +37,10 @@ public class CinematicController {
 			this.updateTrack(delta, newTime, d);
 		}
 		this.time = newTime;
+
+		if (this.isOver()) {
+			this.onOver();
+		}
 	}
 
 	private void updateTrack(float delta, float newTime, CinematicData data) {
@@ -93,6 +101,14 @@ public class CinematicController {
 		}
 	}
 
+	private void onOver() {
+		if (this.overTriggered) {
+			return;
+		}
+		this.eventDispatcher.dispatchEvent(new Event("over"));
+		this.overTriggered = true;
+	}
+
 	private void updateStartEnd() {
 		this.startTime = this.cinematicDatas.stream()
 			.map(CinematicData::getStartTime)
@@ -109,6 +125,12 @@ public class CinematicController {
 				this.cinematicDatas.stream().anyMatch(data -> CAMERA_SYMBOLIC_NAME.equals(data.getSymbolicName()));
 	}
 
+	public void reset() {
+		this.cinematicDatas.clear();
+		this.eventDispatcher.getListeners().clear();
+		this.overTriggered = false;
+	}
+
 	public float getStartTime() {
 		return startTime;
 	}
@@ -121,6 +143,14 @@ public class CinematicController {
 		return this.hasCamera;
 	}
 
+	public boolean isHasControlTaken() {
+		return hasControlTaken;
+	}
+
+	public void setHasControlTaken(boolean hasControlTaken) {
+		this.hasControlTaken = hasControlTaken;
+	}
+
 	public boolean isOver() {
 		return this.getTime() > this.getEndTime();
 	}
@@ -130,7 +160,7 @@ public class CinematicController {
 	}
 
 	public void setCinematicDatas(List<CinematicData> datas) {
-		this.cinematicDatas.clear();
+		this.reset();
 		this.cinematicDatas.addAll(datas);
 		this.updateStartEnd();
 	}
@@ -149,5 +179,13 @@ public class CinematicController {
 
 	public void setRate(float rate) {
 		this.rate = rate;
+	}
+
+	public void addEventListener(String type, IEventListener l) {
+		eventDispatcher.addEventListener(type, l);
+	}
+
+	public void removeEventListener(String type, IEventListener l) {
+		eventDispatcher.removeEventListener(type, l);
 	}
 }

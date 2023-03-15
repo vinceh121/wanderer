@@ -101,11 +101,21 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 	}
 
 	@JsonIgnore
+	public T getFirstKeyFrame() {
+		return this.keyFrames.firstEntry().getValue();
+	}
+	
+	@JsonIgnore
 	public float getEndTime() {
 		if (this.keyFrames.size() == 0) {
 			return Float.NaN;
 		}
 		return this.keyFrames.lastKey();
+	}
+	
+	@JsonIgnore
+	public T getLastKeyFrame() {
+		return this.keyFrames.lastEntry().getValue();
 	}
 
 	// HACK: we don't want to prevent keys being removed on duplicate timings, so we

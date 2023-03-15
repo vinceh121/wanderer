@@ -66,10 +66,10 @@ public class JsGame {
 
 		try {
 			this.game.startCinematic(resolveMaybeRalativePath((String) args[0], thisObj));
+			return this.game.getCinematicController();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		return Undefined.instance;
 	}
 
 	private Object spawn(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {

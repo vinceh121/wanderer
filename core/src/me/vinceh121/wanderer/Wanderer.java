@@ -17,7 +17,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
@@ -81,6 +80,10 @@ public class Wanderer extends ApplicationAdapter {
 	 * To store controlled entity before pause to remove control
 	 */
 	private IControllableEntity pauseControlledEntity;
+	/**
+	 * To store controlled entity before cinematic to remove control
+	 */
+	private IControllableEntity cinematicControlledEntity;
 	private AbstractBuilding interactingBuilding;
 
 	private CinematicController cinematicController;
@@ -219,10 +222,10 @@ public class Wanderer extends ApplicationAdapter {
 		///// GAMEPLAY
 
 		Random islandRng = new Random(69420L);
-		for (int i = 0; i < 90; i++) {
-			Vector3 pos = new Vector3()
-				.setFromSpherical(0, islandRng.nextFloat() * MathUtils.PI2 * 0.7f + 2f * (MathUtils.PI2 * 0.3f))
-				.scl(1000);
+		for (int i = 0; i < 300; i++) {
+			final float spread = 9000;
+			Vector3 pos = new Vector3(islandRng.nextFloat() * spread, -160, islandRng.nextFloat() * spread)
+				.add(-7740 - spread / 2, 0, -5890 - spread / 2);
 			Quaternion rot = new Quaternion(Vector3.Y, islandRng.nextFloat() * 360f);
 
 			Prop isl = new Prop(this, MetaRegistry.getInstance().get("rock" + (islandRng.nextInt(7) + 1)));
@@ -255,7 +258,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		final IslandMeta firstIsland = MetaRegistry.getInstance().get("first_island");
 		final Island island = new Island(this, firstIsland);
-
+		island.setTranslation(-7740, -160, -5890);
 		this.addEntity(island);
 		playerClan.addMember(island);
 
@@ -266,6 +269,7 @@ public class Wanderer extends ApplicationAdapter {
 		john.setSymbolicName("player");
 		john.setBeltSize(5);
 		john.setTranslation(0.1f, 50f, 0.1f);
+		john.setTranslation(-7740, -100, -5890);
 
 		this.itemBar.setCharacter(john);
 
@@ -553,11 +557,26 @@ public class Wanderer extends ApplicationAdapter {
 		this.cinematicController = new CinematicController(this);
 		this.cinematicController.setCinematicDatas(data);
 		this.letterboxOverlay.start();
+		this.setHUDVisible(false);
+		this.cinematicControlledEntity = this.controlledEntity;
+		this.removeEntityControl();
 	}
 
 	public void stopCinematic() {
 		this.cinematicController = null;
-		this.letterboxOverlay.stop();
+		if (this.letterboxOverlay.isStarted()) {
+			this.letterboxOverlay.stop();
+		}
+		this.setHUDVisible(true);
+		if (this.cinematicControlledEntity != null) {
+			this.controlEntity(this.cinematicControlledEntity);
+			this.cinematicControlledEntity = null;
+		}
+	}
+
+	public void setHUDVisible(boolean vis) {
+		this.energyBar.setVisible(vis);
+		this.itemBar.setVisible(vis);
 	}
 
 	public Array<AbstractEntity> getEntities() {
