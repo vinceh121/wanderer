@@ -20,7 +20,9 @@ import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleShader.AlignMode;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
 import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
+import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
+import com.badlogic.gdx.graphics.g3d.utils.DepthShaderProvider;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -36,7 +38,7 @@ import me.vinceh121.wanderer.glx.WandererShader;
 public class GraphicsManager extends ApplicationAdapter {
 	private ScreenViewport viewportUi;
 	private Environment env;
-	private ModelBatch modelBatch;
+	private ModelBatch modelBatch, shadowBatch;
 	private PerspectiveCamera cam;
 	private Viewport viewport3d;
 	private Stage stage;
@@ -48,6 +50,9 @@ public class GraphicsManager extends ApplicationAdapter {
 	@Override
 	public void create() {
 		this.modelBatch = new ModelBatch(new WandererShaderProvider());
+		DepthShader.Config shadowConfig = new DepthShader.Config();
+		shadowConfig.numBones = 64;
+		this.shadowBatch = new ModelBatch(new DepthShaderProvider(shadowConfig));
 
 		this.env = new Environment();
 
@@ -91,6 +96,7 @@ public class GraphicsManager extends ApplicationAdapter {
 
 		this.env.set(this.skybox.getAmbiantLight());
 		this.env.add(this.skybox.getSunLight());
+		this.env.shadowMap = this.skybox.getSunLight();
 	}
 
 	public void apply() {
@@ -202,6 +208,10 @@ public class GraphicsManager extends ApplicationAdapter {
 		return this.modelBatch;
 	}
 
+	public ModelBatch getShadowBatch() {
+		return shadowBatch;
+	}
+
 	/**
 	 * @return the stage
 	 */
@@ -221,6 +231,10 @@ public class GraphicsManager extends ApplicationAdapter {
 	 */
 	public Environment getEnv() {
 		return this.env;
+	}
+
+	public SkyboxRenderer getSkybox() {
+		return skybox;
 	}
 
 	public ParticleSystem getParticleSystem() {

@@ -24,6 +24,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalShadowLight;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader.Config;
 import com.badlogic.gdx.graphics.g3d.utils.BaseShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
@@ -41,7 +42,8 @@ public class SkyboxRenderer {
 	private float previous;
 	private SkyShader shader;
 	private ColorAttribute ambiantLight;
-	private DirectionalLight sunLight, moonLight;
+	private DirectionalShadowLight sunLight;
+	private DirectionalLight moonLight;
 	private SkyProperties skyProperties;
 
 	public void create() {
@@ -68,8 +70,12 @@ public class SkyboxRenderer {
 
 		this.stars = this.makeStarsOneOne("orig/lib/stars/texturenone.ktx");
 
+		final int shadowQuality =
+				Gdx.app.getPreferences("me.vinceh121.wanderer.graphics").getInteger("shadowQuality", 16);
+
 		this.ambiantLight = new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f);
-		this.sunLight = new DirectionalLight().set(0.8f, 0.8f, 0.8f, 1f, 0f, 0f);
+		this.sunLight = new DirectionalShadowLight(1024 * shadowQuality, 1024 * shadowQuality, 512, 512, 0.1f, 2000);
+		this.sunLight.set(0.8f, 0.8f, 0.8f, 1f, 0f, 0f);
 	}
 
 	/**
@@ -337,7 +343,7 @@ public class SkyboxRenderer {
 		return ambiantLight;
 	}
 
-	public DirectionalLight getSunLight() {
+	public DirectionalShadowLight getSunLight() {
 		return sunLight;
 	}
 

@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Quaternion;
@@ -163,7 +164,7 @@ public class Wanderer extends ApplicationAdapter {
 					if (getDayDuration() == 15800f) {
 						setDayDuration(30f);
 						if (cinematicController != null) {
-							cinematicController.setRate(5);
+							cinematicController.setRate(500);
 						}
 					} else {
 						setDayDuration(15800f);
@@ -325,6 +326,28 @@ public class Wanderer extends ApplicationAdapter {
 
 		this.graphicsManager.clear();
 		this.graphicsManager.renderSkybox(this.timeOfDay);
+
+		final Vector3 sunCenter;
+
+		if (this.controlledEntity != null) {
+			sunCenter = ((AbstractEntity) this.controlledEntity).getTransform().getTranslation(new Vector3());
+		} else {
+			sunCenter = this.graphicsManager.getCamera().position;
+		}
+
+		Camera sunCam = this.graphicsManager.getSkybox().getSunLight().getCamera();
+		this.graphicsManager.getSkybox().getSunLight().update(sunCenter, null);
+
+		this.graphicsManager.getSkybox().getSunLight().begin();
+		this.graphicsManager.getShadowBatch().begin(sunCam);
+		for (int i = 0; i < this.entities.size; i++) {
+			final AbstractEntity entity = this.entities.get(i);
+			if (entity.isCastShadow()) {
+				entity.render(this.graphicsManager.getShadowBatch(), this.graphicsManager.getEnv());
+			}
+		}
+		this.graphicsManager.getShadowBatch().end();
+		this.graphicsManager.getSkybox().getSunLight().end();
 
 		this.graphicsManager.begin();
 		for (int i = 0; i < this.entities.size; i++) {
