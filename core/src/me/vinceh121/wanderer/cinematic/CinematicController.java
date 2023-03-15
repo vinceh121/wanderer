@@ -103,6 +103,22 @@ public class CinematicController {
 		}
 	}
 
+	public void pause() {
+		for (SoundEmitter3D e : this.sounds) {
+			if (!e.isDisposed()) {
+				e.pause();
+			}
+		}
+	}
+
+	public void resume() {
+		for (SoundEmitter3D e : this.sounds) {
+			if (!e.isDisposed()) {
+				e.play();
+			}
+		}
+	}
+
 	private void onOver() {
 		if (this.overTriggered) {
 			return;
@@ -160,7 +176,7 @@ public class CinematicController {
 	public void addSound(SoundEmitter3D emitter) {
 		this.sounds.add(emitter);
 	}
-	
+
 	public List<CinematicData> getCinematicDatas() {
 		return cinematicDatas;
 	}

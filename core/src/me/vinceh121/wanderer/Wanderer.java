@@ -716,14 +716,26 @@ public class Wanderer extends ApplicationAdapter {
 	public void pause() {
 		this.paused = true;
 		this.pauseControlledEntity = this.controlledEntity;
-		this.removeEntityControl();
+		if (this.controlledEntity != null) {
+			this.removeEntityControl();
+		}
+
+		if (this.cinematicController != null) {
+			this.cinematicController.pause();
+		}
 	}
 
 	@Override
 	public void resume() {
 		this.paused = false;
-		this.controlEntity(this.pauseControlledEntity);
-		this.pauseControlledEntity = null;
+		if (this.pauseControlledEntity != null) {
+			this.controlEntity(this.pauseControlledEntity);
+			this.pauseControlledEntity = null;
+		}
+
+		if (this.cinematicController != null) {
+			this.cinematicController.resume();
+		}
 	}
 
 	@Override
