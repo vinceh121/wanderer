@@ -152,6 +152,18 @@ public class OpenAL3DSource implements SoundEmitter3D {
 	}
 
 	@Override
+	public void setPitch(float pitch) {
+		setContext();
+		alSourcef(this.source, AL_PITCH, pitch);
+	}
+
+	@Override
+	public float getPitch() {
+		setContext();
+		return alGetSourcef(this.source, AL_PITCH);
+	}
+
+	@Override
 	public void update() {
 		if (!this.isDisposed() && this.isDisposeOnStop() && this.isStopped()) {
 			this.dispose();

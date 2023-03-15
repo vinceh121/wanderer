@@ -51,6 +51,20 @@ public interface SoundEmitter3D extends Disposable {
 
 	Vector3 getPosition();
 
+	/**
+	 * Frequency shift by pitch, will change playback speed.
+	 *
+	 * @param pitch [0-1[
+	 */
+	void setPitch(final float pitch);
+
+	/**
+	 * Frequency shift by pitch, will change playback speed.
+	 *
+	 * @return pitch [0-1[
+	 */
+	float getPitch();
+
 	long getId();
 
 }

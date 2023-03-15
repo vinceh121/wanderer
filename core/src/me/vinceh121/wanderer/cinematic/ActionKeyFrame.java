@@ -18,7 +18,7 @@ public abstract class ActionKeyFrame extends KeyFrame<Void> {
 		super(time, null);
 	}
 
-	public abstract void action(Wanderer game, AbstractEntity target, float time);
+	public abstract void action(Wanderer game, CinematicController controller, AbstractEntity target, float time);
 
 	@JsonIgnore
 	@Override

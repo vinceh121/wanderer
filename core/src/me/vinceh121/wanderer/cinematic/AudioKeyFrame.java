@@ -7,6 +7,7 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
+import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
 public class AudioKeyFrame extends ActionKeyFrame {
 	private static final Logger LOG = LogManager.getLogger(AudioKeyFrame.class);
@@ -26,13 +27,16 @@ public class AudioKeyFrame extends ActionKeyFrame {
 	}
 
 	@Override
-	public void action(Wanderer game, AbstractEntity target, float time) {
+	public void action(Wanderer game, CinematicController controller, AbstractEntity target, float time) {
 		if (!WandererConstants.ASSET_MANAGER.isLoaded(this.sound, Sound3D.class)) {
 			LOG.warn("Hot-loading sound {}", this.sound);
 			WandererConstants.ASSET_MANAGER.load(this.sound, Sound3D.class);
 			WandererConstants.ASSET_MANAGER.finishLoadingAsset(this.sound);
 		}
-		WandererConstants.ASSET_MANAGER.get(this.sound, Sound3D.class).playGeneral();
+		SoundEmitter3D emitter = WandererConstants.ASSET_MANAGER.get(this.sound, Sound3D.class).playGeneral();
+		emitter.setDisposeOnStop(true);
+		emitter.setPitch(controller.getRate());
+		controller.addSound(emitter);
 	}
 
 	public String getSound() {

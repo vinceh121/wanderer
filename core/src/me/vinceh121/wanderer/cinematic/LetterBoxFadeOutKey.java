@@ -14,7 +14,7 @@ public class LetterBoxFadeOutKey extends ActionKeyFrame {
 	}
 
 	@Override
-	public void action(Wanderer game, AbstractEntity target, float time) {
+	public void action(Wanderer game, CinematicController controller, AbstractEntity target, float time) {
 		game.getLetterboxOverlay().stop();
 	}
 }

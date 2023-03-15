@@ -13,7 +13,7 @@ public class InvisibleKey extends ActionKeyFrame {
 	}
 
 	@Override
-	public void action(Wanderer game, AbstractEntity target, float time) {
+	public void action(Wanderer game, CinematicController controller, AbstractEntity target, float time) {
 		target.setInvisible(true);
 	}
 }

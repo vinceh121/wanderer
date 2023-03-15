@@ -16,6 +16,7 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.event.Event;
 import me.vinceh121.wanderer.event.EventDispatcher;
 import me.vinceh121.wanderer.event.IEventListener;
+import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class CinematicController {
@@ -24,7 +25,8 @@ public class CinematicController {
 	private final EventDispatcher eventDispatcher = new EventDispatcher();
 	private final Wanderer game;
 	private final List<CinematicData> cinematicDatas = new ArrayList<>();
-	private float time, startTime, endTime, rate = 10;
+	private final List<SoundEmitter3D> sounds = new ArrayList<>();
+	private float time, startTime, endTime, rate = 1f;
 	private boolean hasCamera, hasControlTaken, overTriggered;
 
 	public CinematicController(Wanderer game) {
@@ -97,7 +99,7 @@ public class CinematicController {
 		NavigableMap<Float, ActionKeyFrame> actions = data.getActions().inBetween(this.time, newTime);
 
 		for (ActionKeyFrame action : actions.values()) {
-			action.action(game, data.getCacheEntity(), newTime);
+			action.action(game, this, data.getCacheEntity(), newTime);
 		}
 	}
 
@@ -155,6 +157,10 @@ public class CinematicController {
 		return this.getTime() > this.getEndTime();
 	}
 
+	public void addSound(SoundEmitter3D emitter) {
+		this.sounds.add(emitter);
+	}
+	
 	public List<CinematicData> getCinematicDatas() {
 		return cinematicDatas;
 	}
