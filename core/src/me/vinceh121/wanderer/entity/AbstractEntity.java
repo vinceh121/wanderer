@@ -242,6 +242,18 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		return this.transform;
 	}
 
+	public Vector3 getTranslation() {
+		return this.getTransform().getTranslation(new Vector3());
+	}
+
+	public Quaternion getRotation() {
+		return this.getTransform().getRotation(new Quaternion());
+	}
+
+	public Vector3 getScale() {
+		return this.getTransform().getScale(new Vector3());
+	}
+	
 	public void setTransform(final Matrix4 transform) {
 		Objects.nonNull(transform);
 		this.transform.set(transform);
