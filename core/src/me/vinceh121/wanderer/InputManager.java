@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
@@ -16,13 +17,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.ControllerMapping;
 import com.badlogic.gdx.controllers.Controllers;
+import com.electronwill.nightconfig.core.Config;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import me.vinceh121.wanderer.input.Binding;
 import me.vinceh121.wanderer.input.Binding.DeviceType;
@@ -32,7 +32,6 @@ import me.vinceh121.wanderer.input.MouseWheelScroll;
 
 public class InputManager extends ApplicationAdapter {
 	private static final Logger LOG = LogManager.getLogger(InputManager.class);
-	private static final String PREF_NAME = "me.vinceh121.wanderer.inputs";
 	private final HashSetValuedHashMap<Input, Binding> bindings = new HashSetValuedHashMap<>();
 	private final PriorityQueue<InputListener> listeners =
 			new PriorityQueue<>((o1, o2) -> Integer.compare(o2.getPriority(), o1.getPriority())); // reverse sort order
@@ -48,23 +47,28 @@ public class InputManager extends ApplicationAdapter {
 
 	public void load() throws JsonProcessingException {
 		this.bindings.clear();
-		final Preferences pref = Gdx.app.getPreferences(InputManager.PREF_NAME);
-		for (final Input i : Input.values()) {
-			if (pref.contains(i.toString())) {
-				this.bindings.putAll(i,
-						WandererConstants.MAPPER.readValue(pref.getString(i.toString()),
-								new TypeReference<List<Binding>>() {
-								}));
-			}
+		List<Config> cfgBinds = Preferences.getPreferences().get("input.bindings");
+		if (cfgBinds == null) {
+			return;
+		}
+
+		for (Config e : cfgBinds) {
+			Input in = e.getEnum("input", Input.class);
+			Binding bind = new Binding(e.get("binding"), e.getEnum("deviceType", DeviceType.class));
+			this.bindings.put(in, bind);
 		}
 	}
 
 	public void save() throws JsonProcessingException {
-		final Preferences pref = Gdx.app.getPreferences(InputManager.PREF_NAME);
-		for (final Input i : this.bindings.keySet()) {
-			pref.putString(i.toString(), WandererConstants.MAPPER.writeValueAsString(this.bindings.get(i)));
+		List<Config> cfgBinds = new ArrayList<>(this.bindings.size());
+		for (Entry<Input, Binding> e : this.bindings.entries()) {
+			Config cfg = Config.inMemory();
+			cfg.set("input", e.getKey());
+			cfg.set("deviceType", e.getValue().getDeviceType());
+			cfg.set("binding", e.getValue().getKey());
+			cfgBinds.add(cfg);
 		}
-		pref.flush();
+		Preferences.getPreferences().set("input.bindings", cfgBinds);
 	}
 
 	public void setDefaultBinds() {

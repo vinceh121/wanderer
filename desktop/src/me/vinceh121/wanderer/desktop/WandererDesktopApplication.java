@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.desktop;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.audio.Lwjgl3Audio;
@@ -27,4 +28,8 @@ public class WandererDesktopApplication extends Lwjgl3Application {
 		}
 	}
 
+	@Override
+	public Preferences getPreferences(String name) {
+		throw new UnsupportedOperationException("Use Preferences class with Nightconfig instead of GDX's preferences");
+	}
 }

@@ -108,5 +108,6 @@ project(":core") {
         api "org.reflections:reflections:0.10.2"
         api "org.apache.logging.log4j:log4j-core:2.20.0"
         api "org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0"
+        api "com.electronwill.night-config:toml:3.6.6"
     }
 }

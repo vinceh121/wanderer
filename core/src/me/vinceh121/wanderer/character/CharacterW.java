@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.MetaRegistry;
+import me.vinceh121.wanderer.Preferences;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.animation.MultiplexedSkinAnimationController;
@@ -329,7 +330,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 				}
 
 				final float lookSensY =
-						Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay").getFloat("lookSensitivityY", 0.005f);
+						Preferences.getPreferences().<Double>getOrElse("input.lookSensitivityY", 0.005).floatValue();
 				CharacterW.this.cameraHeight = MathUtils.clamp(CharacterW.this.cameraHeight + lookSensY * y, 0, 1);
 
 				if (!CharacterW.this.controller.canJump()) {
@@ -337,7 +338,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 				}
 
 				final float lookSensX =
-						Gdx.app.getPreferences("me.vinceh121.wanderer.gameplay").getFloat("lookSensitivityX", 0.2f);
+						Preferences.getPreferences().<Double>getOrElse("input.lookSensitivityX", 0.2).floatValue();
 
 				CharacterW.this.controller.setWorldTransform(
 						CharacterW.this.controller.getWorldTransform().rotate(Vector3.Y, -lookSensX * x));
