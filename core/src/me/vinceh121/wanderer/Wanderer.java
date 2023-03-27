@@ -131,18 +131,7 @@ public class Wanderer extends ApplicationAdapter {
 					}
 					return true;
 				} else if (in == Input.SWITCH_CONTROLLED_VEHICLE) {
-					if (Wanderer.this.controlledEntity == null) {
-						for (final AbstractEntity e : Wanderer.this.entities) {
-							if (e instanceof IControllableEntity) {
-								LOG.info("Controlling {}", e);
-								Wanderer.this.controlEntity((IControllableEntity) e);
-								return true;
-							}
-						}
-					} else {
-						LOG.info("Remove control");
-						Wanderer.this.removeEntityControl();
-					}
+					Wanderer.this.cycleControl();
 					return true;
 				} else if (in == Input.QUICK_SAVE) {
 					try {
@@ -177,7 +166,9 @@ public class Wanderer extends ApplicationAdapter {
 					Gdx.input.setCursorCatched(!Gdx.input.isCursorCatched());
 					return true;
 				} else if (in == Input.PAUSE_MENU) {
-					if (paused) {
+					if (cinematicController != null) {
+						cinematicController.skip();
+					} else if (paused) {
 						resume();
 					} else {
 						pause();
@@ -455,6 +446,23 @@ public class Wanderer extends ApplicationAdapter {
 
 	protected void bindPlayerClan() {
 		this.energyBar.setClan(this.playerClan);
+	}
+
+	public void cycleControl() {
+		for (int i = this.playerClan.getMembers()
+			.indexOf(((AbstractEntity) this.controlledEntity).getId(),
+					true); i < this.playerClan.getMembers().size; i++) {
+			AbstractEntity e = entities.get(i);
+			if (e instanceof IControllableEntity && e != this.controlledEntity) {
+				LOG.info("Controlling {}", e);
+				WandererConstants.ASSET_MANAGER.get("orig/feedback/taken_control.wav", Sound3D.class).playGeneral();
+				this.showMessage("Taking control...");
+				Wanderer.this.controlEntity((IControllableEntity) e);
+				return;
+			}
+		}
+
+		this.showMessage("nothing to control");
 	}
 
 	public void saveStateless(FileHandle dest) throws IOException {

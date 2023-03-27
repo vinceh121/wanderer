@@ -33,6 +33,14 @@ public class CinematicController {
 		this.game = game;
 	}
 
+	public void skip() {
+		this.update(this.endTime - this.time);
+		for (SoundEmitter3D s : this.sounds) {
+			s.stop();
+			s.dispose();
+		}
+	}
+
 	public void update(float delta) {
 		final float newTime = this.time + delta * rate;
 		for (CinematicData d : this.cinematicDatas) {
