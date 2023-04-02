@@ -252,6 +252,7 @@ public class Wanderer extends ApplicationAdapter {
 		playerClan.setColor(Color.BLUE);
 		playerClan.setName("player clan");
 		playerClan.setMaxEnergy(100);
+		playerClan.setEnergy(50);
 		this.clans.add(playerClan);
 
 		final IslandMeta firstIsland = MetaRegistry.getInstance().get("first_island");
@@ -451,8 +452,8 @@ public class Wanderer extends ApplicationAdapter {
 	public void cycleControl() {
 		for (int i = this.playerClan.getMembers()
 			.indexOf(((AbstractEntity) this.controlledEntity).getId(),
-					true); i < this.playerClan.getMembers().size; i++) {
-			AbstractEntity e = entities.get(i);
+					false); i < this.playerClan.getMembers().size * 2 - 1; i++) {
+			AbstractEntity e = this.getEntity(this.playerClan.getMembers().get(i % this.playerClan.getMembers().size));
 			if (e instanceof IControllableEntity && e != this.controlledEntity) {
 				LOG.info("Controlling {}", e);
 				WandererConstants.ASSET_MANAGER.get("orig/feedback/taken_control.wav", Sound3D.class).playGeneral();

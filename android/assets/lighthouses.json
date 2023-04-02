@@ -63,7 +63,7 @@
 		"collisionModel": "orig/j_lighthouse01.n/collide.obj",
 		"buildTime": 10,
 		"red": true,
-		"shrink": true,
+		"artefactScale": 0.05,
 		"interactZoneRadius": 11.0,
 		"interactZoneHeight": 20.0,
 		"energyRequired": 0

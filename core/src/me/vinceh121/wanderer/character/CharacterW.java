@@ -380,6 +380,9 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		this.previewBuilding.dispose();
 
 		final InConstructionBuilding build = new InConstructionBuilding(this.game, this.placing);
+		if (this.getClan() != null) {
+			this.getClan().addMember(build);
+		}
 		this.game.addEntity(build);
 		this.attachedIsland.addBuilding(build, s);
 

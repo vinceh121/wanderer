@@ -6,6 +6,7 @@
 		"orig/feedback/backpack_active.wav",
 		"orig/feedback/noenergy.wav",
 		"orig/feedback/nobuildarea.wav",
+		"orig/feedback/taken_control.wav",
 		"orig/lib/sound/healingspell.wav"
 	],
 	"textures": [

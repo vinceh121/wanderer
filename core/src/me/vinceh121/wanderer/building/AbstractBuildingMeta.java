@@ -10,8 +10,8 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	private Array<DisplayModel> displayModels = new Array<>();
 	private String collisionModel;
 	private int energyRequired, buildTime;
-	private boolean red, shrink = true;
-	private float interactZoneRadius = 11f, interactZoneHeight = 20f;
+	private boolean red;
+	private float interactZoneRadius = 11f, interactZoneHeight = 20f, artefactScale = 1f;
 	private SlotType slotType = SlotType.GENERIC;
 
 	public AbstractBuildingMeta() {
@@ -93,14 +93,6 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 		}
 	}
 
-	public boolean isShrink() {
-		return this.shrink;
-	}
-
-	public void setShrink(final boolean shrink) {
-		this.shrink = shrink;
-	}
-
 	public float getInteractZoneRadius() {
 		return this.interactZoneRadius;
 	}
@@ -115,6 +107,14 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 
 	public void setInteractZoneHeight(final float interactZoneHeight) {
 		this.interactZoneHeight = interactZoneHeight;
+	}
+
+	public float getArtefactScale() {
+		return artefactScale;
+	}
+
+	public void setArtefactScale(float artefactScale) {
+		this.artefactScale = artefactScale;
 	}
 
 	public SlotType getSlotType() {

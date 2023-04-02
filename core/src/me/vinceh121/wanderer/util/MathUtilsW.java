@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.util;
 
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 
@@ -19,5 +20,25 @@ public final class MathUtilsW {
 			q.idt();
 		}
 		return q;
+	}
+
+	public static Matrix4 setRotation(Matrix4 trans, Quaternion rot) {
+		Vector3 pos = new Vector3();
+		Vector3 scale = new Vector3();
+		trans.getTranslation(pos);
+		trans.getScale(scale);
+
+		trans.set(pos, rot, scale);
+		return trans;
+	}
+
+	public static Matrix4 setScale(Matrix4 trans, Vector3 scale) {
+		Vector3 pos = new Vector3();
+		Quaternion rot = new Quaternion();
+		trans.getTranslation(pos);
+		trans.getRotation(rot);
+
+		trans.set(pos, rot, scale);
+		return trans;
 	}
 }

@@ -8,6 +8,7 @@ public enum Input {
 	FLY_LEFT("Flying Left"),
 	FLY_RIGHT("Flying Right"),
 	FLY_BOOST("Flying Boost"),
+	FIRE("Fire"),
 	SWITCH_CONTROLLED_VEHICLE("Switch controlled vehicle"),
 	DEBUG_BULLET("Physics Debug"),
 	DEBUG_GLX("Graphics Debug"),

@@ -2,6 +2,8 @@ package me.vinceh121.wanderer.script;
 
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Undefined;
@@ -13,9 +15,13 @@ import com.badlogic.gdx.files.FileHandle;
 import me.vinceh121.wanderer.IMeta;
 import me.vinceh121.wanderer.MetaRegistry;
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.building.AbstractBuildingMeta;
+import me.vinceh121.wanderer.building.BuildingArtifactEntity;
+import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 
 public class JsGame {
+	private static final Logger LOG = LogManager.getLogger(JsGame.class);
 	private final Wanderer game;
 
 	public JsGame(Wanderer game) {
@@ -44,6 +50,34 @@ public class JsGame {
 		JsUtils.install(scope, "setDayTime", this::setDayTime);
 		JsUtils.install(scope, "playCinematic", this::playCinematic);
 		JsUtils.install(scope, "spawn", this::spawn);
+		JsUtils.install(scope, "newv", this::newv);
+	}
+
+	private AbstractEntity newv(String metaName) {
+		if (this.game.getControlledEntity() == null) {
+			LOG.error("Cannot use newv when no entity is being controlled");
+			return null;
+		}
+		IMeta meta = MetaRegistry.getInstance().get(metaName);
+		if (meta == null) {
+			LOG.error("Unknown meta {}", metaName);
+			return null;
+		}
+
+		final AbstractEntity entity;
+		if (meta instanceof AbstractBuildingMeta) {
+			entity = new BuildingArtifactEntity(game, (AbstractBuildingMeta) meta);
+		} else {
+			entity = meta.create(this.game);
+		}
+		entity.setTranslation(((AbstractEntity) this.game.getControlledEntity()).getTranslation().cpy().add(4, 0, 0));
+		this.game.addEntity(entity);
+
+		if (entity instanceof IClanMember) {
+			this.game.getPlayerClan().addMember((IClanMember) entity);
+		}
+
+		return entity;
 	}
 
 	private Object loadMapFragment(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
@@ -55,8 +89,8 @@ public class JsGame {
 		}
 	}
 
-	private void setDayTime(int hours, int mins) {
-		this.game.setElapsedTimeOfDay(hours * 3600 + mins * 60);
+	private void setDayTime(Number hours, Number mins) {
+		this.game.setElapsedTimeOfDay(hours.floatValue() * 3600 + mins.floatValue() * 60);
 	}
 
 	private Object playCinematic(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {

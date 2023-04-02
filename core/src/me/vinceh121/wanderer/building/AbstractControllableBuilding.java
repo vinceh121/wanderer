@@ -1,15 +1,16 @@
-package me.vinceh121.wanderer.entity;
+package me.vinceh121.wanderer.building;
 
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
 
-public abstract class AbstractLivingControllableEntity extends AbstractClanLivingEntity implements IControllableEntity {
-	private boolean isControlled;
+public abstract class AbstractControllableBuilding extends AbstractBuilding implements IControllableEntity {
+	private boolean controlled;
 	private InputListener inputListener;
 
-	public AbstractLivingControllableEntity(final Wanderer game) {
-		super(game);
+	public AbstractControllableBuilding(Wanderer game, AbstractBuildingMeta meta) {
+		super(game, meta);
 	}
 
 	@Override
@@ -19,27 +20,22 @@ public abstract class AbstractLivingControllableEntity extends AbstractClanLivin
 		}
 		return this.inputListener;
 	}
-
+	
 	public InputListener createInputProcessor() {
 		return new InputListenerAdapter(-1000);
 	}
 
 	@Override
 	public void onTakeControl() {
-		this.isControlled = true;
+		this.controlled = true;
 	}
 
 	@Override
 	public void onRemoveControl() {
-		this.isControlled = false;
+		this.controlled = false;
 	}
 
 	public boolean isControlled() {
-		return this.isControlled;
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
+		return this.controlled;
 	}
 }

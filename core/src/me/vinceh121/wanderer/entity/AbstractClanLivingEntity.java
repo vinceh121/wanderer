@@ -93,4 +93,12 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 			this.onDeath();
 		}
 	}
+	
+	@Override
+	public void dispose() {
+		if (this.clan != null) {
+			this.clan.removeMember(this);
+		}
+		super.dispose();
+	}
 }

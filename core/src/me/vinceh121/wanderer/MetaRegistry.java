@@ -18,6 +18,7 @@ import me.vinceh121.wanderer.building.IslandMeta;
 import me.vinceh121.wanderer.building.LighthouseMeta;
 import me.vinceh121.wanderer.character.CharacterMeta;
 import me.vinceh121.wanderer.entity.PropMeta;
+import me.vinceh121.wanderer.guntower.MachineGunGuntowerMeta;
 
 public final class MetaRegistry {
 	private static final MetaRegistry INSTANCE = new MetaRegistry();
@@ -38,6 +39,7 @@ public final class MetaRegistry {
 		this.readMetas(Gdx.files.internal("islands.json"), IslandMeta.class);
 		this.readMetas(Gdx.files.internal("characters.json"), CharacterMeta.class);
 		this.readMetas(Gdx.files.internal("props.json"), PropMeta.class);
+		this.readMetas(Gdx.files.internal("machinegunGuntowers.json"), MachineGunGuntowerMeta.class);
 	}
 
 	public void clear() {

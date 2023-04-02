@@ -11,9 +11,7 @@ public class BuildingArtifactEntity extends AbstractArtifactEntity {
 	public BuildingArtifactEntity(final Wanderer game, final AbstractBuildingMeta meta) {
 		super(game, meta);
 
-		if (meta.isShrink()) {
-			this.scale(0.05f, 0.05f, 0.05f);
-		}
+		this.scale(meta.getArtefactScale());
 	}
 
 	@Override

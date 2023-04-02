@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.entity;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Mesh;
@@ -124,6 +125,15 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		}
 		for (final ParticleEmitter e : this.particles) {
 			e.updateLoading();
+		}
+	}
+
+	public void animateParts(String animationChannel, Consumer<Matrix4> transformation ) {
+		for (DisplayModel m : this.models) {
+			if (animationChannel.equals(m.getAnimationChannel())) {
+				transformation.accept(m.getRelativeTransform());
+				m.updateTransform(getTransform());
+			}
 		}
 	}
 
@@ -287,8 +297,23 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	 * @return
 	 * @see com.badlogic.gdx.math.Matrix4#scl(com.badlogic.gdx.math.Vector3)
 	 */
-	public void scl(final Vector3 scale) {
+	public void scale(final Vector3 scale) {
 		this.transform.scl(scale);
+		this.updateTransform();
+	}
+
+	public void scale(float scale) {
+		transform.scl(scale);
+		this.updateTransform();
+	}
+
+	public void translate(Vector3 translation) {
+		transform.translate(translation);
+		this.updateTransform();
+	}
+
+	public void translate(float x, float y, float z) {
+		transform.translate(x, y, z);
 		this.updateTransform();
 	}
 

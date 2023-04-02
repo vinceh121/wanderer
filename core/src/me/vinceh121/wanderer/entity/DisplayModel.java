@@ -27,7 +27,7 @@ public class DisplayModel {
 	@JsonIgnore
 	private final Matrix4 absoluteTransform = new Matrix4();
 	private final List<Attribute> textureAttributes = new ArrayList<>();
-	private String displayModel, displayTexture;
+	private String displayModel, displayTexture, animationChannel;
 	@JsonIgnore
 	private ModelInstance cacheDisplayModel;
 
@@ -51,6 +51,7 @@ public class DisplayModel {
 		this.setDisplayModel(from.getDisplayModel());
 		this.setDisplayTexture(from.getDisplayTexture());
 		this.setCacheDisplayModel(from.getCacheDisplayModel());
+		this.setAnimationChannel(from.getAnimationChannel());
 	}
 
 	public void render(final ModelBatch batch, final Environment env) {
@@ -114,6 +115,14 @@ public class DisplayModel {
 		this.displayTexture = displayTexture;
 	}
 
+	public String getAnimationChannel() {
+		return animationChannel;
+	}
+
+	public void setAnimationChannel(String animationChannel) {
+		this.animationChannel = animationChannel;
+	}
+
 	@JsonIgnore
 	public ModelInstance getCacheDisplayModel() {
 		return this.cacheDisplayModel;
@@ -156,5 +165,12 @@ public class DisplayModel {
 
 	public Attribute removeTextureAttribute(final int index) {
 		return this.textureAttributes.remove(index);
+	}
+
+	@Override
+	public String toString() {
+		return "DisplayModel [relativeTransform=" + relativeTransform + ", absoluteTransform=" + absoluteTransform
+				+ ", displayModel=" + displayModel + ", displayTexture=" + displayTexture + ", animationChannel="
+				+ animationChannel + "]";
 	}
 }

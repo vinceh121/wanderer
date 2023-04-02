@@ -83,6 +83,9 @@ public class InConstructionBuilding extends AbstractBuilding {
 		if (this.getIsland() != null) {
 			this.getIsland().removeBuilding(this);
 			final AbstractBuilding newBuilding = (AbstractBuilding) this.getMeta().create(this.game);
+			if (this.getClan() != null) {
+				this.getClan().addMember(newBuilding);
+			}
 			this.game.addEntity(newBuilding);
 			this.getIsland().addBuilding(newBuilding, this.getSlot());
 		}

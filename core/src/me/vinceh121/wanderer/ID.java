@@ -48,7 +48,7 @@ public class ID implements Comparable<ID> {
 
 	@Override
 	public String toString() {
-		return Integer.toHexString(this.value);
+		return Integer.toString(this.value);
 	}
 
 	public static int newValue() {
