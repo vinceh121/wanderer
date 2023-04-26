@@ -70,10 +70,15 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 
 		Vector3 dir = getLookDirection();
 
-		Quaternion lookRot = new Quaternion();
-		lookRot.setFromCross(dir, Vector3.Y);
+		Quaternion rot = new Quaternion();
+		rot.setFromCross(Vector3.Y, dir);
+		rot.mul(new Quaternion(Vector3.X, 90));
 
-		this.animateParts("setLookRot", t -> MathUtilsW.setRotation(t, lookRot));
+		Quaternion adj = new Quaternion();
+		adj.setEulerAnglesRad(rot.getYawRad(), rot.getPitchRad(), 0); // TODO this looks like it could be way more
+																		// optimized if I look into simplifying this
+
+		this.animateParts("setLookRot", t -> MathUtilsW.setRotation(t, adj));
 	}
 
 	protected void moveCamera() {
