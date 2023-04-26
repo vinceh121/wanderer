@@ -47,7 +47,7 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 				final float lookSensY =
 						Preferences.getPreferences().<Double>getOrElse("input.lookSensitivityY", 0.005).floatValue();
 				polarAngle += y * lookSensY * -1f;
-				polarAngle %= 1;
+				polarAngle = MathUtils.clamp(polarAngle, meta.getPolarMin(), meta.getPolarMax());
 				return true;
 			}
 		};
