@@ -191,6 +191,12 @@ public class InputManager extends ApplicationAdapter {
 			}
 
 			@Override
+			public boolean touchDragged(int screenX, int screenY, int pointer) {
+				// fix for mouseMoved not getting called if a mouse button is held down
+				return this.mouseMoved(screenX, screenY);
+			}
+			
+			@Override
 			public boolean mouseMoved(final int screenX, final int screenY) {
 				final int centerX = Gdx.graphics.getWidth() / 2;
 				final int centerY = Gdx.graphics.getHeight() / 2;
