@@ -38,6 +38,7 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 			}
 			this.fireSoundEmitter =
 					WandererConstants.ASSET_MANAGER.get(this.meta.getFireSound(), Sound3D.class).playGeneral();
+			this.addSoundEmitter(this.fireSoundEmitter);
 		}
 	}
 

@@ -74,7 +74,7 @@ public class Wanderer extends ApplicationAdapter {
 	private Clan playerClan;
 
 	private DebugOverlay debugOverlay;
-	private boolean debugBullet = false, glxDebug = false, paused;
+	private boolean debugBullet = false, glxDebug = false, paused, audioEmittersDebug = false;
 
 	private IControllableEntity controlledEntity;
 	/**
@@ -161,6 +161,9 @@ public class Wanderer extends ApplicationAdapter {
 							cinematicController.setRate(1);
 						}
 					}
+					return true;
+				} else if (in == Input.DEBUG_AUDIO) {
+					audioEmittersDebug = !audioEmittersDebug;
 					return true;
 				} else if (in == Input.CURSOR_CAPTURE) {
 					Gdx.input.setCursorCatched(!Gdx.input.isCursorCatched());
@@ -451,8 +454,8 @@ public class Wanderer extends ApplicationAdapter {
 
 	public void cycleControl() {
 		for (int i = this.playerClan.getMembers()
-			.indexOf(((AbstractEntity) this.controlledEntity).getId(),
-					false); i < this.playerClan.getMembers().size * 2 - 1; i++) {
+			.indexOf(((AbstractEntity) this.controlledEntity).getId(), false); i < this.playerClan.getMembers().size * 2
+					- 1; i++) {
 			AbstractEntity e = this.getEntity(this.playerClan.getMembers().get(i % this.playerClan.getMembers().size));
 			if (e instanceof IControllableEntity && e != this.controlledEntity) {
 				LOG.info("Controlling {}", e);
@@ -804,5 +807,13 @@ public class Wanderer extends ApplicationAdapter {
 
 	public PerspectiveCamera getCamera() {
 		return this.graphicsManager.getCamera();
+	}
+
+	public boolean isAudioEmittersDebug() {
+		return audioEmittersDebug;
+	}
+
+	public void setAudioEmittersDebug(boolean audioEmittersDebug) {
+		this.audioEmittersDebug = audioEmittersDebug;
 	}
 }

@@ -13,6 +13,7 @@ public enum Input {
 	DEBUG_BULLET("Physics Debug"),
 	DEBUG_GLX("Graphics Debug"),
 	DEBUG_TIMESCALE("Toggle Timescale"),
+	DEBUG_AUDIO("Audio Debug"),
 	CURSOR_CAPTURE("Toggle cursor capture"),
 	PAUSE_MENU("Pause"),
 	SHOW_OBJECTIVES("Show objectives"),

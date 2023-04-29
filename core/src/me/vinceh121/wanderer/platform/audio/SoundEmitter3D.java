@@ -47,8 +47,14 @@ public interface SoundEmitter3D extends Disposable {
 
 	Vector3 getVelocity();
 
+	/**
+	 * @param pos The absolute position in the OpenAL world
+	 */
 	void setPosition(final Vector3 pos);
 
+	/**
+	 * @return The absolute position in the OpenAL world
+	 */
 	Vector3 getPosition();
 
 	/**
@@ -66,5 +72,11 @@ public interface SoundEmitter3D extends Disposable {
 	float getPitch();
 
 	long getId();
+
+	void setRelativePosition(float x, float y, float z);
+
+	void setRelativePosition(Vector3 from);
+
+	Vector3 getRelativePosition();
 
 }

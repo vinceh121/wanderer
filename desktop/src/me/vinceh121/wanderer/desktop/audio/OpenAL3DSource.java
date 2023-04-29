@@ -15,6 +15,7 @@ public class OpenAL3DSource implements SoundEmitter3D {
 	private final OpenAL3DAudio audio;
 	private final int source;
 	private final long context;
+	private final Vector3 relativePosition = new Vector3();
 	private boolean disposeOnStop, disposed;
 
 	public OpenAL3DSource(final OpenAL3DAudio audio, final long context) throws OpenALException {
@@ -43,6 +44,21 @@ public class OpenAL3DSource implements SoundEmitter3D {
 		alSource3f(this.source, AL_POSITION, pos.x, pos.y, pos.z);
 	}
 
+	@Override
+	public Vector3 getRelativePosition() {
+		return this.relativePosition;
+	}
+	
+	@Override
+	public void setRelativePosition(Vector3 from) {
+		this.relativePosition.set(from);
+	}
+	
+	@Override
+	public void setRelativePosition(float x, float y, float z) {
+		this.relativePosition.set(x, y, z);
+	}
+	
 	@Override
 	public Vector3 getVelocity() {
 		setContext();

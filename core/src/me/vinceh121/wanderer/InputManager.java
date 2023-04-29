@@ -107,6 +107,7 @@ public class InputManager extends ApplicationAdapter {
 		this.bindings.put(Input.DEBUG_BULLET, new Binding(Keys.F7, DeviceType.KEYBOARD));
 		this.bindings.put(Input.DEBUG_GLX, new Binding(Keys.F3, DeviceType.KEYBOARD));
 		this.bindings.put(Input.DEBUG_TIMESCALE, new Binding(Keys.F6, DeviceType.KEYBOARD));
+		this.bindings.put(Input.DEBUG_AUDIO, new Binding(Keys.F7, DeviceType.KEYBOARD));
 		this.bindings.put(Input.CURSOR_CAPTURE, new Binding(Keys.F4, DeviceType.KEYBOARD));
 
 		this.bindings.put(Input.SWITCH_CONTROLLED_VEHICLE, new Binding(Keys.TAB, DeviceType.KEYBOARD));

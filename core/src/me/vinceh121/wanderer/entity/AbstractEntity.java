@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -29,6 +30,7 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.event.EventDispatcher;
 import me.vinceh121.wanderer.event.IEventListener;
+import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
 public abstract class AbstractEntity implements Disposable, ISaveable {
 	protected final Wanderer game;
@@ -36,6 +38,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	private final Vector3 collideObjectOffset = new Vector3();
 	private final Array<DisplayModel> models = new Array<>();
 	private final Array<ParticleEmitter> particles = new Array<>();
+	private final Array<SoundEmitter3D> soundEmitters = new Array<>();
 	private final Matrix4 transform = new Matrix4();
 	// note: ID can't be final to be able to set explicit values when loading a save
 	private ID id = new ID();
@@ -126,9 +129,20 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		for (final ParticleEmitter e : this.particles) {
 			e.updateLoading();
 		}
+		for (final SoundEmitter3D e : this.soundEmitters) {
+			Vector3 relPos = e.getRelativePosition().cpy();
+			relPos.mul(getTransform());
+			e.setPosition(relPos);
+
+			if (this.game.isAudioEmittersDebug()) {
+				ModelInstance ins = new ModelInstance(WandererConstants.getAudioDebug(), relPos);
+				ins.transform.scl(5);
+				batch.render(ins);
+			}
+		}
 	}
 
-	public void animateParts(String animationChannel, Consumer<Matrix4> transformation ) {
+	public void animateParts(String animationChannel, Consumer<Matrix4> transformation) {
 		for (DisplayModel m : this.models) {
 			if (animationChannel.equals(m.getAnimationChannel())) {
 				transformation.accept(m.getRelativeTransform());
@@ -248,6 +262,14 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		return this.models;
 	}
 
+	public Array<SoundEmitter3D> getSoundEmitters() {
+		return this.soundEmitters;
+	}
+
+	public void addSoundEmitter(SoundEmitter3D emitter) {
+		this.soundEmitters.add(emitter);
+	}
+
 	public Matrix4 getTransform() {
 		return this.transform;
 	}
@@ -263,7 +285,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	public Vector3 getScale() {
 		return this.getTransform().getScale(new Vector3());
 	}
-	
+
 	public void setTransform(final Matrix4 transform) {
 		Objects.nonNull(transform);
 		this.transform.set(transform);

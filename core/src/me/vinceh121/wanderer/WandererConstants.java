@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
+import me.vinceh121.wanderer.glx.GLBModelLoader;
 import me.vinceh121.wanderer.glx.GLTFModelLoader;
 import me.vinceh121.wanderer.json.WandererJsonModule;
 import me.vinceh121.wanderer.platform.audio.AudioSystem3D;
@@ -32,6 +33,15 @@ public final class WandererConstants {
 	
 	public static Skin getDevSkin() {
 		return WandererConstants.ASSET_MANAGER.get("skins/default/uiskin.json", Skin.class);
+	}
+	
+	public static Model getAudioDebug() {
+		final String name = "audio-debug.glb";
+		if (!ASSET_MANAGER.isLoaded(name, Model.class)) {
+			ASSET_MANAGER.load(name, Model.class);
+			ASSET_MANAGER.finishLoadingAsset(name);
+		}
+		return ASSET_MANAGER.get(name, Model.class);
 	}
 
 	static {
@@ -59,6 +69,7 @@ public final class WandererConstants {
 		WandererConstants.ASSET_MANAGER.setLoader(Sound3D.class,
 				new Sound3DLoader(WandererConstants.ASSET_MANAGER.getFileHandleResolver()));
 		WandererConstants.ASSET_MANAGER.setLoader(Model.class, ".gltf", new GLTFModelLoader());
+		WandererConstants.ASSET_MANAGER.setLoader(Model.class, ".glb", new GLBModelLoader());
 
 		WandererConstants.MIPMAPS.genMipMaps = true;
 
