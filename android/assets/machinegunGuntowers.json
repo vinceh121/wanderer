@@ -1,5 +1,6 @@
 {
 	"j_guntower01": {
+		"fireSound": "orig/lib/sound/mgtower03a.wav",
 		"buildTime": 3,
 		"artifactModel": "orig/j_guntower01.n/dummy.obj",
 		"artifactTexture": "orig/j_guntower01.n/texturealpha.ktx",

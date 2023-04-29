@@ -7,6 +7,7 @@ import me.vinceh121.wanderer.building.AbstractBuildingMeta;
 public abstract class AbstractGuntowerMeta extends AbstractBuildingMeta {
 	private Vector3 cameraOffset = new Vector3();
 	private float polarMin = 0.1f, polarMax = 0.9f;
+	private String fireSound;
 
 	public Vector3 getCameraOffset() {
 		return cameraOffset;
@@ -30,5 +31,13 @@ public abstract class AbstractGuntowerMeta extends AbstractBuildingMeta {
 
 	public void setPolarMax(float polarMax) {
 		this.polarMax = polarMax;
+	}
+
+	public String getFireSound() {
+		return fireSound;
+	}
+
+	public void setFireSound(String fireSound) {
+		this.fireSound = fireSound;
 	}
 }

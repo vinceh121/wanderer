@@ -1,5 +1,8 @@
 package me.vinceh121.wanderer.guntower;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
@@ -7,20 +10,35 @@ import com.badlogic.gdx.math.Vector3;
 
 import me.vinceh121.wanderer.Preferences;
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.building.AbstractControllableBuilding;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
+import me.vinceh121.wanderer.platform.audio.Sound3D;
+import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 import me.vinceh121.wanderer.util.MathUtilsW;
 
 public abstract class AbstractGuntower extends AbstractControllableBuilding {
+	private static final Logger LOG = LogManager.getLogger(AbstractGuntower.class);
 	private final AbstractGuntowerMeta meta;
+	protected SoundEmitter3D fireSoundEmitter;
 	private float azimuth = 0.75f, polarAngle = 0.5f;
 
 	public AbstractGuntower(Wanderer game, AbstractGuntowerMeta meta) {
 		super(game, meta);
 		this.meta = meta;
 		this.setName("Gun tower");
+
+		if (this.meta.getFireSound() != null) {
+			if (!WandererConstants.ASSET_MANAGER.isLoaded(this.meta.getFireSound(), Sound3D.class)) {
+				LOG.warn("Hot-loading fire sound {}", this.meta.getFireSound());
+				WandererConstants.ASSET_MANAGER.load(this.meta.getFireSound(), Sound3D.class);
+				WandererConstants.ASSET_MANAGER.finishLoadingAsset(this.meta.getFireSound());
+			}
+			this.fireSoundEmitter =
+					WandererConstants.ASSET_MANAGER.get(this.meta.getFireSound(), Sound3D.class).playGeneral();
+		}
 	}
 
 	public abstract void fire();
@@ -28,15 +46,6 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	@Override
 	public InputListener createInputProcessor() {
 		return new InputListenerAdapter(50) {
-			@Override
-			public boolean inputDown(Input in) {
-				if (in == Input.FIRE) {
-					fire();
-					return true;
-				}
-				return false;
-			}
-
 			@Override
 			public boolean mouseMoved(int x, int y) {
 				final float lookSensX =
@@ -79,6 +88,10 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 																		// optimized if I look into simplifying this
 
 		this.animateParts("setLookRot", t -> MathUtilsW.setRotation(t, adj));
+
+		if (this.isControlled() && this.game.getInputManager().isPressed(Input.FIRE)) {
+			fire();
+		}
 	}
 
 	protected void moveCamera() {

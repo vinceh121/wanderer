@@ -74,6 +74,8 @@ public class InputManager extends ApplicationAdapter {
 	public void setDefaultBinds() {
 		this.bindings.clear();
 
+		this.bindings.put(Input.FIRE, new Binding(Buttons.LEFT, DeviceType.MOUSE));
+
 		this.bindings.put(Input.WALK_RIGHT, new Binding(Keys.RIGHT, DeviceType.KEYBOARD));
 		this.bindings.put(Input.WALK_RIGHT, new Binding(Keys.D, DeviceType.KEYBOARD));
 		this.bindings.put(Input.WALK_LEFT, new Binding(Keys.LEFT, DeviceType.KEYBOARD));
@@ -195,7 +197,7 @@ public class InputManager extends ApplicationAdapter {
 				// fix for mouseMoved not getting called if a mouse button is held down
 				return this.mouseMoved(screenX, screenY);
 			}
-			
+
 			@Override
 			public boolean mouseMoved(final int screenX, final int screenY) {
 				final int centerX = Gdx.graphics.getWidth() / 2;
