@@ -1,14 +1,30 @@
 package me.vinceh121.wanderer.guntower;
 
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.ClosestNotMeRayResultCallback;
+import com.badlogic.gdx.utils.Array;
+
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.entity.AbstractEntity;
+import me.vinceh121.wanderer.math.Segment3;
 
 public class MachineGunGuntower extends AbstractGuntower {
 	private final MachineGunGuntowerMeta meta;
+	private final Array<MachineGunTurret> turrets = new Array<>();
 	private float fireTimeout;
 
 	public MachineGunGuntower(Wanderer game, MachineGunGuntowerMeta meta) {
 		super(game, meta);
 		this.meta = meta;
+
+		for (MachineGunTurret turret : this.meta.getTurrets()) {
+			this.turrets.add(new MachineGunTurret(turret));
+		}
 	}
 
 	@Override
@@ -17,8 +33,29 @@ public class MachineGunGuntower extends AbstractGuntower {
 			return;
 		}
 
+		for (MachineGunTurret turret : this.turrets) {
+			this.fireTurret(turret);
+		}
+
 		this.fireSoundEmitter.play();
 		this.fireTimeout = 0.085f;
+	}
+
+	private void fireTurret(MachineGunTurret turret) {
+		turret.updateTransform(getTransform());
+		turret.getAbsoluteTransform().rotate(this.getLookRotation());
+		Segment3 seg = turret.calculateRandomBulletPath();
+
+		ClosestNotMeRayResultCallback cb = new ClosestNotMeRayResultCallback(getCollideObject());
+		game.getBtWorld().rayTest(seg.getStart(), seg.getEnd(), cb);
+
+		if (cb.hasHit()) {
+			System.out.println("hit!");
+			AbstractEntity e = this.game.getEntity(cb.getCollisionObject().getUserIndex());
+			System.out.println(e);
+		}
+
+		cb.dispose();
 	}
 
 	@Override
@@ -33,5 +70,9 @@ public class MachineGunGuntower extends AbstractGuntower {
 	@Override
 	public MachineGunGuntowerMeta getMeta() {
 		return meta;
+	}
+
+	public Array<MachineGunTurret> getTurrets() {
+		return turrets;
 	}
 }

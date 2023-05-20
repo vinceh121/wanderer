@@ -10,6 +10,31 @@
 			16,
 			-6.5
 		],
+		"turrets": [
+			{
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						10.7,
+						0.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				"distance": 650,
+				"startRadius": 0.5,
+				"endRadius": 5
+			}
+		],
 		"energyRequired": 5,
 		"collisionModel": "orig/j_guntower01.n/collide.obj",
 		"displayModels": [

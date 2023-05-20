@@ -30,13 +30,22 @@ public final class WandererConstants {
 	public static final ObjectMapper MAPPER = new ObjectMapper(), SAVE_MAPPER;
 	public static final AudioSystem3D AUDIO = (AudioSystem3D) Gdx.audio;
 	public static final Texture BLACK_PIXEL;
-	
+
 	public static Skin getDevSkin() {
 		return WandererConstants.ASSET_MANAGER.get("skins/default/uiskin.json", Skin.class);
 	}
-	
+
 	public static Model getAudioDebug() {
 		final String name = "audio-debug.glb";
+		if (!ASSET_MANAGER.isLoaded(name, Model.class)) {
+			ASSET_MANAGER.load(name, Model.class);
+			ASSET_MANAGER.finishLoadingAsset(name);
+		}
+		return ASSET_MANAGER.get(name, Model.class);
+	}
+
+	public static Model getCircleDebug() {
+		final String name = "circle-debug.glb";
 		if (!ASSET_MANAGER.isLoaded(name, Model.class)) {
 			ASSET_MANAGER.load(name, Model.class);
 			ASSET_MANAGER.finishLoadingAsset(name);

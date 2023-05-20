@@ -1,10 +1,18 @@
 package me.vinceh121.wanderer.util;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public final class MathUtilsW {
+	public static Vector2 setFromPolar(Vector2 v, float rad) {
+		v.x = MathUtils.cos(rad);
+		v.y = MathUtils.sin(rad);
+		return v;
+	}
+	
 	public static Vector3 fixNaN(Vector3 v, float val) {
 		if (Float.isNaN(v.x))
 			v.x = val;

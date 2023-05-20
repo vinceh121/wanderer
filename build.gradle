@@ -109,5 +109,13 @@ project(":core") {
         api "org.apache.logging.log4j:log4j-core:2.20.0"
         api "org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0"
         api "com.electronwill.night-config:toml:3.6.6"
+
+        testImplementation(platform('org.junit:junit-bom:5.9.3'))
+        testImplementation "org.junit.jupiter:junit-jupiter:5.9.3"
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging { events "passed", "skipped", "failed" }
     }
 }

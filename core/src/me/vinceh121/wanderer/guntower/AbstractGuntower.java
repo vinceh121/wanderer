@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 
@@ -63,11 +64,17 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 		};
 	}
 
-	private Vector3 getLookDirection() {
+	public Vector3 getLookDirection() {
 		Vector3 direction = new Vector3();
 		direction.setFromSpherical(MathUtils.PI2 * (azimuth % 1), MathUtils.PI * (polarAngle % 1));
 		direction.rotateRad(Vector3.X, MathUtils.HALF_PI);
 		return direction;
+	}
+
+	public Quaternion getLookRotation() {
+		Quaternion rot = new Quaternion();
+		rot.setFromCross(Vector3.Y, this.getLookDirection());
+		return rot;
 	}
 
 	@Override
@@ -80,15 +87,16 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 
 		Vector3 dir = getLookDirection();
 
-		Quaternion rot = new Quaternion();
-		rot.setFromCross(Vector3.Y, dir);
-		rot.mul(new Quaternion(Vector3.X, 90));
+//		Quaternion rot = new Quaternion();
+//		rot.setFromCross(Vector3.Y, dir);
+//		rot.mul(new Quaternion(Vector3.X, 90));
+//
+//		Quaternion adj = new Quaternion();
+//		adj.setEulerAnglesRad(rot.getYawRad(), rot.getPitchRad(), 0); // TODO this looks like it could be way more
+//																		// optimized if I look into simplifying this
 
-		Quaternion adj = new Quaternion();
-		adj.setEulerAnglesRad(rot.getYawRad(), rot.getPitchRad(), 0); // TODO this looks like it could be way more
-																		// optimized if I look into simplifying this
-
-		this.animateParts("setLookRot", t -> MathUtilsW.setRotation(t, adj));
+		this.animateParts("setLookRot",
+				t -> t.setToLookAt(t.getTranslation(new Vector3()), dir, Vector3.Y));
 
 		if (this.isControlled() && this.game.getInputManager().isPressed(Input.FIRE)) {
 			fire();
