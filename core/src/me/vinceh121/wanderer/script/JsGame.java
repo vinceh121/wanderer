@@ -51,6 +51,13 @@ public class JsGame {
 		JsUtils.install(scope, "playCinematic", this::playCinematic);
 		JsUtils.install(scope, "spawn", this::spawn);
 		JsUtils.install(scope, "newv", this::newv);
+
+		JsUtils.install(scope, "debugAudio", this::debugAudio);
+	}
+
+	private void debugAudio() {
+		this.game.setAudioEmittersDebug(!this.game.isAudioEmittersDebug());
+		LOG.info("Audio debug now {}", this.game.isAudioEmittersDebug());
 	}
 
 	private AbstractEntity newv(String metaName) {
