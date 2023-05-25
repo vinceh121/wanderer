@@ -1,16 +1,11 @@
 package me.vinceh121.wanderer.guntower;
 
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ClosestNotMeRayResultCallback;
 import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.Wanderer;
-import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.entity.AbstractEntity;
+import me.vinceh121.wanderer.entity.ILivingEntity;
 import me.vinceh121.wanderer.math.Segment3;
 
 public class MachineGunGuntower extends AbstractGuntower {
@@ -53,6 +48,12 @@ public class MachineGunGuntower extends AbstractGuntower {
 			System.out.println("hit!");
 			AbstractEntity e = this.game.getEntity(cb.getCollisionObject().getUserIndex());
 			System.out.println(e);
+			if (e instanceof ILivingEntity) {
+				System.out.println("health before: " + ((ILivingEntity) e).getHealth());
+				((ILivingEntity) e).setInvincible(false);
+				((ILivingEntity) e).damage(turret.getDamage(), turret.getType());
+				System.out.println("health now: " + ((ILivingEntity) e).getHealth());
+			}
 		}
 
 		cb.dispose();

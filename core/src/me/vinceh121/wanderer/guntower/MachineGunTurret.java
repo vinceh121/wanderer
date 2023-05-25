@@ -14,7 +14,7 @@ public class MachineGunTurret {
 	@JsonIgnore
 	private final Matrix4 absoluteTransform = new Matrix4();
 	private final Matrix4 relativeTransform = new Matrix4();
-	private float distance, startRadius, endRadius;
+	private float distance, startRadius, endRadius, damage;
 	private DamageType type = DamageType.MACHINE_GUN;
 
 	public MachineGunTurret() {
@@ -26,6 +26,7 @@ public class MachineGunTurret {
 		this.distance = other.distance;
 		this.startRadius = other.startRadius;
 		this.endRadius = other.endRadius;
+		this.damage = other.damage;
 		this.type = other.type;
 	}
 
@@ -40,7 +41,8 @@ public class MachineGunTurret {
 	}
 
 	public Segment3 calculateBulletPath(float angle, float radiusFrac) {
-		// adapt random distribution to avoid concentration of points to center of circle
+		// adapt random distribution to avoid concentration of points to center of
+		// circle
 		// https://www.youtube.com/watch?v=4y_nmpv-9lI
 		float radSqrt = (float) Math.sqrt(radiusFrac);
 		Quaternion rot = this.absoluteTransform.getRotation(new Quaternion());
@@ -84,6 +86,14 @@ public class MachineGunTurret {
 
 	public void setEndRadius(float endRadius) {
 		this.endRadius = endRadius;
+	}
+
+	public float getDamage() {
+		return damage;
+	}
+
+	public void setDamage(float damage) {
+		this.damage = damage;
 	}
 
 	public DamageType getType() {

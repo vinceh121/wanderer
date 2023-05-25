@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.building;
 
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.combat.DamageType;
 
 public class Lighthouse extends AbstractBuilding {
 	public Lighthouse(final Wanderer game, final LighthouseMeta meta) {
@@ -10,7 +11,7 @@ public class Lighthouse extends AbstractBuilding {
 	@Override
 	public void onDeath() {
 		super.onDeath();
-		this.getIsland().damage(Float.MAX_VALUE);
+		this.getIsland().damage(Float.MAX_VALUE, DamageType.EXPLOSION);
 	}
 
 	@Override

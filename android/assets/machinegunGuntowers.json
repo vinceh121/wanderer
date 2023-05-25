@@ -31,6 +31,7 @@
 					]
 				},
 				"distance": 650,
+				"damage": 20,
 				"startRadius": 0.5,
 				"endRadius": 5
 			}

@@ -1,12 +1,18 @@
 package me.vinceh121.wanderer.entity;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
+import me.vinceh121.wanderer.combat.CombatUtils;
+import me.vinceh121.wanderer.combat.DamageType;
 
 public abstract class AbstractClanLivingEntity extends AbstractEntity implements ILivingEntity, IClanMember {
+	private final Map<DamageType, Float> armors = new EnumMap<>(DamageType.class);
 	private float maxHealth = 1, health = 1;
 	private boolean invincible;
 	private Clan clan;
@@ -49,8 +55,16 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	}
 
 	@Override
-	public void damage(final float health) {
-		this.health += health;
+	public void damage(final float damage, DamageType type) {
+		if (this.isInvincible()) {
+			return;
+		}
+
+		float armor = this.getArmor(type);
+		float dealtDamage = CombatUtils.dealtDamage(damage, armor);
+
+		this.health -= dealtDamage;
+
 		this.checkDeath();
 	}
 
@@ -62,6 +76,21 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	@Override
 	public void onJoinClan(Clan clan) {
 		this.clan = clan;
+	}
+
+	@Override
+	public Map<DamageType, Float> getArmors() {
+		return this.armors;
+	}
+
+	@Override
+	public float getArmor(DamageType type) {
+		return this.armors.containsKey(type) ? this.armors.get(type) : 0;
+	}
+
+	@Override
+	public void setArmor(DamageType type, float armor) {
+		this.armors.put(type, armor);
 	}
 
 	@Override
@@ -93,7 +122,7 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 			this.onDeath();
 		}
 	}
-	
+
 	@Override
 	public void dispose() {
 		if (this.clan != null) {
