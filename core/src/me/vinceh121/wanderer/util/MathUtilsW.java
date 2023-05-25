@@ -7,18 +7,41 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public final class MathUtilsW {
+	public static Vector3 average(Iterable<Vector3> vecs) {
+		int count = 0;
+		Vector3 res = new Vector3();
+		for (Vector3 v : vecs) {
+			res.add(v);
+			count++;
+		}
+		res.x /= count;
+		res.y /= count;
+		res.z /= count;
+		return res;
+	}
+
 	public static Vector2 setFromPolar(Vector2 v, float rad) {
 		v.x = MathUtils.cos(rad);
 		v.y = MathUtils.sin(rad);
 		return v;
 	}
-	
+
 	public static Vector3 fixNaN(Vector3 v, float val) {
 		if (Float.isNaN(v.x))
 			v.x = val;
 		if (Float.isNaN(v.y))
 			v.y = val;
 		if (Float.isNaN(v.z))
+			v.z = val;
+		return v;
+	}
+
+	public static Vector3 fixInfinity(Vector3 v, float val) {
+		if (Float.isInfinite(v.x))
+			v.x = val;
+		if (Float.isInfinite(v.y))
+			v.y = val;
+		if (Float.isInfinite(v.z))
 			v.z = val;
 		return v;
 	}
