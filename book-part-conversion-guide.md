@@ -29,17 +29,17 @@ setDayTime(hours: number, minutes: number): void
 ##### on / addEventListener
 
 ```typescript
-addEventListener(event: string, handler: function): void
+addEventListener(event: string, handler: (event: Event) => void): void
 ```
 
 ##### oneshottimer,oneshotaction / setTimeout
 
 ```typescript
-setTimeout(handler: function, delay: number, args...: any): number
+setTimeout(handler: (args...: any[]) => void, delay: number, args...: any[]): number
 ```
 
 ##### timer  / setInterval
 
 ```typescript
-setInterval(handler: function, delay: number, args...: any): number
+setInterval(handler: (args...: any[]) => void, delay: number, args...: any[]): number
 ```
