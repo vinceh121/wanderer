@@ -18,7 +18,6 @@ import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
-import me.vinceh121.wanderer.util.MathUtilsW;
 
 public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	private static final Logger LOG = LogManager.getLogger(AbstractGuntower.class);
@@ -86,17 +85,11 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 		}
 
 		Vector3 dir = getLookDirection();
+		Quaternion rot = new Quaternion();
+		rot.setFromMatrix(new Matrix4().setToLookAt(dir, Vector3.Y));
+		rot.conjugate();
 
-//		Quaternion rot = new Quaternion();
-//		rot.setFromCross(Vector3.Y, dir);
-//		rot.mul(new Quaternion(Vector3.X, 90));
-//
-//		Quaternion adj = new Quaternion();
-//		adj.setEulerAnglesRad(rot.getYawRad(), rot.getPitchRad(), 0); // TODO this looks like it could be way more
-//																		// optimized if I look into simplifying this
-
-		this.animateParts("setLookRot",
-				t -> t.setToLookAt(t.getTranslation(new Vector3()), dir, Vector3.Y));
+		this.animateParts("setLookRot", t -> t.set(t.getTranslation(new Vector3()), rot));
 
 		if (this.isControlled() && this.game.getInputManager().isPressed(Input.FIRE)) {
 			fire();
