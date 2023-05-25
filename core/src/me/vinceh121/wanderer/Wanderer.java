@@ -54,6 +54,7 @@ import me.vinceh121.wanderer.ui.EnergyBar;
 import me.vinceh121.wanderer.ui.ItemBar;
 import me.vinceh121.wanderer.ui.LetterboxOverlay;
 import me.vinceh121.wanderer.ui.Subtitle;
+import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class Wanderer extends ApplicationAdapter {
 	private static final Logger LOG = LogManager.getLogger(Wanderer.class);
@@ -285,10 +286,18 @@ public class Wanderer extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		final float delta = Gdx.graphics.getDeltaTime();
+
+		Vector3 cameraVelocity = WandererConstants.AUDIO.getListenerPosition();
+		cameraVelocity.sub(this.getCamera().position);
+		cameraVelocity.scl(1f / delta);
+		MathUtilsW.fixInfinity(cameraVelocity, 0);
+		MathUtilsW.fixNaN(cameraVelocity, 0);
+
+		WandererConstants.AUDIO.setListenerVelocity(cameraVelocity);
 		WandererConstants.AUDIO.setListenerPosition(this.getCamera().position);
 		WandererConstants.AUDIO.setListenerOrientation(this.getCamera().direction, this.getCamera().up);
 
-		final float delta = Gdx.graphics.getDeltaTime();
 		this.graphicsManager.apply();
 
 		WandererConstants.ASSET_MANAGER.update(8);
