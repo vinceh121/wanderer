@@ -1,5 +1,9 @@
 package me.vinceh121.wanderer.guntower;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ClosestNotMeRayResultCallback;
 import com.badlogic.gdx.utils.Array;
 
@@ -7,6 +11,7 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.ILivingEntity;
 import me.vinceh121.wanderer.math.Segment3;
+import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class MachineGunGuntower extends AbstractGuntower {
 	private final MachineGunGuntowerMeta meta;
@@ -17,9 +22,13 @@ public class MachineGunGuntower extends AbstractGuntower {
 		super(game, meta);
 		this.meta = meta;
 
+		List<Vector3> turretPos = new ArrayList<>(this.meta.getTurrets().size);
 		for (MachineGunTurret turret : this.meta.getTurrets()) {
 			this.turrets.add(new MachineGunTurret(turret));
+			turretPos.add(turret.getRelativeTransform().getTranslation(new Vector3()));
 		}
+		// moves the emitter to the average position of all the turrets
+		this.fireSoundEmitter.setRelativePosition(MathUtilsW.average(turretPos));
 	}
 
 	@Override
