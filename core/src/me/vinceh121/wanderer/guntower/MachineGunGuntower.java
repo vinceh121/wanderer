@@ -45,14 +45,9 @@ public class MachineGunGuntower extends AbstractGuntower {
 		game.getBtWorld().rayTest(seg.getStart(), seg.getEnd(), cb);
 
 		if (cb.hasHit()) {
-			System.out.println("hit!");
 			AbstractEntity e = this.game.getEntity(cb.getCollisionObject().getUserIndex());
-			System.out.println(e);
 			if (e instanceof ILivingEntity) {
-				System.out.println("health before: " + ((ILivingEntity) e).getHealth());
-				((ILivingEntity) e).setInvincible(false);
 				((ILivingEntity) e).damage(turret.getDamage(), turret.getType());
-				System.out.println("health now: " + ((ILivingEntity) e).getHealth());
 			}
 		}
 
