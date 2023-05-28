@@ -88,6 +88,14 @@ project(":tools") {
     }
 }
 
+project(":launcher") {
+    apply plugin: "java-library"
+
+    dependencies {
+        api "me.vinceh121.wanderer:nebula2-assets-extractor:0.5.0-SNAPSHOT"
+    }
+}
+
 project(":core") {
     apply plugin: "java-library"
 
