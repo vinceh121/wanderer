@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -36,6 +37,7 @@ import me.vinceh121.n2ae.script.nob.NOBParser;
 import me.vinceh121.n2ae.texture.NtxFileReader;
 import me.vinceh121.wanderer.launcher.LauncherMain;
 import me.vinceh121.wanderer.launcher.data.AnimationSources;
+import me.vinceh121.wanderer.launcher.data.ExternalDownload;
 
 public class ExtractStep extends AbstractWizardStep {
 	private static final long serialVersionUID = 1L;
@@ -115,6 +117,13 @@ public class ExtractStep extends AbstractWizardStep {
 					new TypeReference<List<AnimationSources>>() {
 					});
 			this.filesToProcessCount += anims.size();
+			final List<ExternalDownload> downs = MAPPER.readValue(
+					getClass().getClassLoader()
+						.getResourceAsStream("me/vinceh121/wanderer/launcher/externalDownloads.json"),
+					new TypeReference<List<ExternalDownload>>() {
+					});
+			this.filesToProcessCount += downs.size();
+
 			this.model = MAPPER.readValue(
 					getClass().getClassLoader()
 						.getResourceAsStream("me/vinceh121/wanderer/launcher/project-nomads.classmodel.cdbed99c.json"),
@@ -139,7 +148,25 @@ public class ExtractStep extends AbstractWizardStep {
 			for (AnimationSources anim : anims) {
 				this.convertAnimation(anim);
 			}
+			this.publish("Downloading external assets...");
+			for (ExternalDownload down : downs) {
+				this.downloadExternal(down);
+			}
 			this.publish("Done!");
+		}
+
+		private void downloadExternal(ExternalDownload down) throws IOException {
+			this.publish("Downloading " + down.getUrl());
+			Path outPath = LauncherMain.getAssetsPath().resolve(down.getOutPath());
+			// mkdir parent directories
+			Files.createDirectories(outPath.getParent());
+
+			URL url = new URL(down.getUrl());
+
+			try (OutputStream out = Files.newOutputStream(outPath); InputStream in = url.openStream()) {
+				in.transferTo(out);
+			}
+			this.incProcessedCount();
 		}
 
 		private void convertAnimation(AnimationSources anim) throws IOException, ParseException {
