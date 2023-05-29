@@ -30,6 +30,7 @@ public class FirstTimeWizard extends JDialog {
 		this.setTitle("Wanderer installation wizard");
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		this.setModal(true);
 		this.add(this.pnlButtons, BorderLayout.SOUTH);
 
 		this.btnPrev.setEnabled(false);

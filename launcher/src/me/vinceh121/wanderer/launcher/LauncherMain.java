@@ -26,10 +26,7 @@ public class LauncherMain {
 		}
 		PnDarkLaf.setup();
 
-		if (Files.exists(LauncherMain.getAssetsPath())) {
-			final LauncherFrame frame = new LauncherFrame();
-			frame.setVisible(true);
-		} else {
+		if (Files.notExists(LauncherMain.getAssetsPath())) {
 			final FirstTimeWizardContext ctx = new FirstTimeWizardContext();
 			final FirstTimeWizard wiz = new FirstTimeWizard(ctx,
 					List.of(new WelcomeStep(ctx),
@@ -39,6 +36,9 @@ public class LauncherMain {
 							new FinishStep(ctx)));
 			wiz.setVisible(true);
 		}
+
+		final LauncherFrame frame = new LauncherFrame();
+		frame.setVisible(true);
 	}
 
 	public static Path getAssetsPath() {

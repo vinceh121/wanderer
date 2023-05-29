@@ -1,6 +1,8 @@
 package me.vinceh121.wanderer.launcher.wizard;
 
-import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,6 +10,7 @@ import java.nio.file.Path;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
@@ -19,12 +22,48 @@ public class DataSelectStep extends AbstractWizardStep {
 
 	public DataSelectStep(final FirstTimeWizardContext ctx) {
 		super(ctx);
-		this.setLayout(new FlowLayout());
-		this.add(this.txtPath);
+		this.setLayout(new GridBagLayout());
+
+		this.add(new JLabel("Please select the path to the \"data.npk\" file of your Project Nomads installation:"),
+				new GridBagConstraints(0,
+						0,
+						2,
+						1,
+						0,
+						0,
+						GridBagConstraints.BASELINE_LEADING,
+						GridBagConstraints.NONE,
+						new Insets(0, 0, 0, 0),
+						0,
+						0));
+
+		this.add(this.txtPath,
+				new GridBagConstraints(0,
+						1,
+						1,
+						1,
+						1,
+						0,
+						GridBagConstraints.CENTER,
+						GridBagConstraints.HORIZONTAL,
+						new Insets(0, 0, 0, 0),
+						0,
+						0));
 
 		final JButton btnBrowse = new JButton("Browse");
 		btnBrowse.addActionListener(e -> this.browse());
-		this.add(btnBrowse);
+		this.add(btnBrowse,
+				new GridBagConstraints(1,
+						1,
+						1,
+						1,
+						0,
+						0,
+						GridBagConstraints.BASELINE_LEADING,
+						GridBagConstraints.NONE,
+						new Insets(0, 0, 0, 0),
+						0,
+						0));
 
 		this.txtPath.setValue(DataSelectStep.getDefaultDataPath());
 	}
@@ -40,7 +79,7 @@ public class DataSelectStep extends AbstractWizardStep {
 		}
 
 		fc.setMultiSelectionEnabled(false);
-		fc.addChoosableFileFilter(new FileFilter() {
+		FileFilter npkFilter = new FileFilter() {
 
 			@Override
 			public String getDescription() {
@@ -51,7 +90,9 @@ public class DataSelectStep extends AbstractWizardStep {
 			public boolean accept(final File f) {
 				return f.isDirectory() || f.getName().endsWith(".npk");
 			}
-		});
+		};
+		fc.addChoosableFileFilter(npkFilter);
+		fc.setFileFilter(npkFilter);
 		final int res = fc.showOpenDialog(null);
 		if (res == JFileChooser.ERROR_OPTION) {
 			JOptionPane.showMessageDialog(null,
