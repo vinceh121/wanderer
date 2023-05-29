@@ -3,8 +3,8 @@ package me.vinceh121.wanderer.launcher.wizard;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
-import me.vinceh121.wanderer.launcher.DataNpkSum;
-import me.vinceh121.wanderer.launcher.VoiceLineSum;
+import me.vinceh121.wanderer.launcher.data.DataNpkSum;
+import me.vinceh121.wanderer.launcher.data.VoiceLineSum;
 
 public class FirstTimeWizardContext {
 	private Path dataPath;

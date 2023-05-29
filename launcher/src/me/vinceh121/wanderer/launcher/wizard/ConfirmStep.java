@@ -15,8 +15,8 @@ import javax.swing.SwingWorker;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import me.vinceh121.wanderer.launcher.DataNpkSum;
-import me.vinceh121.wanderer.launcher.VoiceLineSum;
+import me.vinceh121.wanderer.launcher.data.DataNpkSum;
+import me.vinceh121.wanderer.launcher.data.VoiceLineSum;
 
 public class ConfirmStep extends AbstractWizardStep {
 	private static final long serialVersionUID = 1L;

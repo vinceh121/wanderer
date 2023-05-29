@@ -1,4 +1,4 @@
-package me.vinceh121.wanderer.launcher;
+package me.vinceh121.wanderer.launcher.data;
 
 import java.util.Locale;
 

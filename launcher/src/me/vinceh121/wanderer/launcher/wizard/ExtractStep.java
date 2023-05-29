@@ -34,8 +34,8 @@ import me.vinceh121.n2ae.script.NOBClazz;
 import me.vinceh121.n2ae.script.ParseException;
 import me.vinceh121.n2ae.script.nob.NOBParser;
 import me.vinceh121.n2ae.texture.NtxFileReader;
-import me.vinceh121.wanderer.launcher.AnimationSources;
 import me.vinceh121.wanderer.launcher.LauncherMain;
+import me.vinceh121.wanderer.launcher.data.AnimationSources;
 
 public class ExtractStep extends AbstractWizardStep {
 	private static final long serialVersionUID = 1L;
