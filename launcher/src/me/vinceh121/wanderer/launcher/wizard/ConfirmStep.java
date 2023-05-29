@@ -78,7 +78,7 @@ public class ConfirmStep extends AbstractWizardStep {
 
 		@Override
 		protected void done() {
-			if (ConfirmStep.this.isValid()) {
+			if (ConfirmStep.this.isValidSums()) {
 				ConfirmStep.this.lbl.setText("<html>Going to install assets from Project Nomads <b>"
 						+ ConfirmStep.this.voice.getJavaLocale().getDisplayLanguage() + "</b></html>");
 			} else {

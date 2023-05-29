@@ -1,0 +1,20 @@
+[
+	{
+		"outputPath": "char_john.n/skin",
+		"animationFile": "char_john.n/character.nax",
+		"meshFile": "char_john.n/skin.nvx",
+		"scriptFile": "char_john.n/_main.n"
+	},
+	{
+		"outputPath": "char_susie.n/skin",
+		"animationFile": "char_susie.n/character.nax",
+		"meshFile": "char_susie.n/skin.nvx",
+		"scriptFile": "char_susie.n/_main.n"
+	},
+	{
+		"outputPath": "char_goliath.n/skin",
+		"animationFile": "char_goliath.n/character.nax",
+		"meshFile": "char_goliath.n/skin.nvx",
+		"scriptFile": "char_goliath.n/_main.n"
+	}
+]
