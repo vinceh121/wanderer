@@ -65,6 +65,9 @@ public class ExtractStep extends AbstractWizardStep {
 	@Override
 	public void onSwitchTo() {
 		this.worker.execute();
+
+		this.ctx.setNextEnabled(false);
+		this.ctx.setPreviousEnabled(false);
 	}
 
 	@Override
@@ -136,6 +139,7 @@ public class ExtractStep extends AbstractWizardStep {
 			for (AnimationSources anim : anims) {
 				this.convertAnimation(anim);
 			}
+			this.publish("Done!");
 		}
 
 		private void convertAnimation(AnimationSources anim) throws IOException, ParseException {
@@ -171,6 +175,7 @@ public class ExtractStep extends AbstractWizardStep {
 						Files.newOutputStream(LauncherMain.getAssetsPath().resolve(anim.getOutputPath() + ".gltf")),
 						gen.getGltf());
 			}
+			this.incProcessedCount();
 		}
 
 		private void recurse(final File file) {
@@ -243,6 +248,11 @@ public class ExtractStep extends AbstractWizardStep {
 		}
 
 		@Override
+		protected void done() {
+			ExtractStep.this.ctx.setNextEnabled(true);
+		}
+
+		@Override
 		protected void process(final List<String> chunks) {
 			for (final String s : chunks) {
 				ExtractStep.this.textArea.append(s);
@@ -250,6 +260,8 @@ public class ExtractStep extends AbstractWizardStep {
 			}
 			ExtractStep.this.scroll.getVerticalScrollBar()
 				.setValue(ExtractStep.this.scroll.getVerticalScrollBar().getMaximum());
+
+			ExtractStep.this.ctx.setNextEnabled(false);
 		}
 	}
 }

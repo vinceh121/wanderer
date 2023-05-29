@@ -46,6 +46,7 @@ public class ConfirmStep extends AbstractWizardStep {
 	@Override
 	public void onSwitchTo() {
 		new SumCheck().execute();
+		this.ctx.setNextEnabled(false);
 	}
 
 	private boolean isValidSums() {
@@ -79,6 +80,7 @@ public class ConfirmStep extends AbstractWizardStep {
 		@Override
 		protected void done() {
 			if (ConfirmStep.this.isValidSums()) {
+				ConfirmStep.this.ctx.setNextEnabled(true);
 				ConfirmStep.this.lbl.setText("<html>Going to install assets from Project Nomads <b>"
 						+ ConfirmStep.this.voice.getJavaLocale().getDisplayLanguage() + "</b></html>");
 			} else {

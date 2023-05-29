@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.launcher.wizard;
 
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 import me.vinceh121.wanderer.launcher.DataNpkSum;
 import me.vinceh121.wanderer.launcher.VoiceLineSum;
@@ -9,6 +10,7 @@ public class FirstTimeWizardContext {
 	private Path dataPath;
 	private DataNpkSum data;
 	private VoiceLineSum voice;
+	private Consumer<Boolean> setPreviousEnabled, setNextEnabled;
 
 	public Path getDataPath() {
 		return this.dataPath;
@@ -32,5 +34,25 @@ public class FirstTimeWizardContext {
 
 	public void setVoice(final VoiceLineSum voice) {
 		this.voice = voice;
+	}
+
+	public void onSetPreviousEnabled(Consumer<Boolean> setPreviousEnabled) {
+		this.setPreviousEnabled = setPreviousEnabled;
+	}
+
+	public void setPreviousEnabled(boolean enabled) {
+		if (this.setPreviousEnabled != null) {
+			this.setPreviousEnabled.accept(enabled);
+		}
+	}
+
+	public void onSetNextEnabled(Consumer<Boolean> setNextEnabled) {
+		this.setNextEnabled = setNextEnabled;
+	}
+	
+	public void setNextEnabled(boolean enabled) {
+		if (this.setNextEnabled != null) {
+			this.setNextEnabled.accept(enabled);
+		}
 	}
 }

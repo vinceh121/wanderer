@@ -13,6 +13,7 @@ import me.vinceh121.wanderer.launcher.pntheme.PnDarkLaf;
 import me.vinceh121.wanderer.launcher.wizard.ConfirmStep;
 import me.vinceh121.wanderer.launcher.wizard.DataSelectStep;
 import me.vinceh121.wanderer.launcher.wizard.ExtractStep;
+import me.vinceh121.wanderer.launcher.wizard.FinishStep;
 import me.vinceh121.wanderer.launcher.wizard.FirstTimeWizard;
 import me.vinceh121.wanderer.launcher.wizard.FirstTimeWizardContext;
 import me.vinceh121.wanderer.launcher.wizard.WelcomeStep;
@@ -31,7 +32,11 @@ public class LauncherMain {
 		} else {
 			final FirstTimeWizardContext ctx = new FirstTimeWizardContext();
 			final FirstTimeWizard wiz = new FirstTimeWizard(ctx,
-					List.of(new WelcomeStep(ctx), new DataSelectStep(ctx), new ConfirmStep(ctx), new ExtractStep(ctx)));
+					List.of(new WelcomeStep(ctx),
+							new DataSelectStep(ctx),
+							new ConfirmStep(ctx),
+							new ExtractStep(ctx),
+							new FinishStep(ctx)));
 			wiz.setVisible(true);
 		}
 	}
