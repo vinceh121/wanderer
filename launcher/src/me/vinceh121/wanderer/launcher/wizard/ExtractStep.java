@@ -108,8 +108,8 @@ public class ExtractStep extends AbstractWizardStep {
 		}
 
 		private void doInBackground0() throws IOException, ParseException {
-			final File output = LauncherMain.getAssetsPath().toFile();
-			output.mkdir();
+			final File outputOrig = LauncherMain.getAssetsPath().resolve("orig").toFile();
+			outputOrig.mkdirs();
 
 			this.publish("Reading metadata...");
 			final List<AnimationSources> anims = MAPPER.readValue(
@@ -138,12 +138,12 @@ public class ExtractStep extends AbstractWizardStep {
 				this.countFilesRecurse(r.getTableOfContents());
 
 				final NnpkFileExtractor extract = new NnpkFileExtractor(npkIn);
-				extract.setOutput(output);
+				extract.setOutput(outputOrig);
 				extract.extractAllFiles(r.getTableOfContents());
 			}
 			this.publish("Extracted NPK.");
 			this.publish("Converting assets...");
-			this.recurse(output);
+			this.recurse(outputOrig);
 			this.publish("Converting animations...");
 			for (AnimationSources anim : anims) {
 				this.convertAnimation(anim);
