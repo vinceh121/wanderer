@@ -23,9 +23,10 @@ import me.vinceh121.wanderer.json.WandererJsonModule;
 import me.vinceh121.wanderer.platform.audio.AudioSystem3D;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.platform.audio.Sound3DLoader;
+import me.vinceh121.wanderer.util.AssetFileHandleResolver;
 
 public final class WandererConstants {
-	public static final AssetManager ASSET_MANAGER = new AssetManager();
+	public static final AssetManager ASSET_MANAGER = new AssetManager(new AssetFileHandleResolver());
 	public static final TextureParameter MIPMAPS = new TextureParameter();
 	public static final ObjectMapper MAPPER = new ObjectMapper(), SAVE_MAPPER;
 	public static final AudioSystem3D AUDIO = (AudioSystem3D) Gdx.audio;

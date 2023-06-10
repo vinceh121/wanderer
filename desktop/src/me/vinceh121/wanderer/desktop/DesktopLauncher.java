@@ -38,12 +38,7 @@ public class DesktopLauncher {
 				0,
 				Preferences.getPreferences().getIntOrElse("graphics.msaaSamples", 4));// all default except for 4× anti
 																						// aliasing
-		try {
-			new WandererDesktopApplication(new ApplicationMultiplexer(new StoryWanderer()), config);
-		} catch (Exception e) {
-			LOG.error("Uncaught braught back up to main!", e);
-			System.exit(-1);
-		}
+		new WandererDesktopApplication(new ApplicationMultiplexer(new StoryWanderer()), config);
 	}
 
 	private static Path getConfigPath() {

@@ -2,5 +2,8 @@ sourceCompatibility = 11
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.resources.srcDirs = ["resources/"]
 
 eclipse.project.name = appName + "-launcher"
+
+application.mainClass = "me.vinceh121.wanderer.launcher.LauncherMain"

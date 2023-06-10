@@ -45,7 +45,7 @@ project(":desktop") {
 
 
     dependencies {
-        implementation project(":core")
+        api project(":core")
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
@@ -60,7 +60,7 @@ project(":android") {
     configurations { natives }
 
     dependencies {
-        implementation project(":core")
+        api project(":core")
         api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
@@ -81,7 +81,7 @@ project(":tools") {
     apply plugin: "java-library"
 
     dependencies {
-        implementation project(":core")
+        api project(":core")
 
         api "info.picocli:picocli:4.7.1"
         api "me.vinceh121.wanderer:nebula2-assets-extractor:0.5.0-SNAPSHOT"
@@ -90,15 +90,17 @@ project(":tools") {
 
 project(":launcher") {
     apply plugin: "java-library"
+    apply plugin: "application"
 
     dependencies {
+        api project(":desktop")
+
         api "me.vinceh121.wanderer:nebula2-assets-extractor:0.5.0-SNAPSHOT"
     }
 }
 
 project(":core") {
     apply plugin: "java-library"
-
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"

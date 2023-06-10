@@ -12,6 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,6 +23,7 @@ import me.vinceh121.wanderer.launcher.data.VoiceLineSum;
 
 public class ConfirmStep extends AbstractWizardStep {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOG = LogManager.getLogger(ConfirmStep.class);
 	private static final char[] HEX_ARRAY = "0123456789abcdef".toCharArray();
 	private final JLabel lbl = new JLabel();
 	private DataNpkSum data;
@@ -54,15 +58,29 @@ public class ConfirmStep extends AbstractWizardStep {
 	}
 
 	private class SumCheck extends SwingWorker<Void, Void> {
+
 		@Override
 		protected Void doInBackground() throws Exception {
+			try {
+				this.doInBackground0();
+			} catch (Exception e) {
+				LOG.error("Error while checking localization", e);
+				JOptionPane.showMessageDialog(null, "Error while checking localization: " + e);
+			}
+			return null;
+		}
+
+		protected Void doInBackground0() throws Exception {
 			final ObjectMapper mapper = new ObjectMapper();
 			final Map<String, DataNpkSum> dataSums = mapper.readValue(
-					this.getClass().getClassLoader().getResourceAsStream("me/vinceh121/wanderer/launcher/dataSums.json"),
+					this.getClass()
+						.getClassLoader()
+						.getResourceAsStream("me/vinceh121/wanderer/launcher/dataSums.json"),
 					new TypeReference<Map<String, DataNpkSum>>() {
 					});
 			final Map<String, VoiceLineSum> voiceSums = mapper.readValue(
-					this.getClass().getClassLoader()
+					this.getClass()
+						.getClassLoader()
 						.getResourceAsStream("me/vinceh121/wanderer/launcher/c00p01spr01Sums.json"),
 					new TypeReference<Map<String, VoiceLineSum>>() {
 					});
