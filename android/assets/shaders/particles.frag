@@ -18,7 +18,7 @@ uniform sampler2D u_diffuseTexture;
 #ifdef blendedFlag
 varying float v_opacity;
 #ifdef alphaTestFlag
-varying float v_alphaTest;
+uniform float v_alphaTest;
 #endif //alphaTestFlag
 #endif //blendedFlag
 
