@@ -9,8 +9,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Map;
 
@@ -108,7 +111,9 @@ public class ExtractStep extends AbstractWizardStep {
 		}
 
 		private void doInBackground0() throws IOException, ParseException {
-			final File outputOrig = LauncherMain.getAssetsPath().resolve("orig").toFile();
+			final Path dataPath = ExtractStep.this.ctx.getDataPath();
+			final Path origPath = LauncherMain.getAssetsPath().resolve("orig");
+			final File outputOrig = origPath.toFile();
 			outputOrig.mkdirs();
 
 			this.publish("Reading metadata...");
@@ -130,8 +135,25 @@ public class ExtractStep extends AbstractWizardStep {
 					new TypeReference<Map<String, NOBClazz>>() {
 					});
 
+			this.publish("Copying feedback, voice lines, and music...");
+			Files.walkFileTree(dataPath.getParent().resolve("book"), new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(Path src, BasicFileAttributes attrs) throws IOException {
+					if (!src.getFileName().toString().endsWith(".wav")) {
+						return FileVisitResult.CONTINUE;
+					}
+					Path relPath = dataPath.getParent().relativize(src);
+					publish("Copying sound " + relPath);
+					Path dest = origPath.resolve(relPath);
+					Files.createDirectories(dest.getParent());
+					Files.copy(src, dest);
+					return FileVisitResult.CONTINUE;
+				}
+			});
+			// is this really necessary?
+			Files.move(origPath.resolve("book").resolve("feedback"), origPath.resolve("feedback"));
 			this.publish("Extracting NPK...");
-			try (InputStream npkIn = Files.newInputStream(ExtractStep.this.ctx.getDataPath())) {
+			try (InputStream npkIn = Files.newInputStream(dataPath)) {
 				final NnpkFileReader r = new NnpkFileReader(npkIn);
 				r.readAll();
 
