@@ -214,13 +214,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		this.subtitle = new Subtitle();
 		this.graphicsManager.getStage().addActor(this.subtitle);
-
-		try {
-			MetaRegistry.getInstance().loadDefaults();
-		} catch (final IOException e1) {
-			throw new RuntimeException(e1);
-		}
-
+	
 		///// GAMEPLAY
 
 		Random islandRng = new Random(69420L);
@@ -800,7 +794,6 @@ public class Wanderer extends ApplicationAdapter {
 		this.scriptManager.dispose();
 		this.graphicsManager.dispose();
 		this.physicsManager.dispose();
-		WandererConstants.ASSET_MANAGER.dispose();
 		if (this.consoleHandler != null) {
 			try {
 				this.consoleHandler.close();

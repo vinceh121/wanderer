@@ -36,7 +36,6 @@ public class ScriptManager {
 	private final ScriptableObject baseScope = new NativeObject();
 
 	public ScriptManager() {
-		ContextFactory.initGlobal(new WandererContextFactory());
 		this.ctx = Context.enter();
 		this.ctx.setLanguageVersion(Context.VERSION_ES6);
 	}
@@ -100,6 +99,7 @@ public class ScriptManager {
 	}
 
 	static {
+		ContextFactory.initGlobal(new WandererContextFactory());
 		PART_SCOPE_CLASSES.addAll(Arrays.asList(
 				// .story
 				StoryBook.class,

@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.core.exc.StreamReadException;
@@ -21,10 +24,17 @@ import me.vinceh121.wanderer.entity.PropMeta;
 import me.vinceh121.wanderer.guntower.MachineGunGuntowerMeta;
 
 public final class MetaRegistry {
+	private static final Logger LOG = LogManager.getLogger(MetaRegistry.class);
 	private static final MetaRegistry INSTANCE = new MetaRegistry();
 	private final Map<String, IMeta> metaMap = new HashMap<>();
 
 	private MetaRegistry() {
+		try {
+			this.loadDefaults();
+		} catch (final IOException e) {
+			LOG.error("Error while loading meta defaults", e);
+			throw new RuntimeException(e);
+		}
 	}
 
 	public <T extends IMeta> void readMetas(final FileHandle fh, final Class<T> clazz)
@@ -62,7 +72,7 @@ public final class MetaRegistry {
 	public <T extends IMeta> T get(final String key) {
 		return (T) this.metaMap.get(key);
 	}
-	
+
 	public String getReverse(final IMeta meta) {
 		for (Entry<String, IMeta> e : this.metaMap.entrySet()) {
 			if (e.getValue() == meta) {
