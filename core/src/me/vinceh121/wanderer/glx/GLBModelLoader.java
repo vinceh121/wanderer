@@ -5,11 +5,11 @@ import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.utils.Array;
 
+import me.vinceh121.wanderer.util.AssetFileHandleResolver;
 import net.mgsx.gltf.loaders.glb.GLBAssetLoader;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
@@ -20,7 +20,7 @@ public class GLBModelLoader extends AsynchronousAssetLoader<Model, AssetLoaderPa
 	private final GLBAssetLoader delegate;
 	
 	public GLBModelLoader() {
-		this(new InternalFileHandleResolver());
+		this(new AssetFileHandleResolver());
 	}
 
 	public GLBModelLoader(FileHandleResolver resolver) {
