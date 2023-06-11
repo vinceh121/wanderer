@@ -51,6 +51,7 @@ public class LauncherFrame extends JFrame {
 	}
 
 	public void start() {
+		this.setVisible(false);
 		new Thread(() -> {
 			this.started = true;
 			try {
@@ -60,6 +61,7 @@ public class LauncherFrame extends JFrame {
 				JOptionPane.showMessageDialog(null, "Unexpected error in Wanderer: " + t);
 			}
 			this.started = false;
+			this.setVisible(true);
 			LOG.info("Wanderer terminated");
 		}, "MainGameThread").start();
 	}
