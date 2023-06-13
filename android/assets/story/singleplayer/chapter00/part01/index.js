@@ -1,7 +1,7 @@
 
-const part = new Part("The Old Master Builder", [
-	"Find a backpack", // "Explore the island",
-	"Collect all lighthouses" // "Learn from the mighty Master Builder"
+const part = new Part(gettext("The Old Master Builder"), [
+	gettext("Find a backpack"), // "Explore the island",
+	gettext("Collect all lighthouses") // "Learn from the mighty Master Builder"
 ]);
 
 part.state.collectedBuildings = 0;
@@ -20,7 +20,7 @@ part.setPartStart(() => {
 			part.state.collectedBuildings++;
 			if (part.state.collectedBuildings == 3) {
 				part.addObjectiveCompleted(1);
-				console.log("Picked up lighthouses");
+				console.log("Picked up Lighthouses");
 			}
 		});
 	});

@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.guntower;
 
+import static me.vinceh121.wanderer.i18n.I18N.gettext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +71,11 @@ public class MachineGunGuntower extends AbstractGuntower {
 		if (this.fireTimeout < 0) {
 			this.fireTimeout = 0;
 		}
+	}
+
+	@Override
+	public String getName() {
+		return gettext("Gun tower");
 	}
 
 	@Override

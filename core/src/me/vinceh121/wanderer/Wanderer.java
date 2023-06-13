@@ -1,5 +1,7 @@
 package me.vinceh121.wanderer;
 
+import static me.vinceh121.wanderer.i18n.I18N.gettext;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -137,7 +139,7 @@ public class Wanderer extends ApplicationAdapter {
 				} else if (in == Input.QUICK_SAVE) {
 					try {
 						Wanderer.this.saveStateless(Gdx.files.local("quick.json"));
-						showMessage("Quick saved!");
+						showMessage(gettext("Quick saved!"));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -145,7 +147,7 @@ public class Wanderer extends ApplicationAdapter {
 				} else if (in == Input.QUICK_LOAD) {
 					try {
 						Wanderer.this.loadStateless(Gdx.files.local("quick.json"));
-						showMessage("Quick loaded!");
+						showMessage(gettext("Quick loaded!"));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -214,7 +216,7 @@ public class Wanderer extends ApplicationAdapter {
 
 		this.subtitle = new Subtitle();
 		this.graphicsManager.getStage().addActor(this.subtitle);
-	
+
 		///// GAMEPLAY
 
 		Random islandRng = new Random(69420L);
@@ -463,13 +465,13 @@ public class Wanderer extends ApplicationAdapter {
 			if (e instanceof IControllableEntity && e != this.controlledEntity) {
 				LOG.info("Controlling {}", e);
 				WandererConstants.ASSET_MANAGER.get("orig/feedback/taken_control.wav", Sound3D.class).playGeneral();
-				this.showMessage("Taking control...");
+				this.showMessage(gettext("Taking control..."));
 				Wanderer.this.controlEntity((IControllableEntity) e);
 				return;
 			}
 		}
 
-		this.showMessage("nothing to control");
+		this.showMessage(gettext("Nothing to control"));
 	}
 
 	public void saveStateless(FileHandle dest) throws IOException {
@@ -668,7 +670,7 @@ public class Wanderer extends ApplicationAdapter {
 			return;
 		}
 		this.interactingBuilding = building;
-		this.showMessage("Control " + building.getName());
+		this.showMessage(/* 0: name of the entity to control */gettext("Control {0}", building.getName()));
 		WandererConstants.ASSET_MANAGER.get("orig/feedback/use_ok.wav", Sound3D.class).playGeneral();
 	}
 

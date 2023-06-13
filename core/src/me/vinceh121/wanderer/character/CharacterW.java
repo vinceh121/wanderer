@@ -1,5 +1,7 @@
 package me.vinceh121.wanderer.character;
 
+import static me.vinceh121.wanderer.i18n.I18N.gettext;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -348,7 +350,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 	private void placeBuilding() {
 		if (this.getClan().getEnergy() < this.placing.getEnergyRequired()) {
-			this.game.showMessage("Not enough energy!");
+			this.game.showMessage(gettext("Not enough energy!"));
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class)
 				.playGeneral()
 				.setDisposeOnStop(true);
@@ -356,7 +358,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		}
 
 		if (this.previewBuilding.isBlocked()) {
-			this.game.showMessage("Slot blocked!");
+			this.game.showMessage(gettext("Slot blocked!"));
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound3D.class)
 				.playGeneral()
 				.setDisposeOnStop(true);
@@ -390,13 +392,13 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		}
 		final AbstractBuildingMeta build = (AbstractBuildingMeta) arti;
 		if (this.getClan().getEnergy() < build.getEnergyRequired()) {
-			this.game.showMessage("Not enough energy!");
+			this.game.showMessage(gettext("Not enough energy!"));
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class).playGeneral();
 			return;
 		}
 		final Array<Slot> free = this.attachedIsland.getFreeSlots(build.getSlotType());
 		if (free.size == 0) {
-			this.game.showMessage("No free slot!");
+			this.game.showMessage(gettext("No free slot!"));
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound3D.class).playGeneral();
 			return;
 		}

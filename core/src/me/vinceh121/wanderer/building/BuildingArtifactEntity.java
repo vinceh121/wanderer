@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.building;
 
+import static me.vinceh121.wanderer.i18n.I18N.gettext;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.artifact.AbstractArtifactEntity;
@@ -24,7 +25,7 @@ public class BuildingArtifactEntity extends AbstractArtifactEntity {
 			return true;
 		} else {
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/beltfull.wav", Sound3D.class).playGeneral();
-			game.showMessage("Belt full!");
+			game.showMessage(gettext("Belt full!"));
 			return false;
 		}
 	}

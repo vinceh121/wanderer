@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.building;
 
+import static me.vinceh121.wanderer.i18n.I18N.gettext;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.combat.DamageType;
 
@@ -16,6 +17,6 @@ public class Lighthouse extends AbstractBuilding {
 
 	@Override
 	public String getName() {
-		return "Lighthouse";
+		return gettext("Lighthouse");
 	}
 }
