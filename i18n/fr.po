@@ -9,14 +9,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-13 22:08+0200\n"
-"PO-Revision-Date: 2023-06-13 23:03+0200\n"
-"Last-Translator: Vincent <contact@vinceh121.me>\n"
-"Language-Team: French <traduc@traduc.org>\n"
+"PO-Revision-Date: 2023-06-14 16:48+0000\n"
+"Last-Translator: vinceh121 <contact@vinceh121.me>\n"
+"Language-Team: French <http://weblate.vinceh121.me/projects/wanderer/game/fr/"
+">\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.8.1\n"
 
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
 msgid "Belt full!"
@@ -24,36 +26,36 @@ msgstr "Ceinture pleine !"
 
 #: core/src/me/vinceh121/wanderer/building/Lighthouse.java:20
 msgid "Lighthouse"
-msgstr ""
+msgstr "Phare"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
 msgid "Not enough energy!"
-msgstr ""
+msgstr "Pas assez d'énergie !"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
 msgid "Slot blocked!"
-msgstr ""
+msgstr "Emplacement bloqué !"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
 msgid "No free slot!"
-msgstr ""
+msgstr "Pas d'emplacement libre !"
 
 #: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:78
 msgid "Gun tower"
-msgstr ""
+msgstr "Tourelle"
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:142
 msgid "Quick saved!"
-msgstr ""
+msgstr "Sauvegarde rapide terminée !"
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:150
 msgid "Quick loaded!"
-msgstr ""
+msgstr "Sauvegarde rapide chargée !"
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:468
 msgid "Taking control..."
-msgstr ""
+msgstr "Prise de contrôle..."
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:474
 msgid "Nothing to control"
@@ -73,10 +75,10 @@ msgstr ""
 #: android/assets/story/singleplayer/chapter00/part01/index.js:3
 #: desktop/bin/main/story/singleplayer/chapter00/part01/index.js:3
 msgid "Find a backpack"
-msgstr ""
+msgstr "Trouver un sac à dos"
 
 #. "Explore the island",
 #: android/assets/story/singleplayer/chapter00/part01/index.js:4
 #: desktop/bin/main/story/singleplayer/chapter00/part01/index.js:4
 msgid "Collect all lighthouses"
-msgstr ""
+msgstr "Obtenir tous les phares"
