@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-13 22:08+0200\n"
-"PO-Revision-Date: 2023-06-14 16:48+0000\n"
+"PO-Revision-Date: 2023-06-17 10:47+0000\n"
 "Last-Translator: vinceh121 <contact@vinceh121.me>\n"
 "Language-Team: French <http://weblate.vinceh121.me/projects/wanderer/game/fr/"
 ">\n"
@@ -59,18 +59,18 @@ msgstr "Prise de contrôle..."
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:474
 msgid "Nothing to control"
-msgstr ""
+msgstr "Rien à contrôler"
 
 #. 0: name of the entity to control
 #: core/src/me/vinceh121/wanderer/Wanderer.java:673
 #, java-format
 msgid "Control {0}"
-msgstr ""
+msgstr "Contrôler {0}"
 
 #: android/assets/story/singleplayer/chapter00/part01/index.js:2
 #: desktop/bin/main/story/singleplayer/chapter00/part01/index.js:2
 msgid "The Old Master Builder"
-msgstr ""
+msgstr "Le vieux Maître Bâtisseur"
 
 #: android/assets/story/singleplayer/chapter00/part01/index.js:3
 #: desktop/bin/main/story/singleplayer/chapter00/part01/index.js:3
