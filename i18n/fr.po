@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-13 22:08+0200\n"
-"PO-Revision-Date: 2023-06-17 10:47+0000\n"
+"PO-Revision-Date: 2023-06-18 10:20+0000\n"
 "Last-Translator: vinceh121 <contact@vinceh121.me>\n"
 "Language-Team: French <http://weblate.vinceh121.me/projects/wanderer/game/fr/"
 ">\n"
@@ -70,7 +70,7 @@ msgstr "Contrôler {0}"
 #: android/assets/story/singleplayer/chapter00/part01/index.js:2
 #: desktop/bin/main/story/singleplayer/chapter00/part01/index.js:2
 msgid "The Old Master Builder"
-msgstr "Le vieux Maître Bâtisseur"
+msgstr "L'ancien Maître Bâtisseur"
 
 #: android/assets/story/singleplayer/chapter00/part01/index.js:3
 #: desktop/bin/main/story/singleplayer/chapter00/part01/index.js:3
