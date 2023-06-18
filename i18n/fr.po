@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 13:58+0200\n"
-"PO-Revision-Date: 2023-06-17 10:47+0000\n"
+"POT-Creation-Date: 2023-06-13 22:08+0200\n"
+"PO-Revision-Date: 2023-06-18 10:20+0000\n"
 "Last-Translator: vinceh121 <contact@vinceh121.me>\n"
 "Language-Team: French <http://weblate.vinceh121.me/projects/wanderer/game/fr/"
 ">\n"
@@ -62,6 +62,10 @@ msgstr "Contrôler {0}"
 #: core/src/me/vinceh121/wanderer/building/Lighthouse.java:20
 msgid "Lighthouse"
 msgstr "Phare"
+
+#: android/assets/story/singleplayer/chapter00/part01/index.js:2
+msgid "The Old Master Builder"
+msgstr "L'ancien Maître Bâtisseur"
 
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
 msgid "Belt full!"
@@ -146,11 +150,3 @@ msgstr ""
 msgid "crashed into the rocks of a lonely island..."
 msgstr ""
 
-#~ msgid "The Old Master Builder"
-#~ msgstr "Le vieux Maître Bâtisseur"
-
-#~ msgid "Find a backpack"
-#~ msgstr "Trouver un sac à dos"
-
-#~ msgid "Collect all lighthouses"
-#~ msgstr "Obtenir tous les phares"
