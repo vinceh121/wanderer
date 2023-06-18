@@ -79,3 +79,82 @@ msgstr ""
 #: desktop/bin/main/story/singleplayer/chapter00/part01/index.js:4
 msgid "Collect all lighthouses"
 msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid ""
+"In the chaos of war, the world was split asunder and the sancient "
+"civilization of the master builders came to an end."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "Today, long after the catastrophe, the old world is but a legend."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "Those few who survived settled on the drifting ruins of the planet..."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "...that wander slowly through the endless sea of clouds."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "They are nomads, restless adventurers seeking their fate..."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "They came from the Grey Market.Three friends, nomads, adventurers."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid ""
+"Susie, Goliath and John - They were far and away the best when it came to "
+"difficult missions."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "The old cutthroat Trevayne had told them .."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "...Of a mysterious island in the territory of the Sentinels"
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid ""
+"Heavily guarded and extremely dangerous.However, rich rewards beckoned..."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "..a cache of master builders' artifacts!"
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid ""
+"With this the three adventurers would be comfortable for the rest of their "
+"days."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "..although Trevayne would of course take his usual cut of the haul."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid ""
+"All went according to plan, until suddenly a wing of fighters emerged from "
+"the clouds ..."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid ""
+"They didn't stand a chance. Two of the friends were captured immediately by "
+"the Sentinels."
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "One was left for dead when his aircraft, followed by the fighter wing"
+msgstr ""
+
+#: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
+msgid "crashed into the rocks of a lonely island..."
+msgstr ""

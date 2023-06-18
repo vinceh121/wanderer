@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.desktop;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 import org.apache.commons.lang3.SystemUtils;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import me.vinceh121.wanderer.ApplicationMultiplexer;
 import me.vinceh121.wanderer.Preferences;
 import me.vinceh121.wanderer.StoryWanderer;
+import me.vinceh121.wanderer.i18n.I18N;
 
 public class DesktopLauncher {
 	private static final Logger LOG = LogManager.getLogger(DesktopLauncher.class);
@@ -25,6 +27,12 @@ public class DesktopLauncher {
 			Preferences.loadPreferences(configPath);
 		}
 		final boolean debug = Preferences.getPreferences().getOrElse("debug", false);
+
+		try {
+			I18N.load(Preferences.getPreferences().getOrElse("locale.ui", "en_UK"));
+		} catch (final IOException e) {
+			LOG.error("Failed to load UI locale", e);
+		}
 
 		final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		Configuration.DEBUG.set(debug);

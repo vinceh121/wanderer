@@ -24,6 +24,7 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.script.FileHandleModuleSourceProvider;
 import me.vinceh121.wanderer.script.JsAudio;
 import me.vinceh121.wanderer.script.JsConsole;
+import me.vinceh121.wanderer.script.JsI18N;
 import me.vinceh121.wanderer.script.JsTimers;
 import me.vinceh121.wanderer.script.WandererContextFactory;
 import me.vinceh121.wanderer.story.Chapter;
@@ -92,6 +93,7 @@ public class ScriptManager {
 		// Use a global JsTimers to avoid id-collision as much as possible
 		JsTimers.getInstance().install(scope);
 		JsAudio.install(scope);
+		JsI18N.install(scope);
 
 		for (final Class<?> cls : PART_SCOPE_CLASSES) {
 			scope.put(cls.getSimpleName(), scope, new NativeJavaClass(scope, cls));
