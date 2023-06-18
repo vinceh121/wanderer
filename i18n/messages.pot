@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-13 22:08+0200\n"
+"POT-Creation-Date: 2023-06-18 13:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,14 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
-msgid "Belt full!"
-msgstr ""
-
-#: core/src/me/vinceh121/wanderer/building/Lighthouse.java:20
-msgid "Lighthouse"
-msgstr ""
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
@@ -64,20 +56,12 @@ msgstr ""
 msgid "Control {0}"
 msgstr ""
 
-#: android/assets/story/singleplayer/chapter00/part01/index.js:2
-#: desktop/bin/main/story/singleplayer/chapter00/part01/index.js:2
-msgid "The Old Master Builder"
+#: core/src/me/vinceh121/wanderer/building/Lighthouse.java:20
+msgid "Lighthouse"
 msgstr ""
 
-#: android/assets/story/singleplayer/chapter00/part01/index.js:3
-#: desktop/bin/main/story/singleplayer/chapter00/part01/index.js:3
-msgid "Find a backpack"
-msgstr ""
-
-#. "Explore the island",
-#: android/assets/story/singleplayer/chapter00/part01/index.js:4
-#: desktop/bin/main/story/singleplayer/chapter00/part01/index.js:4
-msgid "Collect all lighthouses"
+#: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
+msgid "Belt full!"
 msgstr ""
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
