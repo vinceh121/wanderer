@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-13 22:08+0200\n"
-"PO-Revision-Date: 2023-06-18 10:20+0000\n"
+"PO-Revision-Date: 2023-06-20 12:47+0000\n"
 "Last-Translator: vinceh121 <contact@vinceh121.me>\n"
-"Language-Team: French <http://weblate.vinceh121.me/projects/wanderer/game/fr/"
-">\n"
+"Language-Team: French <https://weblate.vinceh121.me/projects/wanderer/game/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
 msgid "Not enough energy!"
-msgstr "Pas assez d'énergie !"
+msgstr "Pas assez d''énergie !"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
 msgid "Slot blocked!"
@@ -31,7 +31,7 @@ msgstr "Emplacement bloqué !"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
 msgid "No free slot!"
-msgstr "Pas d'emplacement libre !"
+msgstr "Pas d''emplacement libre !"
 
 #: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:78
 msgid "Gun tower"
@@ -65,7 +65,7 @@ msgstr "Phare"
 
 #: android/assets/story/singleplayer/chapter00/part01/index.js:2
 msgid "The Old Master Builder"
-msgstr "L'ancien Maître Bâtisseur"
+msgstr "L''ancien Maître Bâtisseur"
 
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
 msgid "Belt full!"
@@ -76,77 +76,93 @@ msgid ""
 "In the chaos of war, the world was split asunder and the sancient "
 "civilization of the master builders came to an end."
 msgstr ""
+"Le chaos de la guerre fit éclater le monde en morceaux et ce fut la fin de "
+"la civilisation des Maîtres Bâtisseurs."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "Today, long after the catastrophe, the old world is but a legend."
-msgstr ""
+msgstr "Aujourd'hui, seule subsiste la légende d'un monde qui fut brisé."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "Those few who survived settled on the drifting ruins of the planet..."
 msgstr ""
+"Les rares survivants s''établirent sur les ruines flottantes de la planète..."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "...that wander slowly through the endless sea of clouds."
-msgstr ""
+msgstr "... qui errent lentement dans une mer de nuages sans fin."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "They are nomads, restless adventurers seeking their fate..."
 msgstr ""
+"Ils sont nomades, aventuriers agitant sans relâche leurs rêves éthérés..."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "They came from the Grey Market.Three friends, nomads, adventurers."
 msgstr ""
+"Ils vinrent du Bazar Nébuleux. Trois amis, des nomades, des aventuriers."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid ""
 "Susie, Goliath and John - They were far and away the best when it came to "
 "difficult missions."
 msgstr ""
+"Susie, Goliath et John. Les meilleurs d''entre les meilleurs, toujours "
+"volontaires pour les missions les plus difficiles."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "The old cutthroat Trevayne had told them .."
-msgstr ""
+msgstr "Ce vieux coupe-jarret de Trevayne leur avait parlé..."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "...Of a mysterious island in the territory of the Sentinels"
-msgstr ""
+msgstr "... d''une île mystérieuse dans le territoire des Sentinelles."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid ""
 "Heavily guarded and extremely dangerous.However, rich rewards beckoned..."
 msgstr ""
+"Une île férocement défendue où beaucoup avaient laissé la vie. Mais elle "
+"abritait..."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "..a cache of master builders' artifacts!"
-msgstr ""
+msgstr "... une cache d''artefacts des Maîtres Bâtisseurs !"
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid ""
 "With this the three adventurers would be comfortable for the rest of their "
 "days."
 msgstr ""
+"Qu'ils s'en emparent et les trois amis seraient à l'abri du besoin jusqu'à "
+"la fin de leurs jours..."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "..although Trevayne would of course take his usual cut of the haul."
-msgstr ""
+msgstr "... même une fois décomptée la commission habituelle de Trevayne."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid ""
 "All went according to plan, until suddenly a wing of fighters emerged from "
 "the clouds ..."
 msgstr ""
+"Tout se déroulait selon leur plan lorsqu''une escadrille de chasseurs "
+"hostiles fendit les nuages..."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid ""
 "They didn't stand a chance. Two of the friends were captured immediately by "
 "the Sentinels."
 msgstr ""
+"Ils n'avaient aucune chance ! Deux d'entre eux furent rapidement capturés "
+"par les Sentinelles."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "One was left for dead when his aircraft, followed by the fighter wing"
 msgstr ""
+"Le dernier fut laissé pour mort lorsque son Aéroplane pourchassé par les "
+"chasseurs"
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "crashed into the rocks of a lonely island..."
-msgstr ""
-
+msgstr "s'écrasa sur les rochers d'un îlot désert..."
