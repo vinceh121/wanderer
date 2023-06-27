@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 13:58+0200\n"
+"POT-Creation-Date: 2023-06-27 22:41+0200\n"
 "PO-Revision-Date: 2023-06-13 22:09+0200\n"
 "Last-Translator: Vincent <contact@vinceh121.me>\n"
 "Language-Team: English\n"
@@ -16,23 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
-msgid "Not enough energy!"
-msgstr "Not enough energy!"
-
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
-msgid "Slot blocked!"
-msgstr "Slot blocked!"
-
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
-msgid "No free slot!"
-msgstr "No free slot!"
-
-#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:78
-msgid "Gun tower"
-msgstr "Gun tower"
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:142
 msgid "Quick saved!"
@@ -56,13 +39,43 @@ msgstr "Nothing to control"
 msgid "Control {0}"
 msgstr "Control {0}"
 
-#: core/src/me/vinceh121/wanderer/building/Lighthouse.java:20
-msgid "Lighthouse"
-msgstr "Lighthouse"
-
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
 msgid "Belt full!"
 msgstr "Belt full!"
+
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
+msgid "Not enough energy!"
+msgstr "Not enough energy!"
+
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
+msgid "Slot blocked!"
+msgstr "Slot blocked!"
+
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
+msgid "No free slot!"
+msgstr "No free slot!"
+
+#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:78
+msgid "Gun tower"
+msgstr "Gun tower"
+
+#: android/assets/story/singleplayer/chapter00/part01/index.js:2
+msgid "The Old Master Builder"
+msgstr "The Old Master Builder"
+
+#: android/assets/story/singleplayer/chapter00/part01/index.js:3
+msgid "Find a backpack"
+msgstr "Find a backpack"
+
+#. "Explore the island",
+#: android/assets/story/singleplayer/chapter00/part01/index.js:4
+msgid "Collect all lighthouses"
+msgstr "Collect all lighthouses"
+
+#: core/src/me/vinceh121/wanderer/building/Lighthouse.java:20
+msgid "Lighthouse"
+msgstr "Lighthouse"
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid ""
@@ -142,12 +155,3 @@ msgstr ""
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "crashed into the rocks of a lonely island..."
 msgstr ""
-
-#~ msgid "The Old Master Builder"
-#~ msgstr "The Old Master Builder"
-
-#~ msgid "Find a backpack"
-#~ msgstr "Find a backpack"
-
-#~ msgid "Collect all lighthouses"
-#~ msgstr "Collect all lighthouses"

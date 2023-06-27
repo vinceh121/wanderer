@@ -1,6 +1,99 @@
-buildscript {
-    
+import groovy.json.JsonSlurper
+import java.nio.file.Paths
 
+abstract class XGettextTask extends DefaultTask {
+    @TaskAction
+    void execute() {
+        def srcSearchPaths = ["android/assets", "android/src", "launcher/src", "desktop/src", "tools/src", "core/src"]
+        def gettextFiles = new HashSet<String>()
+        for ( path in srcSearchPaths ) {
+            project.fileTree path include "**/*.java", "**/*.js" visit { if (!it.directory) gettextFiles.add project.projectDir.getAbsoluteFile().toPath().relativize(it.file.getAbsoluteFile().toPath()); }
+        }
+
+        project.exec {
+            commandLine "xgettext --from-code=UTF-8 --add-comments -o i18n/messages.pot ${gettextFiles.join " "}".split(" ")
+        }
+    }
+}
+def xgettext = tasks.register("xgettext", XGettextTask)
+
+abstract class CinXGettextTask extends DefaultTask {
+    String stringBlock(str) {
+        def block = ""
+        def parts = str.split "\n"
+        
+        for ( int i = 0; i < parts.length; i++ ) {
+            block += '"'
+            block += parts[i]
+            block += '"'
+
+            if (i != parts.length - 1) {
+                block += "\n"
+            }
+        }
+        return block
+    }
+
+    @TaskAction
+    void execute() {
+        def srcSearchPaths = ["android/assets"]
+        def jsonSlurper = new JsonSlurper()
+        def cinFiles = new HashSet<FileTreeElement>()
+        for ( path in srcSearchPaths ) {
+            project.fileTree path include "**/cin*.json" visit { if (!it.directory) cinFiles.add it }
+        }
+        def po = new PrintWriter(new FileOutputStream(project.file("i18n/messages.pot"), true))
+        po.println()
+
+        for ( file in cinFiles ) {
+            def cin = jsonSlurper.parse file.file
+            for ( track in cin ) {
+                if ( !track.actions || !track.actions.keys ) {
+                    continue
+                }
+
+                for ( action in track.actions.keys ) {
+                    if ( !action.text || action["@class"] != "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame" ) {
+                        continue
+                    }
+
+                    po.print "#: "
+                    po.println project.projectDir.getAbsoluteFile().toPath().relativize(file.file.getAbsoluteFile().toPath())
+                    po.print "msgid "
+                    po.println this.stringBlock(action.text)
+                    po.println 'msgstr ""\n'
+                }
+            }
+        }
+        po.flush()
+    }
+}
+def cinxgettext = tasks.register("cinxgettext", CinXGettextTask)
+cinxgettext.configure { dependsOn(xgettext) }
+
+abstract class MsguniqTask extends DefaultTask {
+    @TaskAction
+    void execute() {
+        project.exec { commandLine "msguniq -o i18n/messages.pot i18n/messages.pot".split(" ") }
+    }
+}
+def msguniq = tasks.register("msguniq", MsguniqTask)
+
+abstract class MsgmergeTask extends DefaultTask {
+    @TaskAction
+    void execute() {
+        def transFiles = new HashSet<FileTreeElement>()
+        project.fileTree "./i18n/" include "*.po" visit { if (!it.directory) transFiles.add it }
+        for ( trans in transFiles ) {
+            project.exec { commandLine "msgmerge -U --previous i18n/${trans.name} i18n/messages.pot".split(" ") }
+        }
+    }
+}
+def msgmerge = tasks.register("msgmerge", MsgmergeTask)
+
+tasks.register("i18n") { dependsOn(xgettext, cinxgettext, msguniq, msgmerge) };
+
+buildscript {
     repositories {
         mavenLocal()
         mavenCentral()

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-13 22:08+0200\n"
+"POT-Creation-Date: 2023-06-27 22:41+0200\n"
 "PO-Revision-Date: 2023-06-18 10:20+0000\n"
 "Last-Translator: vinceh121 <contact@vinceh121.me>\n"
 "Language-Team: French <http://weblate.vinceh121.me/projects/wanderer/game/fr/"
@@ -19,23 +19,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 4.8.1\n"
-
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
-msgid "Not enough energy!"
-msgstr "Pas assez d'énergie !"
-
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
-msgid "Slot blocked!"
-msgstr "Emplacement bloqué !"
-
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
-msgid "No free slot!"
-msgstr "Pas d'emplacement libre !"
-
-#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:78
-msgid "Gun tower"
-msgstr "Tourelle"
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:142
 msgid "Quick saved!"
@@ -59,17 +42,43 @@ msgstr "Rien à contrôler"
 msgid "Control {0}"
 msgstr "Contrôler {0}"
 
-#: core/src/me/vinceh121/wanderer/building/Lighthouse.java:20
-msgid "Lighthouse"
-msgstr "Phare"
+#: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
+msgid "Belt full!"
+msgstr "Ceinture pleine !"
+
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
+msgid "Not enough energy!"
+msgstr "Pas assez d'énergie !"
+
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
+msgid "Slot blocked!"
+msgstr "Emplacement bloqué !"
+
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
+msgid "No free slot!"
+msgstr "Pas d'emplacement libre !"
+
+#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:78
+msgid "Gun tower"
+msgstr "Tourelle"
 
 #: android/assets/story/singleplayer/chapter00/part01/index.js:2
 msgid "The Old Master Builder"
 msgstr "L'ancien Maître Bâtisseur"
 
-#: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
-msgid "Belt full!"
-msgstr "Ceinture pleine !"
+#: android/assets/story/singleplayer/chapter00/part01/index.js:3
+msgid "Find a backpack"
+msgstr ""
+
+#. "Explore the island",
+#: android/assets/story/singleplayer/chapter00/part01/index.js:4
+msgid "Collect all lighthouses"
+msgstr ""
+
+#: core/src/me/vinceh121/wanderer/building/Lighthouse.java:20
+msgid "Lighthouse"
+msgstr "Phare"
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid ""
@@ -149,4 +158,3 @@ msgstr ""
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "crashed into the rocks of a lonely island..."
 msgstr ""
-
