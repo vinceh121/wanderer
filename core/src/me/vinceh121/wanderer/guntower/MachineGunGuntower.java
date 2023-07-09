@@ -4,11 +4,14 @@ import static me.vinceh121.wanderer.i18n.I18N.gettext;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ClosestNotMeRayResultCallback;
 import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.combat.BulletEntity;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.ILivingEntity;
 import me.vinceh121.wanderer.math.Segment3;
@@ -60,6 +63,27 @@ public class MachineGunGuntower extends AbstractGuntower {
 				((ILivingEntity) e).damage(turret.getDamage(), turret.getType());
 			}
 		}
+
+		Vector3 hitPoint = new Vector3();
+		cb.getHitPointWorld(hitPoint);
+
+		BulletEntity bullet = new BulletEntity(this.game);
+		bullet.setTranslation(seg.getStart());
+		Vector3 direction = seg.getEnd().cpy().sub(seg.getStart()).nor();
+		bullet.rotate(new Quaternion().setFromCross(direction, Vector3.Z).conjugate());
+		bullet.setDirection(direction);
+		bullet.setHasHit(cb.hasHit());
+
+		if (bullet.isHasHit()) {
+			bullet.setDistance(seg.getStart()
+				.cpy()
+				.interpolate(seg.getEnd(), cb.getClosestHitFraction(), Interpolation.linear)
+				.dst(seg.getStart()));
+		} else {
+			bullet.setDistance(seg.length());
+		}
+
+		this.game.addEntity(bullet);
 
 		cb.dispose();
 	}
