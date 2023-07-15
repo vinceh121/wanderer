@@ -28,6 +28,7 @@ import me.vinceh121.wanderer.ID;
 import me.vinceh121.wanderer.ISaveable;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.event.Event;
 import me.vinceh121.wanderer.event.EventDispatcher;
 import me.vinceh121.wanderer.event.IEventListener;
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
@@ -61,7 +62,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 			colTransform.getTranslation(colTranslation);
 			colTranslation.sub(this.collideObjectOffset);
 			colTransform.setTranslation(colTranslation);
-			this.transform.set(colTransform);
+			this.setTransform(colTransform);
 		} else if (this.collideModel != null && this.collideObject == null) {
 			// else, try to load it the collision model if present and we don't already have
 			// a collision defined
@@ -81,6 +82,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		}
 		this.getCollideObject().setUserIndex(this.getId().getValue());
 		this.updateTransform();
+		this.eventDispatcher.dispatchEvent(new Event("collideModelLoaded"));
 	}
 
 	private void loadCollideModelMesh() {
@@ -212,6 +214,17 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 			this.game.getBtWorld().removeRigidBody(this.collideObject);
 			this.game.getBtWorld().addRigidBody(collideObject, collisionGroup, collisionMask);
 		}
+	}
+
+	public void removeCollideObject() {
+		this.game.getBtWorld().removeRigidBody(this.collideObject);
+		this.collideObject = null;
+	}
+	
+	public void disposeCollideObject() {
+		this.game.getBtWorld().removeRigidBody(this.collideObject);
+		this.collideObject.dispose();
+		this.collideObject = null;
 	}
 
 	public float getMass() {
@@ -504,6 +517,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 			this.game.getGraphicsManager().removeParticle(e);
 			e.dispose();
 		}
+		this.leaveBtWorld(this.game.getBtWorld());
 		if (this.collideObject != null) {
 			Gdx.app.postRunnable(() -> this.collideObject.dispose());
 		}

@@ -8,6 +8,7 @@ import me.vinceh121.wanderer.entity.DisplayModel;
 
 public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	private Array<DisplayModel> displayModels = new Array<>();
+	private Array<DisplayModel> explosionParts = new Array<>();
 	private String collisionModel;
 	private int energyRequired, buildTime;
 	private boolean red;
@@ -31,6 +32,14 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 
 	public void setDisplayModels(final Array<DisplayModel> displayModels) {
 		this.displayModels = displayModels;
+	}
+
+	public Array<DisplayModel> getExplosionParts() {
+		return this.explosionParts;
+	}
+
+	public void setExplosionParts(final Array<DisplayModel> explosionParts) {
+		this.explosionParts = explosionParts;
 	}
 
 	public void addModel(final DisplayModel value) {

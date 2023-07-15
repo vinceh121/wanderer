@@ -38,6 +38,170 @@
 		],
 		"energyRequired": 5,
 		"collisionModel": "orig/j_guntower01.n/collide.obj",
+		"explosionParts": [
+			{
+				"displayModel": "orig/j_guntower01.n/debris01.obj",
+				"displayTexture": "orig/j_guntower01.n/texturealpha.ktx",
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						19.0,
+						6.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				}
+			},
+			{
+				"displayModel": "orig/j_guntower01.n/debris02.obj",
+				"displayTexture": "orig/j_guntower01.n/texturealpha.ktx",
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						28.0,
+						6.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				}
+			},
+			{
+				"displayModel": "orig/j_guntower01.n/debris03.obj",
+				"displayTexture": "orig/j_guntower01.n/texturealpha.ktx",
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						6.0,
+						1.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				}
+			},
+			{
+				"displayModel": "orig/j_guntower01.n/debris04.obj",
+				"displayTexture": "orig/j_guntower01.n/texturealpha.ktx",
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						2.6,
+						-5.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				}
+			},
+			{
+				"displayModel": "orig/j_guntower01.n/debris05.obj",
+				"displayTexture": "orig/j_guntower01.n/texturealpha.ktx",
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						6.0,
+						3.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				}
+			},
+			{
+				"displayModel": "orig/j_guntower01.n/debris06.obj",
+				"displayTexture": "orig/j_guntower01.n/texturealpha.ktx",
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						29.0,
+						-6.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				}
+			},
+			{
+				"displayModel": "orig/j_guntower01.n/debris07.obj",
+				"displayTexture": "orig/j_guntower01.n/texturealpha.ktx",
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						29.0,
+						0.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				}
+			},
+			{
+				"displayModel": "orig/j_guntower01.n/debris08.obj",
+				"displayTexture": "orig/j_guntower01.n/texturealpha.ktx"
+			},
+			{
+				"displayModel": "orig/j_guntower01.n/debris09.obj",
+				"displayTexture": "orig/j_guntower01.n/texturealpha.ktx"
+			}
+		],
 		"displayModels": [
 			{
 				"displayModel": "orig/j_guntower01.n/base.obj",

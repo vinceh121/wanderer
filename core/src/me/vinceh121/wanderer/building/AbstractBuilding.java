@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
 import com.badlogic.gdx.physics.bullet.collision.btGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
+import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -23,6 +24,7 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 	private final btGhostObject interactZone;
 	private final IContactListener interactListener;
 	private final AbstractBuildingMeta meta;
+	private final Array<DisplayModel> explosionParts = new Array<>();
 	private String name;
 	private Island island;
 	private Slot slot;
@@ -34,6 +36,10 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 		this.setCollideModel(meta.getCollisionModel());
 		for (final DisplayModel m : meta.getDisplayModels()) {
 			this.getModels().add(new DisplayModel(m)); // need to clone display models
+		}
+
+		for (final DisplayModel m : meta.getExplosionParts()) {
+			this.explosionParts.add(new DisplayModel(m));
 		}
 
 		this.interactZone = new btGhostObject();
@@ -86,6 +92,19 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 		}
 	}
 
+	@Override
+	public void onDeath() {
+		this.game.removeEntity(this);
+		this.dispose();
+
+		for (DisplayModel m : this.explosionParts) {
+			ExplosionPart part = new ExplosionPart(game, m);
+			part.translate(this.getTranslation());
+			part.addEventListener("collideModelLoaded", e -> part.thrust(5));
+			this.game.addEntity(part);
+		}
+	}
+
 	public String getName() {
 		return this.name;
 	}
@@ -134,11 +153,6 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 	@JsonIgnore
 	public IContactListener getInteractListener() {
 		return this.interactListener;
-	}
-
-	@Override
-	public void onDeath() {
-		// TODO explode
 	}
 
 	@Override

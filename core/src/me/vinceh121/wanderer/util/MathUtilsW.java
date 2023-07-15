@@ -7,13 +7,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public final class MathUtilsW {
+	public static Vector3 randomDirectionAround(Vector3 orig, float maxDeviation) {
+		Vector3 deviation = new Vector3();
+		deviation.setFromSpherical(MathUtils.random(MathUtils.PI2), MathUtils.random(MathUtils.PI));
+		deviation.slerp(deviation, 1 - maxDeviation);
+		return deviation;
+	}
+
 	public static Vector3 average(Iterable<Vector3> vecs) {
 		int count = 0;
 		Vector3 res = new Vector3();
+
 		for (Vector3 v : vecs) {
 			res.add(v);
 			count++;
 		}
+
 		res.x /= count;
 		res.y /= count;
 		res.z /= count;
