@@ -81,6 +81,11 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 			this.loadCollideModelConvex();
 		}
 		this.getCollideObject().setUserIndex(this.getId().getValue());
+
+		final Vector3 inertia = new Vector3();
+		this.getCollideObject().getCollisionShape().calculateLocalInertia(this.getMass(), inertia);
+		this.getCollideObject().setMassProps(this.getMass(), inertia);
+
 		this.updateTransform();
 		this.eventDispatcher.dispatchEvent(new Event("collideModelLoaded"));
 	}
@@ -209,18 +214,18 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	 * @param collideObject
 	 */
 	public void setCollideObject(final btRigidBody collideObject, final int collisionGroup, final int collisionMask) {
-		this.collideObject = collideObject;
 		if (this.collideObject != null) {
 			this.game.getBtWorld().removeRigidBody(this.collideObject);
-			this.game.getBtWorld().addRigidBody(collideObject, collisionGroup, collisionMask);
 		}
+		this.game.getBtWorld().addRigidBody(collideObject, collisionGroup, collisionMask);
+		this.collideObject = collideObject;
 	}
 
 	public void removeCollideObject() {
 		this.game.getBtWorld().removeRigidBody(this.collideObject);
 		this.collideObject = null;
 	}
-	
+
 	public void disposeCollideObject() {
 		this.game.getBtWorld().removeRigidBody(this.collideObject);
 		this.collideObject.dispose();

@@ -24,8 +24,8 @@ public class ExplosionPart extends AbstractEntity {
 	}
 
 	public void thrust(float strength) {
-		this.getCollideObject().getCollisionShape().calculateLocalInertia(this.getMass(), new Vector3());
 		this.getCollideObject().setLinearVelocity(MathUtilsW.randomDirectionAround(Vector3.Y, 0.1f).scl(strength));
-		this.getCollideObject().setAngularVelocity(new Vector3(MathUtils.random(-1, 1), MathUtils.random(-1, 1), MathUtils.random(-1, 1)));
+		this.getCollideObject()
+			.setAngularVelocity(new Vector3(MathUtils.random(-1, 1), MathUtils.random(-1, 1), MathUtils.random(-1, 1)));
 	}
 }
