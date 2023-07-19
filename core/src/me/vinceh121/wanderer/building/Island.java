@@ -133,8 +133,14 @@ public class Island extends AbstractClanLivingEntity {
 	private void updateBuildings() {
 		final Matrix4 islandTrans = this.getTransform();
 		for (final AbstractBuilding building : this.buildings) {
-			building.setTransform(islandTrans.cpy().translate(building.getSlot().getLocation()));
-			building.rotate(building.getSlot().getRotation());
+			Matrix4 buildingTransform = new Matrix4();
+
+			buildingTransform.translate(building.getSlot().getLocation());
+			buildingTransform.rotate(building.getSlot().getRotation());
+
+			buildingTransform.mul(islandTrans);
+
+			building.setTransform(buildingTransform);
 		}
 	}
 
