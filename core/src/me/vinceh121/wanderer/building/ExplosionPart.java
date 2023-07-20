@@ -2,6 +2,7 @@ package me.vinceh121.wanderer.building;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy.CollisionFilterGroups;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.entity.AbstractEntity;
@@ -13,8 +14,11 @@ public class ExplosionPart extends AbstractEntity {
 	public ExplosionPart(Wanderer game, DisplayModel model) {
 		super(game);
 
-		this.setMass(1f);
+		this.setMass(0.01f);
 		this.setExactCollideModel(false);
+		this.setCollisionGroup(CollisionFilterGroups.DebrisFilter);
+		this.setCollisionMask(CollisionFilterGroups.DefaultFilter | CollisionFilterGroups.KinematicFilter
+				| CollisionFilterGroups.StaticFilter);
 		this.setCollideModel(model.getDisplayModel());
 
 		DisplayModel mdl = new DisplayModel(model);

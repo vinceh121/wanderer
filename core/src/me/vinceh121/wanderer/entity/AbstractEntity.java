@@ -197,14 +197,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 
 	public void setCollideObject(final btRigidBody collideObject) {
 		collideObject.setUserIndex(this.getId().getValue());
-		// https://pybullet.org/Bullet/BulletFull/btDiscreteDynamicsWorld_8cpp_source.html#l00579
-		final boolean isDynamic = !collideObject.isStaticObject() && !collideObject.isKinematicObject();
-		final int collisionFilterGroup = isDynamic ? btBroadphaseProxy.CollisionFilterGroups.DefaultFilter
-				: btBroadphaseProxy.CollisionFilterGroups.StaticFilter;
-		final int collisionFilterMask = isDynamic ? btBroadphaseProxy.CollisionFilterGroups.AllFilter
-				: btBroadphaseProxy.CollisionFilterGroups.AllFilter
-						^ btBroadphaseProxy.CollisionFilterGroups.StaticFilter;
-		this.setCollideObject(collideObject, collisionFilterGroup, collisionFilterMask);
+		this.setCollideObject(collideObject, this.collisionGroup, this.collisionMask);
 	}
 
 	/**

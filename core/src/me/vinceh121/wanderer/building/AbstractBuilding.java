@@ -100,7 +100,7 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 		for (DisplayModel m : this.explosionParts) {
 			ExplosionPart part = new ExplosionPart(game, m);
 			part.translate(this.getTranslation());
-			part.addEventListener("collideModelLoaded", e -> part.thrust(5));
+			part.addEventListener("collideModelLoaded", e -> part.thrust(10));
 			this.game.addEntity(part);
 		}
 	}
