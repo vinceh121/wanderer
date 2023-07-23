@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy.CollisionFilt
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.entity.ParticleEmitter;
 import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class ExplosionPart extends AbstractEntity {
@@ -25,6 +26,9 @@ public class ExplosionPart extends AbstractEntity {
 		this.setTransform(mdl.getRelativeTransform());
 		mdl.getRelativeTransform().idt();
 		this.addModel(mdl);
+
+		this.addParticle(
+				new ParticleEmitter(this.game.getGraphicsManager().getParticleSystem(), "particles/debrisfire1.p"));
 	}
 
 	public void thrust(float strength) {
