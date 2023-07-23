@@ -1,6 +1,8 @@
 package me.vinceh121.wanderer.script;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +13,7 @@ import org.mozilla.javascript.commonjs.module.ModuleScope;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.Vector3;
 
 import me.vinceh121.wanderer.IMeta;
 import me.vinceh121.wanderer.MetaRegistry;
@@ -60,34 +63,53 @@ public class JsGame {
 		JsGame.LOG.info("Audio debug now {}", this.game.isAudioEmittersDebug());
 	}
 
-	private AbstractEntity newv(final String metaName) {
+	private Object newv(final String metaName, Integer count) {
 		if (this.game.getControlledEntity() == null) {
 			JsGame.LOG.error("Cannot use newv when no entity is being controlled");
 			return null;
 		}
+
+		if (count == null) {
+			count = 1;
+		}
+
 		final IMeta meta = MetaRegistry.getInstance().get(metaName);
+
 		if (meta == null) {
 			JsGame.LOG.error("Unknown meta {}", metaName);
 			return null;
 		}
 
-		final AbstractEntity entity;
-		if (meta instanceof AbstractBuildingMeta) {
-			entity = new BuildingArtifactEntity(this.game, (AbstractBuildingMeta) meta);
+		AbstractEntity controlled = (AbstractEntity) this.game.getControlledEntity();
+
+		List<AbstractEntity> entities = new ArrayList<>(count);
+
+		for (int i = 0; i < count; i++) {
+			final AbstractEntity entity;
+
+			if (meta instanceof AbstractBuildingMeta) {
+				entity = new BuildingArtifactEntity(this.game, (AbstractBuildingMeta) meta);
+			} else {
+				entity = meta.create(this.game);
+			}
+
+			entity.setTranslation(new Vector3(0, 4, 4).mul(controlled.getRotation()).add(controlled.getTranslation()));
+			this.game.addEntity(entity);
+
+			if (entity instanceof IClanMember) {
+				this.game.getPlayerClan().addMember((IClanMember) entity);
+			}
+		}
+
+		if (entities.size() == 1) {
+			return entities.get(0);
 		} else {
-			entity = meta.create(this.game);
+			return entities;
 		}
-		entity.setTranslation(((AbstractEntity) this.game.getControlledEntity()).getTranslation().cpy().add(4, 0, 0));
-		this.game.addEntity(entity);
-
-		if (entity instanceof IClanMember) {
-			this.game.getPlayerClan().addMember((IClanMember) entity);
-		}
-
-		return entity;
 	}
 
-	private Object loadMapFragment(final Context cx, final Scriptable scope, final Scriptable thisObj, final Object[] args) {
+	private Object loadMapFragment(final Context cx, final Scriptable scope, final Scriptable thisObj,
+			final Object[] args) {
 		final FileHandle path = JsGame.resolveMaybeRalativePath((String) args[0], thisObj);
 		try {
 			return this.game.loadMapFragment(path);
@@ -100,7 +122,8 @@ public class JsGame {
 		this.game.setElapsedTimeOfDay(hours.floatValue() * 3600 + mins.floatValue() * 60);
 	}
 
-	private Object playCinematic(final Context cx, final Scriptable scope, final Scriptable thisObj, final Object[] args) {
+	private Object playCinematic(final Context cx, final Scriptable scope, final Scriptable thisObj,
+			final Object[] args) {
 		if (args.length != 1) {
 			throw new IllegalArgumentException("playCinematic needs 1 argument");
 		}

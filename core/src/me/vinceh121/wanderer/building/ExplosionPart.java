@@ -43,6 +43,7 @@ public class ExplosionPart extends AbstractEntity {
 		super.tick(delta);
 
 		this.lifetime += delta;
+
 		if (this.lifetime > this.maxLifetime) {
 			this.game.removeEntity(this);
 			this.dispose();

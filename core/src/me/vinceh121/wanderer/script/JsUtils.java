@@ -20,6 +20,8 @@ public final class JsUtils {
 		JsUtils.install(scope, propName, (final Context cx, final Scriptable s, final Scriptable thisObj, final Object[] args) -> {
 			if (args.length < 1) {
 				function.accept(null, null);
+			} else if (args.length < 2) {
+				function.accept((T) JsUtils.maybeUnwrap(args[0]), null);
 			} else {
 				function.accept((T) JsUtils.maybeUnwrap(args[0]), (U) JsUtils.maybeUnwrap(args[1]));
 			}
