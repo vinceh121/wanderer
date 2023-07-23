@@ -22,7 +22,7 @@ import me.vinceh121.wanderer.script.JsGame;
 import me.vinceh121.wanderer.script.JsUtils;
 
 public class ConsoleHandler implements AutoCloseable {
-	private final Logger LOG = LogManager.getLogger(ConsoleHandler.class);
+	private static final Logger LOG = LogManager.getLogger(ConsoleHandler.class);
 	private final Wanderer game;
 	private final Terminal terminal;
 	private final LineReader lineReader;
@@ -57,6 +57,7 @@ public class ConsoleHandler implements AutoCloseable {
 		this.scope = this.jsContext.initSafeStandardObjects();
 		new JsGame(this.game).install(this.scope);
 		fillConsoleScope(scope);
+
 		while (!this.closed) {
 			try {
 				final String line = this.lineReader.readLine("Wanderer> ");
@@ -84,5 +85,9 @@ public class ConsoleHandler implements AutoCloseable {
 
 		JsUtils.install(scope, "exit", () -> Gdx.app.postRunnable(() -> this.game.dispose()));
 		JsUtils.install(scope, "forceexit", () -> System.exit(-1));
+	}
+
+	public ScriptableObject getScope() {
+		return this.scope;
 	}
 }

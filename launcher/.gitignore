@@ -1,5 +1,8 @@
 /build/
 .classpath
 .project
-/assets/
 /bin/
+
+/assets/
+/mods/
+quick.json

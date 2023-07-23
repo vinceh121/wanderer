@@ -48,6 +48,7 @@ import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.entity.Prop;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
+import me.vinceh121.wanderer.modding.ModManager;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.script.JsGame;
 import me.vinceh121.wanderer.ui.BlinkLabel;
@@ -64,6 +65,7 @@ public class Wanderer extends ApplicationAdapter {
 	private final PhysicsManager physicsManager = new PhysicsManager();
 	private final GraphicsManager graphicsManager = new GraphicsManager();
 	private final ScriptManager scriptManager = new ScriptManager();
+	private final ModManager modManager = new ModManager();
 
 	private ConsoleHandler consoleHandler;
 
@@ -115,10 +117,19 @@ public class Wanderer extends ApplicationAdapter {
 		new JsGame(this).install(this.scriptManager.getBaseScope());
 
 		try {
+			this.modManager.loadMods();
+			this.modManager.executeModsEntryPoints(this.scriptManager);
+		} catch (IOException e) {
+			LOG.error("Failed to load mods", e);
+			System.exit(-3);
+		}
+
+		try {
 			this.inputManager.loadOrDefaults();
 		} catch (final JsonProcessingException e) {
 			LOG.error("Failed to load key bindings", e);
 		}
+
 		this.inputManager.addListener(new InputListenerAdapter(0) {
 			@Override
 			public boolean inputDown(final Input in) {
@@ -803,6 +814,10 @@ public class Wanderer extends ApplicationAdapter {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public ConsoleHandler getConsoleHandler() {
+		return this.consoleHandler;
 	}
 
 	public btDiscreteDynamicsWorld getBtWorld() {
