@@ -27,14 +27,14 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 	}
 
 	@JsonCreator
-	public AnimationTrack(@JsonProperty("keys") List<T> list, @JsonProperty("interpolation") EnumInterpolation inter) {
-		for (T frame : list) {
+	public AnimationTrack(@JsonProperty("keys") final List<T> list, @JsonProperty("interpolation") final EnumInterpolation inter) {
+		for (final T frame : list) {
 			this.addKeyframe(frame);
 		}
 		this.interpolation = inter;
 	}
 
-	public void addKeyframe(T frame) {
+	public void addKeyframe(final T frame) {
 		this.keyFrames.put(frame.getTime(), frame);
 	}
 
@@ -45,29 +45,29 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 
 	@JsonIgnore
 	public NavigableMap<Float, T> getKeyFramesMap() {
-		return keyFrames;
+		return this.keyFrames;
 	}
 
 	public EnumInterpolation getInterpolation() {
-		return interpolation;
+		return this.interpolation;
 	}
 
-	public void setInterpolation(EnumInterpolation interpolation) {
+	public void setInterpolation(final EnumInterpolation interpolation) {
 		this.interpolation = interpolation;
 	}
 
-	public NavigableMap<Float, T> inBetween(float startTime, float endTime) {
+	public NavigableMap<Float, T> inBetween(final float startTime, final float endTime) {
 		return this.keyFrames.subMap(startTime, true, endTime, false);
 	}
 
-	public Pair<T, T> getKeyFramesAt(float time) {
+	public Pair<T, T> getKeyFramesAt(final float time) {
 		final Entry<Float, T> leftEntry = this.keyFrames.floorEntry(time);
 		final Entry<Float, T> rightEntry = this.keyFrames.ceilingEntry(time);
 		return Pair.of(leftEntry == null ? null : leftEntry.getValue(),
 				rightEntry == null ? null : rightEntry.getValue());
 	}
 
-	protected float getAlpha(Pair<T, T> pair, float time) {
+	protected float getAlpha(final Pair<T, T> pair, final float time) {
 		return (time - pair.getLeft().getTime()) / (pair.getRight().getTime() - pair.getLeft().getTime());
 	}
 
@@ -75,8 +75,8 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 		return Interpolation.linear;
 	}
 
-	public V interpolate(float time) {
-		Pair<T, T> pair = this.getKeyFramesAt(time);
+	public V interpolate(final float time) {
+		final Pair<T, T> pair = this.getKeyFramesAt(time);
 		if (pair.getLeft() == null && pair.getRight() != null) {
 			return pair.getRight().getValue();
 		}
@@ -89,7 +89,7 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 		return pair.getLeft()
 			.interpolate(pair.getRight().getValue(),
 					this.interpolation == null ? this.getDefaultInterpolation() : this.interpolation.inter,
-					getAlpha(pair, time));
+					this.getAlpha(pair, time));
 	}
 
 	@JsonIgnore
@@ -104,7 +104,7 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 	public T getFirstKeyFrame() {
 		return this.keyFrames.firstEntry().getValue();
 	}
-	
+
 	@JsonIgnore
 	public float getEndTime() {
 		if (this.keyFrames.size() == 0) {
@@ -112,7 +112,7 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 		}
 		return this.keyFrames.lastKey();
 	}
-	
+
 	@JsonIgnore
 	public T getLastKeyFrame() {
 		return this.keyFrames.lastEntry().getValue();
@@ -120,8 +120,8 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 
 	// HACK: we don't want to prevent keys being removed on duplicate timings, so we
 	// make a float comparator that cannot return 0
-	private static int compareKeys(Float f1, Float f2) {
-		int fc = Float.compare(f1, f2);
+	private static int compareKeys(final Float f1, final Float f2) {
+		final int fc = Float.compare(f1, f2);
 		if (fc == 0) {
 			// can't return 1 here! otherwise we get submaps where fromKey > toKey
 			return -1;
@@ -140,16 +140,16 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 
 		private final Interpolation inter;
 
-		private EnumInterpolation() {
+		EnumInterpolation() {
 			this(null);
 		}
 
-		private EnumInterpolation(Interpolation inter) {
+		EnumInterpolation(final Interpolation inter) {
 			this.inter = inter;
 		}
 
 		public Interpolation getInter() {
-			return inter;
+			return this.inter;
 		}
 	}
 }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Interpolation;
 public final class InterpolationW {
 	public static final Interpolation NEAREST = new Interpolation() {
 		@Override
-		public float apply(float a) {
+		public float apply(final float a) {
 			if (a < 0.5f) {
 				return 0f;
 			} else {

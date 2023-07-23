@@ -47,22 +47,22 @@ public class InputManager extends ApplicationAdapter {
 
 	public void load() throws JsonProcessingException {
 		this.bindings.clear();
-		List<Config> cfgBinds = Preferences.getPreferences().get("input.bindings");
+		final List<Config> cfgBinds = Preferences.getPreferences().get("input.bindings");
 		if (cfgBinds == null) {
 			return;
 		}
 
-		for (Config e : cfgBinds) {
-			Input in = e.getEnum("input", Input.class);
-			Binding bind = new Binding(e.get("binding"), e.getEnum("deviceType", DeviceType.class));
+		for (final Config e : cfgBinds) {
+			final Input in = e.getEnum("input", Input.class);
+			final Binding bind = new Binding(e.get("binding"), e.getEnum("deviceType", DeviceType.class));
 			this.bindings.put(in, bind);
 		}
 	}
 
 	public void save() throws JsonProcessingException {
-		List<Config> cfgBinds = new ArrayList<>(this.bindings.size());
-		for (Entry<Input, Binding> e : this.bindings.entries()) {
-			Config cfg = Config.inMemory();
+		final List<Config> cfgBinds = new ArrayList<>(this.bindings.size());
+		for (final Entry<Input, Binding> e : this.bindings.entries()) {
+			final Config cfg = Config.inMemory();
 			cfg.set("input", e.getKey());
 			cfg.set("deviceType", e.getValue().getDeviceType());
 			cfg.set("binding", e.getValue().getKey());
@@ -180,7 +180,7 @@ public class InputManager extends ApplicationAdapter {
 				} else if (amountX < 0) {
 					scroll = MouseWheelScroll.LEFT;
 				} else {
-					LOG.error("Couldn't figure out a mouse scroll value");
+					InputManager.LOG.error("Couldn't figure out a mouse scroll value");
 					return false;
 				}
 
@@ -194,7 +194,7 @@ public class InputManager extends ApplicationAdapter {
 			}
 
 			@Override
-			public boolean touchDragged(int screenX, int screenY, int pointer) {
+			public boolean touchDragged(final int screenX, final int screenY, final int pointer) {
 				// fix for mouseMoved not getting called if a mouse button is held down
 				return this.mouseMoved(screenX, screenY);
 			}
@@ -244,12 +244,12 @@ public class InputManager extends ApplicationAdapter {
 
 			@Override
 			public void connected(final Controller controller) {
-				LOG.info("{} connected", controller.getName());
+				InputManager.LOG.info("{} connected", controller.getName());
 			}
 
 			@Override
 			public void disconnected(final Controller controller) {
-				LOG.info("{} disconnected", controller.getName());
+				InputManager.LOG.info("{} disconnected", controller.getName());
 			}
 		});
 

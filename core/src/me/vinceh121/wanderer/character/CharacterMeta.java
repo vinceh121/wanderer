@@ -159,7 +159,7 @@ public class CharacterMeta implements IMeta {
 	}
 
 	@Override
-	public AbstractEntity create(Wanderer game) {
+	public AbstractEntity create(final Wanderer game) {
 		return new CharacterW(game, this);
 	}
 

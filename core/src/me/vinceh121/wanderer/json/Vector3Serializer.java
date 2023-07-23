@@ -28,9 +28,9 @@ public class Vector3Serializer extends StdSerializer<Vector3> {
 	}
 
 	@Override
-	public void serializeWithType(Vector3 value, JsonGenerator gen, SerializerProvider provider, TypeSerializer typeSer)
+	public void serializeWithType(final Vector3 value, final JsonGenerator gen, final SerializerProvider provider, final TypeSerializer typeSer)
 			throws IOException {
-		WritableTypeId typeIdDef = typeSer.writeTypePrefix(gen, typeSer.typeId(value, JsonToken.START_ARRAY));
+		final WritableTypeId typeIdDef = typeSer.writeTypePrefix(gen, typeSer.typeId(value, JsonToken.START_ARRAY));
 		gen.setCurrentValue(value);
 		gen.writeNumber(value.x);
 		gen.writeNumber(value.y);

@@ -6,7 +6,7 @@ import me.vinceh121.wanderer.entity.ILivingEntity;
 
 public class DeathKeyFrame extends ActionKeyFrame {
 	@Override
-	public void action(Wanderer game, CinematicController controller, AbstractEntity target, float time) {
+	public void action(final Wanderer game, final CinematicController controller, final AbstractEntity target, final float time) {
 		if (target instanceof ILivingEntity) {
 			((ILivingEntity) target).onDeath();
 		} else {

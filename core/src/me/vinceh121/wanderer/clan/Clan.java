@@ -69,7 +69,7 @@ public class Clan implements ISaveable {
 	}
 
 	public Array<ID> getMembers() {
-		return members;
+		return this.members;
 	}
 
 	public void addMember(final IClanMember value) {
@@ -100,7 +100,7 @@ public class Clan implements ISaveable {
 	}
 
 	@Override
-	public void readState(ObjectNode node) {
+	public void readState(final ObjectNode node) {
 		this.id = new ID(node.get("id").asInt());
 		this.setName(node.get("name").asText());
 		this.setColor(WandererConstants.MAPPER.convertValue(node.get("color"), Color.class));

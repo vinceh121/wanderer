@@ -10,15 +10,15 @@ public class Vector3KeyFrame extends KeyFrame<Vector3> {
 	public Vector3KeyFrame() {
 	}
 
-	public Vector3KeyFrame(float time, Vector3 value) {
+	public Vector3KeyFrame(final float time, final Vector3 value) {
 		super(time, value);
 	}
 
 	@Override
-	public Vector3 interpolate(Vector3 other, Interpolation i, float alpha) {
+	public Vector3 interpolate(final Vector3 other, final Interpolation i, final float alpha) {
 		return this.getValue().cpy().interpolate(other, alpha, i);
 	}
 
-	public void action(Wanderer game, AbstractEntity target, float time) {
+	public void action(final Wanderer game, final AbstractEntity target, final float time) {
 	}
 }

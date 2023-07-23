@@ -52,7 +52,7 @@ public class Binding {
 
 	@Override
 	public String toString() {
-		return "Binding [key=" + key + ", deviceType=" + deviceType + "]";
+		return "Binding [key=" + this.key + ", deviceType=" + this.deviceType + "]";
 	}
 
 	public enum DeviceType {

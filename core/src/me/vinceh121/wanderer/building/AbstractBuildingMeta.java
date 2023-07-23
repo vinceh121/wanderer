@@ -119,10 +119,10 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	}
 
 	public float getArtefactScale() {
-		return artefactScale;
+		return this.artefactScale;
 	}
 
-	public void setArtefactScale(float artefactScale) {
+	public void setArtefactScale(final float artefactScale) {
 		this.artefactScale = artefactScale;
 	}
 

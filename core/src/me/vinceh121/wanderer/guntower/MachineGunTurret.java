@@ -20,7 +20,7 @@ public class MachineGunTurret {
 	public MachineGunTurret() {
 	}
 
-	public MachineGunTurret(MachineGunTurret other) {
+	public MachineGunTurret(final MachineGunTurret other) {
 		this.absoluteTransform.set(other.absoluteTransform);
 		this.relativeTransform.set(other.relativeTransform);
 		this.distance = other.distance;
@@ -40,75 +40,75 @@ public class MachineGunTurret {
 		return this.calculateBulletPath(MathUtils.random(MathUtils.PI2), MathUtils.random());
 	}
 
-	public Segment3 calculateBulletPath(float angle, float radiusFrac) {
+	public Segment3 calculateBulletPath(final float angle, final float radiusFrac) {
 		// adapt random distribution to avoid concentration of points to center of
 		// circle
 		// https://www.youtube.com/watch?v=4y_nmpv-9lI
-		float radSqrt = (float) Math.sqrt(radiusFrac);
-		Quaternion rot = this.absoluteTransform.getRotation(new Quaternion());
+		final float radSqrt = (float) Math.sqrt(radiusFrac);
+		final Quaternion rot = this.absoluteTransform.getRotation(new Quaternion());
 
-		Circle3 near = new Circle3();
+		final Circle3 near = new Circle3();
 		near.setRadius(this.startRadius);
 		near.setRotation(rot);
 		this.absoluteTransform.getTranslation(near.getCenter());
 
-		Circle3 far = new Circle3();
+		final Circle3 far = new Circle3();
 		far.setRadius(this.endRadius);
 		far.setRotation(rot);
 		far.getCenter().set(0, this.distance, 0).mul(rot).add(near.getCenter());
 
-		Vector3 pointNear = near.getPointOn(angle, radSqrt);
-		Vector3 pointFar = far.getPointOn(angle, radSqrt);
+		final Vector3 pointNear = near.getPointOn(angle, radSqrt);
+		final Vector3 pointFar = far.getPointOn(angle, radSqrt);
 
-		Segment3 seg = new Segment3(pointNear, pointFar);
+		final Segment3 seg = new Segment3(pointNear, pointFar);
 		return seg;
 	}
 
 	public float getDistance() {
-		return distance;
+		return this.distance;
 	}
 
-	public void setDistance(float distance) {
+	public void setDistance(final float distance) {
 		this.distance = distance;
 	}
 
 	public float getStartRadius() {
-		return startRadius;
+		return this.startRadius;
 	}
 
-	public void setStartRadius(float startRadius) {
+	public void setStartRadius(final float startRadius) {
 		this.startRadius = startRadius;
 	}
 
 	public float getEndRadius() {
-		return endRadius;
+		return this.endRadius;
 	}
 
-	public void setEndRadius(float endRadius) {
+	public void setEndRadius(final float endRadius) {
 		this.endRadius = endRadius;
 	}
 
 	public float getDamage() {
-		return damage;
+		return this.damage;
 	}
 
-	public void setDamage(float damage) {
+	public void setDamage(final float damage) {
 		this.damage = damage;
 	}
 
 	public DamageType getType() {
-		return type;
+		return this.type;
 	}
 
-	public void setType(DamageType type) {
+	public void setType(final DamageType type) {
 		this.type = type;
 	}
 
 	public Matrix4 getRelativeTransform() {
-		return relativeTransform;
+		return this.relativeTransform;
 	}
 
 	public Matrix4 getAbsoluteTransform() {
-		return absoluteTransform;
+		return this.absoluteTransform;
 	}
 }

@@ -33,18 +33,18 @@ public class StoryWanderer extends Wanderer {
 
 		this.getInputManager().addListener(new InputListenerAdapter(0) {
 			@Override
-			public boolean inputDown(Input in) {
+			public boolean inputDown(final Input in) {
 				if (in == Input.SHOW_OBJECTIVES) {
-					objectivesView.setVisible(true);
+					StoryWanderer.this.objectivesView.setVisible(true);
 					return true;
 				}
 				return false;
 			}
 
 			@Override
-			public boolean inputUp(Input in) {
+			public boolean inputUp(final Input in) {
 				if (in == Input.SHOW_OBJECTIVES) {
-					objectivesView.setVisible(false);
+					StoryWanderer.this.objectivesView.setVisible(false);
 					return true;
 				}
 				return false;
@@ -57,15 +57,15 @@ public class StoryWanderer extends Wanderer {
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void resize(final int width, final int height) {
 		super.resize(width, height);
 		this.objectivesView.setX(width / 2);
 		this.objectivesView.setY(height - 60);
 	}
 
-	public void startStory(String name, int chapter, int part) {
-		Scriptable exports =
-				this.getScriptManager().loadModule(STORY_SCRIPTS_ROOT.child(name + ".js"), STORY_SCRIPTS_ROOT);
+	public void startStory(final String name, final int chapter, final int part) {
+		final Scriptable exports =
+				this.getScriptManager().loadModule(StoryWanderer.STORY_SCRIPTS_ROOT.child(name + ".js"), StoryWanderer.STORY_SCRIPTS_ROOT);
 		this.storyBook = (StoryBook) ((NativeJavaObject) exports.get("storyBook", exports)).unwrap();
 		this.chapter = this.storyBook.getChapters().get(chapter);
 		this.part = this.chapter.getParts().get(part);
@@ -78,7 +78,7 @@ public class StoryWanderer extends Wanderer {
 		this.part.getPartStart().run();
 	}
 
-	private void onObjectiveCompleted(Event e) {
+	private void onObjectiveCompleted(final Event e) {
 		this.objectivesView.setObjectivesCompleted(this.part.getObjectivesCompleted());
 	}
 
@@ -87,10 +87,10 @@ public class StoryWanderer extends Wanderer {
 	}
 
 	public Chapter getChapter() {
-		return chapter;
+		return this.chapter;
 	}
 
 	public Part getPart() {
-		return part;
+		return this.part;
 	}
 }

@@ -11,66 +11,66 @@ public class Save {
 	private MapW map;
 
 	public String getStoryBook() {
-		return storyBook;
+		return this.storyBook;
 	}
 
-	public void setStoryBook(String storyBook) {
+	public void setStoryBook(final String storyBook) {
 		this.storyBook = storyBook;
 	}
 
 	public ID getControlled() {
-		return controlled;
+		return this.controlled;
 	}
 
-	public void setControlled(ID controlled) {
+	public void setControlled(final ID controlled) {
 		this.controlled = controlled;
 	}
 
 	public ID getPlayerClan() {
-		return playerClan;
+		return this.playerClan;
 	}
 
-	public void setPlayerClan(ID playerClan) {
+	public void setPlayerClan(final ID playerClan) {
 		this.playerClan = playerClan;
 	}
 
 	public int getChapter() {
-		return chapter;
+		return this.chapter;
 	}
 
-	public void setChapter(int chapter) {
+	public void setChapter(final int chapter) {
 		this.chapter = chapter;
 	}
 
 	public int getPart() {
-		return part;
+		return this.part;
 	}
 
-	public void setPart(int part) {
+	public void setPart(final int part) {
 		this.part = part;
 	}
 
 	public float getTime() {
-		return time;
+		return this.time;
 	}
 
-	public void setTime(float time) {
+	public void setTime(final float time) {
 		this.time = time;
 	}
 
 	public Map<String, Object> getPartState() {
-		return partState;
+		return this.partState;
 	}
 
-	public void setPartState(Map<String, Object> partState) {
+	public void setPartState(final Map<String, Object> partState) {
 		this.partState = partState;
 	}
 
 	public MapW getMap() {
-		return map;
+		return this.map;
 	}
 
-	public void setMap(MapW map) {
+	public void setMap(final MapW map) {
 		this.map = map;
 	}
 }

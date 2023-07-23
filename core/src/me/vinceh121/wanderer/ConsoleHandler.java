@@ -31,7 +31,7 @@ public class ConsoleHandler implements AutoCloseable {
 	private Context jsContext;
 	private ScriptableObject scope;
 
-	public ConsoleHandler(Wanderer game) throws IOException {
+	public ConsoleHandler(final Wanderer game) throws IOException {
 		this.game = game;
 		this.terminal = TerminalBuilder.builder()
 			.color(true)
@@ -42,7 +42,7 @@ public class ConsoleHandler implements AutoCloseable {
 			.build();
 		this.lineReader = LineReaderBuilder.builder()
 			.appName("Wanderer")
-			.terminal(terminal)
+			.terminal(this.terminal)
 			.history(new DefaultHistory())
 			.build();
 	}
@@ -56,19 +56,19 @@ public class ConsoleHandler implements AutoCloseable {
 		this.jsContext = ContextFactory.getGlobal().enterContext();
 		this.scope = this.jsContext.initSafeStandardObjects();
 		new JsGame(this.game).install(this.scope);
-		fillConsoleScope(scope);
+		this.fillConsoleScope(this.scope);
 
 		while (!this.closed) {
 			try {
 				final String line = this.lineReader.readLine("Wanderer> ");
-				Object res = this.jsContext.evaluateString(this.scope, line, "<stdin>", -1, null);
+				final Object res = this.jsContext.evaluateString(this.scope, line, "<stdin>", -1, null);
 				System.out.println(ScriptRuntime.toString(res));
-			} catch (EcmaError e) {
-				LOG.error("", e);
-			} catch (UserInterruptException e) {
+			} catch (final EcmaError e) {
+				ConsoleHandler.LOG.error("", e);
+			} catch (final UserInterruptException e) {
 				// ignore
-			} catch (Exception e) {
-				LOG.error("Unhandled exception in console", e);
+			} catch (final Exception e) {
+				ConsoleHandler.LOG.error("Unhandled exception in console", e);
 			}
 		}
 	}
@@ -80,7 +80,7 @@ public class ConsoleHandler implements AutoCloseable {
 		this.listenerThread.interrupt();
 	}
 
-	private void fillConsoleScope(ScriptableObject scope) {
+	private void fillConsoleScope(final ScriptableObject scope) {
 		ScriptManager.fillStoryScope(scope);
 
 		JsUtils.install(scope, "exit", () -> Gdx.app.postRunnable(() -> this.game.dispose()));

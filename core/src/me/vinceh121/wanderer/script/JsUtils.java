@@ -17,11 +17,11 @@ public final class JsUtils {
 
 	@SuppressWarnings("unchecked")
 	public static <T, U> void install(final Scriptable scope, final String propName, final BiConsumer<T, U> function) {
-		install(scope, propName, (Context cx, Scriptable s, Scriptable thisObj, Object[] args) -> {
+		JsUtils.install(scope, propName, (final Context cx, final Scriptable s, final Scriptable thisObj, final Object[] args) -> {
 			if (args.length < 1) {
 				function.accept(null, null);
 			} else {
-				function.accept((T) maybeUnwrap(args[0]), (U) maybeUnwrap(args[1]));
+				function.accept((T) JsUtils.maybeUnwrap(args[0]), (U) JsUtils.maybeUnwrap(args[1]));
 			}
 			return Undefined.instance;
 		});
@@ -29,11 +29,11 @@ public final class JsUtils {
 
 	@SuppressWarnings("unchecked")
 	public static <T> void install(final Scriptable scope, final String propName, final Consumer<T> function) {
-		install(scope, propName, (Context cx, Scriptable s, Scriptable thisObj, Object[] args) -> {
+		JsUtils.install(scope, propName, (final Context cx, final Scriptable s, final Scriptable thisObj, final Object[] args) -> {
 			if (args.length < 1) {
 				function.accept(null);
 			} else {
-				function.accept((T) maybeUnwrap(args[0]));
+				function.accept((T) JsUtils.maybeUnwrap(args[0]));
 			}
 			return Undefined.instance;
 		});
@@ -41,23 +41,21 @@ public final class JsUtils {
 
 	@SuppressWarnings("unchecked")
 	public static <T, R> void install(final Scriptable scope, final String propName, final Function<T, R> function) {
-		install(scope, propName, (Context cx, Scriptable s, Scriptable thisObj, Object[] args) -> {
+		JsUtils.install(scope, propName, (final Context cx, final Scriptable s, final Scriptable thisObj, final Object[] args) -> {
 			if (args.length < 1) {
 				return function.apply(null);
 			} else {
-				return function.apply((T) maybeUnwrap(args[0]));
+				return function.apply((T) JsUtils.maybeUnwrap(args[0]));
 			}
 		});
 	}
 
 	public static <T> void install(final Scriptable scope, final String propName, final Supplier<T> function) {
-		install(scope, propName, (Context cx, Scriptable s, Scriptable thisObj, Object[] args) -> {
-			return function.get();
-		});
+		JsUtils.install(scope, propName, (final Context cx, final Scriptable s, final Scriptable thisObj, final Object[] args) -> function.get());
 	}
 
 	public static void install(final Scriptable scope, final String propName, final Runnable function) {
-		install(scope, propName, (Context cx, Scriptable s, Scriptable thisObj, Object[] args) -> {
+		JsUtils.install(scope, propName, (final Context cx, final Scriptable s, final Scriptable thisObj, final Object[] args) -> {
 			function.run();
 			return Undefined.instance;
 		});
@@ -69,7 +67,7 @@ public final class JsUtils {
 		scope.put(propName, scope, jsFunc);
 	}
 
-	public static Object maybeUnwrap(Object in) {
+	public static Object maybeUnwrap(final Object in) {
 		if (in instanceof NativeJavaObject) {
 			return ((NativeJavaObject) in).unwrap();
 		} else {
@@ -77,11 +75,11 @@ public final class JsUtils {
 		}
 	}
 
-	public static ModuleScope getModuleScope(Scriptable scope) {
+	public static ModuleScope getModuleScope(final Scriptable scope) {
 		if (scope instanceof ModuleScope) {
 			return (ModuleScope) scope;
 		} else if (scope.getParentScope() != null) {
-			return getModuleScope(scope.getParentScope());
+			return JsUtils.getModuleScope(scope.getParentScope());
 		} else {
 			return null;
 		}

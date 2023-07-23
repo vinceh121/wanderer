@@ -8,8 +8,8 @@ public class AssetFileHandleResolver implements FileHandleResolver {
 	private static final String ASSETS_FOLDER = "assets/";
 
 	@Override
-	public FileHandle resolve(String fileName) {
-		FileHandle fh = Gdx.files.local(ASSETS_FOLDER + fileName);
+	public FileHandle resolve(final String fileName) {
+		FileHandle fh = Gdx.files.local(AssetFileHandleResolver.ASSETS_FOLDER + fileName);
 		if (fh.exists()) {
 			return fh;
 		}

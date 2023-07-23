@@ -11,7 +11,7 @@ import me.vinceh121.wanderer.platform.audio.Sound3D;
 public class EnergyArtefact extends AbstractArtifactEntity {
 	private static final ArtifactMeta ENERGY_META = new ArtifactMeta() { // FIXME move to a JSON
 		@Override
-		public AbstractEntity create(Wanderer game) {
+		public AbstractEntity create(final Wanderer game) {
 			return new EnergyArtefact(game);
 		}
 	};

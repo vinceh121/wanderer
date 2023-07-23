@@ -24,11 +24,11 @@ public class JsGame {
 	private static final Logger LOG = LogManager.getLogger(JsGame.class);
 	private final Wanderer game;
 
-	public JsGame(Wanderer game) {
+	public JsGame(final Wanderer game) {
 		this.game = game;
 	}
 
-	public void install(Scriptable scope) {
+	public void install(final Scriptable scope) {
 		scope.put("game", scope, this.game);
 
 		JsUtils.install(scope, "getElapsedTimeOfDay", this.game::getElapsedTimeOfDay);
@@ -57,23 +57,23 @@ public class JsGame {
 
 	private void debugAudio() {
 		this.game.setAudioEmittersDebug(!this.game.isAudioEmittersDebug());
-		LOG.info("Audio debug now {}", this.game.isAudioEmittersDebug());
+		JsGame.LOG.info("Audio debug now {}", this.game.isAudioEmittersDebug());
 	}
 
-	private AbstractEntity newv(String metaName) {
+	private AbstractEntity newv(final String metaName) {
 		if (this.game.getControlledEntity() == null) {
-			LOG.error("Cannot use newv when no entity is being controlled");
+			JsGame.LOG.error("Cannot use newv when no entity is being controlled");
 			return null;
 		}
-		IMeta meta = MetaRegistry.getInstance().get(metaName);
+		final IMeta meta = MetaRegistry.getInstance().get(metaName);
 		if (meta == null) {
-			LOG.error("Unknown meta {}", metaName);
+			JsGame.LOG.error("Unknown meta {}", metaName);
 			return null;
 		}
 
 		final AbstractEntity entity;
 		if (meta instanceof AbstractBuildingMeta) {
-			entity = new BuildingArtifactEntity(game, (AbstractBuildingMeta) meta);
+			entity = new BuildingArtifactEntity(this.game, (AbstractBuildingMeta) meta);
 		} else {
 			entity = meta.create(this.game);
 		}
@@ -87,53 +87,53 @@ public class JsGame {
 		return entity;
 	}
 
-	private Object loadMapFragment(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
-		FileHandle path = resolveMaybeRalativePath((String) args[0], thisObj);
+	private Object loadMapFragment(final Context cx, final Scriptable scope, final Scriptable thisObj, final Object[] args) {
+		final FileHandle path = JsGame.resolveMaybeRalativePath((String) args[0], thisObj);
 		try {
 			return this.game.loadMapFragment(path);
-		} catch (ReflectiveOperationException e) {
+		} catch (final ReflectiveOperationException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void setDayTime(Number hours, Number mins) {
+	private void setDayTime(final Number hours, final Number mins) {
 		this.game.setElapsedTimeOfDay(hours.floatValue() * 3600 + mins.floatValue() * 60);
 	}
 
-	private Object playCinematic(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+	private Object playCinematic(final Context cx, final Scriptable scope, final Scriptable thisObj, final Object[] args) {
 		if (args.length != 1) {
 			throw new IllegalArgumentException("playCinematic needs 1 argument");
 		}
 
 		try {
-			this.game.startCinematic(resolveMaybeRalativePath((String) args[0], thisObj));
+			this.game.startCinematic(JsGame.resolveMaybeRalativePath((String) args[0], thisObj));
 			return this.game.getCinematicController();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private Object spawn(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+	private Object spawn(final Context cx, final Scriptable scope, final Scriptable thisObj, final Object[] args) {
 		if (args.length < 1) {
 			throw new IllegalArgumentException("spawn needs arguments");
 		}
 
-		String prototype = (String) args[0];
-		IMeta meta = MetaRegistry.getInstance().get(prototype);
+		final String prototype = (String) args[0];
+		final IMeta meta = MetaRegistry.getInstance().get(prototype);
 		if (meta == null) {
 			return Undefined.instance;
 		}
 
-		AbstractEntity ent = meta.create(this.game);
+		final AbstractEntity ent = meta.create(this.game);
 		this.game.addEntity(ent);
 
 		return ent;
 	}
 
-	private static FileHandle resolveMaybeRalativePath(String path, Scriptable thisObj) {
+	private static FileHandle resolveMaybeRalativePath(String path, final Scriptable thisObj) {
 		if (path.startsWith("./")) {
-			ModuleScope module = JsUtils.getModuleScope(thisObj);
-			FileHandle parent = FileHandleModuleSourceProvider.fromURI(module.getUri()).parent();
+			final ModuleScope module = JsUtils.getModuleScope(thisObj);
+			final FileHandle parent = FileHandleModuleSourceProvider.fromURI(module.getUri()).parent();
 			path = parent + path.substring(1);
 		}
 		return Gdx.files.internal(path);

@@ -32,7 +32,7 @@ public final class MetaRegistry {
 		try {
 			this.loadDefaults();
 		} catch (final IOException e) {
-			LOG.error("Error while loading meta defaults", e);
+			MetaRegistry.LOG.error("Error while loading meta defaults", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -74,7 +74,7 @@ public final class MetaRegistry {
 	}
 
 	public String getReverse(final IMeta meta) {
-		for (Entry<String, IMeta> e : this.metaMap.entrySet()) {
+		for (final Entry<String, IMeta> e : this.metaMap.entrySet()) {
 			if (e.getValue() == meta) {
 				return e.getKey();
 			}

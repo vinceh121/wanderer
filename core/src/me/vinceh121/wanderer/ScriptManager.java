@@ -75,7 +75,7 @@ public class ScriptManager {
 	}
 
 	public static void copyObject(final Scriptable from, final Scriptable to) {
-		for (Object id : from.getIds()) {
+		for (final Object id : from.getIds()) {
 			if (id instanceof Integer) {
 				to.put((int) id, to, from.get((int) id, from));
 			} else if (id instanceof String) {
@@ -95,20 +95,20 @@ public class ScriptManager {
 		JsAudio.install(scope);
 		JsI18N.install(scope);
 
-		for (final Class<?> cls : PART_SCOPE_CLASSES) {
+		for (final Class<?> cls : ScriptManager.PART_SCOPE_CLASSES) {
 			scope.put(cls.getSimpleName(), scope, new NativeJavaClass(scope, cls));
 		}
 	}
 
 	static {
 		ContextFactory.initGlobal(new WandererContextFactory());
-		PART_SCOPE_CLASSES.addAll(Arrays.asList(
+		ScriptManager.PART_SCOPE_CLASSES.addAll(Arrays.asList(
 				// .story
 				StoryBook.class,
 				Chapter.class,
 				Part.class));
 
-		Reflections entityRef = new Reflections("me.vinceh121.wanderer");
-		PART_SCOPE_CLASSES.addAll(entityRef.get(Scanners.SubTypes.of(AbstractEntity.class).asClass()));
+		final Reflections entityRef = new Reflections("me.vinceh121.wanderer");
+		ScriptManager.PART_SCOPE_CLASSES.addAll(entityRef.get(Scanners.SubTypes.of(AbstractEntity.class).asClass()));
 	}
 }

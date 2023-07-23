@@ -37,15 +37,15 @@ public class ParticleEmitter {
 	public void updateLoading() {
 		if (this.particle != null && this.delegate == null) {
 			if (WandererConstants.ASSET_MANAGER.isLoaded(this.particle, ParticleEffect.class)) {
-				this.delegate = new ParticleEffect(
-						WandererConstants.ASSET_MANAGER.get(this.particle, ParticleEffect.class));
+				this.delegate =
+						new ParticleEffect(WandererConstants.ASSET_MANAGER.get(this.particle, ParticleEffect.class));
 				this.delegate.init();
 				this.delegate.start();
 				this.delegate.setTransform(this.absoluteTransform);
 				this.system.add(this.delegate);
 			} else {
-				final ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(
-						this.system.getBatches());
+				final ParticleEffectLoader.ParticleEffectLoadParameter loadParam =
+						new ParticleEffectLoader.ParticleEffectLoadParameter(this.system.getBatches());
 				WandererConstants.ASSET_MANAGER.load(this.particle, ParticleEffect.class, loadParam);
 			}
 		}

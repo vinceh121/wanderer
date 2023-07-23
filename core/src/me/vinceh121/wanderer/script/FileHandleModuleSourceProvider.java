@@ -30,7 +30,8 @@ public class FileHandleModuleSourceProvider implements ModuleSourceProvider {
 	}
 
 	@Override
-	public ModuleSource loadSource(final URI uri, final URI baseUri, final Object validator) throws IOException, URISyntaxException {
+	public ModuleSource loadSource(final URI uri, final URI baseUri, final Object validator)
+			throws IOException, URISyntaxException {
 		FileHandle fh = FileHandleModuleSourceProvider.fromURI(uri);
 		if (!fh.path().endsWith(".js")) {
 			fh = fh.sibling(fh.name() + ".js");

@@ -10,34 +10,34 @@ public abstract class AbstractGuntowerMeta extends AbstractBuildingMeta {
 	private String fireSound;
 
 	public Vector3 getCameraOffset() {
-		return cameraOffset;
+		return this.cameraOffset;
 	}
 
-	public void setCameraOffset(Vector3 cameraOffset) {
+	public void setCameraOffset(final Vector3 cameraOffset) {
 		this.cameraOffset = cameraOffset;
 	}
 
 	public float getPolarMin() {
-		return polarMin;
+		return this.polarMin;
 	}
 
-	public void setPolarMin(float polarMin) {
+	public void setPolarMin(final float polarMin) {
 		this.polarMin = polarMin;
 	}
 
 	public float getPolarMax() {
-		return polarMax;
+		return this.polarMax;
 	}
 
-	public void setPolarMax(float polarMax) {
+	public void setPolarMax(final float polarMax) {
 		this.polarMax = polarMax;
 	}
 
 	public String getFireSound() {
-		return fireSound;
+		return this.fireSound;
 	}
 
-	public void setFireSound(String fireSound) {
+	public void setFireSound(final String fireSound) {
 		this.fireSound = fireSound;
 	}
 }

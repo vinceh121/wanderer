@@ -38,10 +38,10 @@ public class WandererShader extends DefaultShader {
 	}
 
 	@Override
-	public void init(ShaderProgram program, Renderable renderable) {
+	public void init(final ShaderProgram program, final Renderable renderable) {
 		try {
 			super.init(program, renderable);
-		} catch (GdxRuntimeException e) {
+		} catch (final GdxRuntimeException e) {
 			throw new IllegalStateException(GraphicsManager
 				.shaderDebug(e.getMessage(), program.getFragmentShaderSource(), program.getVertexShaderSource()));
 		}

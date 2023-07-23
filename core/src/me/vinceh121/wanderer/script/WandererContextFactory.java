@@ -5,7 +5,7 @@ import org.mozilla.javascript.ContextFactory;
 
 public class WandererContextFactory extends ContextFactory {
 	@Override
-	protected boolean hasFeature(Context cx, int featureIndex) {
+	protected boolean hasFeature(final Context cx, final int featureIndex) {
 		switch (featureIndex) {
 		case Context.FEATURE_ENABLE_JAVA_MAP_ACCESS:
 			return true;

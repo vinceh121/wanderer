@@ -7,18 +7,18 @@ public class Mod {
 	private FileHandle folder;
 
 	public ModManifest getManifest() {
-		return manifest;
+		return this.manifest;
 	}
 
-	public void setManifest(ModManifest manifest) {
+	public void setManifest(final ModManifest manifest) {
 		this.manifest = manifest;
 	}
 
 	public FileHandle getFolder() {
-		return folder;
+		return this.folder;
 	}
 
-	public void setFolder(FileHandle folder) {
+	public void setFolder(final FileHandle folder) {
 		this.folder = folder;
 	}
 }

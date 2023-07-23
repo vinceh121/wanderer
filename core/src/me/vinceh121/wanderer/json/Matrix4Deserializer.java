@@ -22,7 +22,7 @@ public class Matrix4Deserializer extends StdDeserializer<Matrix4> {
 	}
 
 	@Override
-	public Matrix4 deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+	public Matrix4 deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JacksonException {
 		if (p.isExpectedStartObjectToken()) {
 			return this.deserializeComponents(p, ctxt);
 		} else if (p.isExpectedStartArrayToken()) {
@@ -44,10 +44,10 @@ public class Matrix4Deserializer extends StdDeserializer<Matrix4> {
 
 	public Matrix4 deserializeComponents(final JsonParser p, final DeserializationContext ctxt)
 			throws IOException, JacksonException {
-		final JsonDeserializer<Object> vector3Deser = ctxt
-			.findNonContextualValueDeserializer(SimpleType.constructUnsafe(Vector3.class));
-		final JsonDeserializer<Object> quaternionDeser = ctxt
-			.findNonContextualValueDeserializer(SimpleType.constructUnsafe(Quaternion.class));
+		final JsonDeserializer<Object> vector3Deser =
+				ctxt.findNonContextualValueDeserializer(SimpleType.constructUnsafe(Vector3.class));
+		final JsonDeserializer<Object> quaternionDeser =
+				ctxt.findNonContextualValueDeserializer(SimpleType.constructUnsafe(Quaternion.class));
 
 		Vector3 translation = new Vector3();
 		Quaternion rotation = new Quaternion();

@@ -20,7 +20,7 @@ public class TransformKeyFrame extends KeyFrame<Matrix4> {
 	}
 
 	@Override
-	public Matrix4 interpolate(Matrix4 other, Interpolation i, float alpha) {
+	public Matrix4 interpolate(final Matrix4 other, final Interpolation i, final float alpha) {
 		assert i != null && i == Interpolation.linear : "TransformKeyFrame only supports linear interpolation";
 		return this.getValue().cpy().lerp(other, alpha);
 	}
@@ -29,22 +29,25 @@ public class TransformKeyFrame extends KeyFrame<Matrix4> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(transform);
+		result = prime * result + Objects.hash(this.transform);
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
-		TransformKeyFrame other = (TransformKeyFrame) obj;
-		return Objects.equals(transform, other.transform);
+		}
+		final TransformKeyFrame other = (TransformKeyFrame) obj;
+		return Objects.equals(this.transform, other.transform);
 	}
 
-	public void action(Wanderer game, AbstractEntity target, float time) {
+	public void action(final Wanderer game, final AbstractEntity target, final float time) {
 	}
 }

@@ -38,7 +38,7 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	}
 
 	@Override
-	public void setMaxHealth(float maxHealth) {
+	public void setMaxHealth(final float maxHealth) {
 		this.maxHealth = maxHealth;
 		this.setHealth(Math.min(this.maxHealth, this.health));
 	}
@@ -55,13 +55,13 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	}
 
 	@Override
-	public void damage(final float damage, DamageType type) {
+	public void damage(final float damage, final DamageType type) {
 		if (this.isInvincible()) {
 			return;
 		}
 
-		float armor = this.getArmor(type);
-		float dealtDamage = CombatUtils.dealtDamage(damage, armor);
+		final float armor = this.getArmor(type);
+		final float dealtDamage = CombatUtils.dealtDamage(damage, armor);
 
 		this.health -= dealtDamage;
 
@@ -74,7 +74,7 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	}
 
 	@Override
-	public void onJoinClan(Clan clan) {
+	public void onJoinClan(final Clan clan) {
 		this.clan = clan;
 	}
 
@@ -84,17 +84,17 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	}
 
 	@Override
-	public float getArmor(DamageType type) {
+	public float getArmor(final DamageType type) {
 		return this.armors.containsKey(type) ? this.armors.get(type) : 0;
 	}
 
 	@Override
-	public void setArmor(DamageType type, float armor) {
+	public void setArmor(final DamageType type, final float armor) {
 		this.armors.put(type, armor);
 	}
 
 	@Override
-	public void writeState(ObjectNode node) {
+	public void writeState(final ObjectNode node) {
 		super.writeState(node);
 		if (this.getClan() != null) {
 			node.put("clan", this.getClan().getId().getValue());
@@ -107,7 +107,7 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	}
 
 	@Override
-	public void readState(ObjectNode node) {
+	public void readState(final ObjectNode node) {
 		super.readState(node);
 		if (node.hasNonNull("clan")) {
 			this.onJoinClan(this.game.getClan(node.get("clan").asInt()));

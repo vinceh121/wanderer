@@ -29,21 +29,21 @@ public class CinematicController {
 	private float time, startTime, endTime, rate = 1f;
 	private boolean hasCamera, hasControlTaken, overTriggered;
 
-	public CinematicController(Wanderer game) {
+	public CinematicController(final Wanderer game) {
 		this.game = game;
 	}
 
 	public void skip() {
 		this.update(this.endTime - this.time);
-		for (SoundEmitter3D s : this.sounds) {
+		for (final SoundEmitter3D s : this.sounds) {
 			s.stop();
 			s.dispose();
 		}
 	}
 
-	public void update(float delta) {
-		final float newTime = this.time + delta * rate;
-		for (CinematicData d : this.cinematicDatas) {
+	public void update(final float delta) {
+		final float newTime = this.time + delta * this.rate;
+		for (final CinematicData d : this.cinematicDatas) {
 			this.updateTrack(delta, newTime, d);
 		}
 		this.time = newTime;
@@ -53,50 +53,52 @@ public class CinematicController {
 		}
 	}
 
-	private void updateTrack(float delta, float newTime, CinematicData data) {
-		final boolean isCamera = CAMERA_SYMBOLIC_NAME.equals(data.getSymbolicName());
+	private void updateTrack(final float delta, final float newTime, final CinematicData data) {
+		final boolean isCamera = CinematicController.CAMERA_SYMBOLIC_NAME.equals(data.getSymbolicName());
 
 		if (this.time > data.getEndTime()) {
 			return;
 		}
 
 		if (data.getCacheEntity() == null && data.getSymbolicName() != null && !isCamera) {
-			AbstractEntity ent = this.game.getEntity(data.getSymbolicName());
+			final AbstractEntity ent = this.game.getEntity(data.getSymbolicName());
 			if (ent == null) {
-				LOG.error("No entity goes by symbolicName {}", data.getSymbolicName());
+				CinematicController.LOG.error("No entity goes by symbolicName {}", data.getSymbolicName());
 				return;
 			}
 			data.setCacheEntity(ent);
 		}
 
 		// process positional tracks only if we have an entity linked
-		Vector3 pos = data.getPosition().interpolate(newTime);
+		final Vector3 pos = data.getPosition().interpolate(newTime);
 		if (pos != null) {
 			MathUtilsW.fixNaN(pos, 0);
 		}
 
-		Quaternion rot = data.getRotation().interpolate(newTime);
+		final Quaternion rot = data.getRotation().interpolate(newTime);
 		if (rot != null) {
 			MathUtilsW.fixNaNIdt(rot);
 			rot.conjugate();
 		}
 
-		Vector3 scl = data.getScale().interpolate(newTime);
+		final Vector3 scl = data.getScale().interpolate(newTime);
 		if (scl != null) {
 			MathUtilsW.fixNaN(scl, 0);
 		}
 
 		if (isCamera) {
-			if (pos != null)
+			if (pos != null) {
 				this.game.getCamera().position.set(pos);
-			if (rot != null)
+			}
+			if (rot != null) {
 				// is the up vector of nebula really this?
 				this.game.getCamera().direction.set(rot.transform(new Vector3(0, 0, -1)));
+			}
 
 			this.game.getCamera().up.set(Vector3.Y);
 			this.game.getCamera().update();
 		} else if (data.getCacheEntity() != null) {
-			Matrix4 trans = new Matrix4(pos == null ? new Vector3() : pos,
+			final Matrix4 trans = new Matrix4(pos == null ? new Vector3() : pos,
 					rot == null ? new Quaternion() : rot,
 					scl == null ? new Vector3(1, 1, 1) : scl);
 
@@ -104,15 +106,15 @@ public class CinematicController {
 		}
 
 		// process action track regardless of whether we have an entity or not
-		NavigableMap<Float, ActionKeyFrame> actions = data.getActions().inBetween(this.time, newTime);
+		final NavigableMap<Float, ActionKeyFrame> actions = data.getActions().inBetween(this.time, newTime);
 
-		for (ActionKeyFrame action : actions.values()) {
-			action.action(game, this, data.getCacheEntity(), newTime);
+		for (final ActionKeyFrame action : actions.values()) {
+			action.action(this.game, this, data.getCacheEntity(), newTime);
 		}
 	}
 
 	public void pause() {
-		for (SoundEmitter3D e : this.sounds) {
+		for (final SoundEmitter3D e : this.sounds) {
 			if (!e.isDisposed()) {
 				e.pause();
 			}
@@ -120,7 +122,7 @@ public class CinematicController {
 	}
 
 	public void resume() {
-		for (SoundEmitter3D e : this.sounds) {
+		for (final SoundEmitter3D e : this.sounds) {
 			if (!e.isDisposed()) {
 				e.play();
 			}
@@ -148,7 +150,7 @@ public class CinematicController {
 			.get();
 
 		this.hasCamera =
-				this.cinematicDatas.stream().anyMatch(data -> CAMERA_SYMBOLIC_NAME.equals(data.getSymbolicName()));
+				this.cinematicDatas.stream().anyMatch(data -> CinematicController.CAMERA_SYMBOLIC_NAME.equals(data.getSymbolicName()));
 	}
 
 	public void reset() {
@@ -158,11 +160,11 @@ public class CinematicController {
 	}
 
 	public float getStartTime() {
-		return startTime;
+		return this.startTime;
 	}
 
 	public float getEndTime() {
-		return endTime;
+		return this.endTime;
 	}
 
 	public boolean hasCamera() {
@@ -170,10 +172,10 @@ public class CinematicController {
 	}
 
 	public boolean isHasControlTaken() {
-		return hasControlTaken;
+		return this.hasControlTaken;
 	}
 
-	public void setHasControlTaken(boolean hasControlTaken) {
+	public void setHasControlTaken(final boolean hasControlTaken) {
 		this.hasControlTaken = hasControlTaken;
 	}
 
@@ -181,46 +183,46 @@ public class CinematicController {
 		return this.getTime() > this.getEndTime();
 	}
 
-	public void addSound(SoundEmitter3D emitter) {
+	public void addSound(final SoundEmitter3D emitter) {
 		this.sounds.add(emitter);
 	}
 
 	public List<CinematicData> getCinematicDatas() {
-		return cinematicDatas;
+		return this.cinematicDatas;
 	}
 
-	public void setCinematicDatas(List<CinematicData> datas) {
+	public void setCinematicDatas(final List<CinematicData> datas) {
 		this.reset();
 		this.cinematicDatas.addAll(datas);
 		this.updateStartEnd();
 	}
 
 	public float getTime() {
-		return time;
+		return this.time;
 	}
 
-	public void setTime(float time) {
+	public void setTime(final float time) {
 		this.time = time;
 	}
 
 	public float getRate() {
-		return rate;
+		return this.rate;
 	}
 
-	public void setRate(float rate) {
+	public void setRate(final float rate) {
 		this.rate = rate;
-		for (SoundEmitter3D e : this.sounds) {
+		for (final SoundEmitter3D e : this.sounds) {
 			if (!e.isDisposed()) {
 				e.setPitch(rate);
 			}
 		}
 	}
 
-	public void addEventListener(String type, IEventListener l) {
-		eventDispatcher.addEventListener(type, l);
+	public void addEventListener(final String type, final IEventListener l) {
+		this.eventDispatcher.addEventListener(type, l);
 	}
 
-	public void removeEventListener(String type, IEventListener l) {
-		eventDispatcher.removeEventListener(type, l);
+	public void removeEventListener(final String type, final IEventListener l) {
+		this.eventDispatcher.removeEventListener(type, l);
 	}
 }

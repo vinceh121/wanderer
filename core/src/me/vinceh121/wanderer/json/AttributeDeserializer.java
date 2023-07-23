@@ -37,7 +37,7 @@ public class AttributeDeserializer extends StdDeserializer<Attribute> {
 	}
 
 	@Override
-	public Attribute deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+	public Attribute deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JacksonException {
 		final ObjectNode n = p.readValueAsTree();
 
 		final String clazz = n.get("@class").asText();
@@ -57,7 +57,7 @@ public class AttributeDeserializer extends StdDeserializer<Attribute> {
 				&& TiledMaterialAttribute.TiledMaterialAlias.equals(type)) {
 			final String textureName = n.get("texture").asText();
 			if (!WandererConstants.ASSET_MANAGER.isLoaded(textureName, Texture.class)) {
-				LOG.error("Hot-loading TiledMaterial texture {}", textureName);
+				AttributeDeserializer.LOG.error("Hot-loading TiledMaterial texture {}", textureName);
 				WandererConstants.ASSET_MANAGER.load(textureName, Texture.class);
 				WandererConstants.ASSET_MANAGER.finishLoadingAsset(textureName);
 			}
@@ -71,8 +71,8 @@ public class AttributeDeserializer extends StdDeserializer<Attribute> {
 			att = TiledMaterialAttribute.create(texture, n.get("opacity").floatValue(), ratio);
 		} else if (BlendingAttribute.class.getSimpleName().equals(clazz) && BlendingAttribute.Alias.equals(type)) {
 			att = new BlendingAttribute(n.get("blended").asBoolean(),
-					getFunc(n.get("sourceFunction")),
-					getFunc(n.get("destFunction")),
+					AttributeDeserializer.getFunc(n.get("sourceFunction")),
+					AttributeDeserializer.getFunc(n.get("destFunction")),
 					n.get("opacity").floatValue());
 		} else {
 			throw new IllegalStateException("Cannot deser Attribute of class " + clazz + " and type " + type);
@@ -80,11 +80,11 @@ public class AttributeDeserializer extends StdDeserializer<Attribute> {
 		return att;
 	}
 
-	private static int getFunc(JsonNode n) {
+	private static int getFunc(final JsonNode n) {
 		if (n.isInt()) {
 			return n.asInt();
 		} else if (n.isTextual()) {
-			return DEPTH_FUNCS.get(n.asText());
+			return AttributeDeserializer.DEPTH_FUNCS.get(n.asText());
 		} else {
 			throw new IllegalArgumentException("Invalid value for blend function " + n);
 		}
@@ -97,8 +97,8 @@ public class AttributeDeserializer extends StdDeserializer<Attribute> {
 				"GL_ONE_MINUS_CONSTANT_ALPHA", "GL_SRC_ALPHA_SATURATE" };
 
 		try {
-			for (String f : funcs) {
-				DEPTH_FUNCS.put(f, GL20.class.getDeclaredField(f).getInt(null));
+			for (final String f : funcs) {
+				AttributeDeserializer.DEPTH_FUNCS.put(f, GL20.class.getDeclaredField(f).getInt(null));
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 			e.printStackTrace();

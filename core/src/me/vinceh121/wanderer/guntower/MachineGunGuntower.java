@@ -14,6 +14,7 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.combat.BulletEntity;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.ILivingEntity;
+import me.vinceh121.wanderer.i18n.I18N;
 import me.vinceh121.wanderer.math.Segment3;
 import me.vinceh121.wanderer.util.MathUtilsW;
 
@@ -22,12 +23,12 @@ public class MachineGunGuntower extends AbstractGuntower {
 	private final Array<MachineGunTurret> turrets = new Array<>();
 	private float fireTimeout;
 
-	public MachineGunGuntower(Wanderer game, MachineGunGuntowerMeta meta) {
+	public MachineGunGuntower(final Wanderer game, final MachineGunGuntowerMeta meta) {
 		super(game, meta);
 		this.meta = meta;
 
-		List<Vector3> turretPos = new ArrayList<>(this.meta.getTurrets().size);
-		for (MachineGunTurret turret : this.meta.getTurrets()) {
+		final List<Vector3> turretPos = new ArrayList<>(this.meta.getTurrets().size);
+		for (final MachineGunTurret turret : this.meta.getTurrets()) {
 			this.turrets.add(new MachineGunTurret(turret));
 			turretPos.add(turret.getRelativeTransform().getTranslation(new Vector3()));
 		}
@@ -37,11 +38,11 @@ public class MachineGunGuntower extends AbstractGuntower {
 
 	@Override
 	public void fire() {
-		if (fireTimeout != 0) {
+		if (this.fireTimeout != 0) {
 			return;
 		}
 
-		for (MachineGunTurret turret : this.turrets) {
+		for (final MachineGunTurret turret : this.turrets) {
 			this.fireTurret(turret);
 		}
 
@@ -49,27 +50,27 @@ public class MachineGunGuntower extends AbstractGuntower {
 		this.fireTimeout = 0.085f;
 	}
 
-	private void fireTurret(MachineGunTurret turret) {
-		turret.updateTransform(getTransform());
+	private void fireTurret(final MachineGunTurret turret) {
+		turret.updateTransform(this.getTransform());
 		turret.getAbsoluteTransform().rotate(this.getLookRotation());
-		Segment3 seg = turret.calculateRandomBulletPath();
+		final Segment3 seg = turret.calculateRandomBulletPath();
 
-		ClosestNotMeRayResultCallback cb = new ClosestNotMeRayResultCallback(getCollideObject());
-		game.getBtWorld().rayTest(seg.getStart(), seg.getEnd(), cb);
+		final ClosestNotMeRayResultCallback cb = new ClosestNotMeRayResultCallback(this.getCollideObject());
+		this.game.getBtWorld().rayTest(seg.getStart(), seg.getEnd(), cb);
 
 		if (cb.hasHit()) {
-			AbstractEntity e = this.game.getEntity(cb.getCollisionObject().getUserIndex());
+			final AbstractEntity e = this.game.getEntity(cb.getCollisionObject().getUserIndex());
 			if (e instanceof ILivingEntity) {
 				((ILivingEntity) e).damage(turret.getDamage(), turret.getType());
 			}
 		}
 
-		Vector3 hitPoint = new Vector3();
+		final Vector3 hitPoint = new Vector3();
 		cb.getHitPointWorld(hitPoint);
 
-		BulletEntity bullet = new BulletEntity(this.game);
+		final BulletEntity bullet = new BulletEntity(this.game);
 		bullet.setTranslation(seg.getStart());
-		Vector3 direction = seg.getEnd().cpy().sub(seg.getStart()).nor();
+		final Vector3 direction = seg.getEnd().cpy().sub(seg.getStart()).nor();
 		bullet.rotate(new Quaternion().setFromCross(direction, Vector3.Z).conjugate());
 		bullet.setDirection(direction);
 		bullet.setHasHit(cb.hasHit());
@@ -89,7 +90,7 @@ public class MachineGunGuntower extends AbstractGuntower {
 	}
 
 	@Override
-	public void tick(float delta) {
+	public void tick(final float delta) {
 		super.tick(delta);
 		this.fireTimeout -= delta;
 		if (this.fireTimeout < 0) {
@@ -99,15 +100,15 @@ public class MachineGunGuntower extends AbstractGuntower {
 
 	@Override
 	public String getName() {
-		return gettext("Gun tower");
+		return I18N.gettext("Gun tower");
 	}
 
 	@Override
 	public MachineGunGuntowerMeta getMeta() {
-		return meta;
+		return this.meta;
 	}
 
 	public Array<MachineGunTurret> getTurrets() {
-		return turrets;
+		return this.turrets;
 	}
 }

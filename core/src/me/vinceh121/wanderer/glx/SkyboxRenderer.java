@@ -52,7 +52,7 @@ public class SkyboxRenderer {
 			this.skies.putAll(WandererConstants.MAPPER.readValue(Gdx.files.internal("skies.json").read(),
 					new TypeReference<Map<String, SkyProperties>>() {
 					}));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException("Failed to load skies.json", e);
 		}
 
@@ -83,7 +83,7 @@ public class SkyboxRenderer {
 	/**
 	 * @param time Time of day, between 0 and 1
 	 */
-	public void update(float time) {
+	public void update(final float time) {
 		assert time >= 0 && time <= 1;
 		final float delta = time - this.previous;
 		this.previous = time;
@@ -114,22 +114,22 @@ public class SkyboxRenderer {
 		this.skyring.transform.rotateRad(Vector3.Y, -0.1f * delta / 0.016666668f);
 
 		this.sunLight.setDirection(this.sunDir);
-		this.sunLight.setColor(interpolatedColor(time, this.skyProperties.getSunLightColor()));
-		this.ambiantLight.color.set(interpolatedColor(time, this.skyProperties.getAmbLightColor()));
+		this.sunLight.setColor(this.interpolatedColor(time, this.skyProperties.getSunLightColor()));
+		this.ambiantLight.color.set(this.interpolatedColor(time, this.skyProperties.getAmbLightColor()));
 	}
 
-	private Color interpolatedColor(float time, Map<TimeRange, Color> colors) {
-		final TimeRange range = currentTimeRange(time, colors.keySet());
+	private Color interpolatedColor(final float time, final Map<TimeRange, Color> colors) {
+		final TimeRange range = this.currentTimeRange(time, colors.keySet());
 		if (range == null) {
 			return new Color();
 		}
 
-		final TimeRange nextRange = nextTimeRange(range.ordinal(), colors.keySet());
+		final TimeRange nextRange = this.nextTimeRange(range.ordinal(), colors.keySet());
 		if (nextRange == null) {
 			return new Color();
 		}
 
-		float alpha = (time - range.getRangeStart()) / (range.getRangeEnd() - range.getRangeStart());
+		final float alpha = (time - range.getRangeStart()) / (range.getRangeEnd() - range.getRangeStart());
 
 		final Color c = colors.get(range).cpy();
 		c.lerp(colors.get(nextRange), alpha);
@@ -137,8 +137,8 @@ public class SkyboxRenderer {
 		return c;
 	}
 
-	private TimeRange currentTimeRange(float time, Collection<TimeRange> ranges) {
-		TimeRange range = getTimeRange(time);
+	private TimeRange currentTimeRange(final float time, final Collection<TimeRange> ranges) {
+		final TimeRange range = SkyboxRenderer.getTimeRange(time);
 		if (ranges.contains(range)) {
 			return range;
 		}
@@ -151,7 +151,7 @@ public class SkyboxRenderer {
 		return null;
 	}
 
-	private TimeRange nextTimeRange(int start, Collection<TimeRange> ranges) {
+	private TimeRange nextTimeRange(final int start, final Collection<TimeRange> ranges) {
 		for (int i = start + 1; i < TimeRange.values().length + 1; i++) {
 			final TimeRange r = TimeRange.values()[i % TimeRange.values().length];
 			if (ranges.contains(r)) {
@@ -161,18 +161,18 @@ public class SkyboxRenderer {
 		return null;
 	}
 
-	public void setSkycapTexture(String tex) {
-		Texture texture = WandererConstants.ASSET_MANAGER.get(tex);
+	public void setSkycapTexture(final String tex) {
+		final Texture texture = WandererConstants.ASSET_MANAGER.get(tex);
 		texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.Linear);
-		Material m = this.skycap.materials.get(0);
+		final Material m = this.skycap.materials.get(0);
 		((TextureAttribute) m.get(TextureAttribute.Diffuse)).textureDescription.texture = texture;
 	}
 
-	private void move(ModelInstance ins, float azi, float ang, float scl, int layer) {
-		Vector3 pos = new Vector3();
+	private void move(final ModelInstance ins, final float azi, final float ang, final float scl, final int layer) {
+		final Vector3 pos = new Vector3();
 		pos.setFromSpherical(azi, ang);
 
-		Quaternion rot = new Quaternion();
+		final Quaternion rot = new Quaternion();
 		rot.setFromCross(pos, Vector3.Y);
 		rot.conjugate();
 
@@ -181,7 +181,7 @@ public class SkyboxRenderer {
 		ins.transform.set(pos, rot, new Vector3(scl, scl, scl));
 	}
 
-	public void render(ModelBatch batch, Environment env) {
+	public void render(final ModelBatch batch, final Environment env) {
 		batch.render(this.stars, env);
 		batch.render(this.sun, env);
 		batch.render(this.mars, env);
@@ -191,11 +191,11 @@ public class SkyboxRenderer {
 		batch.render(this.sky, env);
 	}
 
-	public boolean isDay(float time) {
+	public boolean isDay(final float time) {
 		return time >= 0 && time <= 0.5f;
 	}
 
-	public boolean isNight(float time) {
+	public boolean isNight(final float time) {
 		return time > 0.5f && time <= 1;
 	}
 
@@ -204,79 +204,79 @@ public class SkyboxRenderer {
 				IntAttribute.createCullFace(GL20.GL_FRONT),
 				new ShaderAttribute(new BaseShaderProvider() {
 					@Override
-					protected Shader createShader(Renderable renderable) {
-						SkyShader s = new SkyShader(renderable,
+					protected Shader createShader(final Renderable renderable) {
+						final SkyShader s = new SkyShader(renderable,
 								new Config(Gdx.files.internal("shaders/sky.vert").readString(),
 										Gdx.files.internal("shaders/sky.frag").readString()));
-						s.setTimeOfDay(previous);
-						s.setSunDir(sunDir);
+						s.setTimeOfDay(SkyboxRenderer.this.previous);
+						s.setSunDir(SkyboxRenderer.this.sunDir);
 						SkyboxRenderer.this.shader = s;
 						return s;
 					}
 				})));
 	}
 
-	private ModelInstance makeSphere(Material mat) {
-		ModelBuilder builder = new ModelBuilder();
-		Model model = builder.createSphere(10, 10, 10, 4, 4, mat, VertexAttributes.Usage.Position);
+	private ModelInstance makeSphere(final Material mat) {
+		final ModelBuilder builder = new ModelBuilder();
+		final Model model = builder.createSphere(10, 10, 10, 4, 4, mat, VertexAttributes.Usage.Position);
 		return new ModelInstance(model);
 	}
 
-	private ModelInstance makePlaneAlpha(String tex) {
-		ModelInstance ins = this.makePlane(tex);
+	private ModelInstance makePlaneAlpha(final String tex) {
+		final ModelInstance ins = this.makePlane(tex);
 		ins.materials.get(0).set(new BlendingAttribute(0.5f));
 		return ins;
 	}
 
-	private ModelInstance makePlaneOneOne(String tex) {
-		ModelInstance ins = this.makePlane(tex);
+	private ModelInstance makePlaneOneOne(final String tex) {
+		final ModelInstance ins = this.makePlane(tex);
 		ins.materials.get(0).set(new BlendingAttribute(GL20.GL_ONE, GL20.GL_ONE, 0.5f));
 		return ins;
 	}
 
-	private ModelInstance makeCapAlpha(String tex) {
-		ModelInstance ins = this.makeCap(tex);
+	private ModelInstance makeCapAlpha(final String tex) {
+		final ModelInstance ins = this.makeCap(tex);
 		ins.materials.get(0).set(new BlendingAttribute(0.5f));
 		return ins;
 	}
 
-	private ModelInstance makeRingAlpha(String tex) {
-		ModelInstance ins = this.makeRing(tex);
+	private ModelInstance makeRingAlpha(final String tex) {
+		final ModelInstance ins = this.makeRing(tex);
 		ins.materials.get(0).set(new BlendingAttribute(0.5f));
 		return ins;
 	}
 
-	private ModelInstance makeStarsOneOne(String tex) {
-		ModelInstance ins = this.makeStars(tex);
+	private ModelInstance makeStarsOneOne(final String tex) {
+		final ModelInstance ins = this.makeStars(tex);
 		ins.materials.get(0).set(new BlendingAttribute(GL20.GL_ONE, GL20.GL_ONE, 0.5f));
 		return ins;
 	}
 
-	private ModelInstance makePlane(String tex) {
-		Texture texture = WandererConstants.ASSET_MANAGER.get(tex, Texture.class);
+	private ModelInstance makePlane(final String tex) {
+		final Texture texture = WandererConstants.ASSET_MANAGER.get(tex, Texture.class);
 		texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.Linear);
 		return this.makePlane(texture);
 	}
 
-	private ModelInstance makeCap(String tex) {
-		Texture texture = WandererConstants.ASSET_MANAGER.get(tex, Texture.class);
+	private ModelInstance makeCap(final String tex) {
+		final Texture texture = WandererConstants.ASSET_MANAGER.get(tex, Texture.class);
 		texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.Linear);
 		return this.makeCap(texture);
 	}
 
-	private ModelInstance makeRing(String tex) {
-		Texture texture = WandererConstants.ASSET_MANAGER.get(tex, Texture.class);
+	private ModelInstance makeRing(final String tex) {
+		final Texture texture = WandererConstants.ASSET_MANAGER.get(tex, Texture.class);
 		texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.Linear);
 		return this.makeRing(texture);
 	}
 
-	private ModelInstance makeStars(String tex) {
-		Texture texture = WandererConstants.ASSET_MANAGER.get(tex, Texture.class);
+	private ModelInstance makeStars(final String tex) {
+		final Texture texture = WandererConstants.ASSET_MANAGER.get(tex, Texture.class);
 		texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.Linear);
 		return this.makeStars(texture);
 	}
 
-	private ModelInstance makePlane(Texture tex) {
+	private ModelInstance makePlane(final Texture tex) {
 		final Model model = WandererConstants.ASSET_MANAGER.get("orig/lib/mars/plane.obj", Model.class);
 		final ModelInstance ins = new ModelInstance(model);
 		ins.materials.get(0)
@@ -287,7 +287,7 @@ public class SkyboxRenderer {
 		return ins;
 	}
 
-	private ModelInstance makeCap(Texture tex) {
+	private ModelInstance makeCap(final Texture tex) {
 		// skybox01.n/model.obj has a small cap, others have the same with 10× scale
 		final Model model = WandererConstants.ASSET_MANAGER.get("orig/skybox01.n/model.obj", Model.class);
 		final ModelInstance ins = new ModelInstance(model);
@@ -299,7 +299,7 @@ public class SkyboxRenderer {
 		return ins;
 	}
 
-	private ModelInstance makeRing(Texture tex) {
+	private ModelInstance makeRing(final Texture tex) {
 		// skybox01.n/model.obj has a big ring, others have the same with 10× smaller
 		// scale
 		final Model model = WandererConstants.ASSET_MANAGER.get("orig/skybox01.n/bgplane.obj", Model.class);
@@ -312,7 +312,7 @@ public class SkyboxRenderer {
 		return ins;
 	}
 
-	private ModelInstance makeStars(Texture tex) {
+	private ModelInstance makeStars(final Texture tex) {
 		// skybox01.n/model.obj has a big ring, others have the same with 10× smaller
 		// scale
 		final Model model = WandererConstants.ASSET_MANAGER.get("orig/lib/stars/stars.obj", Model.class);
@@ -326,35 +326,35 @@ public class SkyboxRenderer {
 	}
 
 	public SkyProperties getSkyProperties() {
-		return skyProperties;
+		return this.skyProperties;
 	}
 
-	public void setSkyProperties(SkyProperties skyProperties) {
+	public void setSkyProperties(final SkyProperties skyProperties) {
 		this.skyProperties = skyProperties;
 	}
 
 	public Vector3 getSunDir() {
-		return sunDir;
+		return this.sunDir;
 	}
 
 	public Vector3 getMoonDir() {
-		return moonDir;
+		return this.moonDir;
 	}
 
 	public ColorAttribute getAmbiantLight() {
-		return ambiantLight;
+		return this.ambiantLight;
 	}
 
 	public DirectionalShadowLight getSunLight() {
-		return sunLight;
+		return this.sunLight;
 	}
 
 	public DirectionalLight getMoonLight() {
-		return moonLight;
+		return this.moonLight;
 	}
 
-	public static TimeRange getTimeRange(float time) {
-		for (TimeRange r : TimeRange.values()) {
+	public static TimeRange getTimeRange(final float time) {
+		for (final TimeRange r : TimeRange.values()) {
 			if (time <= r.getRangeEnd()) {
 				return r;
 			}
@@ -362,7 +362,7 @@ public class SkyboxRenderer {
 		return null;
 	}
 
-	public static enum TimeRange {
+	public enum TimeRange {
 		MORNING(0, 0.25f),
 		NOON(0.25f, 0.375f),
 		EVENING_START(0.375f, 0.4375f),
@@ -375,17 +375,17 @@ public class SkyboxRenderer {
 
 		private final float rangeStart, rangeEnd;
 
-		private TimeRange(float rangeStart, float rangeEnd) {
+		TimeRange(final float rangeStart, final float rangeEnd) {
 			this.rangeStart = rangeStart;
 			this.rangeEnd = rangeEnd;
 		}
 
 		public float getRangeStart() {
-			return rangeStart;
+			return this.rangeStart;
 		}
 
 		public float getRangeEnd() {
-			return rangeEnd;
+			return this.rangeEnd;
 		}
 	}
 }

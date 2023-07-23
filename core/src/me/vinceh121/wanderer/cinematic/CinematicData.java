@@ -43,50 +43,50 @@ public class CinematicData {
 	}
 
 	public String getSymbolicName() {
-		return symbolicName;
+		return this.symbolicName;
 	}
 
-	public void setSymbolicName(String symbolicName) {
+	public void setSymbolicName(final String symbolicName) {
 		this.symbolicName = symbolicName;
 	}
 
 	public AbstractEntity getCacheEntity() {
-		return cacheEntity;
+		return this.cacheEntity;
 	}
 
-	public void setCacheEntity(AbstractEntity cacheEntity) {
+	public void setCacheEntity(final AbstractEntity cacheEntity) {
 		this.cacheEntity = cacheEntity;
 	}
 
 	public AnimationTrack<Vector3KeyFrame, Vector3> getPosition() {
-		return position;
+		return this.position;
 	}
 
-	public void setPosition(AnimationTrack<Vector3KeyFrame, Vector3> position) {
+	public void setPosition(final AnimationTrack<Vector3KeyFrame, Vector3> position) {
 		this.position = position;
 	}
 
 	public AnimationTrack<QuaternionKeyFrame, Quaternion> getRotation() {
-		return rotation;
+		return this.rotation;
 	}
 
-	public void setRotation(AnimationTrack<QuaternionKeyFrame, Quaternion> rotation) {
+	public void setRotation(final AnimationTrack<QuaternionKeyFrame, Quaternion> rotation) {
 		this.rotation = rotation;
 	}
 
 	public AnimationTrack<Vector3KeyFrame, Vector3> getScale() {
-		return scale;
+		return this.scale;
 	}
 
-	public void setScale(AnimationTrack<Vector3KeyFrame, Vector3> scale) {
+	public void setScale(final AnimationTrack<Vector3KeyFrame, Vector3> scale) {
 		this.scale = scale;
 	}
 
 	public AnimationTrack<ActionKeyFrame, Void> getActions() {
-		return actions;
+		return this.actions;
 	}
 
-	public void setActions(AnimationTrack<ActionKeyFrame, Void> actions) {
+	public void setActions(final AnimationTrack<ActionKeyFrame, Void> actions) {
 		this.actions = actions;
 	}
 }

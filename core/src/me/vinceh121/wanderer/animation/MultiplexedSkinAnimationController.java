@@ -28,9 +28,9 @@ public class MultiplexedSkinAnimationController extends BaseAnimationController 
 	 */
 	private float previousTrans;
 
-	public MultiplexedSkinAnimationController(ModelInstance target) {
+	public MultiplexedSkinAnimationController(final ModelInstance target) {
 		super(target);
-		for (Node node : flattenNodes(target.nodes)) {
+		for (final Node node : MultiplexedSkinAnimationController.flattenNodes(target.nodes)) {
 			// bone nodes do not have NodeParts, only meshes do
 			if (node.parts.size == 0) {
 				this.boneNames.add(node.id);
@@ -71,8 +71,8 @@ public class MultiplexedSkinAnimationController extends BaseAnimationController 
 		}
 
 		if (this.current.playbackType == PlaybackType.LOOP_SMOOTH && this.smoothLoopTrans != 0) {
-			float alpha = this.smoothLoopTrans / this.transitionTime;
-			for (Animation anim : this.current.animations) {
+			final float alpha = this.smoothLoopTrans / this.transitionTime;
+			for (final Animation anim : this.current.animations) {
 				this.applyAnimations(anim, this.current.currentTime, anim, this.current.totalTime, alpha);
 			}
 			this.smoothLoopTrans = Math.max(0, this.smoothLoopTrans - delta);
@@ -101,24 +101,24 @@ public class MultiplexedSkinAnimationController extends BaseAnimationController 
 			return;
 		}
 
-		for (Animation anim : this.current.animations) {
+		for (final Animation anim : this.current.animations) {
 			this.applyAnimation(anim, this.current.currentTime);
 		}
 	}
 
-	public void playAnimationOptional(String state, PlaybackType playbackType, float speed) {
+	public void playAnimationOptional(final String state, final PlaybackType playbackType, final float speed) {
 		if (this.current == null || !this.current.name.equals(state)) {
 			this.playAnimation(state, playbackType, speed);
 		}
 	}
 
-	public void playAnimation(String state, PlaybackType playbackType, float speed) {
-		Array<Animation> anims = new Array<>(this.boneNames.size);
+	public void playAnimation(final String state, final PlaybackType playbackType, final float speed) {
+		final Array<Animation> anims = new Array<>(this.boneNames.size);
 
-		for (String bone : this.boneNames) {
-			for (String type : ANIM_TYPES) {
+		for (final String bone : this.boneNames) {
+			for (final String type : MultiplexedSkinAnimationController.ANIM_TYPES) {
 				// FIXME PERF ISSUE getAnimation() is an iterative search
-				Animation a = this.target.getAnimation(state + "_" + type + "_" + bone);
+				final Animation a = this.target.getAnimation(state + "_" + type + "_" + bone);
 				if (a != null) {
 					anims.add(a);
 				}
@@ -140,39 +140,39 @@ public class MultiplexedSkinAnimationController extends BaseAnimationController 
 	}
 
 	public AnimationTrack getCurrent() {
-		return current;
+		return this.current;
 	}
 
 	public AnimationTrack getPrevious() {
-		return previous;
+		return this.previous;
 	}
 
 	public boolean isDoTransitions() {
-		return doTransitions;
+		return this.doTransitions;
 	}
 
-	public void setDoTransitions(boolean doTransitions) {
+	public void setDoTransitions(final boolean doTransitions) {
 		this.doTransitions = doTransitions;
 	}
 
 	public float getTransitionTime() {
-		return transitionTime;
+		return this.transitionTime;
 	}
 
-	public void setTransitionTime(float transitionTime) {
+	public void setTransitionTime(final float transitionTime) {
 		this.transitionTime = transitionTime;
 	}
 
-	public static Array<Node> flattenNodes(Iterable<Node> nodes) {
-		Array<Node> list = new Array<>();
-		for (Node n : nodes) {
+	public static Array<Node> flattenNodes(final Iterable<Node> nodes) {
+		final Array<Node> list = new Array<>();
+		for (final Node n : nodes) {
 			list.add(n);
-			list.addAll(flattenNodes(n.getChildren()));
+			list.addAll(MultiplexedSkinAnimationController.flattenNodes(n.getChildren()));
 		}
 		return list;
 	}
 
-	public static enum PlaybackType {
+	public enum PlaybackType {
 		NORMAL, LOOP, LOOP_SMOOTH, BOOMERANG;
 	}
 
@@ -182,53 +182,53 @@ public class MultiplexedSkinAnimationController extends BaseAnimationController 
 		private float totalTime, currentTime, speed = 1f;
 		private PlaybackType playbackType;
 
-		public AnimationTrack(String name, Array<Animation> animations) {
+		public AnimationTrack(final String name, final Array<Animation> animations) {
 			this.name = name;
 			this.animations = animations;
 
-			for (Animation a : animations) {
+			for (final Animation a : animations) {
 				this.totalTime = Math.max(a.duration, this.totalTime);
 			}
 		}
 
 		public String getName() {
-			return name;
+			return this.name;
 		}
 
 		public float getTotalTime() {
-			return totalTime;
+			return this.totalTime;
 		}
 
-		public void setTotalTime(float totalTime) {
+		public void setTotalTime(final float totalTime) {
 			this.totalTime = totalTime;
 		}
 
 		public float getCurrentTime() {
-			return currentTime;
+			return this.currentTime;
 		}
 
-		public void setCurrentTime(float current) {
+		public void setCurrentTime(final float current) {
 			this.currentTime = current;
 		}
 
 		public float getSpeed() {
-			return speed;
+			return this.speed;
 		}
 
-		public void setSpeed(float speed) {
+		public void setSpeed(final float speed) {
 			this.speed = speed;
 		}
 
 		public PlaybackType getPlaybackType() {
-			return playbackType;
+			return this.playbackType;
 		}
 
-		public void setPlaybackType(PlaybackType playbackType) {
+		public void setPlaybackType(final PlaybackType playbackType) {
 			this.playbackType = playbackType;
 		}
 
 		public Array<Animation> getAnimations() {
-			return animations;
+			return this.animations;
 		}
 	}
 }

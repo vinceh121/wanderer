@@ -15,7 +15,7 @@ import me.vinceh121.wanderer.WandererConstants;
 
 public class ModManager {
 	private static final Logger LOG = LogManager.getLogger(ModManager.class);
-	private final List<Mod> mods = new ArrayList<Mod>();
+	private final List<Mod> mods = new ArrayList<>();
 
 	public void loadMods() throws IOException {
 		for (final FileHandle modFolder : Gdx.files.internal("mods").list()) {
@@ -28,12 +28,12 @@ public class ModManager {
 			this.mods.add(mod);
 		}
 
-		LOG.info("Loaded {} mods", this.mods.size());
+		ModManager.LOG.info("Loaded {} mods", this.mods.size());
 	}
 
-	public void executeModsEntryPoints(ScriptManager scriptManager) {
+	public void executeModsEntryPoints(final ScriptManager scriptManager) {
 		for (final Mod mod : this.mods) {
-			FileHandle entryPoint = mod.getFolder().child("index.js");
+			final FileHandle entryPoint = mod.getFolder().child("index.js");
 
 			if (!entryPoint.exists()) {
 				continue;

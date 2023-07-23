@@ -9,7 +9,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 
 public class TransformAnimation {
-	private final SortedSet<TransformKeyFrame> keys = new TreeSet<>((k1, k2) -> Float.compare(k1.getTime(), k2.getTime()));
+	private final SortedSet<TransformKeyFrame> keys =
+			new TreeSet<>((k1, k2) -> Float.compare(k1.getTime(), k2.getTime()));
 	private Interpolation inter;
 
 	public Interpolation getInter() {
@@ -72,7 +73,8 @@ public class TransformAnimation {
 		return anim;
 	}
 
-	public static Matrix4 interpolate(final Matrix4 k1, final Matrix4 k2, final float alpha, final Interpolation inter) {
+	public static Matrix4 interpolate(final Matrix4 k1, final Matrix4 k2, final float alpha,
+			final Interpolation inter) {
 		Objects.requireNonNull(inter);
 		final float[] arr = new float[16];
 		for (int i = 0; i < 16; i++) {

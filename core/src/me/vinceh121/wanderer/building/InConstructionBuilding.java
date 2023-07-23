@@ -50,7 +50,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 	}
 
 	@Override
-	public void tick(float delta) {
+	public void tick(final float delta) {
 		super.tick(delta);
 
 		this.aliveTime += Gdx.graphics.getDeltaTime();

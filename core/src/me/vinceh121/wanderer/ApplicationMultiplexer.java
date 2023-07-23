@@ -9,51 +9,57 @@ public class ApplicationMultiplexer implements ApplicationListener {
 		this(null);
 	}
 
-	public ApplicationMultiplexer(ApplicationListener initialDelegate) {
+	public ApplicationMultiplexer(final ApplicationListener initialDelegate) {
 		this.delegate = initialDelegate;
 	}
 
 	@Override
 	public void create() {
-		if (this.delegate != null)
-			delegate.create();
+		if (this.delegate != null) {
+			this.delegate.create();
+		}
 	}
 
 	@Override
-	public void resize(int width, int height) {
-		if (this.delegate != null)
-			delegate.resize(width, height);
+	public void resize(final int width, final int height) {
+		if (this.delegate != null) {
+			this.delegate.resize(width, height);
+		}
 	}
 
 	@Override
 	public void render() {
-		if (this.delegate != null)
-			delegate.render();
+		if (this.delegate != null) {
+			this.delegate.render();
+		}
 	}
 
 	@Override
 	public void pause() {
-		if (this.delegate != null)
-			delegate.pause();
+		if (this.delegate != null) {
+			this.delegate.pause();
+		}
 	}
 
 	@Override
 	public void resume() {
-		if (this.delegate != null)
-			delegate.resume();
+		if (this.delegate != null) {
+			this.delegate.resume();
+		}
 	}
 
 	@Override
 	public void dispose() {
-		if (this.delegate != null)
-			delegate.dispose();
+		if (this.delegate != null) {
+			this.delegate.dispose();
+		}
 	}
 
 	public ApplicationListener getDelegate() {
-		return delegate;
+		return this.delegate;
 	}
 
-	public void setDelegate(ApplicationListener delegate) {
+	public void setDelegate(final ApplicationListener delegate) {
 		this.delegate = delegate;
 	}
 }

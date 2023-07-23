@@ -12,7 +12,7 @@ import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class ExplosionPart extends AbstractEntity {
 
-	public ExplosionPart(Wanderer game, DisplayModel model) {
+	public ExplosionPart(final Wanderer game, final DisplayModel model) {
 		super(game);
 
 		this.setMass(0.01f);
@@ -22,7 +22,7 @@ public class ExplosionPart extends AbstractEntity {
 				| CollisionFilterGroups.StaticFilter);
 		this.setCollideModel(model.getDisplayModel());
 
-		DisplayModel mdl = new DisplayModel(model);
+		final DisplayModel mdl = new DisplayModel(model);
 		this.setTransform(mdl.getRelativeTransform());
 		mdl.getRelativeTransform().idt();
 		this.addModel(mdl);
@@ -31,7 +31,7 @@ public class ExplosionPart extends AbstractEntity {
 				new ParticleEmitter(this.game.getGraphicsManager().getParticleSystem(), "particles/debrisfire1.p"));
 	}
 
-	public void thrust(float strength) {
+	public void thrust(final float strength) {
 		this.getCollideObject().setLinearVelocity(MathUtilsW.randomDirectionAround(Vector3.Y, 0.1f).scl(strength));
 		this.getCollideObject()
 			.setAngularVelocity(new Vector3(MathUtils.random(-1, 1), MathUtils.random(-1, 1), MathUtils.random(-1, 1)));

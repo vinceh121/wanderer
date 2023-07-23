@@ -14,7 +14,7 @@ public abstract class ActionKeyFrame extends KeyFrame<Void> {
 	public ActionKeyFrame() {
 	}
 
-	public ActionKeyFrame(float time) {
+	public ActionKeyFrame(final float time) {
 		super(time, null);
 	}
 
@@ -25,15 +25,15 @@ public abstract class ActionKeyFrame extends KeyFrame<Void> {
 	public Void getValue() {
 		return super.getValue();
 	}
-	
+
 	@JsonIgnore
 	@Override
-	public void setValue(Void value) {
+	public void setValue(final Void value) {
 		super.setValue(value);
 	}
-	
+
 	@Override
-	public Void interpolate(Void other, Interpolation inter, float alpha) {
+	public Void interpolate(final Void other, final Interpolation inter, final float alpha) {
 		return null;
 	}
 }

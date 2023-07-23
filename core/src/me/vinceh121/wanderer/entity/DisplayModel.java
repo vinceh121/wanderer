@@ -116,10 +116,10 @@ public class DisplayModel {
 	}
 
 	public String getAnimationChannel() {
-		return animationChannel;
+		return this.animationChannel;
 	}
 
-	public void setAnimationChannel(String animationChannel) {
+	public void setAnimationChannel(final String animationChannel) {
 		this.animationChannel = animationChannel;
 	}
 
@@ -169,8 +169,8 @@ public class DisplayModel {
 
 	@Override
 	public String toString() {
-		return "DisplayModel [relativeTransform=" + relativeTransform + ", absoluteTransform=" + absoluteTransform
-				+ ", displayModel=" + displayModel + ", displayTexture=" + displayTexture + ", animationChannel="
-				+ animationChannel + "]";
+		return "DisplayModel [relativeTransform=" + this.relativeTransform + ", absoluteTransform=" + this.absoluteTransform
+				+ ", displayModel=" + this.displayModel + ", displayTexture=" + this.displayTexture + ", animationChannel="
+				+ this.animationChannel + "]";
 	}
 }

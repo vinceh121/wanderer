@@ -10,22 +10,22 @@ import com.electronwill.nightconfig.toml.TomlFormat;
 public final class Preferences {
 	private static CommentedConfig PREFERENCES;
 
-	public static void loadPreferences(Path path) {
-		PREFERENCES = CommentedFileConfig.builder(path, TomlFormat.instance()).onFileNotFound((f, c) -> {
+	public static void loadPreferences(final Path path) {
+		Preferences.PREFERENCES = CommentedFileConfig.builder(path, TomlFormat.instance()).onFileNotFound((f, c) -> {
 			Files.createDirectories(f.getParent());
 			Files.createFile(f);
 			c.initEmptyFile(f);
 			return false;
 		}).autosave().build();
 
-		((CommentedFileConfig) PREFERENCES).load();
+		((CommentedFileConfig) Preferences.PREFERENCES).load();
 	}
 
 	public static void loadInMemory() {
-		PREFERENCES = CommentedConfig.inMemoryConcurrent();
+		Preferences.PREFERENCES = CommentedConfig.inMemoryConcurrent();
 	}
 
 	public static CommentedConfig getPreferences() {
-		return PREFERENCES;
+		return Preferences.PREFERENCES;
 	}
 }

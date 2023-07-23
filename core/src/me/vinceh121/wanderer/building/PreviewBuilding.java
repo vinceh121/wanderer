@@ -25,49 +25,49 @@ public class PreviewBuilding extends AbstractBuilding {
 		this.setCollideModel(null);
 
 		for (final DisplayModel m : this.getModels()) {
-			m.addTextureAttribute(ColorAttribute.createEmissive(BLUE));
+			m.addTextureAttribute(ColorAttribute.createEmissive(PreviewBuilding.BLUE));
 			m.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_DST_COLOR, 0.5f));
 		}
 	}
 
 	@Override
-	public void enterBtWorld(btDiscreteDynamicsWorld world) {
+	public void enterBtWorld(final btDiscreteDynamicsWorld world) {
 		super.enterBtWorld(world);
-		ContactResultCallback cb = new ContactResultCallback() {
+		final ContactResultCallback cb = new ContactResultCallback() {
 			@Override
-			public float addSingleResult(btManifoldPoint cp, btCollisionObjectWrapper colObj0Wrap, int partId0,
-					int index0, btCollisionObjectWrapper colObj1Wrap, int partId1, int index1) {
-				int idx = colObj1Wrap.getCollisionObject().getUserIndex();
-				if (game.getEntity(idx) instanceof IControllableEntity) {
-					setBlocked(true);
+			public float addSingleResult(final btManifoldPoint cp, final btCollisionObjectWrapper colObj0Wrap, final int partId0,
+					final int index0, final btCollisionObjectWrapper colObj1Wrap, final int partId1, final int index1) {
+				final int idx = colObj1Wrap.getCollisionObject().getUserIndex();
+				if (PreviewBuilding.this.game.getEntity(idx) instanceof IControllableEntity) {
+					PreviewBuilding.this.setBlocked(true);
 				}
 				return 0;
 			}
 		};
-		this.game.getBtWorld().contactTest(getInteractZone(), cb);
+		this.game.getBtWorld().contactTest(this.getInteractZone(), cb);
 		cb.dispose();
 	}
 
 	@Override
-	protected void onInteractContact(btCollisionObject colObj0, btCollisionObject colObj1) {
+	protected void onInteractContact(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 		this.setBlocked(true);
 	}
 
 	@Override
-	protected void onInteractStop(btCollisionObject colObj0, btCollisionObject colObj1) {
+	protected void onInteractStop(final btCollisionObject colObj0, final btCollisionObject colObj1) {
 		this.setBlocked(false);
 	}
 
-	private void setBlocked(boolean b) {
+	private void setBlocked(final boolean b) {
 		this.blocked = b;
 		if (b) {
-			this.setColor(RED);
+			this.setColor(PreviewBuilding.RED);
 		} else {
-			this.setColor(BLUE);
+			this.setColor(PreviewBuilding.BLUE);
 		}
 	}
 
-	private void setColor(Color c) {
+	private void setColor(final Color c) {
 		for (final DisplayModel m : this.getModels()) {
 			for (final Attribute att : m.getTextureAttributes()) {
 				if (att instanceof ColorAttribute) {
@@ -78,6 +78,6 @@ public class PreviewBuilding extends AbstractBuilding {
 	}
 
 	public boolean isBlocked() {
-		return blocked;
+		return this.blocked;
 	}
 }

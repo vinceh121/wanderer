@@ -36,6 +36,7 @@ import me.vinceh121.wanderer.character.CharacterWController.FallListener;
 import me.vinceh121.wanderer.entity.AbstractLivingControllableEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.event.Event;
+import me.vinceh121.wanderer.i18n.I18N;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
@@ -81,8 +82,8 @@ public class CharacterW extends AbstractLivingControllableEntity {
 				WandererConstants.ASSET_MANAGER.get(meta.getFallSound(), Sound3D.class)
 					.playSource3D()
 					.setPosition(CharacterW.this.getTransform().getTranslation(new Vector3()));
-				CharacterW.this.eventDispatcher.dispatchEvent(new Event(EVENT_JUMP_END));
-				justRan = justBackedUp = justTurnedLeft = justTurnedRight = false;
+				CharacterW.this.eventDispatcher.dispatchEvent(new Event(CharacterW.EVENT_JUMP_END));
+				CharacterW.this.justRan = CharacterW.this.justBackedUp = CharacterW.this.justTurnedLeft = CharacterW.this.justTurnedRight = false;
 			}
 
 			@Override
@@ -91,7 +92,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 			@Override
 			public void shouldDie() {
-				onDeath();
+				CharacterW.this.onDeath();
 			}
 		});
 		this.getGhostObject().setUserIndex(this.getId().getValue());
@@ -116,7 +117,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	}
 
 	@Override
-	public void tick(float delta) {
+	public void tick(final float delta) {
 		super.tick(delta);
 
 		if (this.animController == null && this.getModels().size > 0
@@ -200,7 +201,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 			final Vector3 characterCenter = characterTransform.cpy().add(0, this.meta.getCapsuleHeight() / 2, 0);
 
-			ClosestNotMeRayResultCallback cb = new ClosestNotMeRayResultCallback(getGhostObject());
+			final ClosestNotMeRayResultCallback cb = new ClosestNotMeRayResultCallback(this.getGhostObject());
 			this.game.getBtWorld().rayTest(characterCenter, pos, cb);
 			if (cb.hasHit()) {
 				pos.lerp(characterCenter, 1 - cb.getClosestHitFraction());
@@ -218,7 +219,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	@Override
 	public void onDeath() {
 		// TODO
-		LOG.debug("Dead!");
+		CharacterW.LOG.debug("Dead!");
 	}
 
 	public void processInput() {
@@ -263,7 +264,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		return new InputListenerAdapter(50) {
 			@Override
 			public boolean inputDown(final Input in) {
-				if (controller.isJumping() || controller.isFalling()) {
+				if (CharacterW.this.controller.isJumping() || CharacterW.this.controller.isFalling()) {
 					return false;
 				}
 
@@ -319,7 +320,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 			@Override
 			public boolean mouseMoved(final int x, final int y) {
-				if (controller.isJumping() || controller.isFalling()) {
+				if (CharacterW.this.controller.isJumping() || CharacterW.this.controller.isFalling()) {
 					return false;
 				}
 
@@ -338,9 +339,9 @@ public class CharacterW extends AbstractLivingControllableEntity {
 						CharacterW.this.controller.getWorldTransform().rotate(Vector3.Y, -lookSensX * x));
 
 				if (x < 0) {
-					justTurnedLeft = true;
+					CharacterW.this.justTurnedLeft = true;
 				} else if (x > 0) {
-					justTurnedRight = true;
+					CharacterW.this.justTurnedRight = true;
 				}
 
 				return true;
@@ -350,7 +351,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 	private void placeBuilding() {
 		if (this.getClan().getEnergy() < this.placing.getEnergyRequired()) {
-			this.game.showMessage(gettext("Not enough energy!"));
+			this.game.showMessage(I18N.gettext("Not enough energy!"));
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class)
 				.playGeneral()
 				.setDisposeOnStop(true);
@@ -358,7 +359,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		}
 
 		if (this.previewBuilding.isBlocked()) {
-			this.game.showMessage(gettext("Slot blocked!"));
+			this.game.showMessage(I18N.gettext("Slot blocked!"));
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound3D.class)
 				.playGeneral()
 				.setDisposeOnStop(true);
@@ -392,13 +393,13 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		}
 		final AbstractBuildingMeta build = (AbstractBuildingMeta) arti;
 		if (this.getClan().getEnergy() < build.getEnergyRequired()) {
-			this.game.showMessage(gettext("Not enough energy!"));
+			this.game.showMessage(I18N.gettext("Not enough energy!"));
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class).playGeneral();
 			return;
 		}
 		final Array<Slot> free = this.attachedIsland.getFreeSlots(build.getSlotType());
 		if (free.size == 0) {
-			this.game.showMessage(gettext("No free slot!"));
+			this.game.showMessage(I18N.gettext("No free slot!"));
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound3D.class).playGeneral();
 			return;
 		}
@@ -519,23 +520,23 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	}
 
 	@Override
-	public void writeState(ObjectNode node) {
+	public void writeState(final ObjectNode node) {
 		super.writeState(node);
 		node.put("meta", MetaRegistry.getInstance().getReverse(this.meta));
 		node.put("beltSize", this.getBeltSize());
 		final ArrayNode belt = node.putArray("belt");
-		for (ArtifactMeta m : this.belt) {
+		for (final ArtifactMeta m : this.belt) {
 			belt.add(MetaRegistry.getInstance().getReverse(m));
 		}
 	}
 
 	@Override
-	public void readState(ObjectNode node) {
+	public void readState(final ObjectNode node) {
 		super.readState(node);
 		this.setBeltSize(node.get("beltSize").asInt());
 		this.belt.clear();
 		final ArrayNode arrBelt = node.withArray("belt");
-		for (JsonNode n : arrBelt) {
+		for (final JsonNode n : arrBelt) {
 			this.belt.add(MetaRegistry.getInstance().get(n.asText()));
 		}
 	}

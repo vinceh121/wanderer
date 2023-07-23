@@ -97,8 +97,8 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 		this.game.removeEntity(this);
 		this.dispose();
 
-		for (DisplayModel m : this.explosionParts) {
-			ExplosionPart part = new ExplosionPart(game, m);
+		for (final DisplayModel m : this.explosionParts) {
+			final ExplosionPart part = new ExplosionPart(this.game, m);
 			part.translate(this.getTranslation());
 			part.addEventListener("collideModelLoaded", e -> part.thrust(10));
 			this.game.addEntity(part);
@@ -188,14 +188,14 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 	}
 
 	@Override
-	public void writeState(ObjectNode node) {
+	public void writeState(final ObjectNode node) {
 		super.writeState(node);
 		node.put("meta", MetaRegistry.getInstance().getReverse(this.getMeta()));
 		node.put("island", this.getIsland().getId().getValue());
 	}
 
 	@Override
-	public void readState(ObjectNode node) {
+	public void readState(final ObjectNode node) {
 		super.readState(node);
 		this.setIsland((Island) this.game.getEntity(node.get("island").asInt()));
 	}

@@ -9,11 +9,11 @@ public class MachineGunGuntowerMeta extends AbstractGuntowerMeta {
 	private final Array<MachineGunTurret> turrets = new Array<>();
 
 	public Array<MachineGunTurret> getTurrets() {
-		return turrets;
+		return this.turrets;
 	}
 
 	@Override
-	public AbstractEntity create(Wanderer game) {
+	public AbstractEntity create(final Wanderer game) {
 		return new MachineGunGuntower(game, this);
 	}
 }

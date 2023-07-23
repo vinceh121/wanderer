@@ -8,47 +8,47 @@ public class PropMeta implements IMeta {
 	private float mass;
 
 	public String getDisplayModel() {
-		return displayModel;
+		return this.displayModel;
 	}
 
-	public void setDisplayModel(String displayModel) {
+	public void setDisplayModel(final String displayModel) {
 		this.displayModel = displayModel;
 	}
 
 	public String getCollideModel() {
-		return collideModel;
+		return this.collideModel;
 	}
 
-	public void setCollideModel(String collideModel) {
+	public void setCollideModel(final String collideModel) {
 		this.collideModel = collideModel;
 	}
 
 	public String getTexture() {
-		return texture;
+		return this.texture;
 	}
 
-	public void setTexture(String texture) {
+	public void setTexture(final String texture) {
 		this.texture = texture;
 	}
 
 	public String getDetailMapTexture() {
-		return detailMapTexture;
+		return this.detailMapTexture;
 	}
 
-	public void setDetailMapTexture(String detailMapTexture) {
+	public void setDetailMapTexture(final String detailMapTexture) {
 		this.detailMapTexture = detailMapTexture;
 	}
 
 	public float getMass() {
-		return mass;
+		return this.mass;
 	}
 
-	public void setMass(float mass) {
+	public void setMass(final float mass) {
 		this.mass = mass;
 	}
 
 	@Override
-	public AbstractEntity create(Wanderer game) {
+	public AbstractEntity create(final Wanderer game) {
 		return new Prop(game, this);
 	}
 }

@@ -18,7 +18,8 @@ public final class JsAudio {
 		JsUtils.install(scope, "play", JsAudio::play);
 	}
 
-	private static Object play(final Context lcx, final Scriptable lscope, final Scriptable thisObj, final Object[] args) {
+	private static Object play(final Context lcx, final Scriptable lscope, final Scriptable thisObj,
+			final Object[] args) {
 		final SoundEmitter3D source;
 		if (args.length == 0) {
 			throw new IllegalArgumentException("Can't invoke play() with no arguments");

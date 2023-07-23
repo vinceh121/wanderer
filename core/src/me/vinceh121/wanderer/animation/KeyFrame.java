@@ -11,49 +11,52 @@ public abstract class KeyFrame<T> {
 	public KeyFrame() {
 	}
 
-	public KeyFrame(float time, T value) {
+	public KeyFrame(final float time, final T value) {
 		this.time = time;
 		this.value = value;
 	}
 
 	public float getTime() {
-		return time;
+		return this.time;
 	}
 
-	public void setTime(float time) {
+	public void setTime(final float time) {
 		this.time = time;
 	}
 
 	public T getValue() {
-		return value;
+		return this.value;
 	}
 
-	public void setValue(T value) {
+	public void setValue(final T value) {
 		this.value = value;
 	}
 
 	public abstract T interpolate(T other, Interpolation i, float alpha);
-	
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(time, value);
+		return Objects.hash(this.time, this.value);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
-		KeyFrame<?> other = (KeyFrame<?>) obj;
-		return Float.floatToIntBits(time) == Float.floatToIntBits(other.time) && Objects.equals(value, other.value);
+		}
+		final KeyFrame<?> other = (KeyFrame<?>) obj;
+		return Float.floatToIntBits(this.time) == Float.floatToIntBits(other.time) && Objects.equals(this.value, other.value);
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " [time=" + time + ", value=" + value + "]";
+		return this.getClass().getName() + " [time=" + this.time + ", value=" + this.value + "]";
 	}
 
 }

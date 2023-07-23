@@ -24,17 +24,17 @@ public class ObjectivesView extends Table {
 		this.row();
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title.setText(title);
 	}
 
 	public void clearObjectives() {
-		for (Cell<Label> obj : this.objectives) {
+		for (final Cell<Label> obj : this.objectives) {
 			this.removeActor(obj.getActor());
 		}
 	}
 
-	public void setObjectives(List<String> newObjectives) {
+	public void setObjectives(final List<String> newObjectives) {
 		this.clearObjectives();
 		int i = 0;
 
@@ -49,20 +49,20 @@ public class ObjectivesView extends Table {
 	}
 
 	public Set<Integer> getObjectivesCompleted() {
-		return objectivesComplete;
+		return this.objectivesComplete;
 	}
 
-	public void setObjectivesCompleted(Set<Integer> completedObjectives) {
+	public void setObjectivesCompleted(final Set<Integer> completedObjectives) {
 		this.objectivesComplete = completedObjectives;
 		this.updateObjectivesFormatting();
 	}
 
 	private void updateObjectivesFormatting() {
-		for (int i = 0; i < this.objectives.size(); i++) {
-			this.objectives.get(i).getActor().setColor(Color.WHITE);
+		for (final Cell<Label> element : this.objectives) {
+			element.getActor().setColor(Color.WHITE);
 		}
-		
-		for (int obj : this.objectivesComplete) {
+
+		for (final int obj : this.objectivesComplete) {
 			this.objectives.get(obj).getActor().setColor(Color.GREEN);
 		}
 	}

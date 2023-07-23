@@ -10,16 +10,16 @@ public class QuaternionKeyFrame extends KeyFrame<Quaternion> {
 	public QuaternionKeyFrame() {
 	}
 
-	public QuaternionKeyFrame(float time, Quaternion value) {
+	public QuaternionKeyFrame(final float time, final Quaternion value) {
 		super(time, value);
 	}
 
 	@Override
-	public Quaternion interpolate(Quaternion other, Interpolation i, float alpha) {
+	public Quaternion interpolate(final Quaternion other, final Interpolation i, final float alpha) {
 		assert i != null : "QuaternionKeyFrame only supports internal SLERP, set interpolation to null";
 		return this.getValue().cpy().slerp(other, alpha);
 	}
 
-	public void action(Wanderer game, AbstractEntity target, float time) {
+	public void action(final Wanderer game, final AbstractEntity target, final float time) {
 	}
 }

@@ -50,7 +50,7 @@ public class GraphicsManager extends ApplicationAdapter {
 	@Override
 	public void create() {
 		this.modelBatch = new ModelBatch(new WandererShaderProvider());
-		DepthShader.Config shadowConfig = new DepthShader.Config();
+		final DepthShader.Config shadowConfig = new DepthShader.Config();
 		shadowConfig.numBones = 64;
 		this.shadowBatch = new ModelBatch(new DepthShaderProvider(shadowConfig));
 
@@ -132,11 +132,11 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.modelBatch.end();
 	}
 
-	public void renderSkybox(float time) {
+	public void renderSkybox(final float time) {
 		final Vector3 oldPos = new Vector3(this.cam.position);
 		this.cam.position.setZero();
 		this.cam.update();
-		this.modelBatch.begin(cam);
+		this.modelBatch.begin(this.cam);
 
 		this.skybox.update(time);
 		this.skybox.render(this.modelBatch, this.env);
@@ -209,7 +209,7 @@ public class GraphicsManager extends ApplicationAdapter {
 	}
 
 	public ModelBatch getShadowBatch() {
-		return shadowBatch;
+		return this.shadowBatch;
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class GraphicsManager extends ApplicationAdapter {
 	}
 
 	public SkyboxRenderer getSkybox() {
-		return skybox;
+		return this.skybox;
 	}
 
 	public ParticleSystem getParticleSystem() {
@@ -249,7 +249,7 @@ public class GraphicsManager extends ApplicationAdapter {
 		}
 
 		@Override
-		public Shader getShader(Renderable renderable) {
+		public Shader getShader(final Renderable renderable) {
 			if (renderable.material.get(ShaderAttribute.TYPE_SHADER) != null) {
 				return this.createShader(renderable);
 			}
@@ -261,8 +261,8 @@ public class GraphicsManager extends ApplicationAdapter {
 			if (renderable.shader != null) {
 				return renderable.shader;
 			} else if (renderable.material.get(ShaderAttribute.TYPE_SHADER) != null) {
-				ShaderAttribute att = (ShaderAttribute) renderable.material.get(ShaderAttribute.TYPE_SHADER);
-				Shader shader = att.getShaderProvider().getShader(renderable);
+				final ShaderAttribute att = (ShaderAttribute) renderable.material.get(ShaderAttribute.TYPE_SHADER);
+				final Shader shader = att.getShaderProvider().getShader(renderable);
 				renderable.shader = shader;
 				return shader;
 			}
@@ -272,20 +272,20 @@ public class GraphicsManager extends ApplicationAdapter {
 
 	private static final Pattern PAT_ANNOTATION = Pattern.compile("[0-9]+\\(([0-9]+)\\) : (.+)");
 
-	public static String shaderDebug(String glLog, String fragCode, String vertCode) {
-		String[] logLines = glLog.split("\n");
-		MultiValuedMap<Integer, String> annotations = new ArrayListValuedHashMap<>();
-		StringBuilder out = new StringBuilder();
+	public static String shaderDebug(final String glLog, final String fragCode, final String vertCode) {
+		final String[] logLines = glLog.split("\n");
+		final MultiValuedMap<Integer, String> annotations = new ArrayListValuedHashMap<>();
+		final StringBuilder out = new StringBuilder();
 
 		// read GL error log
 		for (int i = 1; i < logLines.length; i++) { // FIXME ignore "Fragment shader:", "Vertex shader:" line
-			Matcher m = PAT_ANNOTATION.matcher(logLines[i]);
+			final Matcher m = GraphicsManager.PAT_ANNOTATION.matcher(logLines[i]);
 			if (m.find()) {
 				annotations.put(Integer.parseInt(m.group(1)), m.group(2));
 			}
 		}
 
-		String[] fragLines = fragCode.split("\n");
+		final String[] fragLines = fragCode.split("\n");
 		out.append("\n");
 		for (int i = 0; i < fragLines.length; i++) {
 			out.append(String.format("%4d", i + 1));
@@ -293,7 +293,7 @@ public class GraphicsManager extends ApplicationAdapter {
 			out.append(fragLines[i]);
 			out.append("\n");
 			if (annotations.containsKey(i + 1)) {
-				for (String a : annotations.get(i + 1)) {
+				for (final String a : annotations.get(i + 1)) {
 					out.append("        ^ ");
 					out.append(a);
 					out.append("\n\n");

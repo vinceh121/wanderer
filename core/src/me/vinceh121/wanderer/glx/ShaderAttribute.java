@@ -7,17 +7,17 @@ import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 
 public class ShaderAttribute extends Attribute {
 	public static final String ALIAS_SHADER = "shader";
-	public static final long TYPE_SHADER = register(ALIAS_SHADER);
+	public static final long TYPE_SHADER = Attribute.register(ShaderAttribute.ALIAS_SHADER);
 	private final ShaderProvider shaderProvider;
 
-	public ShaderAttribute(ShaderProvider shaderProvider) {
-		super(TYPE_SHADER);
+	public ShaderAttribute(final ShaderProvider shaderProvider) {
+		super(ShaderAttribute.TYPE_SHADER);
 		Objects.requireNonNull(shaderProvider);
 		this.shaderProvider = shaderProvider;
 	}
 
 	@Override
-	public int compareTo(Attribute o) {
+	public int compareTo(final Attribute o) {
 		throw new UnsupportedOperationException("ShaderAttribute#compareTo(o) is not implemented");
 	}
 
@@ -27,6 +27,6 @@ public class ShaderAttribute extends Attribute {
 	}
 
 	public ShaderProvider getShaderProvider() {
-		return shaderProvider;
+		return this.shaderProvider;
 	}
 }

@@ -5,15 +5,14 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 
 public class InvisibleKey extends ActionKeyFrame {
 	public InvisibleKey() {
-		super();
 	}
 
-	public InvisibleKey(float time) {
+	public InvisibleKey(final float time) {
 		super(time);
 	}
 
 	@Override
-	public void action(Wanderer game, CinematicController controller, AbstractEntity target, float time) {
+	public void action(final Wanderer game, final CinematicController controller, final AbstractEntity target, final float time) {
 		target.setInvisible(true);
 	}
 }

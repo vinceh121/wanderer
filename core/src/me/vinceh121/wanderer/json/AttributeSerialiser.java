@@ -22,7 +22,7 @@ public class AttributeSerialiser extends StdSerializer<Attribute> {
 	}
 
 	@Override
-	public void serialize(Attribute att, JsonGenerator gen, SerializerProvider provider) throws IOException {
+	public void serialize(final Attribute att, final JsonGenerator gen, final SerializerProvider provider) throws IOException {
 		final String type = Attribute.getAttributeAlias(att.type);
 		gen.writeStartObject(att);
 		gen.writeStringField("@class", att.getClass().getSimpleName());
@@ -31,7 +31,7 @@ public class AttributeSerialiser extends StdSerializer<Attribute> {
 		if (att instanceof IntAttribute && att.type == IntAttribute.CullFace) {
 			gen.writeNumberField("value", ((IntAttribute) att).value);
 		} else if (att instanceof DepthTestAttribute && att.type == DepthTestAttribute.Type) {
-			DepthTestAttribute depth = (DepthTestAttribute) att;
+			final DepthTestAttribute depth = (DepthTestAttribute) att;
 			gen.writeNumberField("depthFunc", depth.depthFunc);
 			gen.writeNumberField("depthRangeNear", depth.depthRangeNear);
 			gen.writeNumberField("depthRangeFar", depth.depthRangeFar);
@@ -39,7 +39,7 @@ public class AttributeSerialiser extends StdSerializer<Attribute> {
 		} else if (att instanceof FloatAttribute && att.type == FloatAttribute.AlphaTest) {
 			gen.writeNumberField("value", ((FloatAttribute) att).value);
 		} else if (att instanceof TiledMaterialAttribute && att.type == TiledMaterialAttribute.TiledMaterial) {
-			TiledMaterialAttribute tiled = (TiledMaterialAttribute) att;
+			final TiledMaterialAttribute tiled = (TiledMaterialAttribute) att;
 			gen.writeStringField("texture",
 					WandererConstants.ASSET_MANAGER.getAssetFileName(tiled.getTextureDescriptor().texture));
 			gen.writeNumberField("opacity", tiled.getOpacity());
@@ -48,7 +48,7 @@ public class AttributeSerialiser extends StdSerializer<Attribute> {
 			gen.writeNumber(tiled.getRatio().y);
 			gen.writeEndArray();
 		} else if (att instanceof BlendingAttribute && att.type == BlendingAttribute.Type) {
-			BlendingAttribute blend = (BlendingAttribute) att;
+			final BlendingAttribute blend = (BlendingAttribute) att;
 			gen.writeBooleanField("blended", blend.blended);
 			gen.writeNumberField("sourceFunction", blend.sourceFunction);
 			gen.writeNumberField("destFunction", blend.destFunction);

@@ -28,8 +28,8 @@ public class JsConsole {
 	}
 
 	private Object log(final Context lcx, final Scriptable lscope, final Scriptable thisObj, final Object[] args) {
-		Logger tag = LOG;
-		ModuleScope module = JsUtils.getModuleScope(lscope);
+		Logger tag = JsConsole.LOG;
+		final ModuleScope module = JsUtils.getModuleScope(lscope);
 		if (module != null) {
 			tag = LogManager.getLogger(module.getUri().toString());
 		}

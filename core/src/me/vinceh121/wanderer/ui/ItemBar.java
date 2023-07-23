@@ -17,12 +17,12 @@ import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.glx.NoLightningAttribute;
 
 public class ItemBar extends WandererWidget {
-	private static final Texture TEX_SLOT = WandererConstants.ASSET_MANAGER
-		.get("orig/if_emptyslot.n/slotslot_alpha.ktx", Texture.class);
-	private static final Texture TEX_GAP = WandererConstants.ASSET_MANAGER.get("orig/if_emptyslot.n/gapgap_alpha.ktx",
-			Texture.class);
-	private static final Texture TEX_END = WandererConstants.ASSET_MANAGER.get("orig/if_emptyslot.n/endend_alpha.ktx",
-			Texture.class);
+	private static final Texture TEX_SLOT =
+			WandererConstants.ASSET_MANAGER.get("orig/if_emptyslot.n/slotslot_alpha.ktx", Texture.class);
+	private static final Texture TEX_GAP =
+			WandererConstants.ASSET_MANAGER.get("orig/if_emptyslot.n/gapgap_alpha.ktx", Texture.class);
+	private static final Texture TEX_END =
+			WandererConstants.ASSET_MANAGER.get("orig/if_emptyslot.n/endend_alpha.ktx", Texture.class);
 	private final Quaternion rotation = new Quaternion();
 	private float angle;
 

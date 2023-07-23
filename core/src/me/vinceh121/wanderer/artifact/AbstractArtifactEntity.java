@@ -135,9 +135,9 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 	public void setRotate(final boolean rotate) {
 		this.rotate = rotate;
 	}
-	
+
 	@Override
-	public void writeState(ObjectNode node) {
+	public void writeState(final ObjectNode node) {
 		super.writeState(node);
 		node.put("meta", MetaRegistry.getInstance().getReverse(this.meta));
 	}

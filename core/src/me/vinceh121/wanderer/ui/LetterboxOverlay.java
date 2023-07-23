@@ -19,23 +19,28 @@ public class LetterboxOverlay extends Widget {
 	}
 
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
+	public void draw(final Batch batch, final float parentAlpha) {
 		super.draw(batch, parentAlpha);
 
-		// standard cinema screen is 12/5, and width/(height * x) = 12/5 <-> 0.416667 width / height
-		float barsHeight = (Gdx.graphics.getHeight() - (0.416667f
-				* ((float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight()) * Gdx.graphics.getHeight())) / 2;
+		// standard cinema screen is 12/5, and width/(height * x) = 12/5 <-> 0.416667
+		// width / height
+		float barsHeight = (Gdx.graphics.getHeight() - 0.416667f
+				* ((float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight()) * Gdx.graphics.getHeight()) / 2;
 
 		barsHeight *= this.progress;
 
 		batch.draw(WandererConstants.BLACK_PIXEL, 0, 0, Gdx.graphics.getWidth(), barsHeight);
-		batch.draw(WandererConstants.BLACK_PIXEL, 0, Gdx.graphics.getHeight() - barsHeight, Gdx.graphics.getWidth(), barsHeight);
+		batch.draw(WandererConstants.BLACK_PIXEL,
+				0,
+				Gdx.graphics.getHeight() - barsHeight,
+				Gdx.graphics.getWidth(),
+				barsHeight);
 	}
 
 	@Override
-	public void act(float delta) {
+	public void act(final float delta) {
 		super.act(delta);
-		if (started) {
+		if (this.started) {
 			this.fadeIn.act(delta);
 			this.progress = this.fadeIn.getValue();
 		} else {

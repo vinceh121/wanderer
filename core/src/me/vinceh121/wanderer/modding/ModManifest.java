@@ -4,40 +4,40 @@ public class ModManifest {
 	private String name, version, license, homepage;
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
 	public String getVersion() {
-		return version;
+		return this.version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(final String version) {
 		this.version = version;
 	}
 
 	public String getLicense() {
-		return license;
+		return this.license;
 	}
 
-	public void setLicense(String license) {
+	public void setLicense(final String license) {
 		this.license = license;
 	}
 
 	public String getHomepage() {
-		return homepage;
+		return this.homepage;
 	}
 
-	public void setHomepage(String homepage) {
+	public void setHomepage(final String homepage) {
 		this.homepage = homepage;
 	}
 
 	@Override
 	public String toString() {
-		return "ModManifest [name=" + name + ", version=" + version + ", license=" + license + ", homepage=" + homepage
+		return "ModManifest [name=" + this.name + ", version=" + this.version + ", license=" + this.license + ", homepage=" + this.homepage
 				+ "]";
 	}
 }

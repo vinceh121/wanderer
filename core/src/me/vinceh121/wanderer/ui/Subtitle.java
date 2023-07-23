@@ -17,14 +17,14 @@ public class Subtitle extends Label {
 	}
 
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
+	public void draw(final Batch batch, final float parentAlpha) {
 		final float margin = 5;
 
-		for (GlyphLayout layout : this.getBitmapFontCache().getLayouts()) {
-			for (GlyphRun run : layout.runs) {
-				final float lineHeight = getBitmapFontCache().getFont().getLineHeight();
+		for (final GlyphLayout layout : this.getBitmapFontCache().getLayouts()) {
+			for (final GlyphRun run : layout.runs) {
+				final float lineHeight = this.getBitmapFontCache().getFont().getLineHeight();
 				// i don't understand why this is right
-				final float y = (this.getY(Align.bottomLeft) - run.y + lineHeight * 2) - margin;
+				final float y = this.getY(Align.bottomLeft) - run.y + lineHeight * 2 - margin;
 
 				batch.draw(WandererConstants.BLACK_PIXEL,
 						run.x - margin,
@@ -38,7 +38,7 @@ public class Subtitle extends Label {
 	}
 
 	@Override
-	public void act(float delta) {
+	public void act(final float delta) {
 		super.act(delta);
 
 		final float height = 100;

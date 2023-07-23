@@ -18,10 +18,10 @@ public class Prop extends AbstractEntity {
 	private static final Logger LOG = LogManager.getLogger(Prop.class);
 	private final PropMeta meta;
 
-	public Prop(final Wanderer game, PropMeta meta) {
+	public Prop(final Wanderer game, final PropMeta meta) {
 		super(game);
 		this.meta = meta;
-		DisplayModel mdl = new DisplayModel(meta.getDisplayModel(), meta.getTexture());
+		final DisplayModel mdl = new DisplayModel(meta.getDisplayModel(), meta.getTexture());
 
 		this.addModel(mdl);
 		this.setCollideModel(meta.getCollideModel());
@@ -29,7 +29,7 @@ public class Prop extends AbstractEntity {
 
 		if (meta.getDetailMapTexture() != null) {
 			if (!WandererConstants.ASSET_MANAGER.isLoaded(meta.getDetailMapTexture(), Texture.class)) {
-				LOG.error("Hot loading tiled texture {}", meta.getDetailMapTexture());
+				Prop.LOG.error("Hot loading tiled texture {}", meta.getDetailMapTexture());
 				WandererConstants.ASSET_MANAGER
 					.load(meta.getDetailMapTexture(), Texture.class, WandererConstants.MIPMAPS);
 				WandererConstants.ASSET_MANAGER.finishLoadingAsset(meta.getDetailMapTexture());
@@ -50,7 +50,7 @@ public class Prop extends AbstractEntity {
 	@Override
 	public void writeState(final ObjectNode node) {
 		super.writeState(node);
-		if (meta != null) {
+		if (this.meta != null) {
 			node.put("meta", MetaRegistry.getInstance().getReverse(this.meta));
 		} else {
 			node.putNull("meta");

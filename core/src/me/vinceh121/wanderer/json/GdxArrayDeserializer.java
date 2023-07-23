@@ -54,7 +54,7 @@ public class GdxArrayDeserializer extends ContainerDeserializerBase<Array<Object
 	}
 
 	@Override
-	public Object deserializeWithType(JsonParser p, DeserializationContext ctxt, TypeDeserializer typeDeserializer)
+	public Object deserializeWithType(final JsonParser p, final DeserializationContext ctxt, final TypeDeserializer typeDeserializer)
 			throws IOException {
 		typeDeserializer.deserializeTypedFromArray(p, ctxt);
 		return null;

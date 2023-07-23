@@ -16,7 +16,7 @@ public class Part extends EventDispatcher {
 	private Runnable partStart;
 
 	public Part() {
-		this.state.put("objectivesCompleted", new HashSet<Integer>());
+		this.state.put("objectivesCompleted", new HashSet<>());
 	}
 
 	public Part(final String title, final List<String> objectives) {
@@ -30,7 +30,7 @@ public class Part extends EventDispatcher {
 		return (Set<Integer>) this.state.get("objectivesCompleted");
 	}
 
-	public void addObjectiveCompleted(int objectiveCompleted) {
+	public void addObjectiveCompleted(final int objectiveCompleted) {
 		assert objectiveCompleted < this.objectives.size() : "objectiveCompleted " + objectiveCompleted
 				+ " out of bounds for " + this.objectives.size() + " objectives";
 		this.getObjectivesCompleted().add(objectiveCompleted);
@@ -73,13 +73,13 @@ public class Part extends EventDispatcher {
 	public static class ObjectiveCompletedEvent extends Event {
 		private final int objectiveCompleted;
 
-		public ObjectiveCompletedEvent(int objectiveCompleted) {
+		public ObjectiveCompletedEvent(final int objectiveCompleted) {
 			super("objectiveCompleted");
 			this.objectiveCompleted = objectiveCompleted;
 		}
 
 		public int getObjectiveCompleted() {
-			return objectiveCompleted;
+			return this.objectiveCompleted;
 		}
 	}
 }

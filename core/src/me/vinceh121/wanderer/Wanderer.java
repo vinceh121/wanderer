@@ -46,6 +46,7 @@ import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.entity.Prop;
+import me.vinceh121.wanderer.i18n.I18N;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.modding.ModManager;
@@ -107,8 +108,8 @@ public class Wanderer extends ApplicationAdapter {
 		try {
 			this.consoleHandler = new ConsoleHandler(this);
 			this.consoleHandler.start();
-		} catch (IOException e2) {
-			LOG.error("Failed to init console", e2);
+		} catch (final IOException e2) {
+			Wanderer.LOG.error("Failed to init console", e2);
 		}
 
 		this.inputManager.create();
@@ -119,15 +120,15 @@ public class Wanderer extends ApplicationAdapter {
 		try {
 			this.modManager.loadMods();
 			this.modManager.executeModsEntryPoints(this.scriptManager);
-		} catch (IOException e) {
-			LOG.error("Failed to load mods", e);
+		} catch (final IOException e) {
+			Wanderer.LOG.error("Failed to load mods", e);
 			System.exit(-3);
 		}
 
 		try {
 			this.inputManager.loadOrDefaults();
 		} catch (final JsonProcessingException e) {
-			LOG.error("Failed to load key bindings", e);
+			Wanderer.LOG.error("Failed to load key bindings", e);
 		}
 
 		this.inputManager.addListener(new InputListenerAdapter(0) {
@@ -150,45 +151,45 @@ public class Wanderer extends ApplicationAdapter {
 				} else if (in == Input.QUICK_SAVE) {
 					try {
 						Wanderer.this.saveStateless(Gdx.files.local("quick.json"));
-						showMessage(gettext("Quick saved!"));
-					} catch (IOException e) {
+						Wanderer.this.showMessage(I18N.gettext("Quick saved!"));
+					} catch (final IOException e) {
 						e.printStackTrace();
 					}
 					return true;
 				} else if (in == Input.QUICK_LOAD) {
 					try {
 						Wanderer.this.loadStateless(Gdx.files.local("quick.json"));
-						showMessage(gettext("Quick loaded!"));
-					} catch (IOException e) {
+						Wanderer.this.showMessage(I18N.gettext("Quick loaded!"));
+					} catch (final IOException e) {
 						e.printStackTrace();
 					}
 					return true;
 				} else if (in == Input.DEBUG_TIMESCALE) {
-					if (getDayDuration() == 15800f) {
-						setDayDuration(30f);
-						if (cinematicController != null) {
-							cinematicController.setRate(500);
+					if (Wanderer.this.getDayDuration() == 15800f) {
+						Wanderer.this.setDayDuration(30f);
+						if (Wanderer.this.cinematicController != null) {
+							Wanderer.this.cinematicController.setRate(500);
 						}
 					} else {
-						setDayDuration(15800f);
-						if (cinematicController != null) {
-							cinematicController.setRate(1);
+						Wanderer.this.setDayDuration(15800f);
+						if (Wanderer.this.cinematicController != null) {
+							Wanderer.this.cinematicController.setRate(1);
 						}
 					}
 					return true;
 				} else if (in == Input.DEBUG_AUDIO) {
-					audioEmittersDebug = !audioEmittersDebug;
+					Wanderer.this.audioEmittersDebug = !Wanderer.this.audioEmittersDebug;
 					return true;
 				} else if (in == Input.CURSOR_CAPTURE) {
 					Gdx.input.setCursorCatched(!Gdx.input.isCursorCatched());
 					return true;
 				} else if (in == Input.PAUSE_MENU) {
-					if (cinematicController != null) {
-						cinematicController.skip();
-					} else if (paused) {
-						resume();
+					if (Wanderer.this.cinematicController != null) {
+						Wanderer.this.cinematicController.skip();
+					} else if (Wanderer.this.paused) {
+						Wanderer.this.resume();
 					} else {
-						pause();
+						Wanderer.this.pause();
 					}
 					return true;
 				}
@@ -230,14 +231,14 @@ public class Wanderer extends ApplicationAdapter {
 
 		///// GAMEPLAY
 
-		Random islandRng = new Random(69420L);
+		final Random islandRng = new Random(69420L);
 		for (int i = 0; i < 300; i++) {
 			final float spread = 9000;
-			Vector3 pos = new Vector3(islandRng.nextFloat() * spread, -160, islandRng.nextFloat() * spread)
+			final Vector3 pos = new Vector3(islandRng.nextFloat() * spread, -160, islandRng.nextFloat() * spread)
 				.add(-7740 - spread / 2, 0, -5890 - spread / 2);
-			Quaternion rot = new Quaternion(Vector3.Y, islandRng.nextFloat() * 360f);
+			final Quaternion rot = new Quaternion(Vector3.Y, islandRng.nextFloat() * 360f);
 
-			Prop isl = new Prop(this, MetaRegistry.getInstance().get("rock" + (islandRng.nextInt(7) + 1)));
+			final Prop isl = new Prop(this, MetaRegistry.getInstance().get("rock" + (islandRng.nextInt(7) + 1)));
 			isl.setTranslation(pos);
 			isl.rotate(rot);
 			this.addEntity(isl);
@@ -259,18 +260,18 @@ public class Wanderer extends ApplicationAdapter {
 		energyEntity.setTranslation(2, 34, 10);
 		this.addEntity(energyEntity);
 
-		playerClan = new Clan();
-		playerClan.setColor(Color.BLUE);
-		playerClan.setName("player clan");
-		playerClan.setMaxEnergy(100);
-		playerClan.setEnergy(50);
-		this.clans.add(playerClan);
+		this.playerClan = new Clan();
+		this.playerClan.setColor(Color.BLUE);
+		this.playerClan.setName("player clan");
+		this.playerClan.setMaxEnergy(100);
+		this.playerClan.setEnergy(50);
+		this.clans.add(this.playerClan);
 
 		final IslandMeta firstIsland = MetaRegistry.getInstance().get("first_island");
 		final Island island = new Island(this, firstIsland);
 		island.setTranslation(-7740, -160, -5890);
 		this.addEntity(island);
-		playerClan.addMember(island);
+		this.playerClan.addMember(island);
 
 		final CharacterMeta johnMeta = MetaRegistry.getInstance().get("goliath");
 		johnMeta.ensureLoading();
@@ -283,10 +284,10 @@ public class Wanderer extends ApplicationAdapter {
 
 		this.itemBar.setCharacter(john);
 
-		playerClan.addMember(john);
+		this.playerClan.addMember(john);
 		this.addEntity(john);
 
-		this.setPlayerClan(playerClan);
+		this.setPlayerClan(this.playerClan);
 
 		this.controlEntity(john);
 	}
@@ -295,7 +296,7 @@ public class Wanderer extends ApplicationAdapter {
 	public void render() {
 		final float delta = Gdx.graphics.getDeltaTime();
 
-		Vector3 cameraVelocity = WandererConstants.AUDIO.getListenerPosition();
+		final Vector3 cameraVelocity = WandererConstants.AUDIO.getListenerPosition();
 		cameraVelocity.sub(this.getCamera().position);
 		cameraVelocity.scl(1f / delta);
 		MathUtilsW.fixInfinity(cameraVelocity, 0);
@@ -346,7 +347,7 @@ public class Wanderer extends ApplicationAdapter {
 			sunCenter = this.graphicsManager.getCamera().position;
 		}
 
-		Camera sunCam = this.graphicsManager.getSkybox().getSunLight().getCamera();
+		final Camera sunCam = this.graphicsManager.getSkybox().getSunLight().getCamera();
 		this.graphicsManager.getSkybox().getSunLight().update(sunCenter, null);
 
 		this.graphicsManager.getSkybox().getSunLight().begin();
@@ -456,10 +457,10 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public Clan getPlayerClan() {
-		return playerClan;
+		return this.playerClan;
 	}
 
-	public void setPlayerClan(Clan playerClan) {
+	public void setPlayerClan(final Clan playerClan) {
 		this.playerClan = playerClan;
 		this.bindPlayerClan();
 	}
@@ -472,20 +473,20 @@ public class Wanderer extends ApplicationAdapter {
 		for (int i = this.playerClan.getMembers()
 			.indexOf(((AbstractEntity) this.controlledEntity).getId(), false); i < this.playerClan.getMembers().size * 2
 					- 1; i++) {
-			AbstractEntity e = this.getEntity(this.playerClan.getMembers().get(i % this.playerClan.getMembers().size));
+			final AbstractEntity e = this.getEntity(this.playerClan.getMembers().get(i % this.playerClan.getMembers().size));
 			if (e instanceof IControllableEntity && e != this.controlledEntity) {
-				LOG.info("Controlling {}", e);
+				Wanderer.LOG.info("Controlling {}", e);
 				WandererConstants.ASSET_MANAGER.get("orig/feedback/taken_control.wav", Sound3D.class).playGeneral();
-				this.showMessage(gettext("Taking control..."));
+				this.showMessage(I18N.gettext("Taking control..."));
 				Wanderer.this.controlEntity((IControllableEntity) e);
 				return;
 			}
 		}
 
-		this.showMessage(gettext("Nothing to control"));
+		this.showMessage(I18N.gettext("Nothing to control"));
 	}
 
-	public void saveStateless(FileHandle dest) throws IOException {
+	public void saveStateless(final FileHandle dest) throws IOException {
 		final Save save = this.saveStateless();
 
 		try (OutputStream out = dest.write(false)) {
@@ -494,7 +495,7 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public Save saveStateless() {
-		MapW mapW = this.saveMap();
+		final MapW mapW = this.saveMap();
 
 		final Save save = new Save();
 		if (this.controlledEntity != null) {
@@ -522,15 +523,15 @@ public class Wanderer extends ApplicationAdapter {
 		return mapW;
 	}
 
-	public void loadStateless(FileHandle src) throws IOException {
+	public void loadStateless(final FileHandle src) throws IOException {
 		try (InputStream in = src.read()) {
-			Save sav = WandererConstants.SAVE_MAPPER.readValue(in, Save.class);
-			MapW map = sav.getMap();
+			final Save sav = WandererConstants.SAVE_MAPPER.readValue(in, Save.class);
+			final MapW map = sav.getMap();
 			this.setTimeOfDay(sav.getTime());
 			this.loadMap(map);
 			this.flushEntityQueue();
 
-			AbstractEntity contEnt = this.getEntity(sav.getControlled());
+			final AbstractEntity contEnt = this.getEntity(sav.getControlled());
 			if (contEnt != null) {
 				if (contEnt instanceof IControllableEntity) {
 					this.controlEntity((IControllableEntity) contEnt);
@@ -538,22 +539,22 @@ public class Wanderer extends ApplicationAdapter {
 					throw new IllegalStateException("Cannot control entity from save " + contEnt);
 				}
 			} else {
-				LOG.info("No controlled entity in save");
+				Wanderer.LOG.info("No controlled entity in save");
 			}
 
-			Clan pClan = this.getClan(sav.getPlayerClan());
+			final Clan pClan = this.getClan(sav.getPlayerClan());
 			if (pClan != null) {
 				this.setPlayerClan(pClan);
 			}
-		} catch (Exception e) {
-			LOG.error("Failed to load stateless save", e);
+		} catch (final Exception e) {
+			Wanderer.LOG.error("Failed to load stateless save", e);
 			System.exit(-1);
 		}
 	}
 
-	public void loadMap(MapW map) throws ReflectiveOperationException {
+	public void loadMap(final MapW map) throws ReflectiveOperationException {
 		this.removeEntityControl();
-		for (AbstractEntity e : this.entities) {
+		for (final AbstractEntity e : this.entities) {
 			e.leaveBtWorld(this.getBtWorld());
 			e.dispose();
 		}
@@ -562,27 +563,27 @@ public class Wanderer extends ApplicationAdapter {
 		this.loadMapFragment(map);
 	}
 
-	public MapW loadMapFragment(FileHandle fh) throws ReflectiveOperationException {
+	public MapW loadMapFragment(final FileHandle fh) throws ReflectiveOperationException {
 		try (InputStream in = fh.read()) {
-			MapW map = WandererConstants.MAPPER.readValue(in, MapW.class);
+			final MapW map = WandererConstants.MAPPER.readValue(in, MapW.class);
 			this.loadMapFragment(map);
 			return map;
-		} catch (IOException e) {
-			LOG.error("Failed to load map fragment", e);
+		} catch (final IOException e) {
+			Wanderer.LOG.error("Failed to load map fragment", e);
 			System.exit(-1);
 			throw new RuntimeException(e);
 		}
 	}
 
-	public void loadMapFragment(MapW map) throws ReflectiveOperationException {
-		for (ObjectNode n : map.getEntities()) {
+	public void loadMapFragment(final MapW map) throws ReflectiveOperationException {
+		for (final ObjectNode n : map.getEntities()) {
 			AbstractEntity ent = null;
 			final Class<?> cls = Class.forName(n.get("@class").asText());
-			for (Constructor<?> c : cls.getConstructors()) {
+			for (final Constructor<?> c : cls.getConstructors()) {
 				if (c.getParameterTypes().length == 2 && c.getParameterTypes()[0] == Wanderer.class
 						&& IMeta.class.isAssignableFrom(c.getParameterTypes()[1])) {
 					if (n.get("meta") == null) {
-						LOG.error("Entity {} has constructor w/ meta but save is missing meta property", cls);
+						Wanderer.LOG.error("Entity {} has constructor w/ meta but save is missing meta property", cls);
 						continue;
 					}
 					ent = (AbstractEntity) c.newInstance(this, MetaRegistry.getInstance().get(n.get("meta").asText()));
@@ -603,14 +604,14 @@ public class Wanderer extends ApplicationAdapter {
 		}
 	}
 
-	public void startCinematic(FileHandle fh) throws IOException {
-		List<CinematicData> datas =
+	public void startCinematic(final FileHandle fh) throws IOException {
+		final List<CinematicData> datas =
 				WandererConstants.MAPPER.readValue(fh.read(), new TypeReference<List<CinematicData>>() {
 				});
 		this.startCinematic(datas);
 	}
 
-	public void startCinematic(List<CinematicData> data) {
+	public void startCinematic(final List<CinematicData> data) {
 		this.cinematicController = new CinematicController(this);
 		this.cinematicController.setCinematicDatas(data);
 		this.letterboxOverlay.start();
@@ -631,7 +632,7 @@ public class Wanderer extends ApplicationAdapter {
 		}
 	}
 
-	public void setHUDVisible(boolean vis) {
+	public void setHUDVisible(final boolean vis) {
 		this.energyBar.setVisible(vis);
 		this.itemBar.setVisible(vis);
 	}
@@ -681,7 +682,7 @@ public class Wanderer extends ApplicationAdapter {
 			return;
 		}
 		this.interactingBuilding = building;
-		this.showMessage(/* 0: name of the entity to control */gettext("Control {0}", building.getName()));
+		this.showMessage(/* 0: name of the entity to control */I18N.gettext("Control {0}", building.getName()));
 		WandererConstants.ASSET_MANAGER.get("orig/feedback/use_ok.wav", Sound3D.class).playGeneral();
 	}
 
@@ -694,10 +695,10 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public float getElapsedTimeOfDay() {
-		return elapsedTimeOfDay;
+		return this.elapsedTimeOfDay;
 	}
 
-	public void setElapsedTimeOfDay(float elapsedTimeOfDay) {
+	public void setElapsedTimeOfDay(final float elapsedTimeOfDay) {
 		this.elapsedTimeOfDay = elapsedTimeOfDay;
 	}
 
@@ -705,13 +706,13 @@ public class Wanderer extends ApplicationAdapter {
 	 * @return progress through the day/night between 0 and 1
 	 */
 	public float getTimeOfDay() {
-		return timeOfDay;
+		return this.timeOfDay;
 	}
 
 	/**
 	 * @param timeOfDay progress through the day/night between 0 and 1
 	 */
-	public void setTimeOfDay(float timeOfDay) {
+	public void setTimeOfDay(final float timeOfDay) {
 		this.timeOfDay = timeOfDay;
 
 		this.elapsedTimeOfDay = this.timeOfDay * this.dayDuration;
@@ -721,27 +722,27 @@ public class Wanderer extends ApplicationAdapter {
 	 * @return number of seconds for a full day-night cycle
 	 */
 	public float getDayDuration() {
-		return dayDuration;
+		return this.dayDuration;
 	}
 
 	/**
 	 * @param dayDuration number of seconds for a full day-night cycle
 	 */
-	public void setDayDuration(float dayDuration) {
+	public void setDayDuration(final float dayDuration) {
 		this.dayDuration = dayDuration;
 
 		this.elapsedTimeOfDay = this.dayDuration * this.timeOfDay;
 	}
 
 	public CinematicController getCinematicController() {
-		return cinematicController;
+		return this.cinematicController;
 	}
 
-	public AbstractEntity findFirstEntityByClass(Class<? extends AbstractEntity> cls) {
+	public AbstractEntity findFirstEntityByClass(final Class<? extends AbstractEntity> cls) {
 		return this.findEntitiesByClass(cls).findFirst().orElse(null);
 	}
 
-	public Stream<AbstractEntity> findEntitiesByClass(Class<? extends AbstractEntity> cls) {
+	public Stream<AbstractEntity> findEntitiesByClass(final Class<? extends AbstractEntity> cls) {
 		// This game of casts looks redundant but it's not!
 		// Using Stream.of(this.entities.items) causes a ClassCastException
 		// This is due to an implicit (AbtractEntity[]) this.entities.items added by the
@@ -758,15 +759,15 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public LetterboxOverlay getLetterboxOverlay() {
-		return letterboxOverlay;
+		return this.letterboxOverlay;
 	}
 
 	public Subtitle getSubtitle() {
-		return subtitle;
+		return this.subtitle;
 	}
 
 	public boolean isPaused() {
-		return paused;
+		return this.paused;
 	}
 
 	@Override
@@ -810,12 +811,12 @@ public class Wanderer extends ApplicationAdapter {
 		if (this.consoleHandler != null) {
 			try {
 				this.consoleHandler.close();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	public ConsoleHandler getConsoleHandler() {
 		return this.consoleHandler;
 	}
@@ -829,10 +830,10 @@ public class Wanderer extends ApplicationAdapter {
 	}
 
 	public boolean isAudioEmittersDebug() {
-		return audioEmittersDebug;
+		return this.audioEmittersDebug;
 	}
 
-	public void setAudioEmittersDebug(boolean audioEmittersDebug) {
+	public void setAudioEmittersDebug(final boolean audioEmittersDebug) {
 		this.audioEmittersDebug = audioEmittersDebug;
 	}
 }

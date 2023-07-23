@@ -120,7 +120,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		return new btDefaultMotionState(this.transform);
 	}
 
-	public void tick(float delta) {
+	public void tick(final float delta) {
 	}
 
 	public void render(final ModelBatch batch, final Environment env) {
@@ -128,48 +128,49 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 			return;
 		}
 		for (final DisplayModel m : this.models) {
-			if (m.getCacheDisplayModel() != null)
+			if (m.getCacheDisplayModel() != null) {
 				m.getCacheDisplayModel().userData = m.getDisplayModel();
+			}
 			m.render(batch, env);
 		}
 		for (final ParticleEmitter e : this.particles) {
 			e.updateLoading();
 		}
 		for (final SoundEmitter3D e : this.soundEmitters) {
-			Vector3 relPos = e.getRelativePosition().cpy();
-			relPos.mul(getTransform());
+			final Vector3 relPos = e.getRelativePosition().cpy();
+			relPos.mul(this.getTransform());
 			e.setPosition(relPos);
 
 			if (this.game.isAudioEmittersDebug()) {
-				ModelInstance ins = new ModelInstance(WandererConstants.getAudioDebug(), relPos);
+				final ModelInstance ins = new ModelInstance(WandererConstants.getAudioDebug(), relPos);
 				ins.transform.scl(5);
 				batch.render(ins);
 			}
 		}
 	}
 
-	public void animateParts(String animationChannel, Consumer<Matrix4> transformation) {
-		for (DisplayModel m : this.models) {
+	public void animateParts(final String animationChannel, final Consumer<Matrix4> transformation) {
+		for (final DisplayModel m : this.models) {
 			if (animationChannel.equals(m.getAnimationChannel())) {
 				transformation.accept(m.getRelativeTransform());
-				m.updateTransform(getTransform());
+				m.updateTransform(this.getTransform());
 			}
 		}
 	}
 
 	public boolean isInvisible() {
-		return invisible;
+		return this.invisible;
 	}
 
-	public void setInvisible(boolean invisible) {
+	public void setInvisible(final boolean invisible) {
 		this.invisible = invisible;
 	}
 
 	public boolean isCastShadow() {
-		return castShadow && !this.invisible;
+		return this.castShadow && !this.invisible;
 	}
 
-	public void setCastShadow(boolean castShadow) {
+	public void setCastShadow(final boolean castShadow) {
 		this.castShadow = castShadow;
 	}
 
@@ -183,10 +184,10 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	}
 
 	public String getSymbolicName() {
-		return symbolicName;
+		return this.symbolicName;
 	}
 
-	public void setSymbolicName(String symbolicName) {
+	public void setSymbolicName(final String symbolicName) {
 		this.symbolicName = symbolicName;
 	}
 
@@ -276,7 +277,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		return this.soundEmitters;
 	}
 
-	public void addSoundEmitter(SoundEmitter3D emitter) {
+	public void addSoundEmitter(final SoundEmitter3D emitter) {
 		this.soundEmitters.add(emitter);
 	}
 
@@ -334,18 +335,18 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		this.updateTransform();
 	}
 
-	public void scale(float scale) {
-		transform.scl(scale);
+	public void scale(final float scale) {
+		this.transform.scl(scale);
 		this.updateTransform();
 	}
 
-	public void translate(Vector3 translation) {
-		transform.translate(translation);
+	public void translate(final Vector3 translation) {
+		this.transform.translate(translation);
 		this.updateTransform();
 	}
 
-	public void translate(float x, float y, float z) {
-		transform.translate(x, y, z);
+	public void translate(final float x, final float y, final float z) {
+		this.transform.translate(x, y, z);
 		this.updateTransform();
 	}
 
@@ -480,7 +481,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	}
 
 	@Override
-	public void writeState(ObjectNode node) {
+	public void writeState(final ObjectNode node) {
 		node.put("@class", this.getClass().getCanonicalName());
 		node.put("id", this.id.getValue());
 		node.putPOJO("transform", this.getTransform());
@@ -488,7 +489,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	}
 
 	@Override
-	public void readState(ObjectNode node) {
+	public void readState(final ObjectNode node) {
 		assert this.getClass().getCanonicalName().equals(node.get("@class").asText());
 		if (node.has("id")) {
 			this.id = new ID(node.required("id").asInt());

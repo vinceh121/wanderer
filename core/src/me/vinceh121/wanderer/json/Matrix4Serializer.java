@@ -26,15 +26,15 @@ public class Matrix4Serializer extends StdSerializer<Matrix4> {
 	}
 
 	@Override
-	public void serializeWithType(Matrix4 value, JsonGenerator gen, SerializerProvider serializers,
-			TypeSerializer typeSer) throws IOException {
-		WritableTypeId typeIdDef = typeSer.writeTypePrefix(gen, typeSer.typeId(value, JsonToken.START_ARRAY));
+	public void serializeWithType(final Matrix4 value, final JsonGenerator gen, final SerializerProvider serializers,
+			final TypeSerializer typeSer) throws IOException {
+		final WritableTypeId typeIdDef = typeSer.writeTypePrefix(gen, typeSer.typeId(value, JsonToken.START_ARRAY));
 		gen.setCurrentValue(value);
 		this.writeContent(value, gen, serializers);
 		typeSer.writeTypeSuffix(gen, typeIdDef);
 	}
 
-	private void writeContent(Matrix4 value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+	private void writeContent(final Matrix4 value, final JsonGenerator gen, final SerializerProvider provider) throws IOException {
 		for (final float f : value.val) {
 			gen.writeNumber(f);
 		}

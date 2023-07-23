@@ -16,26 +16,26 @@ public class SkyProperties {
 	private final Map<TimeRange, Color> skyBottomColor = new EnumMap<>(TimeRange.class);
 
 	public Map<TimeRange, Color> getSunColor() {
-		return sunColor;
+		return this.sunColor;
 	}
 
 	public Map<TimeRange, Color> getSunLightColor() {
-		return sunLightColor;
+		return this.sunLightColor;
 	}
 
 	public Map<TimeRange, Color> getAmbLightColor() {
-		return ambLightColor;
+		return this.ambLightColor;
 	}
 
 	public Map<TimeRange, Color> getSkyTopColor() {
-		return skyTopColor;
+		return this.skyTopColor;
 	}
 
 	public Map<TimeRange, Color> getSkyMiddleColor() {
-		return skyMiddleColor;
+		return this.skyMiddleColor;
 	}
 
 	public Map<TimeRange, Color> getSkyBottomColor() {
-		return skyBottomColor;
+		return this.skyBottomColor;
 	}
 }

@@ -9,7 +9,7 @@ public abstract class AbstractControllableBuilding extends AbstractBuilding impl
 	private boolean controlled;
 	private InputListener inputListener;
 
-	public AbstractControllableBuilding(Wanderer game, AbstractBuildingMeta meta) {
+	public AbstractControllableBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
 		super(game, meta);
 	}
 
@@ -20,7 +20,7 @@ public abstract class AbstractControllableBuilding extends AbstractBuilding impl
 		}
 		return this.inputListener;
 	}
-	
+
 	public InputListener createInputProcessor() {
 		return new InputListenerAdapter(-1000);
 	}

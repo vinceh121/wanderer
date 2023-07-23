@@ -15,8 +15,8 @@ public class EnergyBar extends Widget {
 		.get("orig/if_ebar.n/clan_energy_middleclan_energy_middle_alpha.ktx", Texture.class);
 	private static final Texture TEX_TIP = WandererConstants.ASSET_MANAGER
 		.get("orig/if_ebar.n/clan_energy_rightclan_energy_right_alpha.ktx", Texture.class);
-	private static final Texture TEX_BAR = WandererConstants.ASSET_MANAGER.get("orig/if_ebar.n/texturenone.ktx",
-			Texture.class);
+	private static final Texture TEX_BAR =
+			WandererConstants.ASSET_MANAGER.get("orig/if_ebar.n/texturenone.ktx", Texture.class);
 	private int segmentCount = 5, value = 0, maxValue = 100;
 	private Clan clan;
 

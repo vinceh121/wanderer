@@ -10,18 +10,18 @@ public class MapW {
 	private Array<Clan> clans;
 
 	public Array<ObjectNode> getEntities() {
-		return entities;
+		return this.entities;
 	}
 
-	public void setEntities(Array<ObjectNode> entities) {
+	public void setEntities(final Array<ObjectNode> entities) {
 		this.entities = entities;
 	}
 
 	public Array<Clan> getClans() {
-		return clans;
+		return this.clans;
 	}
 
-	public void setClans(Array<Clan> clans) {
+	public void setClans(final Array<Clan> clans) {
 		this.clans = clans;
 	}
 }

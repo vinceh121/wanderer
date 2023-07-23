@@ -17,13 +17,15 @@ public class Sound3DLoader extends AsynchronousAssetLoader<Sound3D, Sound3DLoade
 	}
 
 	@Override
-	public void loadAsync(final AssetManager manager, final String fileName, final FileHandle file, final Sound3DParameter parameter) {
+	public void loadAsync(final AssetManager manager, final String fileName, final FileHandle file,
+			final Sound3DParameter parameter) {
 		// Do not use WandererConstants as it is locked
 		this.sound = ((AudioSystem3D) Gdx.audio).newSound3D(file);
 	}
 
 	@Override
-	public Sound3D loadSync(final AssetManager manager, final String fileName, final FileHandle file, final Sound3DParameter parameter) {
+	public Sound3D loadSync(final AssetManager manager, final String fileName, final FileHandle file,
+			final Sound3DParameter parameter) {
 		final Sound3D sound = this.sound;
 		this.sound = null;
 		return sound;
@@ -31,7 +33,8 @@ public class Sound3DLoader extends AsynchronousAssetLoader<Sound3D, Sound3DLoade
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Array<AssetDescriptor> getDependencies(final String fileName, final FileHandle file, final Sound3DParameter parameter) {
+	public Array<AssetDescriptor> getDependencies(final String fileName, final FileHandle file,
+			final Sound3DParameter parameter) {
 		return null;
 	}
 

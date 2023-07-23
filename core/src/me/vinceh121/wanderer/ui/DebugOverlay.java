@@ -53,7 +53,7 @@ public class DebugOverlay extends Table {
 			try {
 				this.txtPartState.setText("Part state: " + WandererConstants.MAPPER
 					.writeValueAsString(((StoryWanderer) this.game).getPart().getState()));
-			} catch (JsonProcessingException e) {
+			} catch (final JsonProcessingException e) {
 				throw new RuntimeException(e);
 			}
 		} else {

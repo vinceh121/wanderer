@@ -11,58 +11,61 @@ public class Segment3 {
 	public Segment3() {
 	}
 
-	public Segment3(Vector3 start, Vector3 end) {
+	public Segment3(final Vector3 start, final Vector3 end) {
 		this.start.set(start);
 		this.end.set(end);
 	}
 
 	public Vector3 getStart() {
-		return start;
+		return this.start;
 	}
 
 	public Vector3 getEnd() {
-		return end;
+		return this.end;
 	}
 
 	public float length() {
 		return this.start.dst(this.end);
 	}
 
-	public Vector3 set(float x, float y, float z) {
-		return start.set(x, y, z);
+	public Vector3 set(final float x, final float y, final float z) {
+		return this.start.set(x, y, z);
 	}
 
-	public Vector3 set(Vector3 vector) {
-		return start.set(vector);
+	public Vector3 set(final Vector3 vector) {
+		return this.start.set(vector);
 	}
 
-	public Vector3 setEnd(float x, float y, float z) {
-		return end.set(x, y, z);
+	public Vector3 setEnd(final float x, final float y, final float z) {
+		return this.end.set(x, y, z);
 	}
 
-	public Vector3 setStart(Vector3 vector) {
-		return end.set(vector);
+	public Vector3 setStart(final Vector3 vector) {
+		return this.end.set(vector);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(end, start);
+		return Objects.hash(this.end, this.start);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
-		Segment3 other = (Segment3) obj;
-		return Objects.equals(end, other.end) && Objects.equals(start, other.start);
+		}
+		final Segment3 other = (Segment3) obj;
+		return Objects.equals(this.end, other.end) && Objects.equals(this.start, other.start);
 	}
 
 	@Override
 	public String toString() {
-		return "Segment3 [start=" + start + ", end=" + end + "]";
+		return "Segment3 [start=" + this.start + ", end=" + this.end + "]";
 	}
 }

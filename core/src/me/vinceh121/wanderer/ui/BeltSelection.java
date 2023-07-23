@@ -55,12 +55,10 @@ public class BeltSelection extends WandererWidget {
 
 			final int artefactWidth = this.getModelWidthOrDefault(m);
 
-			final Matrix4 trans = new Matrix4(
-					new Vector3(this.getWidth() / 2 - artefactWidth / 2 - artefactWidth * (i + 1),
+			final Matrix4 trans =
+					new Matrix4(new Vector3(this.getWidth() / 2 - artefactWidth / 2 - artefactWidth * (i + 1),
 							this.getHeight() / 2,
-							-32),
-					this.rotation,
-					scale);
+							-32), this.rotation, scale);
 
 			this.setModelTransform(i, trans, m);
 
@@ -80,10 +78,10 @@ public class BeltSelection extends WandererWidget {
 
 			final int artefactWidth = this.getModelWidthOrDefault(m);
 
-			final Matrix4 trans = new Matrix4(
-					new Vector3(this.getWidth() / 2 - artefactWidth / 2, this.getHeight() / 2, -32),
-					this.rotation,
-					new Vector3(2.5f, 2.5f, 2.5f));
+			final Matrix4 trans =
+					new Matrix4(new Vector3(this.getWidth() / 2 - artefactWidth / 2, this.getHeight() / 2, -32),
+							this.rotation,
+							new Vector3(2.5f, 2.5f, 2.5f));
 
 			this.setModelTransform(this.index, trans, m);
 
@@ -100,12 +98,13 @@ public class BeltSelection extends WandererWidget {
 
 			final int artefactWidth = this.getModelWidthOrDefault(m);
 
-			final Matrix4 trans = new Matrix4(
-					new Vector3(this.getWidth() / 2 + artefactWidth / 2 + artefactWidth * (i - this.index - 1),
-							this.getHeight() / 2,
-							-32),
-					this.rotation,
-					scale);
+			final Matrix4 trans =
+					new Matrix4(
+							new Vector3(this.getWidth() / 2 + artefactWidth / 2 + artefactWidth * (i - this.index - 1),
+									this.getHeight() / 2,
+									-32),
+							this.rotation,
+							scale);
 
 			this.setModelTransform(i, trans, m);
 

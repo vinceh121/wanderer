@@ -7,28 +7,27 @@ public class SubtitleKeyFrame extends ActionKeyFrame {
 	private String text;
 
 	public SubtitleKeyFrame() {
-		super();
 	}
 
-	public SubtitleKeyFrame(float time) {
+	public SubtitleKeyFrame(final float time) {
 		super(time);
 	}
 
-	public SubtitleKeyFrame(float time, String text) {
+	public SubtitleKeyFrame(final float time, final String text) {
 		this(time);
 		this.text = text;
 	}
 
 	@Override
-	public void action(Wanderer game, CinematicController controller, AbstractEntity target, float time) {
+	public void action(final Wanderer game, final CinematicController controller, final AbstractEntity target, final float time) {
 		game.getSubtitle().setText(this.text);
 	}
 
 	public String getText() {
-		return text;
+		return this.text;
 	}
 
-	public void setText(String text) {
+	public void setText(final String text) {
 		this.text = text;
 	}
 }

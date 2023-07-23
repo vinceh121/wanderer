@@ -29,9 +29,9 @@ public class QuaternionSerializer extends StdSerializer<Quaternion> {
 	}
 
 	@Override
-	public void serializeWithType(Quaternion value, JsonGenerator gen, SerializerProvider serializers,
-			TypeSerializer typeSer) throws IOException {
-		WritableTypeId typeIdDef = typeSer.writeTypePrefix(gen, typeSer.typeId(value, JsonToken.START_ARRAY));
+	public void serializeWithType(final Quaternion value, final JsonGenerator gen, final SerializerProvider serializers,
+			final TypeSerializer typeSer) throws IOException {
+		final WritableTypeId typeIdDef = typeSer.writeTypePrefix(gen, typeSer.typeId(value, JsonToken.START_ARRAY));
 		gen.setCurrentValue(value);
 		gen.writeNumber(value.x);
 		gen.writeNumber(value.y);

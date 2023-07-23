@@ -16,21 +16,21 @@ public class BulletEntity extends AbstractEntity {
 	private boolean hasHit, playingParticle;
 	private ParticleEmitter hit;
 
-	public BulletEntity(Wanderer game) {
+	public BulletEntity(final Wanderer game) {
 		super(game);
 
 		this.setCastShadow(false);
 
-		DisplayModel model = new DisplayModel("orig/lib/standards/sprite.obj", "orig/lib/explo18/flametipnone.ktx");
+		final DisplayModel model = new DisplayModel("orig/lib/standards/sprite.obj", "orig/lib/explo18/flametipnone.ktx");
 		model.addTextureAttribute(IntAttribute.createCullFace(0));
 		model.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_COLOR, 1f));
 		this.addModel(model);
 
-		hit = new ParticleEmitter(this.game.getGraphicsManager().getParticleSystem(), "particles/bullethit.p");
+		this.hit = new ParticleEmitter(this.game.getGraphicsManager().getParticleSystem(), "particles/bullethit.p");
 	}
 
 	@Override
-	public void tick(float delta) {
+	public void tick(final float delta) {
 		super.tick(delta);
 
 		if (this.playingParticle) {
@@ -43,12 +43,12 @@ public class BulletEntity extends AbstractEntity {
 		}
 
 		final float step = delta * this.speed;
-		this.translate(this.direction.cpy().scl(step).mul(getRotation().conjugate()));
+		this.translate(this.direction.cpy().scl(step).mul(this.getRotation().conjugate()));
 
 		this.progress += step;
 
 		if (this.progress >= this.distance) {
-			this.addParticle(hit);
+			this.addParticle(this.hit);
 			this.updateTransform();
 			this.playingParticle = true;
 		}
@@ -58,7 +58,7 @@ public class BulletEntity extends AbstractEntity {
 		return this.direction;
 	}
 
-	public void setDirection(Vector3 direction) {
+	public void setDirection(final Vector3 direction) {
 		this.direction.set(direction);
 	}
 
@@ -66,31 +66,31 @@ public class BulletEntity extends AbstractEntity {
 		return this.speed;
 	}
 
-	public void setSpeed(float speed) {
+	public void setSpeed(final float speed) {
 		this.speed = speed;
 	}
 
 	public float getDistance() {
-		return distance;
+		return this.distance;
 	}
 
-	public void setDistance(float distance) {
+	public void setDistance(final float distance) {
 		this.distance = distance;
 	}
 
 	public float getProgress() {
-		return progress;
+		return this.progress;
 	}
 
-	public void setProgress(float progress) {
+	public void setProgress(final float progress) {
 		this.progress = progress;
 	}
 
 	public boolean isHasHit() {
-		return hasHit;
+		return this.hasHit;
 	}
 
-	public void setHasHit(boolean hasHit) {
+	public void setHasHit(final boolean hasHit) {
 		this.hasHit = hasHit;
 	}
 }

@@ -38,25 +38,25 @@ public final class WandererConstants {
 
 	public static Model getAudioDebug() {
 		final String name = "audio-debug.glb";
-		if (!ASSET_MANAGER.isLoaded(name, Model.class)) {
-			ASSET_MANAGER.load(name, Model.class);
-			ASSET_MANAGER.finishLoadingAsset(name);
+		if (!WandererConstants.ASSET_MANAGER.isLoaded(name, Model.class)) {
+			WandererConstants.ASSET_MANAGER.load(name, Model.class);
+			WandererConstants.ASSET_MANAGER.finishLoadingAsset(name);
 		}
-		return ASSET_MANAGER.get(name, Model.class);
+		return WandererConstants.ASSET_MANAGER.get(name, Model.class);
 	}
 
 	public static Model getCircleDebug() {
 		final String name = "circle-debug.glb";
-		if (!ASSET_MANAGER.isLoaded(name, Model.class)) {
-			ASSET_MANAGER.load(name, Model.class);
-			ASSET_MANAGER.finishLoadingAsset(name);
+		if (!WandererConstants.ASSET_MANAGER.isLoaded(name, Model.class)) {
+			WandererConstants.ASSET_MANAGER.load(name, Model.class);
+			WandererConstants.ASSET_MANAGER.finishLoadingAsset(name);
 		}
-		return ASSET_MANAGER.get(name, Model.class);
+		return WandererConstants.ASSET_MANAGER.get(name, Model.class);
 	}
 
 	static {
 		WandererJsonModule.registerModules(WandererConstants.MAPPER);
-		MAPPER.enable(JsonParser.Feature.ALLOW_COMMENTS);
+		WandererConstants.MAPPER.enable(JsonParser.Feature.ALLOW_COMMENTS);
 
 		SAVE_MAPPER = JsonMapper.builder().enable(MapperFeature.USE_STATIC_TYPING).build();
 //		SAVE_MAPPER.activateDefaultTyping(BasicPolymorphicTypeValidator.builder().allowIfSubType(new TypeMatcher() {
@@ -100,7 +100,7 @@ public final class WandererConstants {
 		}
 		WandererConstants.ASSET_MANAGER.finishLoading();
 
-		Pixmap blkPix = new Pixmap(1, 1, Format.RGB565);
+		final Pixmap blkPix = new Pixmap(1, 1, Format.RGB565);
 		BLACK_PIXEL = new Texture(blkPix);
 	}
 }
