@@ -11,6 +11,7 @@ import me.vinceh121.wanderer.entity.ParticleEmitter;
 import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class ExplosionPart extends AbstractEntity {
+	private float lifetime, maxLifetime = 3;
 
 	public ExplosionPart(final Wanderer game, final DisplayModel model) {
 		super(game);
@@ -35,5 +36,32 @@ public class ExplosionPart extends AbstractEntity {
 		this.getCollideObject().setLinearVelocity(MathUtilsW.randomDirectionAround(Vector3.Y, 0.1f).scl(strength));
 		this.getCollideObject()
 			.setAngularVelocity(new Vector3(MathUtils.random(-1, 1), MathUtils.random(-1, 1), MathUtils.random(-1, 1)));
+	}
+
+	@Override
+	public void tick(float delta) {
+		super.tick(delta);
+
+		this.lifetime += delta;
+		if (this.lifetime > this.maxLifetime) {
+			this.game.removeEntity(this);
+			this.dispose();
+		}
+	}
+
+	public float getLifetime() {
+		return lifetime;
+	}
+
+	public void setLifetime(float lifetime) {
+		this.lifetime = lifetime;
+	}
+
+	public float getMaxLifetime() {
+		return maxLifetime;
+	}
+
+	public void setMaxLifetime(float maxLifetime) {
+		this.maxLifetime = maxLifetime;
 	}
 }
