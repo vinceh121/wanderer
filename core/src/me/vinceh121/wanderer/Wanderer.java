@@ -1,7 +1,5 @@
 package me.vinceh121.wanderer;
 
-import static me.vinceh121.wanderer.i18n.I18N.gettext;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

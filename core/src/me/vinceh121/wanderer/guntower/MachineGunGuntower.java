@@ -1,6 +1,5 @@
 package me.vinceh121.wanderer.guntower;
 
-import static me.vinceh121.wanderer.i18n.I18N.gettext;
 import java.util.ArrayList;
 import java.util.List;
 

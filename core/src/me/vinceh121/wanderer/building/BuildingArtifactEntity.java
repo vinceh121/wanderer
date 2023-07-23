@@ -1,6 +1,5 @@
 package me.vinceh121.wanderer.building;
 
-import static me.vinceh121.wanderer.i18n.I18N.gettext;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.artifact.AbstractArtifactEntity;

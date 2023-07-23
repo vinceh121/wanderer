@@ -1,7 +1,5 @@
 package me.vinceh121.wanderer.character;
 
-import static me.vinceh121.wanderer.i18n.I18N.gettext;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
