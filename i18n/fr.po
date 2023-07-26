@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-13 22:08+0200\n"
+"POT-Creation-Date: 2023-07-26 17:48+0200\n"
 "PO-Revision-Date: 2023-06-28 21:47+0000\n"
 "Last-Translator: vinceh121 <contact@vinceh121.me>\n"
 "Language-Team: French <https://weblate.vinceh121.me/projects/wanderer/game/"
@@ -20,41 +20,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 4.8.1\n"
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
-msgid "Not enough energy!"
-msgstr "Pas assez d''énergie !"
-
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
-msgid "Slot blocked!"
-msgstr "Emplacement bloqué !"
-
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
-msgid "No free slot!"
-msgstr "Pas d''emplacement libre !"
-
-#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:78
-msgid "Gun tower"
-msgstr "Tourelle"
-
-#: core/src/me/vinceh121/wanderer/Wanderer.java:142
+#: core/src/me/vinceh121/wanderer/Wanderer.java:152
 msgid "Quick saved!"
 msgstr "Sauvegarde rapide terminée !"
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:150
+#: core/src/me/vinceh121/wanderer/Wanderer.java:160
 msgid "Quick loaded!"
 msgstr "Sauvegarde rapide chargée !"
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:468
+#: core/src/me/vinceh121/wanderer/Wanderer.java:478
 msgid "Taking control..."
 msgstr "Prise de contrôle..."
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:474
+#: core/src/me/vinceh121/wanderer/Wanderer.java:484
 msgid "Nothing to control"
 msgstr "Rien à contrôler"
 
 #. 0: name of the entity to control
-#: core/src/me/vinceh121/wanderer/Wanderer.java:673
+#: core/src/me/vinceh121/wanderer/Wanderer.java:683
 #, java-format
 msgid "Control {0}"
 msgstr "Contrôler {0}"
@@ -62,6 +45,23 @@ msgstr "Contrôler {0}"
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
 msgid "Belt full!"
 msgstr "Ceinture pleine !"
+
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:352
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:394
+msgid "Not enough energy!"
+msgstr "Pas assez d''énergie !"
+
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:360
+msgid "Slot blocked!"
+msgstr "Emplacement bloqué !"
+
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:400
+msgid "No free slot!"
+msgstr "Pas d''emplacement libre !"
+
+#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:102
+msgid "Gun tower"
+msgstr "Tourelle"
 
 #: android/assets/story/singleplayer/chapter00/part01/index.js:2
 msgid "The Old Master Builder"

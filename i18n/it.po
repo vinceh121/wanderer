@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 22:41+0200\n"
+"POT-Creation-Date: 2023-07-26 17:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -16,24 +16,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:142
+#: core/src/me/vinceh121/wanderer/Wanderer.java:152
 msgid "Quick saved!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:150
+#: core/src/me/vinceh121/wanderer/Wanderer.java:160
 msgid "Quick loaded!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:468
+#: core/src/me/vinceh121/wanderer/Wanderer.java:478
 msgid "Taking control..."
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:474
+#: core/src/me/vinceh121/wanderer/Wanderer.java:484
 msgid "Nothing to control"
 msgstr ""
 
 #. 0: name of the entity to control
-#: core/src/me/vinceh121/wanderer/Wanderer.java:673
+#: core/src/me/vinceh121/wanderer/Wanderer.java:683
 #, java-format
 msgid "Control {0}"
 msgstr ""
@@ -42,20 +42,20 @@ msgstr ""
 msgid "Belt full!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:352
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:394
 msgid "Not enough energy!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:360
 msgid "Slot blocked!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:400
 msgid "No free slot!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:78
+#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:102
 msgid "Gun tower"
 msgstr ""
 
