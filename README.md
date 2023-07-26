@@ -1,5 +1,5 @@
 [![Discord](https://img.shields.io/badge/discord-grey?style=for-the-badge&logo=discord&logoColor=%235865F2)](https://discord.gg/juNXZBG)
-![Weblate project translated](https://img.shields.io/weblate/progress/wanderer?server=https%3A%2F%2Fweblate.vinceh121.me&style=for-the-badge&logo=weblate)
+[![Weblate project translated](https://img.shields.io/weblate/progress/wanderer?server=https%3A%2F%2Fweblate.vinceh121.me&style=for-the-badge&logo=weblate)](https://weblate.vinceh121.me/projects/wanderer/game/)
 ![License](https://img.shields.io/github/license/vinceh121/wanderer?style=for-the-badge&color=blue)
 
 # Wanderer
