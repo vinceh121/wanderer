@@ -1,0 +1,32 @@
+name: Check I18N
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+    - name: Install GNU gettext
+      run: sudo apt update && sudo apt install -y gettext
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      with:
+        arguments: i18n
+    - name: Check I18N
+      # a Porcelain diff always has a line count of 21 for a change in the middle of a file, used here to know if only a single line is changed
+      # and check that only the creation date is changed
+      run: if [ $(git diff --word-diff=porcelain | wc -l) -ne 21 ] || ! git diff --word-diff=none | grep -- '-"POT-Creation-Date'; then exit -1; fi
+
