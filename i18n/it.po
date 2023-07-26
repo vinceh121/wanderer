@@ -6,15 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: wanderer.weblate@vinceh121.me\n"
 "POT-Creation-Date: 2023-07-26 19:13+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-07-29 02:36+0000\n"
+"Last-Translator: vinceh121 <contact@vinceh121.me>\n"
+"Language-Team: Italian <https://weblate.vinceh121.me/projects/wanderer/game/"
+"it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:152
 msgid "Quick saved!"
@@ -36,24 +39,24 @@ msgstr ""
 #: core/src/me/vinceh121/wanderer/guntower/AbstractGuntower.java:32
 #: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:102
 msgid "Gun tower"
-msgstr ""
+msgstr "Torretta"
 
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
 msgid "Belt full!"
-msgstr ""
+msgstr "Cintura piena!"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:352
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:394
 msgid "Not enough energy!"
-msgstr ""
+msgstr "Energia insufficiente!"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:360
 msgid "Slot blocked!"
-msgstr ""
+msgstr "Spazio edificabile bloccato!"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:400
 msgid "No free slot!"
-msgstr ""
+msgstr "Nessuno spazio edificabile libero!"
 
 #: android/assets/story/singleplayer/chapter00/part01/index.js:2
 msgid "The Old Master Builder"
@@ -78,6 +81,8 @@ msgid ""
 "In the chaos of war, the world was split asunder and the sancient "
 "civilization of the master builders came to an end."
 msgstr ""
+"Durante il caos della guerra, il mondo finì in pezzi e l''antica civiltà dei "
+"mastri costruttori scomparve."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "Today, long after the catastrophe, the old world is but a legend."
