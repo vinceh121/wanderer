@@ -680,7 +680,7 @@ public class Wanderer extends ApplicationAdapter {
 			return;
 		}
 		this.interactingBuilding = building;
-		this.showMessage(/* 0: name of the entity to control */I18N.gettext("Control {0}", building.getName()));
+		this.showMessage(building.getControlMessage());
 		WandererConstants.ASSET_MANAGER.get("orig/feedback/use_ok.wav", Sound3D.class).playGeneral();
 	}
 

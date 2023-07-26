@@ -13,6 +13,7 @@ import me.vinceh121.wanderer.Preferences;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.building.AbstractControllableBuilding;
+import me.vinceh121.wanderer.i18n.I18N;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
@@ -28,7 +29,7 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	public AbstractGuntower(final Wanderer game, final AbstractGuntowerMeta meta) {
 		super(game, meta);
 		this.meta = meta;
-		this.setName("Gun tower");
+		this.setControlMessage(/* Popup message when close to building  */I18N.gettext("Gun tower"));
 
 		if (this.meta.getFireSound() != null) {
 			if (!WandererConstants.ASSET_MANAGER.isLoaded(this.meta.getFireSound(), Sound3D.class)) {

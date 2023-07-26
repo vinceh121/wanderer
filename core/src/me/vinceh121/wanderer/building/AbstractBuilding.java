@@ -25,7 +25,7 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 	private final IContactListener interactListener;
 	private final AbstractBuildingMeta meta;
 	private final Array<DisplayModel> explosionParts = new Array<>();
-	private String name;
+	private String controlMessage;
 	private Island island;
 	private Slot slot;
 
@@ -105,12 +105,12 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 		}
 	}
 
-	public String getName() {
-		return this.name;
+	public String getControlMessage() {
+		return this.controlMessage;
 	}
 
-	public void setName(final String name) {
-		this.name = name;
+	public void setControlMessage(final String controlMessage) {
+		this.controlMessage = controlMessage;
 	}
 
 	/**

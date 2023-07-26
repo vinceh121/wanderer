@@ -98,7 +98,7 @@ public class MachineGunGuntower extends AbstractGuntower {
 	}
 
 	@Override
-	public String getName() {
+	public String getControlMessage() {
 		return I18N.gettext("Gun tower");
 	}
 

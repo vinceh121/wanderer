@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-26 17:48+0200\n"
+"POT-Creation-Date: 2023-07-26 19:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,10 +33,10 @@ msgstr ""
 msgid "Nothing to control"
 msgstr ""
 
-#. 0: name of the entity to control
-#: core/src/me/vinceh121/wanderer/Wanderer.java:683
-#, java-format
-msgid "Control {0}"
+#. Popup message when close to building
+#: core/src/me/vinceh121/wanderer/guntower/AbstractGuntower.java:32
+#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:102
+msgid "Gun tower"
 msgstr ""
 
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
@@ -56,10 +56,6 @@ msgstr ""
 msgid "No free slot!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:102
-msgid "Gun tower"
-msgstr ""
-
 #: android/assets/story/singleplayer/chapter00/part01/index.js:2
 msgid "The Old Master Builder"
 msgstr ""
@@ -73,7 +69,8 @@ msgstr ""
 msgid "Collect all lighthouses"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/building/Lighthouse.java:20
+#. Popup message when close to building
+#: core/src/me/vinceh121/wanderer/building/Lighthouse.java:11
 msgid "Lighthouse"
 msgstr ""
 
