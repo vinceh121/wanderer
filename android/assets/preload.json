@@ -30,7 +30,8 @@
 		"orig/skybox02.n/texture2wow3.ktx",
 		"orig/skybox03.n/texture2wow3.ktx",
 		"orig/skybox04.n/texture2wow3.ktx",
-		"orig/skybox05.n/texture2wow3.ktx"
+		"orig/skybox05.n/texture2wow3.ktx",
+		"orig/locale/if_main.bmp"
 	],
 	"skins": [
 		"skins/default/uiskin.json"

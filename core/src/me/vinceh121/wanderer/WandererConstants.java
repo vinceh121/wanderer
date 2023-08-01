@@ -35,6 +35,10 @@ public final class WandererConstants {
 	public static Skin getDevSkin() {
 		return WandererConstants.ASSET_MANAGER.get("skins/default/uiskin.json", Skin.class);
 	}
+	
+	public static Skin getUISkin() {
+		return getDevSkin();
+	}
 
 	public static Model getAudioDebug() {
 		final String name = "audio-debug.glb";

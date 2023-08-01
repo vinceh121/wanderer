@@ -11,8 +11,8 @@ import org.lwjgl.system.Configuration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import me.vinceh121.wanderer.ApplicationMultiplexer;
+import me.vinceh121.wanderer.MainMenu;
 import me.vinceh121.wanderer.Preferences;
-import me.vinceh121.wanderer.StoryWanderer;
 import me.vinceh121.wanderer.i18n.I18N;
 
 public class DesktopLauncher {
@@ -46,7 +46,7 @@ public class DesktopLauncher {
 				0,
 				Preferences.getPreferences().getIntOrElse("graphics.msaaSamples", 4));// all default except for 4× anti
 																						// aliasing
-		new WandererDesktopApplication(new ApplicationMultiplexer(new StoryWanderer()), config);
+		new WandererDesktopApplication(new ApplicationMultiplexer(new MainMenu()), config);
 	}
 
 	private static Path getConfigPath() {
