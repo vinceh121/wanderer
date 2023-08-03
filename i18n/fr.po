@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: wanderer.weblate@vinceh121.me\n"
 "POT-Creation-Date: 2023-07-29 04:43+0200\n"
 "PO-Revision-Date: 2023-08-22 02:04+0000\n"
-"Last-Translator: vinceh121 <contact@vinceh121.me>\n"
+"Last-Translator: supermarioemeric <emeric.hyvert@gmail.com>\n"
 "Language-Team: French <https://weblate.vinceh121.me/projects/wanderer/game/"
 "fr/>\n"
 "Language: fr\n"
@@ -75,16 +75,16 @@ msgstr "Mode fenêtré"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:47
 msgid "Resolution"
-msgstr ""
+msgstr "Résolution"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:76
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:103
 msgid "Windowed"
-msgstr ""
+msgstr "Fenêtré"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:78
 msgid "(Primary)"
-msgstr ""
+msgstr "(Primaire)"
 
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
 msgid "Belt full!"
@@ -92,31 +92,31 @@ msgstr "Ceinture pleine !"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:85
 msgid "Single player"
-msgstr ""
+msgstr "Campagne"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:95
 msgid "Multiplayer"
-msgstr ""
+msgstr "Multijoueur"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:108
 msgid "Quit"
-msgstr ""
+msgstr "Quitter"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:118
 msgid "Credits"
-msgstr ""
+msgstr "Crédits"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:129
 msgid "New Game"
-msgstr ""
+msgstr "Nouvelle partie"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:132
 msgid "Load Game"
-msgstr ""
+msgstr "Charger la sauvegarde"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:135
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:352
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:394
@@ -194,7 +194,7 @@ msgstr "Ce vieux coupe-jarret de Trevayne leur avait parlé..."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "...Of a mysterious island in the territory of the Sentinels"
-msgstr "... d''une île mystérieuse dans le territoire des Sentinelles."
+msgstr "... D''une île mystérieuse dans le territoire des Sentinelles."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid ""
