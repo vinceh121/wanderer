@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: wanderer.weblate@vinceh121.me\n"
 "POT-Creation-Date: 2023-07-29 04:43+0200\n"
-"PO-Revision-Date: 2023-06-28 21:47+0000\n"
+"PO-Revision-Date: 2023-08-22 02:04+0000\n"
 "Last-Translator: vinceh121 <contact@vinceh121.me>\n"
 "Language-Team: French <https://weblate.vinceh121.me/projects/wanderer/game/"
 "fr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8.1\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:152
 msgid "Quick saved!"
@@ -45,33 +45,33 @@ msgstr "Tourelle"
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:21
 #: core/src/me/vinceh121/wanderer/MainMenu.java:98
 msgid "Options"
-msgstr ""
+msgstr "Options"
 
 #. //// GENERAL
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:25
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:28
 msgid "Interface language"
-msgstr ""
+msgstr "Langue de l''interface"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:32
 msgid "Audio language"
-msgstr ""
+msgstr "Langue audio"
 
 #. /// GRAPHICS
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:37
 msgid "Graphics"
-msgstr ""
+msgstr "Graphismes"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:40
 msgid "V-Sync"
-msgstr ""
+msgstr "Synchronisation verticale"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:43
 msgid "Window mode"
-msgstr ""
+msgstr "Mode fenêtré"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:47
 msgid "Resolution"
