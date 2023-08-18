@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
@@ -58,7 +57,7 @@ import me.vinceh121.wanderer.ui.LetterboxOverlay;
 import me.vinceh121.wanderer.ui.Subtitle;
 import me.vinceh121.wanderer.util.MathUtilsW;
 
-public class Wanderer extends ApplicationAdapter {
+public class Wanderer extends ApplicationDelegate {
 	private static final Logger LOG = LogManager.getLogger(Wanderer.class);
 	private final InputManager inputManager = new InputManager();
 	private final PhysicsManager physicsManager = new PhysicsManager();
@@ -100,6 +99,10 @@ public class Wanderer extends ApplicationAdapter {
 	private Subtitle subtitle;
 
 	private float timeOfDay, elapsedTimeOfDay, dayDuration = 15800f;
+
+	public Wanderer(ApplicationMultiplexer applicationMultiplexer) {
+		super(applicationMultiplexer);
+	}
 
 	@Override
 	public void create() {
@@ -471,7 +474,8 @@ public class Wanderer extends ApplicationAdapter {
 		for (int i = this.playerClan.getMembers()
 			.indexOf(((AbstractEntity) this.controlledEntity).getId(), false); i < this.playerClan.getMembers().size * 2
 					- 1; i++) {
-			final AbstractEntity e = this.getEntity(this.playerClan.getMembers().get(i % this.playerClan.getMembers().size));
+			final AbstractEntity e =
+					this.getEntity(this.playerClan.getMembers().get(i % this.playerClan.getMembers().size));
 			if (e instanceof IControllableEntity && e != this.controlledEntity) {
 				Wanderer.LOG.info("Controlling {}", e);
 				WandererConstants.ASSET_MANAGER.get("orig/feedback/taken_control.wav", Sound3D.class).playGeneral();

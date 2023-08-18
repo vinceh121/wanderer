@@ -22,6 +22,10 @@ public class StoryWanderer extends Wanderer {
 	private Chapter chapter;
 	private Part part;
 
+	public StoryWanderer(ApplicationMultiplexer applicationMultiplexer) {
+		super(applicationMultiplexer);
+	}
+	
 	@Override
 	public void create() {
 		super.create();
