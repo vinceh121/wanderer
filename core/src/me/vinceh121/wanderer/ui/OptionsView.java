@@ -33,11 +33,15 @@ public class OptionsView extends Table {
 	public OptionsView(Skin skin) {
 		super(skin);
 
-		this.add(new Label(gettext("Options"), skin)).padBottom(64).colspan(2);
+		Label lblOptions = new Label(gettext("Options"), skin);
+		lblOptions.setFontScale(2);
+		this.add(lblOptions).padBottom(64).colspan(2);
 		this.row();
 
 		////// GENERAL
-		this.add(new Label(gettext("General"), skin)).padTop(32);
+		Label lblGeneral = new Label(gettext("General"), skin);
+		lblGeneral.setFontScale(1.5f);
+		this.add(lblGeneral).padTop(32);
 		this.row();
 
 		this.add(new Label(gettext("Interface language"), skin));

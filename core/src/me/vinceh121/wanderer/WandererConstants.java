@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Logger;
@@ -23,6 +22,8 @@ import me.vinceh121.wanderer.json.WandererJsonModule;
 import me.vinceh121.wanderer.platform.audio.AudioSystem3D;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.platform.audio.Sound3DLoader;
+import me.vinceh121.wanderer.ui.WSkin;
+import me.vinceh121.wanderer.ui.WSkinLoader;
 import me.vinceh121.wanderer.util.AssetFileHandleResolver;
 
 public final class WandererConstants {
@@ -32,12 +33,12 @@ public final class WandererConstants {
 	public static final AudioSystem3D AUDIO = (AudioSystem3D) Gdx.audio;
 	public static final Texture BLACK_PIXEL;
 
-	public static Skin getDevSkin() {
-		return WandererConstants.ASSET_MANAGER.get("skins/default/uiskin.json", Skin.class);
+	public static WSkin getDevSkin() {
+		return WandererConstants.ASSET_MANAGER.get("skins/default/uiskin.json", WSkin.class);
 	}
-	
-	public static Skin getUISkin() {
-		return getDevSkin();
+
+	public static WSkin getUISkin() {
+		return WandererConstants.ASSET_MANAGER.get("skins/pn/uiskin.json", WSkin.class);
 	}
 
 	public static Model getAudioDebug() {
@@ -84,6 +85,8 @@ public final class WandererConstants {
 				new Sound3DLoader(WandererConstants.ASSET_MANAGER.getFileHandleResolver()));
 		WandererConstants.ASSET_MANAGER.setLoader(Model.class, ".gltf", new GLTFModelLoader());
 		WandererConstants.ASSET_MANAGER.setLoader(Model.class, ".glb", new GLBModelLoader());
+		
+		WandererConstants.ASSET_MANAGER.setLoader(WSkin.class, new WSkinLoader(WandererConstants.ASSET_MANAGER.getFileHandleResolver()));
 
 		WandererConstants.MIPMAPS.genMipMaps = true;
 
@@ -97,7 +100,7 @@ public final class WandererConstants {
 			WandererConstants.ASSET_MANAGER.load(texture, Texture.class);
 		}
 		for (final String skin : preload.get("skins").asStringArray()) {
-			WandererConstants.ASSET_MANAGER.load(skin, Skin.class);
+			WandererConstants.ASSET_MANAGER.load(skin, WSkin.class);
 		}
 		for (final String model : preload.get("models").asStringArray()) {
 			WandererConstants.ASSET_MANAGER.load(model, Model.class);

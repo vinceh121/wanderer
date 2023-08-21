@@ -1,10 +1,6 @@
 [
 	{
-		"url": "https://cdn.vinceh121.me/upload/Solstice-96662089bf95044cad27c5d9af70b8be5f591d6c1a3d879481d92a4d2409c2a6.png",
-		"outPath": "skins/pn/Solstice.png"
-	},
-	{
-		"url": "https://cdn.vinceh121.me/upload/Solstice-96662089bf95044cad27c5d9af70b8be5f591d6c1a3d879481d92a4d2409c2a6.fnt",
-		"outPath": "skins/pn/Solstice.fnt"
+		"url": "https://cdn.vinceh121.me/upload/Solstice-7204130923cd9f3c77f63dc41dad39652ce0afefd0cd9f53b88f9871dc00c508.ttf",
+		"outPath": "skins/pn/Solstice.ttf"
 	}
 ]

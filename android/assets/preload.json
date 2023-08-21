@@ -34,7 +34,8 @@
 		"orig/locale/if_main.bmp"
 	],
 	"skins": [
-		"skins/default/uiskin.json"
+		"skins/default/uiskin.json",
+		"skins/pn/uiskin.json"
 	],
 	"models": [
 		"orig/skybox01.n/model.obj",
