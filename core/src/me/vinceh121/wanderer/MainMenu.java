@@ -138,6 +138,7 @@ public class MainMenu extends ApplicationDelegate {
 				public void clicked(InputEvent event, float x, float y) {
 					StoryWanderer story = new StoryWanderer(applicationMultiplexer);
 					story.create();
+					story.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 					applicationMultiplexer.setDelegate(story);
 					dispose();
 				}
