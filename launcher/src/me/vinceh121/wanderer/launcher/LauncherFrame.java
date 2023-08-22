@@ -2,6 +2,7 @@ package me.vinceh121.wanderer.launcher;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.nio.file.Path;
 
 import javax.swing.JButton;
@@ -68,8 +69,22 @@ public class LauncherFrame extends JFrame {
 
 				Process proc = Runtime.getRuntime()
 					.exec(new String[] { java.toAbsolutePath().toString(), "-jar", "desktop.jar" });
-				proc.getInputStream().transferTo(System.out);
-				proc.getErrorStream().transferTo(System.err);
+
+				new Thread(() -> {
+					try {
+						proc.getInputStream().transferTo(System.out);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}).start();
+				new Thread(() -> {
+					try {
+						proc.getErrorStream().transferTo(System.err);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}).start();
+
 				proc.waitFor();
 			} catch (Throwable t) {
 				LOG.error("Unexpected error", t);
