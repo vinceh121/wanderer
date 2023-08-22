@@ -119,6 +119,7 @@ allprojects {
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.1.0'
         jlineVersion = '3.21.0'
+        log4jVersion = '2.20.0'
     }
 
     repositories {
@@ -187,9 +188,9 @@ project(":launcher") {
     apply plugin: "application"
 
     dependencies {
-        api project(":desktop")
-
         api "me.vinceh121.wanderer:nebula2-assets-extractor:0.5.0-SNAPSHOT"
+        api "org.apache.logging.log4j:log4j-core:$log4jVersion"
+        api "org.apache.logging.log4j:log4j-slf4j2-impl:$log4jVersion"
     }
 }
 
@@ -211,8 +212,8 @@ project(":core") {
         api "org.jline:jline-terminal:$jlineVersion"
         api "com.github.mgsx-dev.gdx-gltf:gltf:227214de89923c7754406c68c1504e75ba087823"
         api "org.reflections:reflections:0.10.2"
-        api "org.apache.logging.log4j:log4j-core:2.20.0"
-        api "org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0"
+        api "org.apache.logging.log4j:log4j-core:$log4jVersion"
+        api "org.apache.logging.log4j:log4j-slf4j2-impl:$log4jVersion"
         api "com.electronwill.night-config:toml:3.6.6"
 
         testImplementation(platform('org.junit:junit-bom:5.9.3'))

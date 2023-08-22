@@ -2,16 +2,16 @@ package me.vinceh121.wanderer.launcher;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.nio.file.Path;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import me.vinceh121.wanderer.desktop.DesktopLauncher;
 
 public class LauncherFrame extends JFrame {
 	private static final Logger LOG = LogManager.getLogger(LauncherFrame.class);
@@ -55,7 +55,22 @@ public class LauncherFrame extends JFrame {
 		new Thread(() -> {
 			this.started = true;
 			try {
-				DesktopLauncher.main(null);
+				final Path home = Path.of(System.getProperty("java.home"));
+				final Path java;
+
+				if (SystemUtils.IS_OS_WINDOWS) {
+					java = home.resolve("bin").resolve("javaw.exe");
+				} else if (SystemUtils.IS_OS_UNIX) {
+					java = home.resolve("bin").resolve("java");
+				} else {
+					throw new IllegalStateException("Don't know how to fetch Java execultable for your OS");
+				}
+
+				Process proc = Runtime.getRuntime()
+					.exec(new String[] { java.toAbsolutePath().toString(), "-jar", "desktop.jar" });
+				proc.getInputStream().transferTo(System.out);
+				proc.getErrorStream().transferTo(System.err);
+				proc.waitFor();
 			} catch (Throwable t) {
 				LOG.error("Unexpected error", t);
 				JOptionPane.showMessageDialog(null, "Unexpected error in Wanderer: " + t);
