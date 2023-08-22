@@ -26,8 +26,6 @@ public class ConfirmStep extends AbstractWizardStep {
 	private static final Logger LOG = LogManager.getLogger(ConfirmStep.class);
 	private static final char[] HEX_ARRAY = "0123456789abcdef".toCharArray();
 	private final JLabel lbl = new JLabel();
-	private DataNpkSum data;
-	private VoiceLineSum voice;
 
 	public ConfirmStep(final FirstTimeWizardContext ctx) {
 		super(ctx);
@@ -54,7 +52,7 @@ public class ConfirmStep extends AbstractWizardStep {
 	}
 
 	private boolean isValidSums() {
-		return this.voice != null && (this.data == null || this.data.isValid());
+		return this.ctx.getVoice() != null && (this.ctx.getData() == null || this.ctx.getData().isValid());
 	}
 
 	private class SumCheck extends SwingWorker<Void, Void> {
@@ -89,8 +87,8 @@ public class ConfirmStep extends AbstractWizardStep {
 			final String voiceHash = ConfirmStep.fileSha256Sum(ConfirmStep.this.ctx.getDataPath()
 				.resolveSibling(Path.of("book", "chapter00", "part01", "sound", "c00p01spr01.wav")));
 
-			ConfirmStep.this.data = dataSums.get(dataHash);
-			ConfirmStep.this.voice = voiceSums.get(voiceHash);
+			ctx.setData(dataSums.get(dataHash));
+			ctx.setVoice(voiceSums.get(voiceHash));
 
 			return null;
 		}
@@ -100,18 +98,18 @@ public class ConfirmStep extends AbstractWizardStep {
 			if (ConfirmStep.this.isValidSums()) {
 				ConfirmStep.this.ctx.setNextEnabled(true);
 				ConfirmStep.this.lbl.setText("<html>Going to install assets from Project Nomads <b>"
-						+ ConfirmStep.this.voice.getJavaLocale().getDisplayLanguage() + "</b></html>");
+						+ ConfirmStep.this.ctx.getVoice().getJavaLocale().getDisplayLanguage() + "</b></html>");
 			} else {
 				final StringBuilder txt = new StringBuilder();
 				txt.append("<html>Cannot install assets from this Project Nomads installation because:<ul>");
-				if (ConfirmStep.this.data == null) {
+				if (ConfirmStep.this.ctx.getData() == null) {
 					txt.append("<li>The data.npk is not recognized</li>");
 				} else {
-					if (ConfirmStep.this.data.isDemo()) {
+					if (ConfirmStep.this.ctx.getData().isDemo()) {
 						txt.append("<li>The demo version does not contain all assets</li>");
 					}
 				}
-				if (ConfirmStep.this.voice == null) {
+				if (ConfirmStep.this.ctx.getVoice() == null) {
 					txt.append("<li>Unrecognized language</li>");
 				}
 				txt.append("</ul></html>");

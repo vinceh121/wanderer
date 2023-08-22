@@ -29,6 +29,7 @@ public class OptionsView extends Table {
 	private MonitorSelect selMon;
 	private ResolutionSelect selRes;
 	private CheckBox chkVSync;
+	private LangSelect speechSelect;
 
 	public OptionsView(Skin skin) {
 		super(skin);
@@ -49,7 +50,8 @@ public class OptionsView extends Table {
 		this.row();
 
 		this.add(new Label(gettext("Audio language"), skin));
-		this.add(new LangSelect(skin, "en", "de", "ru"));
+		this.speechSelect = new LangSelect(skin, "en", "de", "ru");
+		this.add(this.speechSelect);
 		this.row();
 
 		///// GRAPHICS
@@ -126,6 +128,8 @@ public class OptionsView extends Table {
 		}
 
 		Preferences.getPreferences().set("graphics.vsync", this.chkVSync.isChecked());
+
+		Preferences.getPreferences().set("i18n.speech", this.speechSelect.getSelected());
 
 		GraphicsUtilities.setFromPreferences();
 	}

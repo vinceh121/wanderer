@@ -44667,9 +44667,9 @@
 					"text": "In the chaos of war, the world was split asunder and the ancient civilization of the master builders came to an end."
 				},
 				{
-					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
+					"@class": "me.vinceh121.wanderer.cinematic.SpeechKeyFrame",
 					"time": 3.6,
-					"sound": "orig/book/chapter00/part01/sound/c00p01spr01.wav"
+					"sound": "chapter00/part01/sound/c00p01spr01.wav"
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44722,9 +44722,9 @@
 					"text": "They came from the Grey Market.\nThree friends, nomads, adventurers."
 				},
 				{
-					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
+					"@class": "me.vinceh121.wanderer.cinematic.SpeechKeyFrame",
 					"time": 38.6,
-					"sound": "orig/book/chapter00/part01/sound/c00p01spr02.wav"
+					"sound": "chapter00/part01/sound/c00p01spr02.wav"
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",
@@ -44817,9 +44817,9 @@
 					"text": "They didn't stand a chance. Two of the friends were captured immediately by the Sentinels."
 				},
 				{
-					"@class": "me.vinceh121.wanderer.cinematic.AudioKeyFrame",
+					"@class": "me.vinceh121.wanderer.cinematic.SpeechKeyFrame",
 					"time": 102.2,
-					"sound": "orig/book/chapter00/part01/sound/c00p01spr03.wav"
+					"sound": "chapter00/part01/sound/c00p01spr03.wav"
 				},
 				{
 					"@class": "me.vinceh121.wanderer.cinematic.SubtitleKeyFrame",

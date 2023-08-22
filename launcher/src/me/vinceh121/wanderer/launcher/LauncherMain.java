@@ -27,20 +27,24 @@ public class LauncherMain {
 		PnDarkLaf.setup();
 
 		if (Files.notExists(LauncherMain.getAssetsPath())) {
-			final FirstTimeWizardContext ctx = new FirstTimeWizardContext();
-			final FirstTimeWizard wiz = new FirstTimeWizard(ctx,
-					List.of(new WelcomeStep(ctx),
-							new DataSelectStep(ctx),
-							new ConfirmStep(ctx),
-							new ExtractStep(ctx),
-							new FinishStep(ctx)));
-			wiz.setVisible(true);
+			runWizard();
 		}
 
 		final LauncherFrame frame = new LauncherFrame();
 		frame.setVisible(true);
 	}
 
+	public static void runWizard() {
+		final FirstTimeWizardContext ctx = new FirstTimeWizardContext();
+		final FirstTimeWizard wiz = new FirstTimeWizard(ctx,
+				List.of(new WelcomeStep(ctx),
+						new DataSelectStep(ctx),
+						new ConfirmStep(ctx),
+						new ExtractStep(ctx),
+						new FinishStep(ctx)));
+		wiz.setVisible(true);
+	}
+	
 	public static Path getAssetsPath() {
 		return Path.of(".", "assets");
 	}

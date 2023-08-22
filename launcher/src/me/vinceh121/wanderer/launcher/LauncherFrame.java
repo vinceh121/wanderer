@@ -7,6 +7,9 @@ import java.nio.file.Path;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
@@ -34,6 +37,16 @@ public class LauncherFrame extends JFrame {
 		final JButton btnStart = new JButton("Start");
 		btnStart.addActionListener(e -> this.start());
 		this.add(btnStart);
+
+		JMenuBar menu = new JMenuBar();
+		this.setJMenuBar(menu);
+
+		JMenu mnHelp = new JMenu("Help");
+		menu.add(mnHelp);
+
+		JMenuItem mntRerunWizard = new JMenuItem("Rerun installation wizard");
+		mntRerunWizard.addActionListener(e -> LauncherMain.runWizard());
+		mnHelp.add(mntRerunWizard);
 	}
 
 	private void onClose() {

@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Map;
@@ -142,16 +144,30 @@ public class ExtractStep extends AbstractWizardStep {
 					if (!src.getFileName().toString().endsWith(".wav")) {
 						return FileVisitResult.CONTINUE;
 					}
-					Path relPath = dataPath.getParent().relativize(src);
+
+					Path relPath = dataPath.getParent().resolve("book").relativize(src);
 					publish("Copying sound " + relPath);
-					Path dest = origPath.resolve(relPath);
+					Path dest = origPath.resolve("book").resolve(ctx.getVoice().getLocale()).resolve(relPath);
 					Files.createDirectories(dest.getParent());
-					Files.copy(src, dest);
+					Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
 					return FileVisitResult.CONTINUE;
 				}
 			});
+
 			// is this really necessary?
-			Files.move(origPath.resolve("book").resolve("feedback"), origPath.resolve("feedback"));
+			try {
+				Files.move(origPath.resolve("book").resolve(ctx.getVoice().getLocale()).resolve("feedback"),
+						origPath.resolve("feedback"));
+			} catch (FileAlreadyExistsException e) {
+				publish("Refusing to move already existing feedback");
+			}
+			try {
+				Files.move(origPath.resolve("book").resolve(ctx.getVoice().getLocale()).resolve("music"),
+						origPath.resolve("book").resolve("music"));
+			} catch (FileAlreadyExistsException e) {
+				publish("Refusing to move already existing music");
+			}
+
 			this.publish("Extracting NPK...");
 			try (InputStream npkIn = Files.newInputStream(dataPath)) {
 				final NnpkFileReader r = new NnpkFileReader(npkIn);

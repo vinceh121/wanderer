@@ -22,7 +22,16 @@ import me.vinceh121.wanderer.i18n.I18N;
 public class DesktopLauncher {
 	private static final Logger LOG = LogManager.getLogger(DesktopLauncher.class);
 
-	public static void main(final String[] arg) {
+	public static void main(final String[] args) {
+		try {
+			main0(args);
+		} catch (final Throwable t) {
+			LOG.error("Unhandled error", t);
+			System.exit(-1);
+		}
+	}
+
+	private static void main0(final String[] args) {
 		final Path configPath = getConfigPath();
 		if (configPath == null) {
 			LOG.error("Could not find proper config file path");
@@ -47,7 +56,6 @@ public class DesktopLauncher {
 		}
 		// all default except for 4× anti aliasing
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, prefs.getIntOrElse("graphics.msaaSamples", 4));
-
 
 		if (prefs.get("graphics.monitor") instanceof Integer) {
 			config.setWindowedMode(512, 512);
