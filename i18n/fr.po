@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-29 04:43+0200\n"
+"POT-Creation-Date: 2023-08-22 04:03+0200\n"
 "PO-Revision-Date: 2023-06-28 21:47+0000\n"
 "Last-Translator: vinceh121 <contact@vinceh121.me>\n"
 "Language-Team: French <https://weblate.vinceh121.me/projects/wanderer/game/"
@@ -20,19 +20,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 4.8.1\n"
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:152
+#: core/src/me/vinceh121/wanderer/Wanderer.java:155
 msgid "Quick saved!"
 msgstr "Sauvegarde rapide terminée !"
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:160
+#: core/src/me/vinceh121/wanderer/Wanderer.java:163
 msgid "Quick loaded!"
 msgstr "Sauvegarde rapide chargée !"
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:478
+#: core/src/me/vinceh121/wanderer/Wanderer.java:482
 msgid "Taking control..."
 msgstr "Prise de contrôle..."
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:484
+#: core/src/me/vinceh121/wanderer/Wanderer.java:488
 msgid "Nothing to control"
 msgstr "Rien à contrôler"
 
@@ -42,80 +42,93 @@ msgstr "Rien à contrôler"
 msgid "Gun tower"
 msgstr "Tourelle"
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:21
-#: core/src/me/vinceh121/wanderer/MainMenu.java:98
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:36
+#: core/src/me/vinceh121/wanderer/MainMenu.java:104
 msgid "Options"
 msgstr ""
 
 #. //// GENERAL
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:25
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:42
 msgid "General"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:28
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:47
 msgid "Interface language"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:32
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:51
 msgid "Audio language"
 msgstr ""
 
 #. /// GRAPHICS
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:37
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:56
 msgid "Graphics"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:40
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:59
 msgid "V-Sync"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:43
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:64
 msgid "Window mode"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:47
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:75
 msgid "Resolution"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:76
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:103
-msgid "Windowed"
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:86
+#: core/src/me/vinceh121/wanderer/MainMenu.java:152
+msgid "Cancel"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:78
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:95
+msgid "Apply"
+msgstr ""
+
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:157
+msgid "<select fullscreen>"
+msgstr ""
+
+#. Hertz unit
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:159
+msgid "Hz"
+msgstr ""
+
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:178
 msgid "(Primary)"
+msgstr ""
+
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:211
+msgid "Windowed"
 msgstr ""
 
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
 msgid "Belt full!"
 msgstr "Ceinture pleine !"
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:85
+#: core/src/me/vinceh121/wanderer/MainMenu.java:91
 msgid "Single player"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:95
+#: core/src/me/vinceh121/wanderer/MainMenu.java:101
 msgid "Multiplayer"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:108
+#: core/src/me/vinceh121/wanderer/MainMenu.java:114
 msgid "Quit"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:118
+#: core/src/me/vinceh121/wanderer/MainMenu.java:124
 msgid "Credits"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:129
+#: core/src/me/vinceh121/wanderer/MainMenu.java:135
 msgid "New Game"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:132
+#: core/src/me/vinceh121/wanderer/MainMenu.java:149
 msgid "Load Game"
-msgstr ""
-
-#: core/src/me/vinceh121/wanderer/MainMenu.java:135
-msgid "Cancel"
 msgstr ""
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:352
