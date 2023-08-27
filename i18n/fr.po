@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 02:41+0200\n"
-"PO-Revision-Date: 2023-06-28 21:47+0000\n"
-"Last-Translator: vinceh121 <contact@vinceh121.me>\n"
+"Report-Msgid-Bugs-To: wanderer.weblate@vinceh121.me\n"
+"POT-Creation-Date: 2023-07-29 04:43+0200\n"
+"PO-Revision-Date: 2023-08-22 02:04+0000\n"
+"Last-Translator: supermarioemeric <emeric.hyvert@gmail.com>\n"
 "Language-Team: French <https://weblate.vinceh121.me/projects/wanderer/game/"
 "fr/>\n"
 "Language: fr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8.1\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:155
 msgid "Quick saved!"
@@ -45,42 +45,42 @@ msgstr "Tourelle"
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:37
 #: core/src/me/vinceh121/wanderer/MainMenu.java:104
 msgid "Options"
-msgstr ""
+msgstr "Options"
 
 #. //// GENERAL
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:43
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:48
 msgid "Interface language"
-msgstr ""
+msgstr "Langue de l''interface"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:52
 msgid "Audio language"
-msgstr ""
+msgstr "Langue audio"
 
 #. /// GRAPHICS
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:58
 msgid "Graphics"
-msgstr ""
+msgstr "Graphismes"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:61
 msgid "V-Sync"
-msgstr ""
+msgstr "Synchronisation verticale"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:66
 msgid "Window mode"
-msgstr ""
+msgstr "Mode fenêtré"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:77
 msgid "Resolution"
-msgstr ""
+msgstr "Résolution"
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:88
-#: core/src/me/vinceh121/wanderer/MainMenu.java:152
-msgid "Cancel"
-msgstr ""
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:76
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:103
+msgid "Windowed"
+msgstr "Fenêtré"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:97
 msgid "Apply"
@@ -97,7 +97,7 @@ msgstr ""
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:182
 msgid "(Primary)"
-msgstr ""
+msgstr "(Primaire)"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:215
 msgid "Windowed"
@@ -109,27 +109,31 @@ msgstr "Ceinture pleine !"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:91
 msgid "Single player"
-msgstr ""
+msgstr "Campagne"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:101
 msgid "Multiplayer"
-msgstr ""
+msgstr "Multijoueur"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:114
 msgid "Quit"
-msgstr ""
+msgstr "Quitter"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:124
 msgid "Credits"
-msgstr ""
+msgstr "Crédits"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:135
 msgid "New Game"
-msgstr ""
+msgstr "Nouvelle partie"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:149
 msgid "Load Game"
-msgstr ""
+msgstr "Charger la sauvegarde"
+
+#: core/src/me/vinceh121/wanderer/MainMenu.java:135
+msgid "Cancel"
+msgstr "Annuler"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:352
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:394
@@ -211,7 +215,7 @@ msgstr "Ce vieux coupe-jarret de Trevayne leur avait parlé..."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "...Of a mysterious island in the territory of the Sentinels"
-msgstr "... d''une île mystérieuse dans le territoire des Sentinelles."
+msgstr "... D''une île mystérieuse dans le territoire des Sentinelles."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid ""
