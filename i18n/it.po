@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-22 16:24+0200\n"
+"POT-Creation-Date: 2023-08-27 02:41+0200\n"
 "PO-Revision-Date: 2023-07-29 02:36+0000\n"
 "Last-Translator: vinceh121 <contact@vinceh121.me>\n"
 "Language-Team: Italian <https://weblate.vinceh121.me/projects/wanderer/game/"
@@ -41,64 +41,64 @@ msgstr ""
 msgid "Gun tower"
 msgstr "Torretta"
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:36
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:37
 #: core/src/me/vinceh121/wanderer/MainMenu.java:104
 msgid "Options"
 msgstr ""
 
 #. //// GENERAL
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:42
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:43
 msgid "General"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:47
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:48
 msgid "Interface language"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:51
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:52
 msgid "Audio language"
 msgstr ""
 
 #. /// GRAPHICS
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:56
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:58
 msgid "Graphics"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:59
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:61
 msgid "V-Sync"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:64
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:66
 msgid "Window mode"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:75
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:77
 msgid "Resolution"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:86
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:88
 #: core/src/me/vinceh121/wanderer/MainMenu.java:152
 msgid "Cancel"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:95
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:97
 msgid "Apply"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:157
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:161
 msgid "<select fullscreen>"
 msgstr ""
 
 #. Hertz unit
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:159
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:163
 msgid "Hz"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:178
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:182
 msgid "(Primary)"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:211
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:215
 msgid "Windowed"
 msgstr ""
 
