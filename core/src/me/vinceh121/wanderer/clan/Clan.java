@@ -1,5 +1,8 @@
 package me.vinceh121.wanderer.clan;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,6 +22,8 @@ public class Clan implements ISaveable {
 	 * Contains player, buildings and island ids
 	 */
 	private final Array<ID> members = new Array<>();
+	private final Map<Clan, Amicability> relationships = new HashMap<>();
+	private Amicability defaultAmicability = Amicability.NEUTRAL;
 
 	public ID getId() {
 		return this.id;
@@ -83,6 +88,32 @@ public class Clan implements ISaveable {
 
 	public boolean removeMember(final ID value) {
 		return this.members.removeValue(value, true); // compare equality, not pointers
+	}
+
+	public Map<Clan, Amicability> getRelationships() {
+		return this.relationships;
+	}
+
+	public void putRelationship(Clan clan, Amicability amicability) {
+		this.relationships.put(clan, amicability);
+	}
+
+	public Amicability getRelationship(Clan clan) {
+		Amicability amicability = this.relationships.get(clan);
+
+		if (amicability == null) {
+			return this.defaultAmicability;
+		}
+
+		return amicability;
+	}
+
+	public Amicability getDefaultAmicability() {
+		return this.defaultAmicability;
+	}
+
+	public void setDefaultAmicability(Amicability defaultAmicability) {
+		this.defaultAmicability = defaultAmicability;
 	}
 
 	@Override
