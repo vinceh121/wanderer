@@ -9,8 +9,13 @@ import java.util.Properties;
 
 public class I18N {
 	private static final Map<String, String> STRINGS = new HashMap<>();
+	private static boolean passthrough = false;
 
 	public static String gettext(final String msgid) {
+		if (passthrough) {
+			return msgid;
+		}
+
 		final String str = I18N.STRINGS.get(msgid);
 		return str != null ? str : msgid;
 	}
@@ -21,6 +26,12 @@ public class I18N {
 
 	public static void load(final String locale) throws IOException {
 		I18N.STRINGS.clear();
+
+		if ("en_UK".equals(locale)) {
+			passthrough = true;
+			return;
+		}
+
 		try (final InputStream in = I18N.class.getClassLoader().getResourceAsStream("i18n/" + locale + ".properties")) {
 
 			if (in == null) {
