@@ -8,6 +8,7 @@ public abstract class AbstractGuntowerMeta extends AbstractBuildingMeta {
 	private Vector3 cameraOffset = new Vector3();
 	private float polarMin = 0.1f, polarMax = 0.9f;
 	private String fireSound;
+	private boolean hasAi;
 
 	public Vector3 getCameraOffset() {
 		return this.cameraOffset;
@@ -39,5 +40,13 @@ public abstract class AbstractGuntowerMeta extends AbstractBuildingMeta {
 
 	public void setFireSound(final String fireSound) {
 		this.fireSound = fireSound;
+	}
+
+	public boolean isHasAi() {
+		return this.hasAi;
+	}
+
+	public void setHasAi(boolean hasAi) {
+		this.hasAi = hasAi;
 	}
 }

@@ -27,6 +27,7 @@ import me.vinceh121.wanderer.ID;
 import me.vinceh121.wanderer.ISaveable;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.ai.AIController;
 import me.vinceh121.wanderer.event.Event;
 import me.vinceh121.wanderer.event.EventDispatcher;
 import me.vinceh121.wanderer.event.IEventListener;
@@ -47,6 +48,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	private float mass;
 	private boolean exactCollideModel = true, invisible = false, castShadow = true;
 	private int collisionGroup = CollisionFilterGroups.DefaultFilter, collisionMask = CollisionFilterGroups.AllFilter;
+	private AIController<?> aiController;
 
 	public AbstractEntity(final Wanderer game) {
 		this.game = game;
@@ -121,6 +123,9 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	}
 
 	public void tick(final float delta) {
+		if (this.aiController != null) {
+			this.aiController.tick(delta);
+		}
 	}
 
 	public void render(final ModelBatch batch, final Environment env) {
@@ -470,6 +475,14 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 
 	public Array<ParticleEmitter> getParticles() {
 		return this.particles;
+	}
+
+	public AIController<?> getAiController() {
+		return this.aiController;
+	}
+
+	public void setAiController(final AIController<?> aiController) {
+		this.aiController = aiController;
 	}
 
 	public void addEventListener(final String type, final IEventListener l) {

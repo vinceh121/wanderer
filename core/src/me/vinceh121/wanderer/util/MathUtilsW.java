@@ -35,6 +35,14 @@ public final class MathUtilsW {
 		return v;
 	}
 
+	public static float getSphericalPolar(float z, float r) {
+		return MathUtils.acos(z / r);
+	}
+
+	public static float getSphericalAzimuth(float x, float y) {
+		return Math.signum(y) * MathUtils.acos(x / (float)(Math.sqrt(x * x + y * y)));
+	}
+
 	public static Vector3 fixNaN(final Vector3 v, final float val) {
 		if (Float.isNaN(v.x)) {
 			v.x = val;

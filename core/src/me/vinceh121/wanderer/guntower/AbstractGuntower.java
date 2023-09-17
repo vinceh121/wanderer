@@ -29,7 +29,7 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	public AbstractGuntower(final Wanderer game, final AbstractGuntowerMeta meta) {
 		super(game, meta);
 		this.meta = meta;
-		this.setControlMessage(/* Popup message when close to building  */I18N.gettext("Gun tower"));
+		this.setControlMessage(/* Popup message when close to building */I18N.gettext("Gun tower"));
 
 		if (this.meta.getFireSound() != null) {
 			if (!WandererConstants.ASSET_MANAGER.isLoaded(this.meta.getFireSound(), Sound3D.class)) {
@@ -40,6 +40,10 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 			this.fireSoundEmitter =
 					WandererConstants.ASSET_MANAGER.get(this.meta.getFireSound(), Sound3D.class).playSource3D();
 			this.addSoundEmitter(this.fireSoundEmitter);
+		}
+
+		if (this.meta.isHasAi()) {
+			this.setAiController(new GuntowerAiController(game, this));
 		}
 	}
 
@@ -58,7 +62,9 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 				final float lookSensY =
 						Preferences.getPreferences().<Double>getOrElse("input.lookSensitivityY", 0.005).floatValue();
 				AbstractGuntower.this.polarAngle += y * lookSensY * -1f;
-				AbstractGuntower.this.polarAngle = MathUtils.clamp(AbstractGuntower.this.polarAngle, AbstractGuntower.this.meta.getPolarMin(), AbstractGuntower.this.meta.getPolarMax());
+				AbstractGuntower.this.polarAngle = MathUtils.clamp(AbstractGuntower.this.polarAngle,
+						AbstractGuntower.this.meta.getPolarMin(),
+						AbstractGuntower.this.meta.getPolarMax());
 				return true;
 			}
 		};
