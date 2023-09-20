@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.building;
 
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.ai.AIController;
 import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
@@ -8,6 +9,7 @@ import me.vinceh121.wanderer.input.InputListenerAdapter;
 public abstract class AbstractControllableBuilding extends AbstractBuilding implements IControllableEntity {
 	private boolean controlled;
 	private InputListener inputListener;
+	private AIController<?> aiController;
 
 	public AbstractControllableBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
 		super(game, meta);
@@ -26,6 +28,15 @@ public abstract class AbstractControllableBuilding extends AbstractBuilding impl
 	}
 
 	@Override
+	public void tick(float delta) {
+		super.tick(delta);
+
+		if (!this.controlled && this.aiController != null) {
+			this.aiController.tick(delta);
+		}
+	}
+
+	@Override
 	public void onTakeControl() {
 		this.controlled = true;
 	}
@@ -37,5 +48,13 @@ public abstract class AbstractControllableBuilding extends AbstractBuilding impl
 
 	public boolean isControlled() {
 		return this.controlled;
+	}
+
+	public AIController<?> getAiController() {
+		return aiController;
+	}
+
+	public void setAiController(AIController<?> aiController) {
+		this.aiController = aiController;
 	}
 }

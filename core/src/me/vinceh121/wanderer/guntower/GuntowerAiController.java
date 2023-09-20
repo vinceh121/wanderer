@@ -36,24 +36,24 @@ public class GuntowerAiController extends AIController<AbstractGuntower> {
 			return;
 		}
 
-		final Vector3 closestDir = closest.getTranslation().cpy().sub(this.target.getTranslation());
+		final Vector3 closestDir = closest.getTranslation()
+			.cpy()
+			.sub(this.target.getTranslation().add(0, this.target.getAverageTurretPosition().y, 0))
+			.nor();
 		final float angle = this.target.getLookDirection().dot(closestDir);
 
-		if (MathUtils.isZero(angle, 1)) {
+		if (MathUtils.isEqual(angle, 1f, 0.3f)) {
 			this.target.fire();
 		}
 
-		final Vector3 newDir = this.target.getLookDirection().slerp(closestDir, this.turnSpeed * delta);
-		final float r = newDir.len();
-		
-		final float polar = MathUtilsW.getSphericalPolar(newDir.z, r);
-		final float azimuth = MathUtilsW.getSphericalAzimuth(newDir.x, newDir.y);
-		
-		System.out.println(polar);
-		System.out.println(azimuth);
-		System.out.println();
+//		final Vector3 newDir = this.target.getLookDirection().slerp(closestDir, this.turnSpeed * delta);
+		Vector3 newDir = closestDir.cpy();
+		newDir.rotateRad(Vector3.X, MathUtils.HALF_PI);
 
-		this.target.setPolarAngle(polar);
-		this.target.setAzimuth(azimuth);
+		final float polar = MathUtilsW.getSphericalPolar(newDir.z);
+		final float azimuth = MathUtilsW.getSphericalAzimuth(newDir.x, newDir.y);
+
+		this.target.setPolarAngle(1 - (polar / MathUtils.PI));
+		this.target.setAzimuth(1 - (azimuth / MathUtils.PI2));
 	}
 }

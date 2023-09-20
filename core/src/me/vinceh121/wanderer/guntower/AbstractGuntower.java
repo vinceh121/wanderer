@@ -70,6 +70,8 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 		};
 	}
 
+	public abstract Vector3 getAverageTurretPosition();
+
 	public Vector3 getLookDirection() {
 		final Vector3 direction = new Vector3();
 		direction.setFromSpherical(MathUtils.PI2 * (this.azimuth % 1), MathUtils.PI * (this.polarAngle % 1));
@@ -134,7 +136,7 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	}
 
 	public void setPolarAngle(final float polarAngle) {
-		this.polarAngle = polarAngle;
+		this.polarAngle = MathUtils.clamp(polarAngle, this.meta.getPolarMin(), this.meta.getPolarMax());
 	}
 
 	@Override

@@ -98,6 +98,17 @@ public class MachineGunGuntower extends AbstractGuntower {
 	}
 
 	@Override
+	public Vector3 getAverageTurretPosition() {
+		final List<Vector3> pos = new ArrayList<Vector3>(this.turrets.size);
+
+		for (int i = 0; i < this.turrets.size; i++) {
+			pos.add(this.turrets.get(i).getRelativeTransform().getTranslation(new Vector3()));
+		}
+
+		return MathUtilsW.average(pos);
+	}
+
+	@Override
 	public String getControlMessage() {
 		return I18N.gettext("Gun tower");
 	}

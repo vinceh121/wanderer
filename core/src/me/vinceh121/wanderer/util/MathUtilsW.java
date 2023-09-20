@@ -35,8 +35,8 @@ public final class MathUtilsW {
 		return v;
 	}
 
-	public static float getSphericalPolar(float z, float r) {
-		return MathUtils.acos(z / r);
+	public static float getSphericalPolar(float z) {
+		return MathUtils.acos(z);
 	}
 
 	public static float getSphericalAzimuth(float x, float y) {
