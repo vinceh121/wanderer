@@ -1,18 +1,19 @@
 package me.vinceh121.wanderer.guntower;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.ai.AIController;
 import me.vinceh121.wanderer.entity.AbstractEntity;
-import me.vinceh121.wanderer.entity.ILivingEntity;
 import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class GuntowerAiController extends AIController<AbstractGuntower> {
-	private final Array<String> targets = new Array<>(true, 5);
-	private float range = 500, turnSpeed = 5;
+	private final Set<String> targets = new HashSet<>();
+	private float range = 500, turnSpeed = 3;
 
 	public GuntowerAiController(Wanderer game, AbstractGuntower target) {
 		super(game, target);
@@ -26,7 +27,7 @@ public class GuntowerAiController extends AIController<AbstractGuntower> {
 		for (final AbstractEntity e : this.game.getEntities()) {
 			final float dist = this.target.getTranslation().dst(e.getTranslation());
 
-			if (dist < minDist && e != this.target && e instanceof ILivingEntity) {
+			if (dist < minDist && e != this.target && targets.contains(e.getClass().getCanonicalName())) {
 				closest = e;
 				minDist = dist;
 			}
@@ -36,12 +37,12 @@ public class GuntowerAiController extends AIController<AbstractGuntower> {
 			return;
 		}
 
-		final Vector3 closestDir = closest.getTranslation()
+		final Vector3 closestDir = closest.getMidPoint()
 			.cpy()
 			.sub(this.target.getTranslation().add(0, this.target.getAverageTurretPosition().y, 0))
 			.nor();
 
-		final Vector3 newDir = this.target.getLookDirection().slerp(closestDir, delta);
+		final Vector3 newDir = this.target.getLookDirection().slerp(closestDir, this.turnSpeed * delta);
 //		Vector3 newDir = closestDir.cpy();
 		newDir.rotateRad(Vector3.X, MathUtils.HALF_PI);
 

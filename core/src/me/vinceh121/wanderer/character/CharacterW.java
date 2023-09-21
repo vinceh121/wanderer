@@ -81,7 +81,8 @@ public class CharacterW extends AbstractLivingControllableEntity {
 					.playSource3D()
 					.setPosition(CharacterW.this.getTransform().getTranslation(new Vector3()));
 				CharacterW.this.eventDispatcher.dispatchEvent(new Event(CharacterW.EVENT_JUMP_END));
-				CharacterW.this.justRan = CharacterW.this.justBackedUp = CharacterW.this.justTurnedLeft = CharacterW.this.justTurnedRight = false;
+				CharacterW.this.justRan = CharacterW.this.justBackedUp =
+						CharacterW.this.justTurnedLeft = CharacterW.this.justTurnedRight = false;
 			}
 
 			@Override
@@ -466,6 +467,11 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		this.game.getBtWorld().removeAction(this.controller);
 		this.controller.dispose();
 		super.dispose();
+	}
+
+	@Override
+	public Vector3 getMidPoint() {
+		return this.getTranslation().add(0, this.meta.getCapsuleHeight() / 2f, 0);
 	}
 
 	/**

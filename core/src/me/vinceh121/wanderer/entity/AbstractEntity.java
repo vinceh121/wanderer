@@ -253,6 +253,14 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		}
 	}
 
+	public Vector3 getMidPoint() {
+		if (this.collideObject != null) {
+			return this.collideObject.getCenterOfMassPosition();
+		}
+
+		return this.getTranslation();
+	}
+
 	public void addModel(final DisplayModel value) {
 		this.models.add(value);
 	}
