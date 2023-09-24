@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import me.vinceh121.wanderer.WandererConstants;
@@ -24,6 +25,7 @@ public class DisplayModel {
 	 * This model's transform relative to the entity's
 	 */
 	private final Matrix4 relativeTransform = new Matrix4();
+	private final Array<DisplayModel> children = new Array<>();
 	@JsonIgnore
 	private final Matrix4 absoluteTransform = new Matrix4();
 	private final List<Attribute> textureAttributes = new ArrayList<>();
@@ -52,9 +54,17 @@ public class DisplayModel {
 		this.setDisplayTexture(from.getDisplayTexture());
 		this.setCacheDisplayModel(from.getCacheDisplayModel());
 		this.setAnimationChannel(from.getAnimationChannel());
+
+		for (DisplayModel fromChild : from.getChildren()) {
+			this.children.add(new DisplayModel(fromChild));
+		}
 	}
 
 	public void render(final ModelBatch batch, final Environment env) {
+		for (DisplayModel child : this.children) {
+			child.render(batch, env);
+		}
+
 		if (this.displayModel == null) {
 			return;
 		}
@@ -78,6 +88,7 @@ public class DisplayModel {
 	public void loadDisplayModel() {
 		final Model model = WandererConstants.ASSET_MANAGER.get(this.getDisplayModel(), Model.class);
 		final ModelInstance instance = new ModelInstance(model);
+
 		if (this.displayTexture != null) {
 			final Texture texture = WandererConstants.ASSET_MANAGER.get(this.displayTexture, Texture.class);
 			texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.Linear);
@@ -85,8 +96,13 @@ public class DisplayModel {
 			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
 			instance.materials.get(0).set(this.textureAttributes); // this is called set but it's more like add
 		}
+
 		this.setCacheDisplayModel(instance);
 		this.getCacheDisplayModel().transform = this.absoluteTransform;
+
+		for (DisplayModel child : this.children) {
+			child.loadDisplayModel();
+		}
 	}
 
 	public void updateTransform(final Matrix4 entityTrans) {
@@ -97,6 +113,19 @@ public class DisplayModel {
 		if (this.cacheDisplayModel != null) {
 			this.cacheDisplayModel.transform = this.absoluteTransform;
 		}
+
+		for (DisplayModel child : this.children) {
+			child.updateTransform(this.absoluteTransform);
+		}
+	}
+
+	public Array<DisplayModel> getChildren() {
+		return this.children;
+	}
+
+	public void setChildren(Array<DisplayModel> children) {
+		this.children.clear();
+		this.children.addAll(children);
 	}
 
 	public String getDisplayModel() {
@@ -169,8 +198,8 @@ public class DisplayModel {
 
 	@Override
 	public String toString() {
-		return "DisplayModel [relativeTransform=" + this.relativeTransform + ", absoluteTransform=" + this.absoluteTransform
-				+ ", displayModel=" + this.displayModel + ", displayTexture=" + this.displayTexture + ", animationChannel="
-				+ this.animationChannel + "]";
+		return "DisplayModel [relativeTransform=" + this.relativeTransform + ", absoluteTransform="
+				+ this.absoluteTransform + ", displayModel=" + this.displayModel + ", displayTexture="
+				+ this.displayTexture + ", animationChannel=" + this.animationChannel + "]";
 	}
 }

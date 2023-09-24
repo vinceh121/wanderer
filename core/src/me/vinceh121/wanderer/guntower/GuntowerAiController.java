@@ -43,7 +43,6 @@ public class GuntowerAiController extends AIController<AbstractGuntower> {
 			.nor();
 
 		final Vector3 newDir = this.target.getLookDirection().slerp(closestDir, this.turnSpeed * delta);
-//		Vector3 newDir = closestDir.cpy();
 		newDir.rotateRad(Vector3.X, MathUtils.HALF_PI);
 
 		final float polar = MathUtilsW.getSphericalPolar(newDir.z);
