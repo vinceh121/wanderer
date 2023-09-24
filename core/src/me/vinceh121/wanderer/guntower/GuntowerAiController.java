@@ -1,7 +1,9 @@
 package me.vinceh121.wanderer.guntower;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -12,7 +14,7 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class GuntowerAiController extends AIController<AbstractGuntower> {
-	private final Set<String> targets = new HashSet<>();
+	private final List<String> priorities = new ArrayList<>();
 	private float range = 500, turnSpeed = 3;
 
 	public GuntowerAiController(Wanderer game, AbstractGuntower target) {
@@ -21,21 +23,37 @@ public class GuntowerAiController extends AIController<AbstractGuntower> {
 
 	@Override
 	public void tick(float delta) {
-		AbstractEntity closest = null;
+		final Queue<AbstractEntity> around = new PriorityQueue<>((e1, e2) -> {
+			final int typeCmp = Integer.compare(this.priorities.indexOf(e1.getClass().getCanonicalName()),
+					this.priorities.indexOf(e2.getClass().getCanonicalName()));
+
+			if (typeCmp != 0) {
+				return typeCmp;
+			} else {
+				return Float.compare(e1.getTranslation().dst2(this.target.getTranslation()),
+						e2.getTranslation().dst2(this.target.getTranslation()));
+			}
+		});
+
 		float minDist = Float.MAX_VALUE;
 
 		for (final AbstractEntity e : this.game.getEntities()) {
 			final float dist = this.target.getTranslation().dst(e.getTranslation());
 
-			if (dist < minDist && e != this.target && targets.contains(e.getClass().getCanonicalName())) {
-				closest = e;
+			if (dist < minDist) {
 				minDist = dist;
+			}
+
+			if (e != this.target && priorities.contains(e.getClass().getCanonicalName())) {
+				around.add(e);
 			}
 		}
 
-		if (minDist > range || closest == null) {
+		if (minDist > range || around.size() == 0) {
 			return;
 		}
+
+		final AbstractEntity closest = around.element();
 
 		final Vector3 closestDir = closest.getMidPoint()
 			.cpy()
