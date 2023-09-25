@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.utils.Align;
@@ -46,6 +47,7 @@ import me.vinceh121.wanderer.entity.Prop;
 import me.vinceh121.wanderer.i18n.I18N;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
+import me.vinceh121.wanderer.math.EllipsePath;
 import me.vinceh121.wanderer.modding.ModManager;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.script.JsGame;
@@ -99,6 +101,7 @@ public class Wanderer extends ApplicationDelegate {
 	private Subtitle subtitle;
 
 	private float timeOfDay, elapsedTimeOfDay, dayDuration = 15800f;
+	private float cameraShakeIntensity, cameraShakeTime, cameraShakeRevolutionTime;
 
 	public Wanderer(ApplicationMultiplexer applicationMultiplexer) {
 		super(applicationMultiplexer);
@@ -337,6 +340,8 @@ public class Wanderer extends ApplicationDelegate {
 			}
 		}
 
+		this.processCameraShake(delta);
+
 		this.graphicsManager.clear();
 		this.graphicsManager.renderSkybox(this.timeOfDay);
 
@@ -386,22 +391,59 @@ public class Wanderer extends ApplicationDelegate {
 
 	protected void flushEntityQueue() {
 		this.entities.removeAll(this.toRemove, true);
+
 		for (final AbstractEntity e : this.toRemove) {
 			this.toAdd.removeValue(e, true);
 			e.leaveBtWorld(this.physicsManager.getBtWorld());
+
 			if (e instanceof IClanMember) {
 				for (final Clan c : this.clans) {
 					c.removeMember((IClanMember) e);
 				}
 			}
 		}
+
 		this.toRemove.clear();
 
 		this.entities.addAll(this.toAdd);
+
 		for (final AbstractEntity e : this.toAdd) {
 			e.enterBtWorld(this.physicsManager.getBtWorld());
 		}
+
 		this.toAdd.clear();
+	}
+
+	public void shakeCamera(float intensity, float time) {
+		this.shakeCamera(intensity, time, 0.25f);
+	}
+
+	public void shakeCamera(float intensity, float time, float revolutionTime) {
+		this.cameraShakeIntensity = intensity;
+		this.cameraShakeTime = time;
+		this.cameraShakeRevolutionTime = revolutionTime;
+	}
+
+	private void processCameraShake(float delta) {
+		// should be a percentage
+		float cameraShakeModifier = Preferences.getPreferences().getOrElse("a11y.cameraShake", 1.0).floatValue();
+
+		if (cameraShakeModifier == 0 || this.cameraShakeTime == 0) {
+			return;
+		}
+
+		final PerspectiveCamera cam = this.graphicsManager.getCamera();
+
+		EllipsePath path = new EllipsePath(0f, 0f, 0.5f * this.cameraShakeIntensity, 0.2f * this.cameraShakeIntensity);
+		path.y = path.height / 2;
+		Vector2 shakeVec2 = path.valueAt(new Vector2(), this.cameraShakeTime / this.cameraShakeRevolutionTime);
+		Vector3 shakeVec3 = new Vector3(shakeVec2, 0);
+		shakeVec3.rot(cam.combined);
+		cam.position.add(shakeVec3);
+
+		cam.update();
+
+		this.cameraShakeTime = Math.max(0, this.cameraShakeTime - delta);
 	}
 
 	public void addEntity(final AbstractEntity e) {

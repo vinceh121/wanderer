@@ -47,6 +47,8 @@ public class MachineGunGuntower extends AbstractGuntower {
 
 		this.fireSoundEmitter.play();
 		this.fireTimeout = 0.085f;
+
+		this.game.shakeCamera(0.5f, 0.25f);
 	}
 
 	private void fireTurret(final MachineGunTurret turret) {
