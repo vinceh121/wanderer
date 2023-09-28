@@ -44,6 +44,8 @@ public class MachineGunGuntower extends AbstractGuntower {
 		for (final MachineGunTurret turret : this.turrets) {
 			this.fireTurret(turret);
 		}
+		
+		this.animateParts("barrelSpin", trans -> trans.rotate(Vector3.Z, 1));
 
 		this.fireSoundEmitter.play();
 		this.fireTimeout = 0.085f; // FIXME should be in meta

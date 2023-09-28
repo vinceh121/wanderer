@@ -19,6 +19,7 @@ import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
+import me.vinceh121.wanderer.util.MathUtilsW;
 
 public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	private static final Logger LOG = LogManager.getLogger(AbstractGuntower.class);
@@ -99,6 +100,9 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 		rot.conjugate();
 
 		this.animateParts("setLookRot", t -> t.set(t.getTranslation(new Vector3()), rot));
+		this.animateParts("platterRot",
+				t -> MathUtilsW.setRotation(t,
+						new Quaternion().setFromAxisRad(Vector3.Y, (1 - azimuth - 0.25f) * MathUtils.PI2)));
 
 		if (this.isControlled() && this.game.getInputManager().isPressed(Input.FIRE)) {
 			this.fire();

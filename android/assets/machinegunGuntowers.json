@@ -211,6 +211,7 @@
 			{
 				"displayModel": "orig/j_guntower01.n/turret.obj",
 				"displayTexture": "orig/j_guntower01.n/texturealpha.ktx",
+				"animationChannel": "platterRot",
 				"relativeTransform": {
 					"translation": [
 						0.0,
@@ -237,7 +238,7 @@
 				"relativeTransform": {
 					"translation": [
 						0.0,
-						10.7,
+						8.9,
 						0.0
 					],
 					"rotation": [
