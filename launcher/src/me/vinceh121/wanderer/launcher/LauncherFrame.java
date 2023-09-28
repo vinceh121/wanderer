@@ -47,6 +47,17 @@ public class LauncherFrame extends JFrame {
 		JMenuItem mntRerunWizard = new JMenuItem("Rerun installation wizard");
 		mntRerunWizard.addActionListener(e -> LauncherMain.runWizard());
 		mnHelp.add(mntRerunWizard);
+
+		JMenuItem mntInstallDetails = new JMenuItem("Installation details");
+		mntInstallDetails.addActionListener(e -> {
+			try {
+				new InstallationInformationDialog().setVisible(true);
+			} catch (IOException e1) {
+				LOG.error("Error loading installation details", e1);
+				JOptionPane.showMessageDialog(null, "Error loading installation details " + e1);
+			}
+		});
+		mnHelp.add(mntInstallDetails);
 	}
 
 	private void onClose() {
