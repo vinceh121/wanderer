@@ -45,9 +45,7 @@ public class EllipsePath extends Ellipse implements Path<Vector2> {
 	}
 
 	public Vector2 valueAtRad(Vector2 out, float rad) {
-		out.set(this.width * MathUtils.cos(rad), this.height * MathUtils.sin(rad));
-		out.add(this.x, this.y);
-
+		out.set(this.width * MathUtils.cos(rad) + this.x, this.height * MathUtils.sin(rad) + this.y);
 		return out;
 	}
 
