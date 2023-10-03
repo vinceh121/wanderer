@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.entity;
 
+import java.util.LinkedList;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -150,7 +151,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	}
 
 	public void animateParts(final String animationChannel, final Consumer<Matrix4> transformation) {
-		for (final DisplayModel m : this.models) {
+		for (final DisplayModel m : this.getFlatModels()) {
 			if (animationChannel.equals(m.getAnimationChannel())) {
 				transformation.accept(m.getRelativeTransform());
 				m.updateTransform(this.getTransform());
@@ -279,6 +280,24 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 
 	public Array<DisplayModel> getModels() {
 		return this.models;
+	}
+
+	public LinkedList<DisplayModel> getFlatModels() {
+		LinkedList<DisplayModel> flatModels = new LinkedList<>();
+
+		for (DisplayModel root : this.models) {
+			this.recurseFlatModels(flatModels, root);
+		}
+
+		return flatModels;
+	}
+
+	private void recurseFlatModels(LinkedList<DisplayModel> flatModels, DisplayModel mdl) {
+		flatModels.add(mdl);
+
+		for (DisplayModel child : mdl.getChildren()) {
+			this.recurseFlatModels(flatModels, child);
+		}
 	}
 
 	public Array<SoundEmitter3D> getSoundEmitters() {

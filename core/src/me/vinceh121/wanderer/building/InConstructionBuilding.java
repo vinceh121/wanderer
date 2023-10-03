@@ -1,5 +1,7 @@
 package me.vinceh121.wanderer.building;
 
+import java.util.LinkedList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,7 +32,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 	public InConstructionBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
 		super(game, meta);
 
-		for (final DisplayModel m : this.getModels()) {
+		for (final DisplayModel m : this.getFlatModels()) {
 			m.addTextureAttribute(ColorAttribute.createEmissive(new Color(0f, 0.8f, 1f, 0f)));
 			m.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_DST_COLOR, 0.5f));
 			m.addTextureAttribute(new NoLightningAttribute());
@@ -63,9 +65,11 @@ public class InConstructionBuilding extends AbstractBuilding {
 	public void render(final ModelBatch batch, final Environment env) {
 		super.render(batch, env);
 
+		final LinkedList<DisplayModel> flatModels = this.getFlatModels();
+		
 		for (int i = 0; i < this.curves.size; i++) {
 			final Bezier<Vector3> bezier = this.curves.get(i);
-			final DisplayModel model = this.getModels().get(i);
+			final DisplayModel model = flatModels.get(i);
 
 			// / 5: slows down the animation
 			// % 1: repeats the curve progress between 0.0 and 1.0
