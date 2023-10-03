@@ -50,7 +50,7 @@ public class InstallationInformationDialog extends JDialog {
 		final JLabel lblVoiceLang = new JLabel("Voice languages");
 		lblVoiceLang.setFont(lblVoiceLang.getFont().deriveFont(Font.BOLD, 16));
 		this.add(lblVoiceLang);
-		
+
 		for (final Locale a : available) {
 			final JCheckBox chkbx = new JCheckBox();
 			chkbx.setEnabled(false);
@@ -60,6 +60,8 @@ public class InstallationInformationDialog extends JDialog {
 			this.add(chkbx);
 		}
 
+		this.setTitle("Installation languages");
 		this.pack();
+		this.setLocationRelativeTo(null);
 	}
 }

@@ -58,6 +58,10 @@ public class LauncherFrame extends JFrame {
 			}
 		});
 		mnHelp.add(mntInstallDetails);
+
+		JMenuItem mntAbout = new JMenuItem("About");
+		mntAbout.addActionListener(e -> new AboutDialog().setVisible(true));
+		mnHelp.add(mntAbout);
 	}
 
 	private void onClose() {
