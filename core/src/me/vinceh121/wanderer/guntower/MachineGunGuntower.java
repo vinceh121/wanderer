@@ -3,6 +3,8 @@ package me.vinceh121.wanderer.guntower;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -20,7 +22,7 @@ import me.vinceh121.wanderer.util.MathUtilsW;
 public class MachineGunGuntower extends AbstractGuntower {
 	private final MachineGunGuntowerMeta meta;
 	private final Array<MachineGunTurret> turrets = new Array<>();
-	private float fireTimeout;
+	private float fireTimeout, barrelSpinSpeed;
 
 	public MachineGunGuntower(final Wanderer game, final MachineGunGuntowerMeta meta) {
 		super(game, meta);
@@ -45,10 +47,10 @@ public class MachineGunGuntower extends AbstractGuntower {
 			this.fireTurret(turret);
 		}
 
-		this.animateParts("barrelSpin", trans -> trans.rotateRad(Vector3.Z, 1));
-
 		this.fireSoundEmitter.play();
 		this.fireTimeout = 0.085f; // FIXME should be in meta
+
+		this.barrelSpinSpeed = 1;
 
 		if (this.isControlled()) {
 			this.game.shakeCamera(0.5f, 0.25f);
@@ -98,8 +100,20 @@ public class MachineGunGuntower extends AbstractGuntower {
 	public void tick(final float delta) {
 		super.tick(delta);
 		this.fireTimeout -= delta;
+
 		if (this.fireTimeout < 0) {
 			this.fireTimeout = 0;
+		}
+	}
+
+	@Override
+	public void render(ModelBatch batch, Environment env) {
+		super.render(batch, env);
+
+		if (this.barrelSpinSpeed != 0) {
+			System.out.println(this.barrelSpinSpeed);
+			this.animateParts("barrelSpin", trans -> trans.rotateRad(Vector3.Z, this.barrelSpinSpeed));
+			this.barrelSpinSpeed = Math.max(0, this.barrelSpinSpeed - 0.01f);
 		}
 	}
 

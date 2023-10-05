@@ -151,11 +151,25 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	}
 
 	public void animateParts(final String animationChannel, final Consumer<Matrix4> transformation) {
-		for (final DisplayModel m : this.getFlatModels()) {
+		for (final DisplayModel roots : this.getModels()) {
+			if (animationChannel.equals(roots.getAnimationChannel())) {
+				transformation.accept(roots.getRelativeTransform());
+				roots.updateTransform(this.getTransform());
+			}
+
+			this.animatePartsRecurse(animationChannel, transformation, roots);
+		}
+	}
+
+	private void animatePartsRecurse(final String animationChannel, final Consumer<Matrix4> transformation,
+			final DisplayModel parent) {
+		for (DisplayModel m : parent.getChildren()) {
 			if (animationChannel.equals(m.getAnimationChannel())) {
 				transformation.accept(m.getRelativeTransform());
-				m.updateTransform(this.getTransform());
+				m.updateTransform(parent.getAbsoluteTransform());
 			}
+
+			this.animatePartsRecurse(animationChannel, transformation, m);
 		}
 	}
 
