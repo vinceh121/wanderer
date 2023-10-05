@@ -58,10 +58,12 @@ public class ConsoleHandler implements AutoCloseable {
 		new JsGame(this.game).install(this.scope);
 		this.fillConsoleScope(this.scope);
 
+		int lineNo = 1;
+
 		while (!this.closed) {
 			try {
 				final String line = this.lineReader.readLine("Wanderer> ");
-				final Object res = this.jsContext.evaluateString(this.scope, line, "<stdin>", -1, null);
+				final Object res = this.jsContext.evaluateString(this.scope, line, "<stdin>", lineNo++, null);
 				System.out.println(ScriptRuntime.toString(res));
 			} catch (final EcmaError e) {
 				ConsoleHandler.LOG.error("", e);
