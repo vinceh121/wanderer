@@ -111,7 +111,6 @@ public class MachineGunGuntower extends AbstractGuntower {
 		super.render(batch, env);
 
 		if (this.barrelSpinSpeed != 0) {
-			System.out.println(this.barrelSpinSpeed);
 			this.animateParts("barrelSpin", trans -> trans.rotateRad(Vector3.Z, this.barrelSpinSpeed));
 			this.barrelSpinSpeed = Math.max(0, this.barrelSpinSpeed - 0.01f);
 		}

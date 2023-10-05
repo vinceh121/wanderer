@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.Preferences;
 import me.vinceh121.wanderer.Wanderer;
@@ -141,6 +142,22 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 
 	public void setPolarAngle(final float polarAngle) {
 		this.polarAngle = MathUtils.clamp(polarAngle, this.meta.getPolarMin(), this.meta.getPolarMax());
+	}
+
+	@Override
+	public void writeState(ObjectNode node) {
+		super.writeState(node);
+
+		node.put("azimuth", this.getAzimuth());
+		node.put("polarAngle", this.getPolarAngle());
+	}
+
+	@Override
+	public void readState(ObjectNode node) {
+		super.readState(node);
+
+		this.setAzimuth(node.get("azimuth").floatValue());
+		this.setPolarAngle(node.get("polarAngle").floatValue());
 	}
 
 	@Override
