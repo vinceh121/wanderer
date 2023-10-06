@@ -1,4 +1,4 @@
-package me.vinceh121.wanderer.guntower;
+package me.vinceh121.wanderer.entity.guntower;
 
 import com.badlogic.gdx.utils.Array;
 

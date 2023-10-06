@@ -21,7 +21,7 @@ import me.vinceh121.wanderer.building.IslandMeta;
 import me.vinceh121.wanderer.building.LighthouseMeta;
 import me.vinceh121.wanderer.character.CharacterMeta;
 import me.vinceh121.wanderer.entity.PropMeta;
-import me.vinceh121.wanderer.guntower.MachineGunGuntowerMeta;
+import me.vinceh121.wanderer.entity.guntower.MachineGunGuntowerMeta;
 
 public final class MetaRegistry {
 	private static final Logger LOG = LogManager.getLogger(MetaRegistry.class);
