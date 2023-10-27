@@ -29,7 +29,7 @@ public class SpeechKeyFrame extends ActionKeyFrame {
 	@Override
 	public void action(final Wanderer game, final CinematicController controller, final AbstractEntity target,
 			final float time) {
-		final String soundPath = "orig/book/" + Preferences.getPreferences().get("i18n.speech") + "/" + this.sound;
+		final String soundPath = "orig/book/" + Preferences.getPreferences().getOrElse("i18n.speech", "en") + "/" + this.sound;
 
 		if (!WandererConstants.ASSET_MANAGER.isLoaded(soundPath, Sound3D.class)) {
 			SpeechKeyFrame.LOG.warn("Hot-loading speech {}", soundPath);

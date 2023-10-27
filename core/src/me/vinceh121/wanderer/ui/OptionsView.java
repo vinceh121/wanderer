@@ -59,7 +59,7 @@ public class OptionsView extends Table {
 		this.row();
 
 		chkVSync = new CheckBox(gettext("V-Sync"), skin);
-		chkVSync.setChecked(Preferences.getPreferences().<Boolean>get("graphics.vsync"));
+		chkVSync.setChecked(Preferences.getPreferences().<Boolean>getOrElse("graphics.vsync", false));
 		this.add(chkVSync);
 		this.row();
 
@@ -67,7 +67,7 @@ public class OptionsView extends Table {
 		this.selMon = new MonitorSelect(skin);
 		if (Preferences.getPreferences().get("graphics.monitor") instanceof Integer) {
 			this.selMon.setSelected(Windowed.WINDOWED);
-		} else {
+		} else if (Preferences.getPreferences().contains("graphics.monitor")) {
 			this.selMon.setSelected(GraphicsUtilities.getMonitor(this.selMon.getItems().toArray(Monitor.class),
 					Preferences.getPreferences().<String>get("graphics.monitor")));
 		}

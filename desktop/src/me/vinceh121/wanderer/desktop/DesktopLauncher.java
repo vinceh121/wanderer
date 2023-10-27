@@ -59,7 +59,7 @@ public class DesktopLauncher {
 
 		if (prefs.get("graphics.monitor") instanceof Integer) {
 			config.setWindowedMode(512, 512);
-		} else {
+		} else if (prefs.contains("graphics.monitor")) {
 			Monitor monitor = getMonitor(prefs.<String>get("graphics.monitor"));
 			config.setFullscreenMode(getDisplayMode(monitor, prefs.<String>get("graphics.resolution")));
 		}
