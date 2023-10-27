@@ -2,6 +2,9 @@ package me.vinceh121.wanderer;
 
 import me.vinceh121.wanderer.entity.AbstractEntity;
 
+/**
+ * TODO rename to prototype, that's more semantically correct
+ */
 public interface IMeta {
 	/**
 	 * Returns a new instance of the concerned entity meta. Perhaps a default if

@@ -65,6 +65,7 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 		if (!(this.game.getControlledEntity() instanceof CharacterW)) {
 			return;
 		}
+
 		final CharacterW chara = (CharacterW) this.game.getControlledEntity();
 
 		// if collided objects are interaction zone and player character
@@ -81,6 +82,7 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 		if (!(this.game.getControlledEntity() instanceof CharacterW)) {
 			return;
 		}
+
 		final CharacterW chara = (CharacterW) this.game.getControlledEntity();
 
 		// if collided objects are interaction zone and player character
@@ -172,6 +174,7 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 	@Override
 	public void leaveBtWorld(final btDiscreteDynamicsWorld world) {
 		super.leaveBtWorld(world);
+
 		if (this.interactZone != null && !this.interactZone.isDisposed()) {
 			world.removeCollisionObject(this.interactZone);
 		}
@@ -205,6 +208,7 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 		if (this.island != null) {
 			this.island.removeBuilding(this);
 		}
+
 		this.game.getPhysicsManager().removeContactListener(this.interactListener);
 		Gdx.app.postRunnable(() -> this.interactZone.dispose());
 		super.dispose();

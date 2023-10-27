@@ -1,0 +1,65 @@
+{
+	"j_scout01": {
+		"collisionModel": "orig/j_scout01.n/collide.obj",
+		"normal": {
+			"minSpeed": 40,
+			"maxSpeed": 70,
+			"acceleration": 3.5,
+			"decceleration": 5
+		},
+		"displayModels": [
+			{
+				"displayModel": "orig/j_scout01.n/wings.obj",
+				"displayTexture": "orig/j_scout01.n/texture_wingnone.ktx",
+				"children": [
+					{
+						"displayModel": "orig/j_scout01.n/aileronl.obj",
+						"displayTexture": "orig/j_scout01.n/texture_wingnone.ktx",
+						"animationChannel": "wingVert",
+						"relativeTransform": {
+							"translation": [
+								-6.154,
+								2.943,
+								0.887
+							],
+							"rotation": [
+								0.0,
+								0.0,
+								0.030538492,
+								-0.9995336
+							],
+							"scale": [
+								1,
+								1,
+								1
+							]
+						}
+					},
+					{
+						"displayModel": "orig/j_scout01.n/aileronr.obj",
+						"displayTexture": "orig/j_scout01.n/texture_wingnone.ktx",
+						"animationChannel": "wingVert",
+						"relativeTransform": {
+							"translation": [
+								6.0,
+								2.943,
+								0.887
+							],
+							"rotation": [
+								0.0,
+								0.0,
+								0.030538514,
+								0.9995336
+							],
+							"scale": [
+								1,
+								1,
+								1
+							]
+						}
+					}
+				]
+			}
+		]
+	}
+}

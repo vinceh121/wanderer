@@ -22,6 +22,7 @@ import me.vinceh121.wanderer.building.LighthouseMeta;
 import me.vinceh121.wanderer.character.CharacterMeta;
 import me.vinceh121.wanderer.entity.PropMeta;
 import me.vinceh121.wanderer.entity.guntower.MachineGunGuntowerMeta;
+import me.vinceh121.wanderer.entity.plane.MachineGunPlaneMeta;
 
 public final class MetaRegistry {
 	private static final Logger LOG = LogManager.getLogger(MetaRegistry.class);
@@ -50,6 +51,7 @@ public final class MetaRegistry {
 		this.readMetas(Gdx.files.internal("characters.json"), CharacterMeta.class);
 		this.readMetas(Gdx.files.internal("props.json"), PropMeta.class);
 		this.readMetas(Gdx.files.internal("machinegunGuntowers.json"), MachineGunGuntowerMeta.class);
+		this.readMetas(Gdx.files.internal("machinegunPlanes.json"), MachineGunPlaneMeta.class);
 	}
 
 	public void clear() {
