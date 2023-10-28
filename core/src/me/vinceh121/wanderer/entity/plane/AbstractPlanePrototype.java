@@ -2,10 +2,10 @@ package me.vinceh121.wanderer.entity.plane;
 
 import com.badlogic.gdx.utils.Array;
 
-import me.vinceh121.wanderer.IMeta;
+import me.vinceh121.wanderer.IPrototype;
 import me.vinceh121.wanderer.entity.DisplayModel;
 
-public abstract class AbstractPlaneMeta implements IMeta {
+public abstract class AbstractPlanePrototype implements IPrototype {
 	private Array<DisplayModel> displayModels = new Array<>();
 	private Array<DisplayModel> explosionParts = new Array<>();
 	private String collisionModel;

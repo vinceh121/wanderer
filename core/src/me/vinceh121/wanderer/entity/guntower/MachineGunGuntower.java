@@ -20,16 +20,16 @@ import me.vinceh121.wanderer.math.Segment3;
 import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class MachineGunGuntower extends AbstractGuntower {
-	private final MachineGunGuntowerMeta meta;
+	private final MachineGunGuntowerPrototype prototype;
 	private final Array<MachineGunTurret> turrets = new Array<>();
 	private float fireTimeout, barrelSpinSpeed;
 
-	public MachineGunGuntower(final Wanderer game, final MachineGunGuntowerMeta meta) {
-		super(game, meta);
-		this.meta = meta;
+	public MachineGunGuntower(final Wanderer game, final MachineGunGuntowerPrototype prototype) {
+		super(game, prototype);
+		this.prototype = prototype;
 
-		final List<Vector3> turretPos = new ArrayList<>(this.meta.getTurrets().size);
-		for (final MachineGunTurret turret : this.meta.getTurrets()) {
+		final List<Vector3> turretPos = new ArrayList<>(this.prototype.getTurrets().size);
+		for (final MachineGunTurret turret : this.prototype.getTurrets()) {
 			this.turrets.add(new MachineGunTurret(turret));
 			turretPos.add(turret.getRelativeTransform().getTranslation(new Vector3()));
 		}
@@ -48,7 +48,7 @@ public class MachineGunGuntower extends AbstractGuntower {
 		}
 
 		this.fireSoundEmitter.play();
-		this.fireTimeout = 0.085f; // FIXME should be in meta
+		this.fireTimeout = 0.085f; // FIXME should be in prototype
 
 		this.barrelSpinSpeed = 1;
 
@@ -133,8 +133,8 @@ public class MachineGunGuntower extends AbstractGuntower {
 	}
 
 	@Override
-	public MachineGunGuntowerMeta getMeta() {
-		return this.meta;
+	public MachineGunGuntowerPrototype getPrototype() {
+		return this.prototype;
 	}
 
 	public Array<MachineGunTurret> getTurrets() {

@@ -29,8 +29,8 @@ public class InConstructionBuilding extends AbstractBuilding {
 	private SoundEmitter3D sound;
 	private float aliveTime;
 
-	public InConstructionBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
-		super(game, meta);
+	public InConstructionBuilding(final Wanderer game, final AbstractBuildingPrototype prototype) {
+		super(game, prototype);
 
 		for (final DisplayModel m : this.getFlatModels()) {
 			m.addTextureAttribute(ColorAttribute.createEmissive(new Color(0f, 0.8f, 1f, 0f)));
@@ -56,7 +56,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 		super.tick(delta);
 
 		this.aliveTime += Gdx.graphics.getDeltaTime();
-		if (this.aliveTime > this.getMeta().getBuildTime()) {
+		if (this.aliveTime > this.getPrototype().getBuildTime()) {
 			this.build();
 		}
 	}
@@ -86,7 +86,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 		}
 		if (this.getIsland() != null) {
 			this.getIsland().removeBuilding(this);
-			final AbstractBuilding newBuilding = (AbstractBuilding) this.getMeta().create(this.game);
+			final AbstractBuilding newBuilding = (AbstractBuilding) this.getPrototype().create(this.game);
 			if (this.getClan() != null) {
 				this.getClan().addMember(newBuilding);
 			}

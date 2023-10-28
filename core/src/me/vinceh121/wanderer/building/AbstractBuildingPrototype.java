@@ -3,10 +3,10 @@ package me.vinceh121.wanderer.building;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 
-import me.vinceh121.wanderer.artifact.ArtifactMeta;
+import me.vinceh121.wanderer.artifact.ArtifactPrototype;
 import me.vinceh121.wanderer.entity.DisplayModel;
 
-public abstract class AbstractBuildingMeta extends ArtifactMeta {
+public abstract class AbstractBuildingPrototype extends ArtifactPrototype {
 	private Array<DisplayModel> displayModels = new Array<>();
 	private Array<DisplayModel> explosionParts = new Array<>();
 	private String collisionModel;
@@ -15,10 +15,10 @@ public abstract class AbstractBuildingMeta extends ArtifactMeta {
 	private float interactZoneRadius = 11f, interactZoneHeight = 20f, artefactScale = 1f;
 	private SlotType slotType = SlotType.GENERIC;
 
-	public AbstractBuildingMeta() {
+	public AbstractBuildingPrototype() {
 	}
 
-	public AbstractBuildingMeta(final int energyRequired, final boolean red, final String artifactModel,
+	public AbstractBuildingPrototype(final int energyRequired, final boolean red, final String artifactModel,
 			final String artifactTexture) {
 		this.energyRequired = energyRequired;
 		this.setRed(red);

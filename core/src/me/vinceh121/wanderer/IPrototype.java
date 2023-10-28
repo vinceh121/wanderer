@@ -5,11 +5,11 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 /**
  * TODO rename to prototype, that's more semantically correct
  */
-public interface IMeta {
+public interface IPrototype {
 	/**
-	 * Returns a new instance of the concerned entity meta. Perhaps a default if
-	 * this meta can be used on multiple entities. This method should not add the
-	 * entity to the game.
+	 * Returns a new instance of the concerned entity prototype. Perhaps a default
+	 * if this prototype can be used on multiple entities. This method should not
+	 * add the entity to the game.
 	 *
 	 * @param game An instance of Wanderer
 	 * @return A new instance of the entity

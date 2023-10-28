@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
-import me.vinceh121.wanderer.artifact.ArtifactMeta;
+import me.vinceh121.wanderer.artifact.ArtifactPrototype;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.glx.NoLightningAttribute;
@@ -27,7 +27,7 @@ public class ItemBar extends WandererWidget {
 	private float angle;
 
 	private CharacterW character;
-	private Array<ArtifactMeta> belt = new Array<>();
+	private Array<ArtifactPrototype> belt = new Array<>();
 	private int count;
 
 	public ItemBar(final Wanderer game) {
@@ -53,7 +53,7 @@ public class ItemBar extends WandererWidget {
 			UiUtils.drawFlip(batch, ItemBar.TEX_SLOT, 32 * i + sX, this.getY());
 
 			if (i / 2 < this.belt.size) {
-				final ArtifactMeta artifact = this.belt.get(i / 2);
+				final ArtifactPrototype artifact = this.belt.get(i / 2);
 
 				final DisplayModel m = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
 				m.setAbsoluteTransform(
@@ -82,11 +82,11 @@ public class ItemBar extends WandererWidget {
 		this.count = count;
 	}
 
-	public Array<ArtifactMeta> getBelt() {
+	public Array<ArtifactPrototype> getBelt() {
 		return this.belt;
 	}
 
-	public void setBelt(final Array<ArtifactMeta> belt) {
+	public void setBelt(final Array<ArtifactPrototype> belt) {
 		this.belt = belt;
 	}
 

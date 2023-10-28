@@ -5,8 +5,8 @@ import me.vinceh121.wanderer.combat.DamageType;
 import me.vinceh121.wanderer.i18n.I18N;
 
 public class Lighthouse extends AbstractBuilding {
-	public Lighthouse(final Wanderer game, final LighthouseMeta meta) {
-		super(game, meta);
+	public Lighthouse(final Wanderer game, final LighthousePrototype prototype) {
+		super(game, prototype);
 
 		this.setControlMessage(/* Popup message when close to building */I18N.gettext("Lighthouse"));
 	}

@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import com.badlogic.gdx.graphics.Texture;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import me.vinceh121.wanderer.MetaRegistry;
+import me.vinceh121.wanderer.PrototypeRegistry;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
@@ -16,26 +16,26 @@ import me.vinceh121.wanderer.glx.TiledMaterialAttribute;
  */
 public class Prop extends AbstractEntity {
 	private static final Logger LOG = LogManager.getLogger(Prop.class);
-	private final PropMeta meta;
+	private final PropPrototype prototype;
 
-	public Prop(final Wanderer game, final PropMeta meta) {
+	public Prop(final Wanderer game, final PropPrototype prototype) {
 		super(game);
-		this.meta = meta;
-		final DisplayModel mdl = new DisplayModel(meta.getDisplayModel(), meta.getTexture());
+		this.prototype = prototype;
+		final DisplayModel mdl = new DisplayModel(prototype.getDisplayModel(), prototype.getTexture());
 
 		this.addModel(mdl);
-		this.setCollideModel(meta.getCollideModel());
-		this.setMass(meta.getMass());
+		this.setCollideModel(prototype.getCollideModel());
+		this.setMass(prototype.getMass());
 
-		if (meta.getDetailMapTexture() != null) {
-			if (!WandererConstants.ASSET_MANAGER.isLoaded(meta.getDetailMapTexture(), Texture.class)) {
-				Prop.LOG.error("Hot loading tiled texture {}", meta.getDetailMapTexture());
+		if (prototype.getDetailMapTexture() != null) {
+			if (!WandererConstants.ASSET_MANAGER.isLoaded(prototype.getDetailMapTexture(), Texture.class)) {
+				Prop.LOG.error("Hot loading tiled texture {}", prototype.getDetailMapTexture());
 				WandererConstants.ASSET_MANAGER
-					.load(meta.getDetailMapTexture(), Texture.class, WandererConstants.MIPMAPS);
-				WandererConstants.ASSET_MANAGER.finishLoadingAsset(meta.getDetailMapTexture());
+					.load(prototype.getDetailMapTexture(), Texture.class, WandererConstants.MIPMAPS);
+				WandererConstants.ASSET_MANAGER.finishLoadingAsset(prototype.getDetailMapTexture());
 			}
 			mdl.addTextureAttribute(TiledMaterialAttribute
-				.create(WandererConstants.ASSET_MANAGER.get(meta.getDetailMapTexture(), Texture.class)));
+				.create(WandererConstants.ASSET_MANAGER.get(prototype.getDetailMapTexture(), Texture.class)));
 		}
 	}
 
@@ -50,10 +50,10 @@ public class Prop extends AbstractEntity {
 	@Override
 	public void writeState(final ObjectNode node) {
 		super.writeState(node);
-		if (this.meta != null) {
-			node.put("meta", MetaRegistry.getInstance().getReverse(this.meta));
+		if (this.prototype != null) {
+			node.put("prototype", PrototypeRegistry.getInstance().getReverse(this.prototype));
 		} else {
-			node.putNull("meta");
+			node.putNull("prototype");
 		}
 	}
 }

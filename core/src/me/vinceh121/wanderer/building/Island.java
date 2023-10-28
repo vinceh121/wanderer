@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import me.vinceh121.wanderer.MetaRegistry;
+import me.vinceh121.wanderer.PrototypeRegistry;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractClanLivingEntity;
@@ -21,7 +21,7 @@ import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
 public class Island extends AbstractClanLivingEntity {
-	private final IslandMeta meta;
+	private final IslandPrototype prototype;
 	private final Array<Slot> slots = new Array<>();
 	private final Array<AbstractBuilding> buildings = new Array<>();
 	private final Array<CharacterW> attachedCharacters = new Array<>();
@@ -29,20 +29,20 @@ public class Island extends AbstractClanLivingEntity {
 			placeCameraDirection = new Vector3();
 	private final IContactListener characterContactListener;
 
-	public Island(final Wanderer game, final IslandMeta meta) {
+	public Island(final Wanderer game, final IslandPrototype prototype) {
 		super(game);
-		this.meta = meta;
+		this.prototype = prototype;
 
-		for (final Slot s : meta.getSlots()) {
+		for (final Slot s : prototype.getSlots()) {
 			this.slots.add(new Slot(s)); // clone slots as to not accidentally edit the prototype
 		}
-		for (final DisplayModel m : meta.getDisplayModels()) {
+		for (final DisplayModel m : prototype.getDisplayModels()) {
 			this.getModels().add(new DisplayModel(m)); // clone models as to not accidentally edit the prototype
 		}
 
-		this.setCollideModel(meta.getCollisionModel());
-		this.setPlaceCameraPosition(meta.getPlaceCameraPosition());
-		this.setPlaceCameraDirection(meta.getPlaceCameraDirection());
+		this.setCollideModel(prototype.getCollisionModel());
+		this.setPlaceCameraPosition(prototype.getPlaceCameraPosition());
+		this.setPlaceCameraDirection(prototype.getPlaceCameraDirection());
 
 		this.characterContactListener = new ContactListenerAdapter() {
 			private CharacterW getChara(final btCollisionObject colObj0, final btCollisionObject colObj1) {
@@ -221,8 +221,8 @@ public class Island extends AbstractClanLivingEntity {
 		this.getCollideObject().forceActivationState(4); // DISABLE_DEACTIVATION
 	}
 
-	public void startBuilding(final Slot slot, final AbstractBuildingMeta meta) {
-		this.addBuilding(new InConstructionBuilding(this.game, meta), slot);
+	public void startBuilding(final Slot slot, final AbstractBuildingPrototype prototype) {
+		this.addBuilding(new InConstructionBuilding(this.game, prototype), slot);
 	}
 
 	public Vector3 getVelocity() {
@@ -248,7 +248,7 @@ public class Island extends AbstractClanLivingEntity {
 	@Override
 	public void writeState(final ObjectNode node) {
 		super.writeState(node);
-		node.put("meta", MetaRegistry.getInstance().getReverse(this.meta));
+		node.put("prototype", PrototypeRegistry.getInstance().getReverse(this.prototype));
 	}
 
 	@Override

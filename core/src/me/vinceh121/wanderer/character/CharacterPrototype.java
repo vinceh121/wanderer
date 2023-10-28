@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector3;
 
-import me.vinceh121.wanderer.IMeta;
+import me.vinceh121.wanderer.IPrototype;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 
-public class CharacterMeta implements IMeta {
+public class CharacterPrototype implements IPrototype {
 	private String name, model, texture, fallSound;
 	private String[] steps, stepsSide;
 	private boolean storyMode;
@@ -142,7 +142,7 @@ public class CharacterMeta implements IMeta {
 	}
 
 	/**
-	 * Asynchronously loads the assets contained by this {@link CharacterMeta}
+	 * Asynchronously loads the assets contained by this {@link CharacterPrototype}
 	 */
 	public void ensureLoading() {
 		WandererConstants.ASSET_MANAGER.load(this.model, Model.class);
@@ -165,8 +165,9 @@ public class CharacterMeta implements IMeta {
 
 	@Override
 	public String toString() {
-		return "CharacterMeta [name=" + this.name + ", model=" + this.model + ", texture=" + this.texture
-				+ ", fallSound=" + this.fallSound + ", steps=" + Arrays.toString(this.steps) + ", stepsSide="
-				+ Arrays.toString(this.stepsSide) + ", storyMode=" + this.storyMode + "]";
+		return "CharacterPrototype [name=" + name + ", model=" + model + ", texture=" + texture + ", fallSound="
+				+ fallSound + ", steps=" + Arrays.toString(steps) + ", stepsSide=" + Arrays.toString(stepsSide)
+				+ ", storyMode=" + storyMode + ", capsuleOffset=" + capsuleOffset + ", capsuleRadius=" + capsuleRadius
+				+ ", capsuleHeight=" + capsuleHeight + "]";
 	}
 }

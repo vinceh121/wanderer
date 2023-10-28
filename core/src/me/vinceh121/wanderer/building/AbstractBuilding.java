@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import me.vinceh121.wanderer.MetaRegistry;
+import me.vinceh121.wanderer.PrototypeRegistry;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractClanLivingEntity;
@@ -23,28 +23,28 @@ import me.vinceh121.wanderer.phys.IContactListener;
 public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 	private final btGhostObject interactZone;
 	private final IContactListener interactListener;
-	private final AbstractBuildingMeta meta;
+	private final AbstractBuildingPrototype prototype;
 	private final Array<DisplayModel> explosionParts = new Array<>();
 	private String controlMessage;
 	private Island island;
 	private Slot slot;
 
-	public AbstractBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
+	public AbstractBuilding(final Wanderer game, final AbstractBuildingPrototype prototype) {
 		super(game);
-		this.meta = meta;
+		this.prototype = prototype;
 
-		this.setCollideModel(meta.getCollisionModel());
-		for (final DisplayModel m : meta.getDisplayModels()) {
+		this.setCollideModel(prototype.getCollisionModel());
+		for (final DisplayModel m : prototype.getDisplayModels()) {
 			this.getModels().add(new DisplayModel(m)); // need to clone display models
 		}
 
-		for (final DisplayModel m : meta.getExplosionParts()) {
+		for (final DisplayModel m : prototype.getExplosionParts()) {
 			this.explosionParts.add(new DisplayModel(m));
 		}
 
 		this.interactZone = new btGhostObject();
 		this.interactZone
-			.setCollisionShape(new btCapsuleShape(meta.getInteractZoneRadius(), meta.getInteractZoneHeight()));
+			.setCollisionShape(new btCapsuleShape(prototype.getInteractZoneRadius(), prototype.getInteractZoneHeight()));
 		this.interactZone.setCollisionFlags(CollisionFlags.CF_NO_CONTACT_RESPONSE);
 		this.interactListener = new ContactListenerAdapter() {
 			@Override
@@ -186,14 +186,14 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 		this.interactZone.setWorldTransform(this.getTransform());
 	}
 
-	public AbstractBuildingMeta getMeta() {
-		return this.meta;
+	public AbstractBuildingPrototype getPrototype() {
+		return this.prototype;
 	}
 
 	@Override
 	public void writeState(final ObjectNode node) {
 		super.writeState(node);
-		node.put("meta", MetaRegistry.getInstance().getReverse(this.getMeta()));
+		node.put("prototype", PrototypeRegistry.getInstance().getReverse(this.getPrototype()));
 		node.put("island", this.getIsland().getId().getValue());
 	}
 

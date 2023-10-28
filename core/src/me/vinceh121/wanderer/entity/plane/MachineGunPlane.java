@@ -4,8 +4,8 @@ import me.vinceh121.wanderer.Wanderer;
 
 public class MachineGunPlane extends AbstractPlane {
 
-	public MachineGunPlane(Wanderer game, MachineGunPlaneMeta meta) {
-		super(game, meta);
+	public MachineGunPlane(Wanderer game, MachineGunPlanePrototype prototype) {
+		super(game, prototype);
 	}
 
 	@Override

@@ -14,18 +14,18 @@ import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.animation.TransformAnimation;
-import me.vinceh121.wanderer.artifact.ArtifactMeta;
+import me.vinceh121.wanderer.artifact.ArtifactPrototype;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.glx.NoLightningAttribute;
 
 public class BeltSelection extends WandererWidget {
-	private final Array<ArtifactMeta> belt;
+	private final Array<ArtifactPrototype> belt;
 	private final Quaternion rotation = new Quaternion();
 	private final Matrix4[] previousTransforms;
 	private float angle;
 	private int index;
 
-	public BeltSelection(final Wanderer game, final Array<ArtifactMeta> belt) {
+	public BeltSelection(final Wanderer game, final Array<ArtifactPrototype> belt) {
 		super(game);
 		Objects.nonNull(belt);
 		this.belt = belt;
@@ -49,7 +49,7 @@ public class BeltSelection extends WandererWidget {
 		// left hand side
 		final Vector3 scale = new Vector3(1.5f, 1.5f, 1.5f);
 		for (int i = this.index - 1; i >= 0; i--) {
-			final ArtifactMeta artifact = this.belt.get(i);
+			final ArtifactPrototype artifact = this.belt.get(i);
 
 			final DisplayModel m = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
 
@@ -72,7 +72,7 @@ public class BeltSelection extends WandererWidget {
 
 		// selected artifact
 		{
-			final ArtifactMeta artifact = this.belt.get(this.index);
+			final ArtifactPrototype artifact = this.belt.get(this.index);
 
 			final DisplayModel m = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
 
@@ -92,7 +92,7 @@ public class BeltSelection extends WandererWidget {
 		// right hand side
 		scale.set(2, 2, 2);
 		for (int i = this.index + 1; i < this.belt.size; i++) {
-			final ArtifactMeta artifact = this.belt.get(i);
+			final ArtifactPrototype artifact = this.belt.get(i);
 
 			final DisplayModel m = new DisplayModel(artifact.getArtifactModel(), artifact.getArtifactTexture());
 

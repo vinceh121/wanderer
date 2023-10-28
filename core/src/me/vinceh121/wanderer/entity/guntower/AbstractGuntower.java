@@ -24,27 +24,27 @@ import me.vinceh121.wanderer.util.MathUtilsW;
 
 public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	private static final Logger LOG = LogManager.getLogger(AbstractGuntower.class);
-	private final AbstractGuntowerMeta meta;
+	private final AbstractGuntowerPrototype prototype;
 	protected SoundEmitter3D fireSoundEmitter;
 	private float azimuth = 0.75f, polarAngle = 0.5f;
 
-	public AbstractGuntower(final Wanderer game, final AbstractGuntowerMeta meta) {
-		super(game, meta);
-		this.meta = meta;
+	public AbstractGuntower(final Wanderer game, final AbstractGuntowerPrototype prototype) {
+		super(game, prototype);
+		this.prototype = prototype;
 		this.setControlMessage(/* Popup message when close to building */I18N.gettext("Gun tower"));
 
-		if (this.meta.getFireSound() != null) {
-			if (!WandererConstants.ASSET_MANAGER.isLoaded(this.meta.getFireSound(), Sound3D.class)) {
-				AbstractGuntower.LOG.warn("Hot-loading fire sound {}", this.meta.getFireSound());
-				WandererConstants.ASSET_MANAGER.load(this.meta.getFireSound(), Sound3D.class);
-				WandererConstants.ASSET_MANAGER.finishLoadingAsset(this.meta.getFireSound());
+		if (this.prototype.getFireSound() != null) {
+			if (!WandererConstants.ASSET_MANAGER.isLoaded(this.prototype.getFireSound(), Sound3D.class)) {
+				AbstractGuntower.LOG.warn("Hot-loading fire sound {}", this.prototype.getFireSound());
+				WandererConstants.ASSET_MANAGER.load(this.prototype.getFireSound(), Sound3D.class);
+				WandererConstants.ASSET_MANAGER.finishLoadingAsset(this.prototype.getFireSound());
 			}
 			this.fireSoundEmitter =
-					WandererConstants.ASSET_MANAGER.get(this.meta.getFireSound(), Sound3D.class).playSource3D();
+					WandererConstants.ASSET_MANAGER.get(this.prototype.getFireSound(), Sound3D.class).playSource3D();
 			this.addSoundEmitter(this.fireSoundEmitter);
 		}
 
-		if (this.meta.isHasAi()) {
+		if (this.prototype.isHasAi()) {
 			this.setAiController(new GuntowerAiController(game, this));
 		}
 	}
@@ -65,8 +65,8 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 						Preferences.getPreferences().<Double>getOrElse("input.lookSensitivityY", 0.005).floatValue();
 				AbstractGuntower.this.polarAngle += y * lookSensY * -1f;
 				AbstractGuntower.this.polarAngle = MathUtils.clamp(AbstractGuntower.this.polarAngle,
-						AbstractGuntower.this.meta.getPolarMin(),
-						AbstractGuntower.this.meta.getPolarMax());
+						AbstractGuntower.this.prototype.getPolarMin(),
+						AbstractGuntower.this.prototype.getPolarMax());
 				return true;
 			}
 		};
@@ -112,8 +112,8 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 
 	protected void moveCamera() {
 		final PerspectiveCamera cam = this.game.getCamera();
-		final float offY = this.meta.getCameraOffset().y;
-		final float offZ = this.meta.getCameraOffset().z;
+		final float offY = this.prototype.getCameraOffset().y;
+		final float offZ = this.prototype.getCameraOffset().z;
 
 		final Vector3 direction = this.getLookDirection();
 
@@ -141,7 +141,7 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	}
 
 	public void setPolarAngle(final float polarAngle) {
-		this.polarAngle = MathUtils.clamp(polarAngle, this.meta.getPolarMin(), this.meta.getPolarMax());
+		this.polarAngle = MathUtils.clamp(polarAngle, this.prototype.getPolarMin(), this.prototype.getPolarMax());
 	}
 
 	@Override
@@ -161,7 +161,7 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	}
 
 	@Override
-	public AbstractGuntowerMeta getMeta() {
-		return this.meta;
+	public AbstractGuntowerPrototype getPrototype() {
+		return this.prototype;
 	}
 }

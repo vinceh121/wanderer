@@ -19,8 +19,8 @@ public class PreviewBuilding extends AbstractBuilding {
 	private static final Color BLUE = new Color(0f, 0.8f, 1f, 0f), RED = new Color(1f, 0.1f, 0f, 0f);
 	private boolean blocked;
 
-	public PreviewBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
-		super(game, meta);
+	public PreviewBuilding(final Wanderer game, final AbstractBuildingPrototype prototype) {
+		super(game, prototype);
 
 		this.setCollideModel(null);
 

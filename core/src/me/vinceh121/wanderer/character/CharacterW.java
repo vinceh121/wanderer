@@ -18,14 +18,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import me.vinceh121.wanderer.MetaRegistry;
+import me.vinceh121.wanderer.PrototypeRegistry;
 import me.vinceh121.wanderer.Preferences;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.animation.MultiplexedSkinAnimationController;
 import me.vinceh121.wanderer.animation.MultiplexedSkinAnimationController.PlaybackType;
-import me.vinceh121.wanderer.artifact.ArtifactMeta;
-import me.vinceh121.wanderer.building.AbstractBuildingMeta;
+import me.vinceh121.wanderer.artifact.ArtifactPrototype;
+import me.vinceh121.wanderer.building.AbstractBuildingPrototype;
 import me.vinceh121.wanderer.building.InConstructionBuilding;
 import me.vinceh121.wanderer.building.Island;
 import me.vinceh121.wanderer.building.PreviewBuilding;
@@ -50,25 +50,25 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	private static final Logger LOG = LogManager.getLogger(CharacterW.class);
 	public static final String EVENT_START_FALL = "START_FALL", EVENT_END_FALL = "END_FALL",
 			EVENT_JUMP_END = "JUMP_END";
-	private final CharacterMeta meta;
+	private final CharacterPrototype prototype;
 	private final CharacterWController controller;
 	private final Vector3 characterDirection = new Vector3();
 	private final Vector3 walkDirection = new Vector3();
-	private final Array<ArtifactMeta> belt = new Array<>();
+	private final Array<ArtifactPrototype> belt = new Array<>();
 	private Island attachedIsland;
 	private int beltSize = 3, placingSlotIndex;
 	private boolean beltOpen, justRan, justBackedUp, justTurnedLeft, justTurnedRight;
 	private BeltSelection beltWidget;
-	private AbstractBuildingMeta placing;
+	private AbstractBuildingPrototype placing;
 	private PreviewBuilding previewBuilding;
 	private float cameraHeight = 0.5f;
 	private MultiplexedSkinAnimationController animController;
 
-	public CharacterW(final Wanderer game, final CharacterMeta meta) {
+	public CharacterW(final Wanderer game, final CharacterPrototype prototype) {
 		super(game);
-		this.meta = meta;
-		this.setCollideObjectOffset(meta.getCapsuleOffset());
-		this.controller = new CharacterWController(this.game, this, meta.getCapsuleRadius(), meta.getCapsuleHeight());
+		this.prototype = prototype;
+		this.setCollideObjectOffset(prototype.getCapsuleOffset());
+		this.controller = new CharacterWController(this.game, this, prototype.getCapsuleRadius(), prototype.getCapsuleHeight());
 		this.controller.setFallListener(new FallListener() {
 
 			@Override
@@ -77,7 +77,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 			@Override
 			public void onJumpEnd(final boolean bigJump) {
-				WandererConstants.ASSET_MANAGER.get(meta.getFallSound(), Sound3D.class)
+				WandererConstants.ASSET_MANAGER.get(prototype.getFallSound(), Sound3D.class)
 					.playSource3D()
 					.setPosition(CharacterW.this.getTransform().getTranslation(new Vector3()));
 				CharacterW.this.eventDispatcher.dispatchEvent(new Event(CharacterW.EVENT_JUMP_END));
@@ -97,7 +97,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		this.getGhostObject().setUserIndex(this.getId().getValue());
 		game.getBtWorld().addAction(this.controller);
 
-		this.addModel(new DisplayModel(meta.getModel(), meta.getTexture()));
+		this.addModel(new DisplayModel(prototype.getModel(), prototype.getTexture()));
 	}
 
 	@Override
@@ -198,7 +198,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 				.add(characterTransform));
 			pos.lerp(cam.position, 0.8f);
 
-			final Vector3 characterCenter = characterTransform.cpy().add(0, this.meta.getCapsuleHeight() / 2, 0);
+			final Vector3 characterCenter = characterTransform.cpy().add(0, this.prototype.getCapsuleHeight() / 2, 0);
 
 			final ClosestNotMeRayResultCallback cb = new ClosestNotMeRayResultCallback(this.getGhostObject());
 			this.game.getBtWorld().rayTest(characterCenter, pos, cb);
@@ -386,11 +386,11 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 	private void selectBuilding() {
 		final int idx = CharacterW.this.beltWidget.getIndex();
-		final ArtifactMeta arti = CharacterW.this.belt.get(idx);
-		if (!(arti instanceof AbstractBuildingMeta)) {
+		final ArtifactPrototype arti = CharacterW.this.belt.get(idx);
+		if (!(arti instanceof AbstractBuildingPrototype)) {
 			return;
 		}
-		final AbstractBuildingMeta build = (AbstractBuildingMeta) arti;
+		final AbstractBuildingPrototype build = (AbstractBuildingPrototype) arti;
 		if (this.getClan().getEnergy() < build.getEnergyRequired()) {
 			this.game.showMessage(I18N.gettext("Not enough energy!"));
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class).playGeneral();
@@ -471,14 +471,14 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 	@Override
 	public Vector3 getMidPoint() {
-		return this.getTranslation().add(0, this.meta.getCapsuleHeight() / 2f, 0);
+		return this.getTranslation().add(0, this.prototype.getCapsuleHeight() / 2f, 0);
 	}
 
 	/**
-	 * @return the meta
+	 * @return the prototype
 	 */
-	public CharacterMeta getMeta() {
-		return this.meta;
+	public CharacterPrototype getPrototype() {
+		return this.prototype;
 	}
 
 	/**
@@ -498,7 +498,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		this.beltSize = beltSize;
 	}
 
-	public Array<ArtifactMeta> getBelt() {
+	public Array<ArtifactPrototype> getBelt() {
 		return this.belt;
 	}
 
@@ -506,7 +506,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		return this.beltSize > this.belt.size;
 	}
 
-	public void pickUpArtifact(final ArtifactMeta artifact) {
+	public void pickUpArtifact(final ArtifactPrototype artifact) {
 		if (!this.canPickUpArtifact()) {
 			throw new IllegalStateException("Can't pickup items");
 		}
@@ -526,11 +526,11 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	@Override
 	public void writeState(final ObjectNode node) {
 		super.writeState(node);
-		node.put("meta", MetaRegistry.getInstance().getReverse(this.meta));
+		node.put("prototype", PrototypeRegistry.getInstance().getReverse(this.prototype));
 		node.put("beltSize", this.getBeltSize());
 		final ArrayNode belt = node.putArray("belt");
-		for (final ArtifactMeta m : this.belt) {
-			belt.add(MetaRegistry.getInstance().getReverse(m));
+		for (final ArtifactPrototype m : this.belt) {
+			belt.add(PrototypeRegistry.getInstance().getReverse(m));
 		}
 	}
 
@@ -541,7 +541,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		this.belt.clear();
 		final ArrayNode arrBelt = node.withArray("belt");
 		for (final JsonNode n : arrBelt) {
-			this.belt.add(MetaRegistry.getInstance().get(n.asText()));
+			this.belt.add(PrototypeRegistry.getInstance().get(n.asText()));
 		}
 	}
 }

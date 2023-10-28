@@ -11,8 +11,8 @@ public abstract class AbstractControllableBuilding extends AbstractBuilding impl
 	private InputListener inputListener;
 	private AIController<?> aiController;
 
-	public AbstractControllableBuilding(final Wanderer game, final AbstractBuildingMeta meta) {
-		super(game, meta);
+	public AbstractControllableBuilding(final Wanderer game, final AbstractBuildingPrototype prototype) {
+		super(game, prototype);
 	}
 
 	@Override

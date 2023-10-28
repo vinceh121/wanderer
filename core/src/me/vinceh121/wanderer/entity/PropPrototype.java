@@ -1,9 +1,9 @@
 package me.vinceh121.wanderer.entity;
 
-import me.vinceh121.wanderer.IMeta;
+import me.vinceh121.wanderer.IPrototype;
 import me.vinceh121.wanderer.Wanderer;
 
-public class PropMeta implements IMeta {
+public class PropPrototype implements IPrototype {
 	private String displayModel, collideModel, texture, detailMapTexture;
 	private float mass;
 

@@ -18,7 +18,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import me.vinceh121.wanderer.MetaRegistry;
+import me.vinceh121.wanderer.PrototypeRegistry;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractEntity;
@@ -29,18 +29,18 @@ import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
 public abstract class AbstractArtifactEntity extends AbstractEntity {
-	private final ArtifactMeta meta;
+	private final ArtifactPrototype prototype;
 	private final btGhostObject pickupZone;
 	private final IContactListener pickupListener;
 	private boolean rotate;
 
-	public AbstractArtifactEntity(final Wanderer game, final ArtifactMeta meta) {
+	public AbstractArtifactEntity(final Wanderer game, final ArtifactPrototype prototype) {
 		super(game);
-		this.meta = meta;
-		this.rotate = meta.isRotate();
+		this.prototype = prototype;
+		this.rotate = prototype.isRotate();
 		this.pickupZone = new btGhostObject();
 		this.pickupZone.setCollisionFlags(CollisionFlags.CF_NO_CONTACT_RESPONSE);
-		this.pickupZone.setCollisionShape(new btSphereShape(meta.getPickupZoneRadius()));
+		this.pickupZone.setCollisionShape(new btSphereShape(prototype.getPickupZoneRadius()));
 		this.pickupListener = new ContactListenerAdapter() {
 			@Override
 			public void onContactStarted(final btCollisionObject colObj0, final btCollisionObject colObj1) {
@@ -66,10 +66,10 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 		};
 		this.game.getPhysicsManager().addContactListener(this.pickupListener);
 
-		if (meta.getArtifactModel() != null && meta.getArtifactTexture() != null) {
-			final DisplayModel model = new DisplayModel(meta.getArtifactModel(), meta.getArtifactTexture());
-			if (meta.getArtifactColor() != null) {
-				model.addTextureAttribute(ColorAttribute.createEmissive(meta.getArtifactColor()));
+		if (prototype.getArtifactModel() != null && prototype.getArtifactTexture() != null) {
+			final DisplayModel model = new DisplayModel(prototype.getArtifactModel(), prototype.getArtifactTexture());
+			if (prototype.getArtifactColor() != null) {
+				model.addTextureAttribute(ColorAttribute.createEmissive(prototype.getArtifactColor()));
 			}
 			model.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_DST_COLOR, 0.75f));
 			model.addTextureAttribute(new NoLightningAttribute());
@@ -114,8 +114,8 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 		this.pickupZone.setWorldTransform(noScaleRotation);
 	}
 
-	public ArtifactMeta getMeta() {
-		return this.meta;
+	public ArtifactPrototype getPrototype() {
+		return this.prototype;
 	}
 
 	@JsonIgnore
@@ -139,7 +139,7 @@ public abstract class AbstractArtifactEntity extends AbstractEntity {
 	@Override
 	public void writeState(final ObjectNode node) {
 		super.writeState(node);
-		node.put("meta", MetaRegistry.getInstance().getReverse(this.meta));
+		node.put("prototype", PrototypeRegistry.getInstance().getReverse(this.prototype));
 	}
 
 	@Override

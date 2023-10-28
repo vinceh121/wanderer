@@ -29,25 +29,25 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	private float speedUpTime, maxTurboTime, turboTime;
 	private long turboPressTime;
 
-	public AbstractPlane(Wanderer game, AbstractPlaneMeta meta) {
+	public AbstractPlane(Wanderer game, AbstractPlanePrototype prototype) {
 		super(game);
 
 		this.setExactCollideModel(false);
 
-		this.setCollideModel(meta.getCollisionModel());
+		this.setCollideModel(prototype.getCollisionModel());
 
-		for (final DisplayModel m : meta.getDisplayModels()) {
+		for (final DisplayModel m : prototype.getDisplayModels()) {
 			this.getModels().add(new DisplayModel(m));
 		}
 
-		for (final DisplayModel m : meta.getExplosionParts()) {
+		for (final DisplayModel m : prototype.getExplosionParts()) {
 			this.explosionParts.add(new DisplayModel(m));
 		}
 
-		this.normal = new PlaneSpeedProfile(meta.getNormal());
-		this.turbo = new PlaneSpeedProfile(meta.getTurbo());
+		this.normal = new PlaneSpeedProfile(prototype.getNormal());
+		this.turbo = new PlaneSpeedProfile(prototype.getTurbo());
 
-		this.maxTurboTime = meta.getMaxTurboTime();
+		this.maxTurboTime = prototype.getMaxTurboTime();
 	}
 
 	@Override

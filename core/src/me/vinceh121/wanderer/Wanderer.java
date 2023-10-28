@@ -33,9 +33,9 @@ import me.vinceh121.wanderer.artifact.EnergyArtefact;
 import me.vinceh121.wanderer.building.AbstractBuilding;
 import me.vinceh121.wanderer.building.BuildingArtifactEntity;
 import me.vinceh121.wanderer.building.Island;
-import me.vinceh121.wanderer.building.IslandMeta;
-import me.vinceh121.wanderer.building.LighthouseMeta;
-import me.vinceh121.wanderer.character.CharacterMeta;
+import me.vinceh121.wanderer.building.IslandPrototype;
+import me.vinceh121.wanderer.building.LighthousePrototype;
+import me.vinceh121.wanderer.character.CharacterPrototype;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.cinematic.CinematicController;
 import me.vinceh121.wanderer.cinematic.CinematicData;
@@ -242,7 +242,7 @@ public class Wanderer extends ApplicationDelegate {
 				.add(-7740 - spread / 2, 0, -5890 - spread / 2);
 			final Quaternion rot = new Quaternion(Vector3.Y, islandRng.nextFloat() * 360f);
 
-			final Prop isl = new Prop(this, MetaRegistry.getInstance().get("rock" + (islandRng.nextInt(7) + 1)));
+			final Prop isl = new Prop(this, PrototypeRegistry.getInstance().get("rock" + (islandRng.nextInt(7) + 1)));
 			isl.setTranslation(pos);
 			isl.rotate(rot);
 			this.addEntity(isl);
@@ -252,10 +252,10 @@ public class Wanderer extends ApplicationDelegate {
 		backpack.setTranslation(-5, 34, 10);
 		this.addEntity(backpack);
 
-		final LighthouseMeta lighthouseArtifactMeta = MetaRegistry.getInstance().get("j_lighthouse01");
+		final LighthousePrototype lighthouseArtifactPrototype = PrototypeRegistry.getInstance().get("j_lighthouse01");
 
 		for (int i = 0; i < 3; i++) {
-			final AbstractArtifactEntity artifactEntity = new BuildingArtifactEntity(this, lighthouseArtifactMeta);
+			final AbstractArtifactEntity artifactEntity = new BuildingArtifactEntity(this, lighthouseArtifactPrototype);
 			artifactEntity.setTranslation(5, 34, 4 * i + 10);
 			this.addEntity(artifactEntity);
 		}
@@ -271,16 +271,16 @@ public class Wanderer extends ApplicationDelegate {
 		this.playerClan.setEnergy(50);
 		this.clans.add(this.playerClan);
 
-		final IslandMeta firstIsland = MetaRegistry.getInstance().get("first_island");
+		final IslandPrototype firstIsland = PrototypeRegistry.getInstance().get("first_island");
 		final Island island = new Island(this, firstIsland);
 		island.setTranslation(-7740, -160, -5890);
 		this.addEntity(island);
 		this.playerClan.addMember(island);
 
-		final CharacterMeta johnMeta = MetaRegistry.getInstance().get("goliath");
-		johnMeta.ensureLoading();
+		final CharacterPrototype johnPrototype = PrototypeRegistry.getInstance().get("goliath");
+		johnPrototype.ensureLoading();
 
-		final CharacterW john = new CharacterW(this, johnMeta);
+		final CharacterW john = new CharacterW(this, johnPrototype);
 		john.setSymbolicName("player");
 		john.setBeltSize(5);
 		john.setTranslation(0.1f, 50f, 0.1f);
@@ -625,12 +625,12 @@ public class Wanderer extends ApplicationDelegate {
 			final Class<?> cls = Class.forName(n.get("@class").asText());
 			for (final Constructor<?> c : cls.getConstructors()) {
 				if (c.getParameterTypes().length == 2 && c.getParameterTypes()[0] == Wanderer.class
-						&& IMeta.class.isAssignableFrom(c.getParameterTypes()[1])) {
-					if (n.get("meta") == null) {
-						Wanderer.LOG.error("Entity {} has constructor w/ meta but save is missing meta property", cls);
+						&& IPrototype.class.isAssignableFrom(c.getParameterTypes()[1])) {
+					if (n.get("prototype") == null) {
+						Wanderer.LOG.error("Entity {} has constructor w/ prototype but save is missing prototype property", cls);
 						continue;
 					}
-					ent = (AbstractEntity) c.newInstance(this, MetaRegistry.getInstance().get(n.get("meta").asText()));
+					ent = (AbstractEntity) c.newInstance(this, PrototypeRegistry.getInstance().get(n.get("prototype").asText()));
 					break;
 				} else if (Arrays.equals(c.getParameterTypes(), new Class<?>[] { Wanderer.class })) {
 					ent = (AbstractEntity) c.newInstance(this);

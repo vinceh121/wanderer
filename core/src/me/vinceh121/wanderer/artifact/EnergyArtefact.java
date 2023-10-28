@@ -9,7 +9,7 @@ import me.vinceh121.wanderer.entity.ParticleEmitter;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 
 public class EnergyArtefact extends AbstractArtifactEntity {
-	private static final ArtifactMeta ENERGY_META = new ArtifactMeta() { // FIXME move to a JSON
+	private static final ArtifactPrototype ENERGY_PROTOTYPE = new ArtifactPrototype() { // FIXME move to a JSON
 		@Override
 		public AbstractEntity create(final Wanderer game) {
 			return new EnergyArtefact(game);
@@ -17,7 +17,7 @@ public class EnergyArtefact extends AbstractArtifactEntity {
 	};
 
 	public EnergyArtefact(final Wanderer game) {
-		super(game, EnergyArtefact.ENERGY_META);
+		super(game, EnergyArtefact.ENERGY_PROTOTYPE);
 		this.addParticle(new ParticleEmitter(game.getGraphicsManager().getParticleSystem(), "particles/energyclot.p"));
 		this.setRotate(false);
 	}
@@ -38,7 +38,7 @@ public class EnergyArtefact extends AbstractArtifactEntity {
 	}
 
 	static {
-		EnergyArtefact.ENERGY_META.setArtifactModel("orig/energyclot.n/kugel2.obj");
-		EnergyArtefact.ENERGY_META.setArtifactModel("orig/lib/eff_glitter/texturenone.ktx");
+		EnergyArtefact.ENERGY_PROTOTYPE.setArtifactModel("orig/energyclot.n/kugel2.obj");
+		EnergyArtefact.ENERGY_PROTOTYPE.setArtifactModel("orig/lib/eff_glitter/texturenone.ktx");
 	}
 }

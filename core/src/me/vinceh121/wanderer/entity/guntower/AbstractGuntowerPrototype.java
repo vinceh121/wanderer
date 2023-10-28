@@ -2,9 +2,9 @@ package me.vinceh121.wanderer.entity.guntower;
 
 import com.badlogic.gdx.math.Vector3;
 
-import me.vinceh121.wanderer.building.AbstractBuildingMeta;
+import me.vinceh121.wanderer.building.AbstractBuildingPrototype;
 
-public abstract class AbstractGuntowerMeta extends AbstractBuildingMeta {
+public abstract class AbstractGuntowerPrototype extends AbstractBuildingPrototype {
 	private Vector3 cameraOffset = new Vector3();
 	private float polarMin = 0.1f, polarMax = 0.9f;
 	private String fireSound;

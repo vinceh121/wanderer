@@ -3,25 +3,25 @@ package me.vinceh121.wanderer.building;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
-import me.vinceh121.wanderer.IMeta;
+import me.vinceh121.wanderer.IPrototype;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 
-public class IslandMeta implements IMeta {
+public class IslandPrototype implements IPrototype {
 	private Array<DisplayModel> displayModels = new Array<>();
 	private String collisionModel;
 	private Array<Slot> slots = new Array<>();
 	private Vector3 placeCameraPosition = new Vector3(), placeCameraDirection = new Vector3();
 
-	public IslandMeta() {
+	public IslandPrototype() {
 	}
 
-	public IslandMeta(final Array<Slot> slots) {
+	public IslandPrototype(final Array<Slot> slots) {
 		this.slots = slots;
 	}
 
-	public IslandMeta(final Slot... slots) {
+	public IslandPrototype(final Slot... slots) {
 		this.slots = new Array<>(slots);
 	}
 

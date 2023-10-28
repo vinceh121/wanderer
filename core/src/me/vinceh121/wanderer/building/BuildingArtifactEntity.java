@@ -9,10 +9,10 @@ import me.vinceh121.wanderer.platform.audio.Sound3D;
 
 public class BuildingArtifactEntity extends AbstractArtifactEntity {
 
-	public BuildingArtifactEntity(final Wanderer game, final AbstractBuildingMeta meta) {
-		super(game, meta);
+	public BuildingArtifactEntity(final Wanderer game, final AbstractBuildingPrototype prototype) {
+		super(game, prototype);
 
-		this.scale(meta.getArtefactScale());
+		this.scale(prototype.getArtefactScale());
 	}
 
 	@Override
@@ -21,7 +21,7 @@ public class BuildingArtifactEntity extends AbstractArtifactEntity {
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/artefactcollected.wav", Sound3D.class)
 				.playSource3D()
 				.setPosition(WandererConstants.AUDIO.getListenerPosition());
-			chara.pickUpArtifact(this.getMeta());
+			chara.pickUpArtifact(this.getPrototype());
 			return true;
 		} else {
 			WandererConstants.ASSET_MANAGER.get("orig/feedback/beltfull.wav", Sound3D.class).playGeneral();

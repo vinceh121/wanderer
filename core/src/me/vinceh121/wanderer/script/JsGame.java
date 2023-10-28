@@ -15,10 +15,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector3;
 
-import me.vinceh121.wanderer.IMeta;
-import me.vinceh121.wanderer.MetaRegistry;
+import me.vinceh121.wanderer.IPrototype;
+import me.vinceh121.wanderer.PrototypeRegistry;
 import me.vinceh121.wanderer.Wanderer;
-import me.vinceh121.wanderer.building.AbstractBuildingMeta;
+import me.vinceh121.wanderer.building.AbstractBuildingPrototype;
 import me.vinceh121.wanderer.building.BuildingArtifactEntity;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
@@ -63,7 +63,7 @@ public class JsGame {
 		JsGame.LOG.info("Audio debug now {}", this.game.isAudioEmittersDebug());
 	}
 
-	private Object newv(final String metaName, Integer count) {
+	private Object newv(final String prototypeName, Integer count) {
 		if (this.game.getControlledEntity() == null) {
 			JsGame.LOG.error("Cannot use newv when no entity is being controlled");
 			return null;
@@ -73,10 +73,10 @@ public class JsGame {
 			count = 1;
 		}
 
-		final IMeta meta = MetaRegistry.getInstance().get(metaName);
+		final IPrototype prototype = PrototypeRegistry.getInstance().get(prototypeName);
 
-		if (meta == null) {
-			JsGame.LOG.error("Unknown meta {}", metaName);
+		if (prototype == null) {
+			JsGame.LOG.error("Unknown prototype {}", prototypeName);
 			return null;
 		}
 
@@ -87,10 +87,10 @@ public class JsGame {
 		for (int i = 0; i < count; i++) {
 			final AbstractEntity entity;
 
-			if (meta instanceof AbstractBuildingMeta) {
-				entity = new BuildingArtifactEntity(this.game, (AbstractBuildingMeta) meta);
+			if (prototype instanceof AbstractBuildingPrototype) {
+				entity = new BuildingArtifactEntity(this.game, (AbstractBuildingPrototype) prototype);
 			} else {
-				entity = meta.create(this.game);
+				entity = prototype.create(this.game);
 			}
 
 			entity.setTranslation(new Vector3(0, 4, 4).mul(controlled.getRotation()).add(controlled.getTranslation()));
@@ -141,13 +141,13 @@ public class JsGame {
 			throw new IllegalArgumentException("spawn needs arguments");
 		}
 
-		final String prototype = (String) args[0];
-		final IMeta meta = MetaRegistry.getInstance().get(prototype);
-		if (meta == null) {
+		final String prototypeName = (String) args[0];
+		final IPrototype prototype = PrototypeRegistry.getInstance().get(prototypeName);
+		if (prototype == null) {
 			return Undefined.instance;
 		}
 
-		final AbstractEntity ent = meta.create(this.game);
+		final AbstractEntity ent = prototype.create(this.game);
 		this.game.addEntity(ent);
 
 		return ent;
