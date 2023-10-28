@@ -91,7 +91,7 @@ abstract class MsgmergeTask extends DefaultTask {
 }
 def msgmerge = tasks.register("msgmerge", MsgmergeTask)
 
-tasks.register("i18n") { dependsOn(xgettext, cinxgettext, msguniq, msgmerge) };
+tasks.register("i18n") { dependsOn(xgettext, cinxgettext, msguniq/*, msgmerge*/) };
 
 buildscript {
     repositories {

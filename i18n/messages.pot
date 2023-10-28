@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 02:41+0200\n"
+"POT-Creation-Date: 2023-10-28 19:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,26 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:155
+#: core/src/me/vinceh121/wanderer/Wanderer.java:158
 msgid "Quick saved!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:163
+#: core/src/me/vinceh121/wanderer/Wanderer.java:166
 msgid "Quick loaded!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:482
+#: core/src/me/vinceh121/wanderer/Wanderer.java:524
 msgid "Taking control..."
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:488
+#: core/src/me/vinceh121/wanderer/Wanderer.java:530
 msgid "Nothing to control"
-msgstr ""
-
-#. Popup message when close to building
-#: core/src/me/vinceh121/wanderer/guntower/AbstractGuntower.java:32
-#: core/src/me/vinceh121/wanderer/guntower/MachineGunGuntower.java:102
-msgid "Gun tower"
 msgstr ""
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:37
@@ -100,6 +94,12 @@ msgstr ""
 msgid "Windowed"
 msgstr ""
 
+#. Popup message when close to building
+#: core/src/me/vinceh121/wanderer/entity/guntower/AbstractGuntower.java:34
+#: core/src/me/vinceh121/wanderer/entity/guntower/MachineGunGuntower.java:132
+msgid "Gun tower"
+msgstr ""
+
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
 msgid "Belt full!"
 msgstr ""
@@ -128,16 +128,16 @@ msgstr ""
 msgid "Load Game"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:352
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:394
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
 msgid "Not enough energy!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:360
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
 msgid "Slot blocked!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:400
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
 msgid "No free slot!"
 msgstr ""
 
