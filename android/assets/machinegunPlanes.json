@@ -1,10 +1,17 @@
 {
 	"j_scout01": {
 		"collisionModel": "orig/j_scout01.n/collide.obj",
+		"maxTurboTime": 1.5,
 		"normal": {
 			"minSpeed": 40,
 			"maxSpeed": 70,
 			"acceleration": 3.5,
+			"decceleration": 5
+		},
+		"turbo": {
+			"minSpeed": 400,
+			"maxSpeed": 400,
+			"acceleration": 2,
 			"decceleration": 5
 		},
 		"displayModels": [

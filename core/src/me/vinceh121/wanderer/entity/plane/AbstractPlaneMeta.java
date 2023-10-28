@@ -10,7 +10,7 @@ public abstract class AbstractPlaneMeta implements IMeta {
 	private Array<DisplayModel> explosionParts = new Array<>();
 	private String collisionModel;
 	private final PlaneSpeedProfile normal = new PlaneSpeedProfile(), turbo = new PlaneSpeedProfile();
-	private float turboTime;
+	private float maxTurboTime;
 
 	public Array<DisplayModel> getDisplayModels() {
 		return displayModels;
@@ -44,11 +44,11 @@ public abstract class AbstractPlaneMeta implements IMeta {
 		return this.turbo;
 	}
 
-	public float getTurboTime() {
-		return turboTime;
+	public float getMaxTurboTime() {
+		return maxTurboTime;
 	}
 
-	public void setTurboTime(float turboTime) {
-		this.turboTime = turboTime;
+	public void setMaxTurboTime(float maxTurboTime) {
+		this.maxTurboTime = maxTurboTime;
 	}
 }

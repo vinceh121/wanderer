@@ -186,14 +186,18 @@ public class DisplayModel {
 
 	public void addTextureAttribute(final Attribute value) {
 		this.textureAttributes.add(value);
+		
+		if (this.cacheDisplayModel != null) {
+			this.cacheDisplayModel.materials.get(0).set(value);
+		}
 	}
 
-	public boolean removeTextureAttribute(final Attribute value) {
-		return this.textureAttributes.remove(value);
-	}
-
-	public Attribute removeTextureAttribute(final int index) {
-		return this.textureAttributes.remove(index);
+	public void removeTextureAttribute(final Attribute value) {
+		this.textureAttributes.remove(value);
+		
+		if (this.cacheDisplayModel != null) {
+			this.cacheDisplayModel.materials.get(0).remove(value.type);
+		}
 	}
 
 	@Override
