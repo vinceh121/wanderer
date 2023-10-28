@@ -67,6 +67,16 @@
 					}
 				]
 			}
+		],
+		"explosionParts": [
+			{
+				"displayModel": "orig/j_scout01.n/debris1.obj",
+				"displayTexture": "orig/j_scout01.n/texturenone.ktx"
+			},
+			{
+				"displayModel": "orig/j_scout01.n/debris2.obj",
+				"displayTexture": "orig/j_scout01.n/texturenone.ktx"
+			}
 		]
 	}
 }

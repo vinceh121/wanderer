@@ -3,7 +3,10 @@ package me.vinceh121.wanderer.entity.plane;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.ClosestNotMeConvexResultCallback;
+import com.badlogic.gdx.physics.bullet.collision.btConvexShape;
 import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.Wanderer;
@@ -26,6 +29,8 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 
 	public AbstractPlane(Wanderer game, AbstractPlaneMeta meta) {
 		super(game);
+
+		this.setExactCollideModel(false);
 
 		this.setCollideModel(meta.getCollisionModel());
 
@@ -80,7 +85,31 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	}
 
 	protected void advance(float dist) {
-		this.translate(0, 0, -dist);
+		if (this.getCollideObject() != null) {
+			final Matrix4 start = this.getTransform();
+			final Vector3 startVec = start.getTranslation(new Vector3());
+
+			final Matrix4 end = this.getTransform().cpy();
+			end.translate(0, 0, -dist);
+			final Vector3 endVec = end.getTranslation(new Vector3());
+
+			final ClosestNotMeConvexResultCallback cb =
+					new ClosestNotMeConvexResultCallback(getCollideObject(), startVec, endVec);
+
+			this.game.getBtWorld()
+				.convexSweepTest((btConvexShape) this.getCollideObject().getCollisionShape(), start, end, cb);
+
+			startVec.lerp(endVec, cb.getClosestHitFraction());
+			this.setTranslation(startVec);
+
+			if (cb.hasHit()) {
+				this.onDeath();
+			}
+
+			cb.dispose();
+		} else {
+			this.translate(0, 0, -dist);
+		}
 	}
 
 	public void turbo() {
@@ -95,8 +124,6 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		for (final DisplayModel mdl : this.getFlatModels()) {
 			mdl.addTextureAttribute(this.colorAttr);
 		}
-
-		System.out.println("Turbo!");
 	}
 
 	protected void unturbo() {
