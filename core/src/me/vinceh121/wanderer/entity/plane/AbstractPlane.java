@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.entity.plane;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
@@ -23,6 +24,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	private final Array<DisplayModel> explosionParts = new Array<>();
 	private final PlaneSpeedProfile normal, turbo;
 	private ColorAttribute colorAttr;
+	private BlendingAttribute blendingAttr;
 	private boolean controlled, isTurbo;
 	private float speedUpTime, maxTurboTime, turboTime;
 	private long turboPressTime;
@@ -120,9 +122,11 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		this.isTurbo = true;
 		this.turboTime = this.maxTurboTime;
 		this.colorAttr = ColorAttribute.createEmissive(this.getClan() == null ? Color.GRAY : this.getClan().getColor());
+		this.blendingAttr = new BlendingAttribute(0.5f);
 
 		for (final DisplayModel mdl : this.getFlatModels()) {
 			mdl.addTextureAttribute(this.colorAttr);
+			mdl.addTextureAttribute(this.blendingAttr);
 		}
 	}
 
@@ -131,6 +135,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 
 		for (final DisplayModel mdl : this.getFlatModels()) {
 			mdl.removeTextureAttribute(this.colorAttr);
+			mdl.removeTextureAttribute(this.blendingAttr);
 		}
 	}
 
