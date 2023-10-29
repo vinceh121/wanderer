@@ -23,6 +23,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	private static final long DOUBLE_TAP_SENSITIVITY = 500;
 	private final Array<DisplayModel> explosionParts = new Array<>();
 	private final PlaneSpeedProfile normal, turbo;
+	private InputListener inputListener;
 	private ColorAttribute colorAttr;
 	private BlendingAttribute blendingAttr;
 	private boolean controlled, isTurbo;
@@ -179,8 +180,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		this.controlled = false;
 	}
 
-	@Override
-	public InputListener getInputProcessor() {
+	public InputListener createInputProcessor() {
 		return new InputListenerAdapter(50) {
 			@Override
 			public boolean inputDown(Input in) {
@@ -196,5 +196,14 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 				return false;
 			}
 		};
+	}
+
+	@Override
+	public InputListener getInputProcessor() {
+		if (this.inputListener == null) {
+			this.inputListener = this.createInputProcessor();
+		}
+
+		return this.inputListener;
 	}
 }
