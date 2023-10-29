@@ -556,6 +556,13 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 			this.game.getGraphicsManager().removeParticle(e);
 			e.dispose();
 		}
+		this.particles.clear();
+
+		for (final SoundEmitter3D e : this.soundEmitters) {
+			e.dispose();
+		}
+		this.soundEmitters.clear();
+
 		this.leaveBtWorld(this.game.getBtWorld());
 		if (this.collideObject != null) {
 			Gdx.app.postRunnable(() -> this.collideObject.dispose());

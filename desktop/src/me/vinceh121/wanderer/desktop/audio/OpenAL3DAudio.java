@@ -190,13 +190,22 @@ public class OpenAL3DAudio implements Lwjgl3Audio, AudioSystem3D {
 	@Override
 	public void update() {
 		Set<OpenAL3DSource> toRemove = new HashSet<>();
+
 		for (OpenAL3DSource src : this.sourcePool) {
 			if (src.isDisposed()) {
 				toRemove.add(src);
 				continue;
 			}
+
 			src.update();
+
+			try {
+				OpenAL3DAudio.checkOpenALError();
+			} catch (OpenALException e) {
+				throw new RuntimeException(e);
+			}
 		}
+
 		this.sourcePool.removeAll(toRemove);
 	}
 

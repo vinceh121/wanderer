@@ -2,6 +2,8 @@ package me.vinceh121.wanderer.desktop.audio;
 
 import static org.lwjgl.openal.AL10.*;
 
+import java.util.Arrays;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.openal.ALC11;
@@ -222,7 +224,7 @@ public class OpenAL3DSource implements SoundEmitter3D {
 
 	@Override
 	public boolean isDisposed() {
-		return this.disposed;
+		return this.disposed || alIsSource(this.source);
 	}
 
 	@Override
@@ -244,10 +246,8 @@ public class OpenAL3DSource implements SoundEmitter3D {
 			if (this.disposed) {
 				return;
 			}
-			setContext();
 			this.disposed = true;
-			this.stop();
-			this.setBuffer(0);
+			setContext();
 			alDeleteSources(this.source);
 			OpenAL3DAudio.checkOpenALError();
 		} catch (OpenALException e) {
@@ -263,5 +263,16 @@ public class OpenAL3DSource implements SoundEmitter3D {
 	@Override
 	public long getId() {
 		return this.source;
+	}
+
+	@Override
+	public String toString() {
+		return "OpenAL3DSource [audio=" + audio + ", source=" + source + ", context=" + context + ", relativePosition="
+				+ relativePosition + ", disposeOnStop=" + disposeOnStop + ", disposed=" + disposed + ", getPosition()="
+				+ getPosition() + ", getVelocity()=" + getVelocity() + ", isLooping()=" + isLooping() + ", getGain()="
+				+ getGain() + ", getBuffer()=" + getBuffer() + ", getOrientation()=" + Arrays.toString(getOrientation())
+				+ ", isPlaying()=" + isPlaying() + ", isStopped()=" + isStopped() + ", isPaused()=" + isPaused()
+				+ ", getPitch()=" + getPitch() + ", getMaxDistnace()=" + getMaxDistnace() + ", getMinDistance()="
+				+ getMinDistance() + ", isDisposed()=" + isDisposed() + "]";
 	}
 }
