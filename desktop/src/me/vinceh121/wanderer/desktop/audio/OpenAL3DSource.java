@@ -48,17 +48,17 @@ public class OpenAL3DSource implements SoundEmitter3D {
 	public Vector3 getRelativePosition() {
 		return this.relativePosition;
 	}
-	
+
 	@Override
 	public void setRelativePosition(Vector3 from) {
 		this.relativePosition.set(from);
 	}
-	
+
 	@Override
 	public void setRelativePosition(float x, float y, float z) {
 		this.relativePosition.set(x, y, z);
 	}
-	
+
 	@Override
 	public Vector3 getVelocity() {
 		setContext();
@@ -177,6 +177,30 @@ public class OpenAL3DSource implements SoundEmitter3D {
 	public float getPitch() {
 		setContext();
 		return alGetSourcef(this.source, AL_PITCH);
+	}
+
+	@Override
+	public void setMaxDistance(float dist) {
+		setContext();
+		alSourcef(this.source, AL_MAX_DISTANCE, dist);
+	}
+
+	@Override
+	public float getMaxDistnace() {
+		setContext();
+		return alGetSourcef(this.source, AL_MAX_DISTANCE);
+	}
+
+	@Override
+	public void setMinDistance(float dist) {
+		setContext();
+		alSourcef(this.source, AL_REFERENCE_DISTANCE, dist);
+	}
+
+	@Override
+	public float getMinDistance() {
+		setContext();
+		return alGetSourcef(this.source, AL_REFERENCE_DISTANCE);
 	}
 
 	@Override

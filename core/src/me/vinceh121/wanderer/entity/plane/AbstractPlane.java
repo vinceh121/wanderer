@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.bullet.collision.btConvexShape;
 import com.badlogic.gdx.utils.Array;
 
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.building.ExplosionPart;
 import me.vinceh121.wanderer.entity.AbstractClanLivingEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
@@ -18,11 +19,15 @@ import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
+import me.vinceh121.wanderer.platform.audio.Sound3D;
+import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
 public abstract class AbstractPlane extends AbstractClanLivingEntity implements IControllableEntity {
 	private static final long DOUBLE_TAP_SENSITIVITY = 500;
 	private final Array<DisplayModel> explosionParts = new Array<>();
 	private final PlaneSpeedProfile normal, turbo;
+	protected final SoundEmitter3D engineEmitter, turboEmitter;
+	private String explosionSound;;
 	private InputListener inputListener;
 	private ColorAttribute colorAttr;
 	private BlendingAttribute blendingAttr;
@@ -49,6 +54,19 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		this.turbo = new PlaneSpeedProfile(prototype.getTurbo());
 
 		this.maxTurboTime = prototype.getMaxTurboTime();
+
+		this.explosionSound = prototype.getExplosionSound();
+
+		this.engineEmitter =
+				WandererConstants.getAssetOrHotload(prototype.getEngineSound(), Sound3D.class).playSource3D();
+		this.engineEmitter.setLooping(true);
+		this.addSoundEmitter(this.engineEmitter);
+
+		this.turboEmitter =
+				WandererConstants.getAssetOrHotload(prototype.getTurboSound(), Sound3D.class).playSource3D();
+		this.turboEmitter.stop();
+		this.addSoundEmitter(this.turboEmitter);
+
 	}
 
 	@Override
@@ -121,6 +139,8 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		}
 
 		this.isTurbo = true;
+		this.turboEmitter.play();
+		this.engineEmitter.pause();
 		this.turboTime = this.maxTurboTime;
 		this.colorAttr = ColorAttribute.createEmissive(this.getClan() == null ? Color.GRAY : this.getClan().getColor());
 		this.blendingAttr = new BlendingAttribute(0.5f);
@@ -133,6 +153,8 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 
 	protected void unturbo() {
 		this.isTurbo = false;
+		this.turboEmitter.stop();
+		this.engineEmitter.play();
 
 		for (final DisplayModel mdl : this.getFlatModels()) {
 			mdl.removeTextureAttribute(this.colorAttr);
@@ -166,6 +188,10 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 			part.addEventListener("collideModelLoaded", e -> part.thrust(10));
 			this.game.addEntity(part);
 		}
+
+		WandererConstants.getAssetOrHotload(this.explosionSound, Sound3D.class)
+			.playSource3D(1, getTranslation())
+			.setDisposeOnStop(true);
 
 		this.dead = true;
 	}

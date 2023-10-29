@@ -49,6 +49,7 @@ public class OpenAL3DBuffer implements Sound3D {
 		try {
 			OpenAL3DSource src = new OpenAL3DSource(this.audio, context);
 			src.setBuffer(this.buffer);
+			src.setMinDistance(10); // TODO figure out the best defaults
 			src.play();
 			OpenAL3DAudio.runtimeCheckOpenAlError();
 			return src;

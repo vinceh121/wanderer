@@ -2,6 +2,9 @@
 	"j_scout01": {
 		"collisionModel": "orig/j_scout01.n/collide.obj",
 		"maxTurboTime": 1.5,
+		"engineSound": "orig/lib/sound/scoutdrive.wav",
+		"turboSound": "orig/lib/sound/scoutdrive.wav",
+		"explosionSound": "orig/lib/sound/crash1.wav",
 		"normal": {
 			"minSpeed": 40,
 			"maxSpeed": 70,

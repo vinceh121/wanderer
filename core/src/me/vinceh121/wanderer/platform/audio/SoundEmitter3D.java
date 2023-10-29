@@ -79,4 +79,11 @@ public interface SoundEmitter3D extends Disposable {
 
 	Vector3 getRelativePosition();
 
+	void setMaxDistance(float dist);
+
+	float getMaxDistnace();
+
+	void setMinDistance(float dist);
+
+	float getMinDistance();
 }

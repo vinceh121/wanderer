@@ -1,5 +1,8 @@
 package me.vinceh121.wanderer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
@@ -9,7 +12,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.Logger;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +29,7 @@ import me.vinceh121.wanderer.ui.WSkinLoader;
 import me.vinceh121.wanderer.util.AssetFileHandleResolver;
 
 public final class WandererConstants {
+	private static final Logger LOG = LogManager.getLogger(WandererConstants.class);
 	public static final AssetManager ASSET_MANAGER = new AssetManager(new AssetFileHandleResolver());
 	public static final TextureParameter MIPMAPS = new TextureParameter();
 	public static final ObjectMapper MAPPER = new ObjectMapper(), SAVE_MAPPER;
@@ -42,21 +45,21 @@ public final class WandererConstants {
 	}
 
 	public static Model getAudioDebug() {
-		final String name = "audio-debug.glb";
-		if (!WandererConstants.ASSET_MANAGER.isLoaded(name, Model.class)) {
-			WandererConstants.ASSET_MANAGER.load(name, Model.class);
-			WandererConstants.ASSET_MANAGER.finishLoadingAsset(name);
-		}
-		return WandererConstants.ASSET_MANAGER.get(name, Model.class);
+		return getAssetOrHotload("audio-debug.glb", Model.class);
 	}
 
 	public static Model getCircleDebug() {
-		final String name = "circle-debug.glb";
-		if (!WandererConstants.ASSET_MANAGER.isLoaded(name, Model.class)) {
-			WandererConstants.ASSET_MANAGER.load(name, Model.class);
-			WandererConstants.ASSET_MANAGER.finishLoadingAsset(name);
+		return getAssetOrHotload("circle-debug.glb", Model.class);
+	}
+
+	public static <T> T getAssetOrHotload(String path, Class<T> type) {
+		if (!ASSET_MANAGER.isLoaded(path, type)) {
+			ASSET_MANAGER.load(path, type);
+			LOG.warn("Hot loading asset {} of type {}", path, type);
+			ASSET_MANAGER.finishLoadingAsset(path);
 		}
-		return WandererConstants.ASSET_MANAGER.get(name, Model.class);
+
+		return ASSET_MANAGER.get(path, type);
 	}
 
 	static {
@@ -80,13 +83,14 @@ public final class WandererConstants {
 
 		// need to do this so Log4J can choose the
 		// actual log level
-		WandererConstants.ASSET_MANAGER.getLogger().setLevel(Logger.DEBUG);
+		WandererConstants.ASSET_MANAGER.getLogger().setLevel(com.badlogic.gdx.utils.Logger.DEBUG);
 		WandererConstants.ASSET_MANAGER.setLoader(Sound3D.class,
 				new Sound3DLoader(WandererConstants.ASSET_MANAGER.getFileHandleResolver()));
 		WandererConstants.ASSET_MANAGER.setLoader(Model.class, ".gltf", new GLTFModelLoader());
 		WandererConstants.ASSET_MANAGER.setLoader(Model.class, ".glb", new GLBModelLoader());
-		
-		WandererConstants.ASSET_MANAGER.setLoader(WSkin.class, new WSkinLoader(WandererConstants.ASSET_MANAGER.getFileHandleResolver()));
+
+		WandererConstants.ASSET_MANAGER.setLoader(WSkin.class,
+				new WSkinLoader(WandererConstants.ASSET_MANAGER.getFileHandleResolver()));
 
 		WandererConstants.MIPMAPS.genMipMaps = true;
 
