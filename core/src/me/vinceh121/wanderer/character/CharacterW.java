@@ -68,7 +68,8 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		super(game);
 		this.prototype = prototype;
 		this.setCollideObjectOffset(prototype.getCapsuleOffset());
-		this.controller = new CharacterWController(this.game, this, prototype.getCapsuleRadius(), prototype.getCapsuleHeight());
+		this.controller =
+				new CharacterWController(this.game, this, prototype.getCapsuleRadius(), prototype.getCapsuleHeight());
 		this.controller.setFallListener(new FallListener() {
 
 			@Override
@@ -77,7 +78,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 			@Override
 			public void onJumpEnd(final boolean bigJump) {
-				WandererConstants.ASSET_MANAGER.get(prototype.getFallSound(), Sound3D.class)
+				WandererConstants.getAssetOrHotload(prototype.getFallSound(), Sound3D.class)
 					.playSource3D()
 					.setPosition(CharacterW.this.getTransform().getTranslation(new Vector3()));
 				CharacterW.this.eventDispatcher.dispatchEvent(new Event(CharacterW.EVENT_JUMP_END));
@@ -351,7 +352,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	private void placeBuilding() {
 		if (this.getClan().getEnergy() < this.placing.getEnergyRequired()) {
 			this.game.showMessage(I18N.gettext("Not enough energy!"));
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class)
+			WandererConstants.getAssetOrHotload("orig/feedback/noenergy.wav", Sound3D.class)
 				.playGeneral()
 				.setDisposeOnStop(true);
 			return;
@@ -359,7 +360,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 		if (this.previewBuilding.isBlocked()) {
 			this.game.showMessage(I18N.gettext("Slot blocked!"));
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound3D.class)
+			WandererConstants.getAssetOrHotload("orig/feedback/nobuildarea.wav", Sound3D.class)
 				.playGeneral()
 				.setDisposeOnStop(true);
 			return;
@@ -393,13 +394,13 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		final AbstractBuildingPrototype build = (AbstractBuildingPrototype) arti;
 		if (this.getClan().getEnergy() < build.getEnergyRequired()) {
 			this.game.showMessage(I18N.gettext("Not enough energy!"));
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/noenergy.wav", Sound3D.class).playGeneral();
+			WandererConstants.getAssetOrHotload("orig/feedback/noenergy.wav", Sound3D.class).playGeneral();
 			return;
 		}
 		final Array<Slot> free = this.attachedIsland.getFreeSlots(build.getSlotType());
 		if (free.size == 0) {
 			this.game.showMessage(I18N.gettext("No free slot!"));
-			WandererConstants.ASSET_MANAGER.get("orig/feedback/nobuildarea.wav", Sound3D.class).playGeneral();
+			WandererConstants.getAssetOrHotload("orig/feedback/nobuildarea.wav", Sound3D.class).playGeneral();
 			return;
 		}
 		CharacterW.this.placing = build;

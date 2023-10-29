@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer.entity;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -205,5 +206,23 @@ public class DisplayModel {
 		return "DisplayModel [relativeTransform=" + this.relativeTransform + ", absoluteTransform="
 				+ this.absoluteTransform + ", displayModel=" + this.displayModel + ", displayTexture="
 				+ this.displayTexture + ", animationChannel=" + this.animationChannel + "]";
+	}
+	
+	public static LinkedList<DisplayModel> flattenModels(Iterable<DisplayModel> models) {
+		LinkedList<DisplayModel> flatModels = new LinkedList<>();
+
+		for (final DisplayModel root : models) {
+			flattenModels(flatModels, root);
+		}
+
+		return flatModels;
+	}
+	
+	private static void flattenModels(LinkedList<DisplayModel> flatModels, DisplayModel mdl) {
+		flatModels.add(mdl);
+
+		for (final DisplayModel child : mdl.getChildren()) {
+			flattenModels(flatModels, child);
+		}
 	}
 }

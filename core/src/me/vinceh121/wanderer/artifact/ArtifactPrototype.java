@@ -1,6 +1,11 @@
 package me.vinceh121.wanderer.artifact;
 
+import java.util.List;
+
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.Model;
 
 import me.vinceh121.wanderer.IPrototype;
 
@@ -48,5 +53,11 @@ public abstract class ArtifactPrototype implements IPrototype {
 
 	public void setPickupZoneRadius(final float pickupZoneRadius) {
 		this.pickupZoneRadius = pickupZoneRadius;
+	}
+
+	@Override
+	public void getAssetsToLoad(List<AssetDescriptor<?>> descriptors) {
+		descriptors.add(new AssetDescriptor<>(artifactModel, Model.class));
+		descriptors.add(new AssetDescriptor<>(artifactTexture, Texture.class));
 	}
 }

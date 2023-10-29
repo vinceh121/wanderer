@@ -297,21 +297,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	}
 
 	public LinkedList<DisplayModel> getFlatModels() {
-		LinkedList<DisplayModel> flatModels = new LinkedList<>();
-
-		for (DisplayModel root : this.models) {
-			this.recurseFlatModels(flatModels, root);
-		}
-
-		return flatModels;
-	}
-
-	private void recurseFlatModels(LinkedList<DisplayModel> flatModels, DisplayModel mdl) {
-		flatModels.add(mdl);
-
-		for (DisplayModel child : mdl.getChildren()) {
-			this.recurseFlatModels(flatModels, child);
-		}
+		return DisplayModel.flattenModels(this.models);
 	}
 
 	public Array<SoundEmitter3D> getSoundEmitters() {

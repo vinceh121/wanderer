@@ -1,11 +1,31 @@
 package me.vinceh121.wanderer.entity;
 
+import java.util.List;
+
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.Model;
+
 import me.vinceh121.wanderer.IPrototype;
 import me.vinceh121.wanderer.Wanderer;
 
 public class PropPrototype implements IPrototype {
 	private String displayModel, collideModel, texture, detailMapTexture;
 	private float mass;
+
+	@Override
+	public void getAssetsToLoad(List<AssetDescriptor<?>> descriptors) {
+		descriptors.add(new AssetDescriptor<>(this.displayModel, Model.class));
+		descriptors.add(new AssetDescriptor<>(this.texture, Texture.class));
+
+		if (this.collideModel != null) {
+			descriptors.add(new AssetDescriptor<>(this.collideModel, Model.class));
+		}
+
+		if (this.detailMapTexture != null) {
+			descriptors.add(new AssetDescriptor<>(this.detailMapTexture, Texture.class));
+		}
+	}
 
 	public String getDisplayModel() {
 		return this.displayModel;

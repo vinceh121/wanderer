@@ -1,10 +1,11 @@
 package me.vinceh121.wanderer;
 
+import java.util.List;
+
+import com.badlogic.gdx.assets.AssetDescriptor;
+
 import me.vinceh121.wanderer.entity.AbstractEntity;
 
-/**
- * TODO rename to prototype, that's more semantically correct
- */
 public interface IPrototype {
 	/**
 	 * Returns a new instance of the concerned entity prototype. Perhaps a default
@@ -15,4 +16,6 @@ public interface IPrototype {
 	 * @return A new instance of the entity
 	 */
 	AbstractEntity create(Wanderer game);
+	
+	void getAssetsToLoad(List<AssetDescriptor<?>> descriptors);
 }

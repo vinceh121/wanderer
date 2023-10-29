@@ -1,5 +1,10 @@
 package me.vinceh121.wanderer.building;
 
+import java.util.List;
+
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
@@ -80,5 +85,15 @@ public class IslandPrototype implements IPrototype {
 	@Override
 	public AbstractEntity create(final Wanderer game) {
 		return new Island(game, this);
+	}
+
+	@Override
+	public void getAssetsToLoad(List<AssetDescriptor<?>> descriptors) {
+		descriptors.add(new AssetDescriptor<>(this.collisionModel, Model.class));
+
+		for (final DisplayModel mdl : DisplayModel.flattenModels(this.displayModels)) {
+			descriptors.add(new AssetDescriptor<>(mdl.getDisplayModel(), Model.class));
+			descriptors.add(new AssetDescriptor<>(mdl.getDisplayTexture(), Texture.class));
+		}
 	}
 }

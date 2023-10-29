@@ -1,7 +1,9 @@
 package me.vinceh121.wanderer.character;
 
 import java.util.Arrays;
+import java.util.List;
 
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector3;
@@ -18,6 +20,21 @@ public class CharacterPrototype implements IPrototype {
 	private boolean storyMode;
 	private Vector3 capsuleOffset = new Vector3(0, 1.2699996f, 0);
 	private float capsuleRadius = 0.5f, capsuleHeight = 1.5f;
+
+	@Override
+	public void getAssetsToLoad(List<AssetDescriptor<?>> descriptors) {
+		descriptors.add(new AssetDescriptor<>(this.model, Model.class));
+		descriptors.add(new AssetDescriptor<>(this.texture, Texture.class, WandererConstants.MIPMAPS));
+		descriptors.add(new AssetDescriptor<>(this.fallSound, Sound3D.class));
+
+		for (final String s : this.steps) {
+			descriptors.add(new AssetDescriptor<>(s, Sound3D.class));
+		}
+
+		for (final String s : this.stepsSide) {
+			descriptors.add(new AssetDescriptor<>(s, Sound3D.class));
+		}
+	}
 
 	/**
 	 * @return the model
@@ -139,23 +156,6 @@ public class CharacterPrototype implements IPrototype {
 
 	public void setCapsuleHeight(final float capsuleHeight) {
 		this.capsuleHeight = capsuleHeight;
-	}
-
-	/**
-	 * Asynchronously loads the assets contained by this {@link CharacterPrototype}
-	 */
-	public void ensureLoading() {
-		WandererConstants.ASSET_MANAGER.load(this.model, Model.class);
-		WandererConstants.ASSET_MANAGER.load(this.texture, Texture.class, WandererConstants.MIPMAPS);
-		WandererConstants.ASSET_MANAGER.load(this.fallSound, Sound3D.class);
-
-		for (final String s : this.steps) {
-			WandererConstants.ASSET_MANAGER.load(s, Sound3D.class);
-		}
-
-		for (final String s : this.stepsSide) {
-			WandererConstants.ASSET_MANAGER.load(s, Sound3D.class);
-		}
 	}
 
 	@Override

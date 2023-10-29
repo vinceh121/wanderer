@@ -280,7 +280,6 @@ public class Wanderer extends ApplicationDelegate {
 		this.playerClan.addMember(island);
 
 		final CharacterPrototype johnPrototype = PrototypeRegistry.getInstance().get("goliath");
-		johnPrototype.ensureLoading();
 
 		final CharacterW john = new CharacterW(this, johnPrototype);
 		john.setSymbolicName("player");
