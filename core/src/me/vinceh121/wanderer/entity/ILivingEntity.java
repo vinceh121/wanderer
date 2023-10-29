@@ -17,6 +17,8 @@ public interface ILivingEntity {
 
 	void onDeath();
 
+	boolean isDead();
+
 	void setInvincible(boolean invincible);
 
 	boolean isInvincible();

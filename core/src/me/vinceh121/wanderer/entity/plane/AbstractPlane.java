@@ -165,6 +165,8 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 			part.addEventListener("collideModelLoaded", e -> part.thrust(10));
 			this.game.addEntity(part);
 		}
+
+		this.dead = true;
 	}
 
 	@Override

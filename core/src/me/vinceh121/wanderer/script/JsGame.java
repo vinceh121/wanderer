@@ -3,6 +3,7 @@ package me.vinceh121.wanderer.script;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +48,8 @@ public class JsGame {
 		JsUtils.install(scope, "getClanForMemeber", this.game::getClanForMember);
 		JsUtils.install(scope, "removeEntity", this.game::removeEntity);
 		JsUtils.install(scope, "findFirstEntityByClass", this.game::findFirstEntityByClass);
-		JsUtils.install(scope, "findEntitiesByClass", this.game::findEntitiesByClass);
+
+		JsUtils.install(scope, "findEntitiesByClass", this::findEntitiesByClass);
 
 		JsUtils.install(scope, "loadMapFragment", this::loadMapFragment);
 		JsUtils.install(scope, "setDayTime", this::setDayTime);
@@ -56,6 +58,11 @@ public class JsGame {
 		JsUtils.install(scope, "newv", this::newv);
 
 		JsUtils.install(scope, "debugAudio", this::debugAudio);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Stream<AbstractEntity> findEntitiesByClass(Class<? extends AbstractEntity> cls) {
+		return (Stream<AbstractEntity>) this.game.findEntitiesByClass(cls);
 	}
 
 	private void debugAudio() {

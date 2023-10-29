@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -43,6 +44,7 @@ import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.IControllableEntity;
+import me.vinceh121.wanderer.entity.ILivingEntity;
 import me.vinceh121.wanderer.entity.Prop;
 import me.vinceh121.wanderer.i18n.I18N;
 import me.vinceh121.wanderer.input.Input;
@@ -324,6 +326,8 @@ public class Wanderer extends ApplicationDelegate {
 		}
 
 		this.flushEntityQueue();
+		
+		this.controlledDeathTest();
 
 		for (int i = 0; i < this.entities.size; i++) {
 			final AbstractEntity entity = this.entities.get(i);
@@ -412,6 +416,19 @@ public class Wanderer extends ApplicationDelegate {
 		}
 
 		this.toAdd.clear();
+	}
+
+	protected void controlledDeathTest() {
+		if (this.controlledEntity instanceof ILivingEntity && ((ILivingEntity) this.controlledEntity).isDead()) {
+			final Optional<CharacterW> optChar =
+					findEntitiesByClass(CharacterW.class).filter(c -> c.getClan() == this.getPlayerClan()).findFirst();
+
+			if (optChar.isPresent()) {
+				this.controlEntity(optChar.get());
+			} else {
+				LOG.error("No player character to control back after death of controlled vehicle");
+			}
+		}
 	}
 
 	public void shakeCamera(float intensity, float time) {
@@ -627,10 +644,13 @@ public class Wanderer extends ApplicationDelegate {
 				if (c.getParameterTypes().length == 2 && c.getParameterTypes()[0] == Wanderer.class
 						&& IPrototype.class.isAssignableFrom(c.getParameterTypes()[1])) {
 					if (n.get("prototype") == null) {
-						Wanderer.LOG.error("Entity {} has constructor w/ prototype but save is missing prototype property", cls);
+						Wanderer.LOG.error(
+								"Entity {} has constructor w/ prototype but save is missing prototype property",
+								cls);
 						continue;
 					}
-					ent = (AbstractEntity) c.newInstance(this, PrototypeRegistry.getInstance().get(n.get("prototype").asText()));
+					ent = (AbstractEntity) c.newInstance(this,
+							PrototypeRegistry.getInstance().get(n.get("prototype").asText()));
 					break;
 				} else if (Arrays.equals(c.getParameterTypes(), new Class<?>[] { Wanderer.class })) {
 					ent = (AbstractEntity) c.newInstance(this);
@@ -786,14 +806,15 @@ public class Wanderer extends ApplicationDelegate {
 		return this.findEntitiesByClass(cls).findFirst().orElse(null);
 	}
 
-	public Stream<AbstractEntity> findEntitiesByClass(final Class<? extends AbstractEntity> cls) {
+	@SuppressWarnings("unchecked")
+	public <T extends AbstractEntity> Stream<T> findEntitiesByClass(final Class<T> cls) {
 		// This game of casts looks redundant but it's not!
 		// Using Stream.of(this.entities.items) causes a ClassCastException
 		// This is due to an implicit (AbtractEntity[]) this.entities.items added by the
 		// compiler that will always fail!
 		// GDX's Array<T>#items has a T[] type, which the compiler will always compile
 		// as Object[]
-		return Stream.of((Object[]) this.entities.items).filter(e -> cls.isInstance(e)).map(e -> (AbstractEntity) e);
+		return Stream.of((Object[]) this.entities.items).filter(e -> cls.isInstance(e)).map(e -> (T) e);
 	}
 
 	public void showMessage(final String message) {

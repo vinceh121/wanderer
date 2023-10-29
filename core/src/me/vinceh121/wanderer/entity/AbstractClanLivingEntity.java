@@ -16,6 +16,7 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	private float maxHealth = 1, health = 1;
 	private boolean invincible;
 	private Clan clan;
+	protected boolean dead;
 
 	public AbstractClanLivingEntity(final Wanderer game) {
 		super(game);
@@ -52,6 +53,11 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	public void setHealth(final float health) {
 		this.health = health;
 		this.checkDeath();
+	}
+
+	@Override
+	public boolean isDead() {
+		return this.dead;
 	}
 
 	@Override
