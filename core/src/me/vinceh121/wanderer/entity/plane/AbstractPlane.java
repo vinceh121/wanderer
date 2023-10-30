@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ClosestNotMeConvexResultCallback;
 import com.badlogic.gdx.physics.bullet.collision.btConvexShape;
@@ -21,6 +22,7 @@ import me.vinceh121.wanderer.input.InputListener;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
+import me.vinceh121.wanderer.util.MathUtilsW;
 
 public abstract class AbstractPlane extends AbstractClanLivingEntity implements IControllableEntity {
 	private static final long DOUBLE_TAP_SENSITIVITY = 500;
@@ -32,7 +34,8 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	private ColorAttribute colorAttr;
 	private BlendingAttribute blendingAttr;
 	private boolean controlled, isTurbo;
-	private float speedUpTime, maxTurboTime, turboTime;
+	private float speedUpTime, maxTurboTime, turboTime, yaw, pitch, roll, currentYawTime, currentPitchTime,
+			currentRollTime;
 	private long turboPressTime;
 
 	public AbstractPlane(Wanderer game, AbstractPlanePrototype prototype) {
@@ -93,6 +96,35 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 
 		final float speedUpProgress = this.speedUpTime / profile.getAcceleration();
 		final float speed = MathUtils.lerp(profile.getMinSpeed(), profile.getMaxSpeed(), speedUpProgress);
+
+		if (this.controlled) {
+			if (this.game.getInputManager().isPressed(Input.FLY_UP)) {
+				this.currentPitchTime = Math.min(this.currentPitchTime + delta, profile.getPitchSpeed());
+			} else if (this.game.getInputManager().isPressed(Input.FLY_DOWN)) {
+				this.currentPitchTime = Math.max(this.currentPitchTime - delta, -profile.getPitchSpeed());
+			} else {
+				this.currentPitchTime = 0;
+			}
+
+			if (this.game.getInputManager().isPressed(Input.FLY_LEFT)) {
+				this.currentRollTime = Math.min(this.currentRollTime + delta, profile.getRollTime());
+				this.currentYawTime = Math.min(this.currentYawTime + delta, profile.getYawSpeed());
+			} else if (this.game.getInputManager().isPressed(Input.FLY_RIGHT)) {
+				this.currentRollTime = Math.max(this.currentRollTime - delta, -profile.getRollTime());
+				this.currentYawTime = Math.max(this.currentYawTime - delta, -profile.getYawSpeed());
+			} else {
+				this.currentRollTime = 0;
+				this.currentYawTime = 0;
+				this.roll = 0;
+			}
+
+			this.yaw += this.currentYawTime;
+			this.pitch =
+					MathUtils.clamp(this.currentPitchTime + this.pitch, -profile.getMaxPitch(), profile.getMaxPitch());
+			this.roll = MathUtils.clamp(this.currentRollTime + this.roll, -profile.getMaxRoll(), profile.getMaxRoll());
+
+			MathUtilsW.setRotation(getTransform(), new Quaternion().setEulerAngles(this.yaw, this.pitch, this.roll));
+		}
 
 		this.advance(speed * delta);
 
@@ -173,6 +205,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 
 		this.game.getCamera().position.set(arm);
 		this.game.getCamera().lookAt(watch);
+		this.game.getCamera().up.set(0, 1, 0);
 	}
 
 	public abstract void fire();

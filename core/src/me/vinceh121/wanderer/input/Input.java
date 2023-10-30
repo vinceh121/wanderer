@@ -5,20 +5,29 @@ public enum Input {
 	WALK_BACKWARDS("Walk Backwards"),
 	WALK_LEFT("Walk Left"),
 	WALK_RIGHT("Walk Right"),
+
+	FLY_UP("Flying Up"),
+	FLY_DOWN("Flying Down"),
 	FLY_LEFT("Flying Left"),
 	FLY_RIGHT("Flying Right"),
 	FLY_BOOST("Flying Boost"),
+
 	FIRE("Fire"),
+
 	SWITCH_CONTROLLED_VEHICLE("Switch controlled vehicle"),
+
 	DEBUG_BULLET("Physics Debug"),
 	DEBUG_GLX("Graphics Debug"),
 	DEBUG_TIMESCALE("Toggle Timescale"),
 	DEBUG_AUDIO("Audio Debug"),
 	CURSOR_CAPTURE("Toggle cursor capture"),
+
 	PAUSE_MENU("Pause"),
 	SHOW_OBJECTIVES("Show objectives"),
+
 	SCROLL_BELT_LEFT("Scroll Belt Left"),
 	SCROLL_BELT_RIGHT("Scroll Belt Right"),
+
 	UI_VALIDATE("UI Validate"),
 	OPEN_BELT("Open Belt"),
 	JUMP("Jump"),

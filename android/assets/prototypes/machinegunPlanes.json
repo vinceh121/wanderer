@@ -9,13 +9,25 @@
 			"minSpeed": 40,
 			"maxSpeed": 70,
 			"acceleration": 3.5,
-			"decceleration": 5
+			"decceleration": 5,
+			"maxPitch": 70,
+			"pitchSpeed": 1.5,
+			"maxYaw": 127,
+			"yawSpeed": 0.8,
+			"maxRoll": 70,
+			"rollTime": 0.4
 		},
 		"turbo": {
 			"minSpeed": 400,
 			"maxSpeed": 400,
 			"acceleration": 2,
-			"decceleration": 5
+			"decceleration": 5,
+			"maxPitch": 70,
+			"pitchSpeed": 3.5,
+			"maxYaw": 80,
+			"yawSpeed": 3.5,
+			"maxRoll": 70,
+			"rollTime": 3.5
 		},
 		"displayModels": [
 			{
