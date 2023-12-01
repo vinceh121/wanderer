@@ -37,7 +37,8 @@ public class AttributeDeserializer extends StdDeserializer<Attribute> {
 	}
 
 	@Override
-	public Attribute deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JacksonException {
+	public Attribute deserialize(final JsonParser p, final DeserializationContext ctxt)
+			throws IOException, JacksonException {
 		final ObjectNode n = p.readValueAsTree();
 
 		final String clazz = n.get("@class").asText();

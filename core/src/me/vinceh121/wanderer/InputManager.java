@@ -86,7 +86,7 @@ public class InputManager extends ApplicationAdapter {
 		this.bindings.put(Input.WALK_BACKWARDS, new Binding(Keys.S, DeviceType.KEYBOARD));
 		this.bindings.put(Input.JUMP, new Binding(Keys.SPACE, DeviceType.KEYBOARD));
 		this.bindings.put(Input.JUMP, new Binding(Buttons.RIGHT, DeviceType.MOUSE));
-		
+
 		this.bindings.put(Input.FLY_RIGHT, new Binding(Keys.RIGHT, DeviceType.KEYBOARD));
 		this.bindings.put(Input.FLY_RIGHT, new Binding(Keys.D, DeviceType.KEYBOARD));
 		this.bindings.put(Input.FLY_LEFT, new Binding(Keys.LEFT, DeviceType.KEYBOARD));

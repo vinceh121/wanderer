@@ -45,15 +45,15 @@ public class OpenAL3DBuffer implements Sound3D {
 		throw new UnsupportedOperationException("OpenAL3DBuffer#play(volume, pitch, pan) is not implemented");
 	}
 
-	public SoundEmitter3D playSource(long context) {
+	public SoundEmitter3D playSource(final long context) {
 		try {
-			OpenAL3DSource src = new OpenAL3DSource(this.audio, context);
+			final OpenAL3DSource src = new OpenAL3DSource(this.audio, context);
 			src.setBuffer(this.buffer);
 			src.setMinDistance(10); // TODO figure out the best defaults
 			src.play();
 			OpenAL3DAudio.runtimeCheckOpenAlError();
 			return src;
-		} catch (OpenALException e) {
+		} catch (final OpenALException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -70,7 +70,7 @@ public class OpenAL3DBuffer implements Sound3D {
 
 	@Override
 	public SoundEmitter3D playSource3D(final float volume) {
-		SoundEmitter3D src = this.playSource3D();
+		final SoundEmitter3D src = this.playSource3D();
 		src.setGain(volume);
 		OpenAL3DAudio.runtimeCheckOpenAlError();
 		return src;
@@ -78,7 +78,7 @@ public class OpenAL3DBuffer implements Sound3D {
 
 	@Override
 	public SoundEmitter3D playSource3D(final float volume, final Vector3 position) {
-		SoundEmitter3D src = this.playSource3D(volume);
+		final SoundEmitter3D src = this.playSource3D(volume);
 		src.setPosition(position);
 		OpenAL3DAudio.runtimeCheckOpenAlError();
 		return src;
@@ -151,7 +151,7 @@ public class OpenAL3DBuffer implements Sound3D {
 
 	@Override
 	public boolean isDisposed() {
-		return disposed;
+		return this.disposed;
 	}
 
 	@Override
@@ -162,7 +162,7 @@ public class OpenAL3DBuffer implements Sound3D {
 			}
 			this.disposed = true;
 			this.audio.disposeBuffer(this.buffer);
-		} catch (OpenALException e) {
+		} catch (final OpenALException e) {
 			throw new RuntimeException(e);
 		}
 	}

@@ -12,7 +12,7 @@ public class I18N {
 	private static boolean passthrough = false;
 
 	public static String gettext(final String msgid) {
-		if (passthrough) {
+		if (I18N.passthrough) {
 			return msgid;
 		}
 
@@ -28,7 +28,7 @@ public class I18N {
 		I18N.STRINGS.clear();
 
 		if ("en_UK".equals(locale)) {
-			passthrough = true;
+			I18N.passthrough = true;
 			return;
 		}
 

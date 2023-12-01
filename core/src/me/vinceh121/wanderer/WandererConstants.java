@@ -45,21 +45,21 @@ public final class WandererConstants {
 	}
 
 	public static Model getAudioDebug() {
-		return getAssetOrHotload("audio-debug.glb", Model.class);
+		return WandererConstants.getAssetOrHotload("audio-debug.glb", Model.class);
 	}
 
 	public static Model getCircleDebug() {
-		return getAssetOrHotload("circle-debug.glb", Model.class);
+		return WandererConstants.getAssetOrHotload("circle-debug.glb", Model.class);
 	}
 
-	public static <T> T getAssetOrHotload(String path, Class<T> type) {
-		if (!ASSET_MANAGER.isLoaded(path, type)) {
-			ASSET_MANAGER.load(path, type);
-			LOG.warn("Hot loading asset {} of type {}", path, type);
-			ASSET_MANAGER.finishLoadingAsset(path);
+	public static <T> T getAssetOrHotload(final String path, final Class<T> type) {
+		if (!WandererConstants.ASSET_MANAGER.isLoaded(path, type)) {
+			WandererConstants.ASSET_MANAGER.load(path, type);
+			WandererConstants.LOG.warn("Hot loading asset {} of type {}", path, type);
+			WandererConstants.ASSET_MANAGER.finishLoadingAsset(path);
 		}
 
-		return ASSET_MANAGER.get(path, type);
+		return WandererConstants.ASSET_MANAGER.get(path, type);
 	}
 
 	static {

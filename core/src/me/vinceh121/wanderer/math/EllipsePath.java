@@ -12,55 +12,55 @@ public class EllipsePath extends Ellipse implements Path<Vector2> {
 	public EllipsePath() {
 	}
 
-	public EllipsePath(Circle circle) {
+	public EllipsePath(final Circle circle) {
 		super(circle);
 	}
 
-	public EllipsePath(Ellipse ellipse) {
+	public EllipsePath(final Ellipse ellipse) {
 		super(ellipse);
 	}
 
-	public EllipsePath(float x, float y, float width, float height) {
+	public EllipsePath(final float x, final float y, final float width, final float height) {
 		super(x, y, width, height);
 	}
 
-	public EllipsePath(Vector2 position, float width, float height) {
+	public EllipsePath(final Vector2 position, final float width, final float height) {
 		super(position, width, height);
 	}
 
-	public EllipsePath(Vector2 position, Vector2 size) {
+	public EllipsePath(final Vector2 position, final Vector2 size) {
 		super(position, size);
 	}
 
 	@Override
-	public Vector2 derivativeAt(Vector2 out, float t) {
+	public Vector2 derivativeAt(final Vector2 out, final float t) {
 		throw new UnsupportedOperationException("EllipsePath#derivativeAt(out, t) is not implemented");
 	}
 
 	@Override
-	public Vector2 valueAt(Vector2 out, float t) {
+	public Vector2 valueAt(final Vector2 out, final float t) {
 		final float rad = t * MathUtils.PI2;
 
 		return this.valueAtRad(out, rad);
 	}
 
-	public Vector2 valueAtRad(Vector2 out, float rad) {
+	public Vector2 valueAtRad(final Vector2 out, final float rad) {
 		out.set(this.width * MathUtils.cos(rad) + this.x, this.height * MathUtils.sin(rad) + this.y);
 		return out;
 	}
 
 	@Override
-	public float approximate(Vector2 v) {
+	public float approximate(final Vector2 v) {
 		throw new UnsupportedOperationException("EllipsePath#approximate(v) is not implemented");
 	}
 
 	@Override
-	public float locate(Vector2 v) {
+	public float locate(final Vector2 v) {
 		throw new UnsupportedOperationException("EllipsePath#locate(v) is not implemented");
 	}
 
 	@Override
-	public float approxLength(int samples) {
+	public float approxLength(final int samples) {
 		throw new UnsupportedOperationException("EllipsePath#approxLength(samples) is not implemented");
 	}
 

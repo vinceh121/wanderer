@@ -27,7 +27,7 @@ public class LauncherMain {
 		PnDarkLaf.setup();
 
 		if (Files.notExists(LauncherMain.getAssetsPath())) {
-			runWizard();
+			LauncherMain.runWizard();
 		}
 
 		final LauncherFrame frame = new LauncherFrame();
@@ -44,7 +44,7 @@ public class LauncherMain {
 						new FinishStep(ctx)));
 		wiz.setVisible(true);
 	}
-	
+
 	public static Path getAssetsPath() {
 		return Path.of(".", "assets");
 	}

@@ -8,7 +8,7 @@ public class PlaneSpeedProfile {
 	public PlaneSpeedProfile() {
 	}
 
-	public PlaneSpeedProfile(PlaneSpeedProfile from) {
+	public PlaneSpeedProfile(final PlaneSpeedProfile from) {
 		this.minSpeed = from.minSpeed;
 		this.maxSpeed = from.maxSpeed;
 		this.acceleration = from.acceleration;
@@ -22,82 +22,82 @@ public class PlaneSpeedProfile {
 	}
 
 	public float getMinSpeed() {
-		return minSpeed;
+		return this.minSpeed;
 	}
 
-	public void setMinSpeed(float minSpeed) {
+	public void setMinSpeed(final float minSpeed) {
 		this.minSpeed = minSpeed;
 	}
 
 	public float getMaxSpeed() {
-		return maxSpeed;
+		return this.maxSpeed;
 	}
 
-	public void setMaxSpeed(float maxSpeed) {
+	public void setMaxSpeed(final float maxSpeed) {
 		this.maxSpeed = maxSpeed;
 	}
 
 	public float getAcceleration() {
-		return acceleration;
+		return this.acceleration;
 	}
 
-	public void setAcceleration(float acceleration) {
+	public void setAcceleration(final float acceleration) {
 		this.acceleration = acceleration;
 	}
 
 	public float getDecceleration() {
-		return decceleration;
+		return this.decceleration;
 	}
 
-	public void setDecceleration(float decceleration) {
+	public void setDecceleration(final float decceleration) {
 		this.decceleration = decceleration;
 	}
 
 	public float getMaxPitch() {
-		return maxPitch;
+		return this.maxPitch;
 	}
 
-	public void setMaxPitch(float maxPitch) {
+	public void setMaxPitch(final float maxPitch) {
 		this.maxPitch = maxPitch;
 	}
 
 	public float getPitchSpeed() {
-		return pitchSpeed;
+		return this.pitchSpeed;
 	}
 
-	public void setPitchSpeed(float pitchSpeed) {
+	public void setPitchSpeed(final float pitchSpeed) {
 		this.pitchSpeed = pitchSpeed;
 	}
 
 	public float getMaxYaw() {
-		return maxYaw;
+		return this.maxYaw;
 	}
 
-	public void setMaxYaw(float maxYaw) {
+	public void setMaxYaw(final float maxYaw) {
 		this.maxYaw = maxYaw;
 	}
 
 	public float getYawSpeed() {
-		return yawSpeed;
+		return this.yawSpeed;
 	}
 
-	public void setYawSpeed(float yawSpeed) {
+	public void setYawSpeed(final float yawSpeed) {
 		this.yawSpeed = yawSpeed;
 	}
 
 	public float getMaxRoll() {
-		return maxRoll;
+		return this.maxRoll;
 	}
 
-	public void setMaxRoll(float maxRoll) {
+	public void setMaxRoll(final float maxRoll) {
 		this.maxRoll = maxRoll;
 	}
 
 	public float getRollTime() {
-		return rollTime;
+		return this.rollTime;
 	}
 
-	public void setRollTime(float rollTime) {
+	public void setRollTime(final float rollTime) {
 		this.rollTime = rollTime;
 	}
 }

@@ -22,7 +22,7 @@ public class CharacterPrototype implements IPrototype {
 	private float capsuleRadius = 0.5f, capsuleHeight = 1.5f;
 
 	@Override
-	public void getAssetsToLoad(List<AssetDescriptor<?>> descriptors) {
+	public void getAssetsToLoad(final List<AssetDescriptor<?>> descriptors) {
 		descriptors.add(new AssetDescriptor<>(this.model, Model.class));
 		descriptors.add(new AssetDescriptor<>(this.texture, Texture.class, WandererConstants.MIPMAPS));
 		descriptors.add(new AssetDescriptor<>(this.fallSound, Sound3D.class));
@@ -165,9 +165,9 @@ public class CharacterPrototype implements IPrototype {
 
 	@Override
 	public String toString() {
-		return "CharacterPrototype [name=" + name + ", model=" + model + ", texture=" + texture + ", fallSound="
-				+ fallSound + ", steps=" + Arrays.toString(steps) + ", stepsSide=" + Arrays.toString(stepsSide)
-				+ ", storyMode=" + storyMode + ", capsuleOffset=" + capsuleOffset + ", capsuleRadius=" + capsuleRadius
-				+ ", capsuleHeight=" + capsuleHeight + "]";
+		return "CharacterPrototype [name=" + this.name + ", model=" + this.model + ", texture=" + this.texture + ", fallSound="
+				+ this.fallSound + ", steps=" + Arrays.toString(this.steps) + ", stepsSide=" + Arrays.toString(this.stepsSide)
+				+ ", storyMode=" + this.storyMode + ", capsuleOffset=" + this.capsuleOffset + ", capsuleRadius=" + this.capsuleRadius
+				+ ", capsuleHeight=" + this.capsuleHeight + "]";
 	}
 }

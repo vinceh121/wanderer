@@ -28,7 +28,7 @@ public abstract class AbstractControllableBuilding extends AbstractBuilding impl
 	}
 
 	@Override
-	public void tick(float delta) {
+	public void tick(final float delta) {
 		super.tick(delta);
 
 		if (!this.controlled && this.aiController != null) {
@@ -51,10 +51,10 @@ public abstract class AbstractControllableBuilding extends AbstractBuilding impl
 	}
 
 	public AIController<?> getAiController() {
-		return aiController;
+		return this.aiController;
 	}
 
-	public void setAiController(AIController<?> aiController) {
+	public void setAiController(final AIController<?> aiController) {
 		this.aiController = aiController;
 	}
 }

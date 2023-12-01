@@ -36,21 +36,21 @@ public class FirstTimeWizardContext {
 		this.voice = voice;
 	}
 
-	public void onSetPreviousEnabled(Consumer<Boolean> setPreviousEnabled) {
+	public void onSetPreviousEnabled(final Consumer<Boolean> setPreviousEnabled) {
 		this.setPreviousEnabled = setPreviousEnabled;
 	}
 
-	public void setPreviousEnabled(boolean enabled) {
+	public void setPreviousEnabled(final boolean enabled) {
 		if (this.setPreviousEnabled != null) {
 			this.setPreviousEnabled.accept(enabled);
 		}
 	}
 
-	public void onSetNextEnabled(Consumer<Boolean> setNextEnabled) {
+	public void onSetNextEnabled(final Consumer<Boolean> setNextEnabled) {
 		this.setNextEnabled = setNextEnabled;
 	}
-	
-	public void setNextEnabled(boolean enabled) {
+
+	public void setNextEnabled(final boolean enabled) {
 		if (this.setNextEnabled != null) {
 			this.setNextEnabled.accept(enabled);
 		}

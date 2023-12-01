@@ -6,7 +6,7 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 public class MachineGunPlanePrototype extends AbstractPlanePrototype {
 
 	@Override
-	public AbstractEntity create(Wanderer game) {
+	public AbstractEntity create(final Wanderer game) {
 		return new MachineGunPlane(game, this);
 	}
 }

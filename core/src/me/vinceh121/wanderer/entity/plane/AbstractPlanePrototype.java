@@ -19,7 +19,7 @@ public abstract class AbstractPlanePrototype implements IPrototype {
 	private float maxTurboTime;
 
 	@Override
-	public void getAssetsToLoad(List<AssetDescriptor<?>> descriptors) {
+	public void getAssetsToLoad(final List<AssetDescriptor<?>> descriptors) {
 		descriptors.add(new AssetDescriptor<>(this.collisionModel, Model.class));
 
 		descriptors.add(new AssetDescriptor<>(this.engineSound, Sound3D.class));
@@ -38,50 +38,50 @@ public abstract class AbstractPlanePrototype implements IPrototype {
 	}
 
 	public Array<DisplayModel> getDisplayModels() {
-		return displayModels;
+		return this.displayModels;
 	}
 
-	public void setDisplayModels(Array<DisplayModel> displayModels) {
+	public void setDisplayModels(final Array<DisplayModel> displayModels) {
 		this.displayModels = displayModels;
 	}
 
 	public Array<DisplayModel> getExplosionParts() {
-		return explosionParts;
+		return this.explosionParts;
 	}
 
-	public void setExplosionParts(Array<DisplayModel> explosionParts) {
+	public void setExplosionParts(final Array<DisplayModel> explosionParts) {
 		this.explosionParts = explosionParts;
 	}
 
 	public String getCollisionModel() {
-		return collisionModel;
+		return this.collisionModel;
 	}
 
-	public void setCollisionModel(String collisionModel) {
+	public void setCollisionModel(final String collisionModel) {
 		this.collisionModel = collisionModel;
 	}
 
 	public String getEngineSound() {
-		return engineSound;
+		return this.engineSound;
 	}
 
-	public void setEngineSound(String engineSound) {
+	public void setEngineSound(final String engineSound) {
 		this.engineSound = engineSound;
 	}
 
 	public String getTurboSound() {
-		return turboSound;
+		return this.turboSound;
 	}
 
-	public void setTurboSound(String turboSound) {
+	public void setTurboSound(final String turboSound) {
 		this.turboSound = turboSound;
 	}
 
 	public String getExplosionSound() {
-		return explosionSound;
+		return this.explosionSound;
 	}
 
-	public void setExplosionSound(String explosionSound) {
+	public void setExplosionSound(final String explosionSound) {
 		this.explosionSound = explosionSound;
 	}
 
@@ -94,10 +94,10 @@ public abstract class AbstractPlanePrototype implements IPrototype {
 	}
 
 	public float getMaxTurboTime() {
-		return maxTurboTime;
+		return this.maxTurboTime;
 	}
 
-	public void setMaxTurboTime(float maxTurboTime) {
+	public void setMaxTurboTime(final float maxTurboTime) {
 		this.maxTurboTime = maxTurboTime;
 	}
 }

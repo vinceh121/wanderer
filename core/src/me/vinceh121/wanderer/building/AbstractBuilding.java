@@ -43,8 +43,8 @@ public abstract class AbstractBuilding extends AbstractClanLivingEntity {
 		}
 
 		this.interactZone = new btGhostObject();
-		this.interactZone
-			.setCollisionShape(new btCapsuleShape(prototype.getInteractZoneRadius(), prototype.getInteractZoneHeight()));
+		this.interactZone.setCollisionShape(
+				new btCapsuleShape(prototype.getInteractZoneRadius(), prototype.getInteractZoneHeight()));
 		this.interactZone.setCollisionFlags(CollisionFlags.CF_NO_CONTACT_RESPONSE);
 		this.interactListener = new ContactListenerAdapter() {
 			@Override

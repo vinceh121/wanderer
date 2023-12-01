@@ -38,28 +38,28 @@ public class LauncherFrame extends JFrame {
 		btnStart.addActionListener(e -> this.start());
 		this.add(btnStart);
 
-		JMenuBar menu = new JMenuBar();
+		final JMenuBar menu = new JMenuBar();
 		this.setJMenuBar(menu);
 
-		JMenu mnHelp = new JMenu("Help");
+		final JMenu mnHelp = new JMenu("Help");
 		menu.add(mnHelp);
 
-		JMenuItem mntRerunWizard = new JMenuItem("Rerun installation wizard");
+		final JMenuItem mntRerunWizard = new JMenuItem("Rerun installation wizard");
 		mntRerunWizard.addActionListener(e -> LauncherMain.runWizard());
 		mnHelp.add(mntRerunWizard);
 
-		JMenuItem mntInstallDetails = new JMenuItem("Installation details");
+		final JMenuItem mntInstallDetails = new JMenuItem("Installation details");
 		mntInstallDetails.addActionListener(e -> {
 			try {
 				new InstallationInformationDialog().setVisible(true);
-			} catch (IOException e1) {
-				LOG.error("Error loading installation details", e1);
+			} catch (final IOException e1) {
+				LauncherFrame.LOG.error("Error loading installation details", e1);
 				JOptionPane.showMessageDialog(null, "Error loading installation details " + e1);
 			}
 		});
 		mnHelp.add(mntInstallDetails);
 
-		JMenuItem mntAbout = new JMenuItem("About");
+		final JMenuItem mntAbout = new JMenuItem("About");
 		mntAbout.addActionListener(e -> new AboutDialog().setVisible(true));
 		mnHelp.add(mntAbout);
 	}
@@ -95,32 +95,32 @@ public class LauncherFrame extends JFrame {
 					throw new IllegalStateException("Don't know how to fetch Java execultable for your OS");
 				}
 
-				Process proc = Runtime.getRuntime()
+				final Process proc = Runtime.getRuntime()
 					.exec(new String[] { java.toAbsolutePath().toString(), "-jar", "desktop.jar" });
 
 				new Thread(() -> {
 					try {
 						proc.getInputStream().transferTo(System.out);
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						e.printStackTrace();
 					}
 				}).start();
 				new Thread(() -> {
 					try {
 						proc.getErrorStream().transferTo(System.err);
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						e.printStackTrace();
 					}
 				}).start();
 
 				proc.waitFor();
-			} catch (Throwable t) {
-				LOG.error("Unexpected error", t);
+			} catch (final Throwable t) {
+				LauncherFrame.LOG.error("Unexpected error", t);
 				JOptionPane.showMessageDialog(null, "Unexpected error in Wanderer: " + t);
 			}
 			this.started = false;
 			this.setVisible(true);
-			LOG.info("Wanderer terminated");
+			LauncherFrame.LOG.info("Wanderer terminated");
 		}, "MainGameThread").start();
 	}
 }

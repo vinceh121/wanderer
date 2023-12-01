@@ -7,7 +7,7 @@ public abstract class AIController<T extends IControllableEntity> {
 	protected final Wanderer game;
 	protected final T target;
 
-	public AIController(Wanderer game, T target) {
+	public AIController(final Wanderer game, final T target) {
 		this.game = game;
 		this.target = target;
 	}

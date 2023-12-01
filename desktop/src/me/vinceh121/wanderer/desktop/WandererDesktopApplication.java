@@ -11,7 +11,7 @@ import me.vinceh121.wanderer.desktop.audio.OpenALException;
 
 public class WandererDesktopApplication extends Lwjgl3Application {
 
-	public WandererDesktopApplication(ApplicationListener listener, Lwjgl3ApplicationConfiguration config) {
+	public WandererDesktopApplication(final ApplicationListener listener, final Lwjgl3ApplicationConfiguration config) {
 		super(listener, config);
 		// the loop starts in the constructor, so we have to hijack createAudio or
 		// another setup method in order to override certain behavior
@@ -29,7 +29,7 @@ public class WandererDesktopApplication extends Lwjgl3Application {
 	}
 
 	@Override
-	public Preferences getPreferences(String name) {
+	public Preferences getPreferences(final String name) {
 		throw new UnsupportedOperationException("Use Preferences class with Nightconfig instead of GDX's preferences");
 	}
 }

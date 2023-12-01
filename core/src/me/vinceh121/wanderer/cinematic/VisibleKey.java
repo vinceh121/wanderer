@@ -12,7 +12,8 @@ public class VisibleKey extends ActionKeyFrame {
 	}
 
 	@Override
-	public void action(final Wanderer game, final CinematicController controller, final AbstractEntity target, final float time) {
+	public void action(final Wanderer game, final CinematicController controller, final AbstractEntity target,
+			final float time) {
 		target.setInvisible(false);
 	}
 }

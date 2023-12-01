@@ -34,7 +34,8 @@ public class Matrix4Serializer extends StdSerializer<Matrix4> {
 		typeSer.writeTypeSuffix(gen, typeIdDef);
 	}
 
-	private void writeContent(final Matrix4 value, final JsonGenerator gen, final SerializerProvider provider) throws IOException {
+	private void writeContent(final Matrix4 value, final JsonGenerator gen, final SerializerProvider provider)
+			throws IOException {
 		for (final float f : value.val) {
 			gen.writeNumber(f);
 		}

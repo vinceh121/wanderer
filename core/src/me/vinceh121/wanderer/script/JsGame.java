@@ -61,7 +61,7 @@ public class JsGame {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Stream<AbstractEntity> findEntitiesByClass(Class<? extends AbstractEntity> cls) {
+	private Stream<AbstractEntity> findEntitiesByClass(final Class<? extends AbstractEntity> cls) {
 		return (Stream<AbstractEntity>) this.game.findEntitiesByClass(cls);
 	}
 
@@ -87,9 +87,9 @@ public class JsGame {
 			return null;
 		}
 
-		AbstractEntity controlled = (AbstractEntity) this.game.getControlledEntity();
+		final AbstractEntity controlled = (AbstractEntity) this.game.getControlledEntity();
 
-		List<AbstractEntity> entities = new ArrayList<>(count);
+		final List<AbstractEntity> entities = new ArrayList<>(count);
 
 		for (int i = 0; i < count; i++) {
 			final AbstractEntity entity;

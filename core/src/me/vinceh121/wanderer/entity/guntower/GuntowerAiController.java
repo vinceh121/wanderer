@@ -17,12 +17,12 @@ public class GuntowerAiController extends AIController<AbstractGuntower> {
 	private final List<String> priorities = new ArrayList<>();
 	private float range = 500, turnSpeed = 3;
 
-	public GuntowerAiController(Wanderer game, AbstractGuntower target) {
+	public GuntowerAiController(final Wanderer game, final AbstractGuntower target) {
 		super(game, target);
 	}
 
 	@Override
-	public void tick(float delta) {
+	public void tick(final float delta) {
 		final Queue<AbstractEntity> around = new PriorityQueue<>((e1, e2) -> {
 			final int typeCmp = Integer.compare(this.priorities.indexOf(e1.getClass().getCanonicalName()),
 					this.priorities.indexOf(e2.getClass().getCanonicalName()));
@@ -44,12 +44,12 @@ public class GuntowerAiController extends AIController<AbstractGuntower> {
 				minDist = dist;
 			}
 
-			if (e != this.target && priorities.contains(e.getClass().getCanonicalName())) {
+			if (e != this.target && this.priorities.contains(e.getClass().getCanonicalName())) {
 				around.add(e);
 			}
 		}
 
-		if (minDist > range || around.size() == 0) {
+		if (minDist > this.range || around.size() == 0) {
 			return;
 		}
 
@@ -66,8 +66,8 @@ public class GuntowerAiController extends AIController<AbstractGuntower> {
 		final float polar = MathUtilsW.getSphericalPolar(newDir.z);
 		final float azimuth = MathUtilsW.getSphericalAzimuth(newDir.x, newDir.y);
 
-		this.target.setPolarAngle(1 - (polar / MathUtils.PI));
-		this.target.setAzimuth(1 - (azimuth / MathUtils.PI2));
+		this.target.setPolarAngle(1 - polar / MathUtils.PI);
+		this.target.setAzimuth(1 - azimuth / MathUtils.PI2);
 
 		final float angle = this.target.getLookDirection().dot(closestDir);
 

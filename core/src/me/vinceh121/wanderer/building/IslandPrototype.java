@@ -88,7 +88,7 @@ public class IslandPrototype implements IPrototype {
 	}
 
 	@Override
-	public void getAssetsToLoad(List<AssetDescriptor<?>> descriptors) {
+	public void getAssetsToLoad(final List<AssetDescriptor<?>> descriptors) {
 		descriptors.add(new AssetDescriptor<>(this.collisionModel, Model.class));
 
 		for (final DisplayModel mdl : DisplayModel.flattenModels(this.displayModels)) {

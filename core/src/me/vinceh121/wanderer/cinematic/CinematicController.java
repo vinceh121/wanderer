@@ -149,8 +149,8 @@ public class CinematicController {
 			.max(Float::compareTo)
 			.get();
 
-		this.hasCamera =
-				this.cinematicDatas.stream().anyMatch(data -> CinematicController.CAMERA_SYMBOLIC_NAME.equals(data.getSymbolicName()));
+		this.hasCamera = this.cinematicDatas.stream()
+			.anyMatch(data -> CinematicController.CAMERA_SYMBOLIC_NAME.equals(data.getSymbolicName()));
 	}
 
 	public void reset() {

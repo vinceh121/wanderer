@@ -24,17 +24,17 @@ public class DesktopLauncher {
 
 	public static void main(final String[] args) {
 		try {
-			main0(args);
+			DesktopLauncher.main0(args);
 		} catch (final Throwable t) {
-			LOG.error("Unhandled error", t);
+			DesktopLauncher.LOG.error("Unhandled error", t);
 			System.exit(-1);
 		}
 	}
 
 	private static void main0(final String[] args) {
-		final Path configPath = getConfigPath();
+		final Path configPath = DesktopLauncher.getConfigPath();
 		if (configPath == null) {
-			LOG.error("Could not find proper config file path");
+			DesktopLauncher.LOG.error("Could not find proper config file path");
 			Preferences.loadInMemory();
 		} else {
 			Preferences.loadPreferences(configPath);
@@ -45,7 +45,7 @@ public class DesktopLauncher {
 		try {
 			I18N.load(prefs.getOrElse("locale.ui", "en_UK"));
 		} catch (final IOException e) {
-			LOG.error("Failed to load UI locale", e);
+			DesktopLauncher.LOG.error("Failed to load UI locale", e);
 		}
 
 		final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -60,23 +60,23 @@ public class DesktopLauncher {
 		if (prefs.get("graphics.monitor") instanceof Integer) {
 			config.setWindowedMode(512, 512);
 		} else if (prefs.contains("graphics.monitor")) {
-			Monitor monitor = getMonitor(prefs.<String>get("graphics.monitor"));
-			config.setFullscreenMode(getDisplayMode(monitor, prefs.<String>get("graphics.resolution")));
+			final Monitor monitor = DesktopLauncher.getMonitor(prefs.<String>get("graphics.monitor"));
+			config.setFullscreenMode(DesktopLauncher.getDisplayMode(monitor, prefs.<String>get("graphics.resolution")));
 		}
 
-		ApplicationMultiplexer multiplexer = new ApplicationMultiplexer();
+		final ApplicationMultiplexer multiplexer = new ApplicationMultiplexer();
 		multiplexer.setDelegate(new MainMenu(multiplexer));
 		new WandererDesktopApplication(multiplexer, config);
 	}
 
-	private static Monitor getMonitor(String name) { // FIXME duplicate code with GraphicsUtilities
+	private static Monitor getMonitor(final String name) { // FIXME duplicate code with GraphicsUtilities
 		return Arrays.stream(Lwjgl3ApplicationConfiguration.getMonitors())
 			.filter(m -> name.equals(m.name))
 			.findFirst()
 			.orElse(null);
 	}
 
-	private static DisplayMode getDisplayMode(Monitor monitor, String displayMode) { // FIXME duplicate code with
+	private static DisplayMode getDisplayMode(final Monitor monitor, final String displayMode) { // FIXME duplicate code with
 																						// GraphicsUtilities
 		return Arrays.stream(Lwjgl3ApplicationConfiguration.getDisplayModes(monitor))
 			.filter(d -> displayMode.equals(d.toString()))

@@ -103,7 +103,7 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 		this.animateParts("setLookRot", t -> t.set(t.getTranslation(new Vector3()), rot));
 		this.animateParts("platterRot",
 				t -> MathUtilsW.setRotation(t,
-						new Quaternion().setFromAxisRad(Vector3.Y, (1 - azimuth - 0.25f) * MathUtils.PI2)));
+						new Quaternion().setFromAxisRad(Vector3.Y, (1 - this.azimuth - 0.25f) * MathUtils.PI2)));
 
 		if (this.isControlled() && this.game.getInputManager().isPressed(Input.FIRE)) {
 			this.fire();
@@ -145,7 +145,7 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	}
 
 	@Override
-	public void writeState(ObjectNode node) {
+	public void writeState(final ObjectNode node) {
 		super.writeState(node);
 
 		node.put("azimuth", this.getAzimuth());
@@ -153,7 +153,7 @@ public abstract class AbstractGuntower extends AbstractControllableBuilding {
 	}
 
 	@Override
-	public void readState(ObjectNode node) {
+	public void readState(final ObjectNode node) {
 		super.readState(node);
 
 		this.setAzimuth(node.get("azimuth").floatValue());

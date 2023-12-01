@@ -39,7 +39,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 			currentRollTime;
 	private long turboPressTime;
 
-	public AbstractPlane(Wanderer game, AbstractPlanePrototype prototype) {
+	public AbstractPlane(final Wanderer game, final AbstractPlanePrototype prototype) {
 		super(game);
 
 		this.setExactCollideModel(false);
@@ -128,7 +128,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 					MathUtils.clamp(this.currentPitchTime + this.pitch, -profile.getMaxPitch(), profile.getMaxPitch());
 			this.roll = MathUtils.clamp(this.currentRollTime + this.roll, -profile.getMaxRoll(), profile.getMaxRoll());
 
-			MathUtilsW.setRotation(getTransform(), new Quaternion().setEulerAngles(this.yaw, this.pitch, this.roll));
+			MathUtilsW.setRotation(this.getTransform(), new Quaternion().setEulerAngles(this.yaw, this.pitch, this.roll));
 		}
 
 		this.advance(speed * delta);
@@ -142,7 +142,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		}
 	}
 
-	protected void advance(float dist) {
+	protected void advance(final float dist) {
 		if (this.getCollideObject() != null) {
 			final Matrix4 start = this.getTransform();
 			final Vector3 startVec = start.getTranslation(new Vector3());
@@ -152,7 +152,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 			final Vector3 endVec = end.getTranslation(new Vector3());
 
 			final ClosestNotMeConvexResultCallback cb =
-					new ClosestNotMeConvexResultCallback(getCollideObject(), startVec, endVec);
+					new ClosestNotMeConvexResultCallback(this.getCollideObject(), startVec, endVec);
 
 			this.game.getBtWorld()
 				.convexSweepTest((btConvexShape) this.getCollideObject().getCollisionShape(), start, end, cb);
@@ -228,7 +228,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		}
 
 		WandererConstants.getAssetOrHotload(this.explosionSound, Sound3D.class)
-			.playSource3D(1, getTranslation())
+			.playSource3D(1, this.getTranslation())
 			.setDisposeOnStop(true);
 
 		this.dead = true;
@@ -247,13 +247,13 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	public InputListener createInputProcessor() {
 		return new InputListenerAdapter(50) {
 			@Override
-			public boolean inputDown(Input in) {
+			public boolean inputDown(final Input in) {
 				if (in == Input.FLY_BOOST) {
-					if (System.currentTimeMillis() - turboPressTime < DOUBLE_TAP_SENSITIVITY) {
-						turbo();
+					if (System.currentTimeMillis() - AbstractPlane.this.turboPressTime < AbstractPlane.DOUBLE_TAP_SENSITIVITY) {
+						AbstractPlane.this.turbo();
 					}
 
-					turboPressTime = System.currentTimeMillis();
+					AbstractPlane.this.turboPressTime = System.currentTimeMillis();
 					return true;
 				}
 

@@ -56,8 +56,8 @@ public abstract class ArtifactPrototype implements IPrototype {
 	}
 
 	@Override
-	public void getAssetsToLoad(List<AssetDescriptor<?>> descriptors) {
-		descriptors.add(new AssetDescriptor<>(artifactModel, Model.class));
-		descriptors.add(new AssetDescriptor<>(artifactTexture, Texture.class));
+	public void getAssetsToLoad(final List<AssetDescriptor<?>> descriptors) {
+		descriptors.add(new AssetDescriptor<>(this.artifactModel, Model.class));
+		descriptors.add(new AssetDescriptor<>(this.artifactTexture, Texture.class));
 	}
 }

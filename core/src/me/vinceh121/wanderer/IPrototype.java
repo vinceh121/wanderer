@@ -16,6 +16,6 @@ public interface IPrototype {
 	 * @return A new instance of the entity
 	 */
 	AbstractEntity create(Wanderer game);
-	
+
 	void getAssetsToLoad(List<AssetDescriptor<?>> descriptors);
 }

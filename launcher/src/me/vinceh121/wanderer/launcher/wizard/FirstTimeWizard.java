@@ -52,8 +52,8 @@ public class FirstTimeWizard extends JDialog {
 
 		this.addWindowListener(new WindowAdapter() {
 			@Override
-			public void windowClosing(WindowEvent e) {
-				int res = JOptionPane.showConfirmDialog(null,
+			public void windowClosing(final WindowEvent e) {
+				final int res = JOptionPane.showConfirmDialog(null,
 						"Are you sure you want to cancel the ongoing installation?",
 						"Cancel confirmation",
 						JOptionPane.YES_NO_OPTION,

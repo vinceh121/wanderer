@@ -107,7 +107,7 @@ public class MachineGunGuntower extends AbstractGuntower {
 	}
 
 	@Override
-	public void render(ModelBatch batch, Environment env) {
+	public void render(final ModelBatch batch, final Environment env) {
 		super.render(batch, env);
 
 		if (this.barrelSpinSpeed != 0) {
@@ -118,7 +118,7 @@ public class MachineGunGuntower extends AbstractGuntower {
 
 	@Override
 	public Vector3 getAverageTurretPosition() {
-		final List<Vector3> pos = new ArrayList<Vector3>(this.turrets.size);
+		final List<Vector3> pos = new ArrayList<>(this.turrets.size);
 
 		for (int i = 0; i < this.turrets.size; i++) {
 			pos.add(this.turrets.get(i).getRelativeTransform().getTranslation(new Vector3()));

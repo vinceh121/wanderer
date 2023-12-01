@@ -8,23 +8,23 @@ public class ExternalDownload {
 	private String outPath;
 
 	public String getUrl() {
-		return url;
+		return this.url;
 	}
 
-	public void setUrl(String url) {
+	public void setUrl(final String url) {
 		this.url = url;
 	}
 
 	public String getOutPath() {
-		return outPath;
+		return this.outPath;
 	}
 
-	public void setOutPath(String outPath) {
+	public void setOutPath(final String outPath) {
 		this.outPath = outPath;
 	}
 
 	@Override
 	public String toString() {
-		return "ExternalDownload [url=" + url + ", outPath=" + outPath + "]";
+		return "ExternalDownload [url=" + this.url + ", outPath=" + this.outPath + "]";
 	}
 }

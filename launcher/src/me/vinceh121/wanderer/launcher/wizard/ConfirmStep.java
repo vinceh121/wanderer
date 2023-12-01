@@ -61,8 +61,8 @@ public class ConfirmStep extends AbstractWizardStep {
 		protected Void doInBackground() throws Exception {
 			try {
 				this.doInBackground0();
-			} catch (Exception e) {
-				LOG.error("Error while checking localization", e);
+			} catch (final Exception e) {
+				ConfirmStep.LOG.error("Error while checking localization", e);
 				JOptionPane.showMessageDialog(null, "Error while checking localization: " + e);
 			}
 			return null;
@@ -87,8 +87,8 @@ public class ConfirmStep extends AbstractWizardStep {
 			final String voiceHash = ConfirmStep.fileSha256Sum(ConfirmStep.this.ctx.getDataPath()
 				.resolveSibling(Path.of("book", "chapter00", "part01", "sound", "c00p01spr01.wav")));
 
-			ctx.setData(dataSums.get(dataHash));
-			ctx.setVoice(voiceSums.get(voiceHash));
+			ConfirmStep.this.ctx.setData(dataSums.get(dataHash));
+			ConfirmStep.this.ctx.setVoice(voiceSums.get(voiceHash));
 
 			return null;
 		}

@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 
 import com.badlogic.gdx.math.Vector3;
@@ -24,26 +26,26 @@ public class OpenAL3DSource implements SoundEmitter3D {
 		this.audio = audio;
 		this.context = context;
 		OpenAL3DAudio.checkOpenALError();
-		setContext();
-		this.source = alGenSources();
+		this.setContext();
+		this.source = AL10.alGenSources();
 		this.audio.registerSource(this);
 		OpenAL3DAudio.checkOpenALError();
 	}
 
 	@Override
 	public Vector3 getPosition() {
-		setContext();
+		this.setContext();
 		final float[] x = new float[1];
 		final float[] y = new float[1];
 		final float[] z = new float[1];
-		alGetSource3f(this.source, AL_POSITION, x, y, z);
+		AL10.alGetSource3f(this.source, AL10.AL_POSITION, x, y, z);
 		return new Vector3(x[0], y[0], z[0]);
 	}
 
 	@Override
 	public void setPosition(final Vector3 pos) {
-		setContext();
-		alSource3f(this.source, AL_POSITION, pos.x, pos.y, pos.z);
+		this.setContext();
+		AL10.alSource3f(this.source, AL10.AL_POSITION, pos.x, pos.y, pos.z);
 	}
 
 	@Override
@@ -52,157 +54,157 @@ public class OpenAL3DSource implements SoundEmitter3D {
 	}
 
 	@Override
-	public void setRelativePosition(Vector3 from) {
+	public void setRelativePosition(final Vector3 from) {
 		this.relativePosition.set(from);
 	}
 
 	@Override
-	public void setRelativePosition(float x, float y, float z) {
+	public void setRelativePosition(final float x, final float y, final float z) {
 		this.relativePosition.set(x, y, z);
 	}
 
 	@Override
 	public Vector3 getVelocity() {
-		setContext();
+		this.setContext();
 		final float[] x = new float[1];
 		final float[] y = new float[1];
 		final float[] z = new float[1];
-		alGetSource3f(this.source, AL_VELOCITY, x, y, z);
+		AL10.alGetSource3f(this.source, AL10.AL_VELOCITY, x, y, z);
 		return new Vector3(x[0], y[0], z[0]);
 	}
 
 	@Override
 	public void setVelocity(final Vector3 vel) {
-		setContext();
-		alSource3f(this.source, AL_VELOCITY, vel.x, vel.y, vel.z);
+		this.setContext();
+		AL10.alSource3f(this.source, AL10.AL_VELOCITY, vel.x, vel.y, vel.z);
 	}
 
 	@Override
 	public boolean isLooping() {
-		setContext();
-		return alGetSourcei(this.source, AL_LOOPING) == AL_TRUE;
+		this.setContext();
+		return AL10.alGetSourcei(this.source, AL10.AL_LOOPING) == AL10.AL_TRUE;
 	}
 
 	@Override
 	public void setLooping(final boolean loop) {
-		setContext();
-		alSourcei(this.source, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
+		this.setContext();
+		AL10.alSourcei(this.source, AL10.AL_LOOPING, loop ? AL10.AL_TRUE : AL10.AL_FALSE);
 	}
 
 	@Override
 	public float getGain() {
-		setContext();
-		return alGetSourcef(this.source, AL_GAIN);
+		this.setContext();
+		return AL10.alGetSourcef(this.source, AL10.AL_GAIN);
 	}
 
 	@Override
 	public void setGain(final float gain) {
-		setContext();
-		alSourcef(this.source, AL_GAIN, gain);
+		this.setContext();
+		AL10.alSourcef(this.source, AL10.AL_GAIN, gain);
 	}
 
 	@Override
 	public int getBuffer() {
-		setContext();
-		return alGetSourcei(this.source, AL_BUFFER);
+		this.setContext();
+		return AL10.alGetSourcei(this.source, AL10.AL_BUFFER);
 	}
 
 	@Override
-	public void setBuffer(int buffer) {
-		setContext();
-		alSourcei(this.source, AL_BUFFER, buffer);
+	public void setBuffer(final int buffer) {
+		this.setContext();
+		AL10.alSourcei(this.source, AL10.AL_BUFFER, buffer);
 	}
 
 	@Override
 	public float[] getOrientation() {
-		setContext();
+		this.setContext();
 		final float[] orientation = new float[6];
-		alGetSourcefv(this.source, AL_VELOCITY, orientation);
+		AL10.alGetSourcefv(this.source, AL10.AL_VELOCITY, orientation);
 		return orientation;
 	}
 
 	@Override
 	public void setOrientation(final Vector3 at, final Vector3 up) {
-		setContext();
-		alSourcefv(this.source, AL_ORIENTATION, new float[] { at.x, at.y, at.z, up.x, up.y, up.z });
+		this.setContext();
+		AL10.alSourcefv(this.source, AL10.AL_ORIENTATION, new float[] { at.x, at.y, at.z, up.x, up.y, up.z });
 	}
 
 	@Override
 	public boolean isPlaying() {
-		setContext();
-		return alGetSourcei(this.source, AL_SOURCE_STATE) == AL_PLAYING;
+		this.setContext();
+		return AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
 	}
 
 	@Override
 	public boolean isStopped() {
-		setContext();
-		return alGetSourcei(this.source, AL_SOURCE_STATE) == AL_STOPPED;
+		this.setContext();
+		return AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) == AL10.AL_STOPPED;
 	}
 
 	@Override
 	public boolean isPaused() {
-		setContext();
-		return alGetSourcei(this.source, AL_SOURCE_STATE) == AL_PAUSED;
+		this.setContext();
+		return AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) == AL10.AL_PAUSED;
 	}
 
 	@Override
 	public void play() {
-		setContext();
-		alSourcePlay(this.source);
+		this.setContext();
+		AL10.alSourcePlay(this.source);
 	}
 
 	@Override
 	public void pause() {
-		setContext();
-		alSourcePause(this.source);
+		this.setContext();
+		AL10.alSourcePause(this.source);
 	}
 
 	@Override
 	public void stop() {
-		setContext();
-		alSourceStop(this.source);
+		this.setContext();
+		AL10.alSourceStop(this.source);
 	}
 
 	@Override
 	public void rewind() {
-		setContext();
-		alSourceRewind(this.source);
+		this.setContext();
+		AL10.alSourceRewind(this.source);
 	}
 
 	@Override
-	public void setPitch(float pitch) {
-		setContext();
-		alSourcef(this.source, AL_PITCH, pitch);
+	public void setPitch(final float pitch) {
+		this.setContext();
+		AL10.alSourcef(this.source, AL10.AL_PITCH, pitch);
 	}
 
 	@Override
 	public float getPitch() {
-		setContext();
-		return alGetSourcef(this.source, AL_PITCH);
+		this.setContext();
+		return AL10.alGetSourcef(this.source, AL10.AL_PITCH);
 	}
 
 	@Override
-	public void setMaxDistance(float dist) {
-		setContext();
-		alSourcef(this.source, AL_MAX_DISTANCE, dist);
+	public void setMaxDistance(final float dist) {
+		this.setContext();
+		AL10.alSourcef(this.source, AL10.AL_MAX_DISTANCE, dist);
 	}
 
 	@Override
 	public float getMaxDistnace() {
-		setContext();
-		return alGetSourcef(this.source, AL_MAX_DISTANCE);
+		this.setContext();
+		return AL10.alGetSourcef(this.source, AL10.AL_MAX_DISTANCE);
 	}
 
 	@Override
-	public void setMinDistance(float dist) {
-		setContext();
-		alSourcef(this.source, AL_REFERENCE_DISTANCE, dist);
+	public void setMinDistance(final float dist) {
+		this.setContext();
+		AL10.alSourcef(this.source, AL10.AL_REFERENCE_DISTANCE, dist);
 	}
 
 	@Override
 	public float getMinDistance() {
-		setContext();
-		return alGetSourcef(this.source, AL_REFERENCE_DISTANCE);
+		this.setContext();
+		return AL10.alGetSourcef(this.source, AL10.AL_REFERENCE_DISTANCE);
 	}
 
 	@Override
@@ -218,13 +220,13 @@ public class OpenAL3DSource implements SoundEmitter3D {
 	}
 
 	@Override
-	public void setDisposeOnStop(boolean disposeOnStop) {
+	public void setDisposeOnStop(final boolean disposeOnStop) {
 		this.disposeOnStop = disposeOnStop;
 	}
 
 	@Override
 	public boolean isDisposed() {
-		return this.disposed || alIsSource(this.source);
+		return this.disposed || AL10.alIsSource(this.source);
 	}
 
 	@Override
@@ -232,12 +234,12 @@ public class OpenAL3DSource implements SoundEmitter3D {
 		if (this.disposed) {
 			return;
 		}
-		LOG.error("Garbaging {}", this.source);
+		OpenAL3DSource.LOG.error("Garbaging {}", this.source);
 		this.dispose();
 	}
 
 	private void setContext() {
-		ALC11.alcMakeContextCurrent(this.context);
+		ALC10.alcMakeContextCurrent(this.context);
 	}
 
 	@Override
@@ -247,10 +249,10 @@ public class OpenAL3DSource implements SoundEmitter3D {
 				return;
 			}
 			this.disposed = true;
-			setContext();
-			alDeleteSources(this.source);
+			this.setContext();
+			AL10.alDeleteSources(this.source);
 			OpenAL3DAudio.checkOpenALError();
-		} catch (OpenALException e) {
+		} catch (final OpenALException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -267,12 +269,12 @@ public class OpenAL3DSource implements SoundEmitter3D {
 
 	@Override
 	public String toString() {
-		return "OpenAL3DSource [audio=" + audio + ", source=" + source + ", context=" + context + ", relativePosition="
-				+ relativePosition + ", disposeOnStop=" + disposeOnStop + ", disposed=" + disposed + ", getPosition()="
-				+ getPosition() + ", getVelocity()=" + getVelocity() + ", isLooping()=" + isLooping() + ", getGain()="
-				+ getGain() + ", getBuffer()=" + getBuffer() + ", getOrientation()=" + Arrays.toString(getOrientation())
-				+ ", isPlaying()=" + isPlaying() + ", isStopped()=" + isStopped() + ", isPaused()=" + isPaused()
-				+ ", getPitch()=" + getPitch() + ", getMaxDistnace()=" + getMaxDistnace() + ", getMinDistance()="
-				+ getMinDistance() + ", isDisposed()=" + isDisposed() + "]";
+		return "OpenAL3DSource [audio=" + this.audio + ", source=" + this.source + ", context=" + this.context + ", relativePosition="
+				+ this.relativePosition + ", disposeOnStop=" + this.disposeOnStop + ", disposed=" + this.disposed + ", getPosition()="
+				+ this.getPosition() + ", getVelocity()=" + this.getVelocity() + ", isLooping()=" + this.isLooping() + ", getGain()="
+				+ this.getGain() + ", getBuffer()=" + this.getBuffer() + ", getOrientation()=" + Arrays.toString(this.getOrientation())
+				+ ", isPlaying()=" + this.isPlaying() + ", isStopped()=" + this.isStopped() + ", isPaused()=" + this.isPaused()
+				+ ", getPitch()=" + this.getPitch() + ", getMaxDistnace()=" + this.getMaxDistnace() + ", getMinDistance()="
+				+ this.getMinDistance() + ", isDisposed()=" + this.isDisposed() + "]";
 	}
 }

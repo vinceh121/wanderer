@@ -46,7 +46,7 @@ public abstract class AbstractGuntowerPrototype extends AbstractBuildingPrototyp
 		return this.hasAi;
 	}
 
-	public void setHasAi(boolean hasAi) {
+	public void setHasAi(final boolean hasAi) {
 		this.hasAi = hasAi;
 	}
 }

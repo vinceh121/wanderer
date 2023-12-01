@@ -66,7 +66,7 @@ public class InConstructionBuilding extends AbstractBuilding {
 		super.render(batch, env);
 
 		final LinkedList<DisplayModel> flatModels = this.getFlatModels();
-		
+
 		for (int i = 0; i < this.curves.size; i++) {
 			final Bezier<Vector3> bezier = this.curves.get(i);
 			final DisplayModel model = flatModels.get(i);

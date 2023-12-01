@@ -30,16 +30,16 @@ public class GdxArraySerializer extends StdSerializer<Array> {
 	}
 
 	@Override
-	public void serializeWithType(final Array value, final JsonGenerator gen, final SerializerProvider provider, final TypeSerializer typeSer)
-			throws IOException {
+	public void serializeWithType(final Array value, final JsonGenerator gen, final SerializerProvider provider,
+			final TypeSerializer typeSer) throws IOException {
 		gen.setCurrentValue(value);
 		final WritableTypeId typeIdDef = typeSer.writeTypePrefix(gen, typeSer.typeId(value, JsonToken.START_ARRAY));
 		this.writeArrayContent(value, gen, provider, typeSer);
 		typeSer.writeTypeSuffix(gen, typeIdDef);
 	}
 
-	private void writeArrayContent(final Array value, final JsonGenerator gen, final SerializerProvider provider, final TypeSerializer typeSer)
-			throws IOException {
+	private void writeArrayContent(final Array value, final JsonGenerator gen, final SerializerProvider provider,
+			final TypeSerializer typeSer) throws IOException {
 		for (final Object e : value) {
 			if (e == null) {
 				provider.defaultSerializeNull(gen);

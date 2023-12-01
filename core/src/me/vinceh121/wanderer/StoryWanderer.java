@@ -22,10 +22,10 @@ public class StoryWanderer extends Wanderer {
 	private Chapter chapter;
 	private Part part;
 
-	public StoryWanderer(ApplicationMultiplexer applicationMultiplexer) {
+	public StoryWanderer(final ApplicationMultiplexer applicationMultiplexer) {
 		super(applicationMultiplexer);
 	}
-	
+
 	@Override
 	public void create() {
 		super.create();
@@ -68,8 +68,8 @@ public class StoryWanderer extends Wanderer {
 	}
 
 	public void startStory(final String name, final int chapter, final int part) {
-		final Scriptable exports =
-				this.getScriptManager().loadModule(StoryWanderer.STORY_SCRIPTS_ROOT.child(name + ".js"), StoryWanderer.STORY_SCRIPTS_ROOT);
+		final Scriptable exports = this.getScriptManager()
+			.loadModule(StoryWanderer.STORY_SCRIPTS_ROOT.child(name + ".js"), StoryWanderer.STORY_SCRIPTS_ROOT);
 		this.storyBook = (StoryBook) ((NativeJavaObject) exports.get("storyBook", exports)).unwrap();
 		this.chapter = this.storyBook.getChapters().get(chapter);
 		this.part = this.chapter.getParts().get(part);

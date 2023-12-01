@@ -5,7 +5,7 @@ import javax.swing.JLabel;
 public class FinishStep extends AbstractWizardStep {
 	private static final long serialVersionUID = 1L;
 
-	public FinishStep(FirstTimeWizardContext ctx) {
+	public FinishStep(final FirstTimeWizardContext ctx) {
 		super(ctx);
 		// @formatter:off
 		this.add(new JLabel("<html>"

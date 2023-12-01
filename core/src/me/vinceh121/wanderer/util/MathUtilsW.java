@@ -35,12 +35,12 @@ public final class MathUtilsW {
 		return v;
 	}
 
-	public static float getSphericalPolar(float z) {
+	public static float getSphericalPolar(final float z) {
 		return MathUtils.acos(z);
 	}
 
-	public static float getSphericalAzimuth(float x, float y) {
-		return Math.signum(y) * MathUtils.acos(x / (float) (Math.sqrt(x * x + y * y)));
+	public static float getSphericalAzimuth(final float x, final float y) {
+		return Math.signum(y) * MathUtils.acos(x / (float) Math.sqrt(x * x + y * y));
 	}
 
 	public static Vector3 fixNaN(final Vector3 v, final float val) {

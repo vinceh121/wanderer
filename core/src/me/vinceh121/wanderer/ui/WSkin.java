@@ -23,15 +23,15 @@ public class WSkin extends Skin {
 	public WSkin() {
 	}
 
-	public WSkin(FileHandle skinFile, TextureAtlas atlas) {
+	public WSkin(final FileHandle skinFile, final TextureAtlas atlas) {
 		super(skinFile, atlas);
 	}
 
-	public WSkin(FileHandle skinFile) {
+	public WSkin(final FileHandle skinFile) {
 		super(skinFile);
 	}
 
-	public WSkin(TextureAtlas atlas) {
+	public WSkin(final TextureAtlas atlas) {
 		super(atlas);
 	}
 
@@ -39,20 +39,22 @@ public class WSkin extends Skin {
 	protected Json getJsonLoader(final FileHandle skinFile) {
 		final Json json = super.getJsonLoader(skinFile);
 
-		Serializer<BitmapFont> fontSer = json.getSerializer(BitmapFont.class);
+		final Serializer<BitmapFont> fontSer = json.getSerializer(BitmapFont.class);
 
 		json.setSerializer(BitmapFont.class, new ReadOnlySerializer<BitmapFont>() {
 			@Override
-			public BitmapFont read(Json json, JsonValue jsonData, @SuppressWarnings("rawtypes") Class type) {
-				String path = json.readValue("file", String.class, jsonData);
+			public BitmapFont read(final Json json, final JsonValue jsonData, @SuppressWarnings("rawtypes") final Class type) {
+				final String path = json.readValue("file", String.class, jsonData);
 				if (path.endsWith(".ttf")) {
 					FileHandle fontFile = skinFile.parent().child(path);
-					if (!fontFile.exists())
+					if (!fontFile.exists()) {
 						fontFile = Gdx.files.internal(path);
-					if (!fontFile.exists())
+					}
+					if (!fontFile.exists()) {
 						throw new SerializationException("Font file not found: " + fontFile);
+					}
 
-					FontParameter parameters = new FontParameter();
+					final FontParameter parameters = new FontParameter();
 					parameters.size = json.readValue("size", int.class, 16, jsonData);
 					parameters.color = Color.valueOf(json.readValue("color", String.class, "#ffffff", jsonData));
 					return FontCache.get(fontFile, parameters);

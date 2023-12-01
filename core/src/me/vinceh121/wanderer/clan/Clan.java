@@ -94,12 +94,12 @@ public class Clan implements ISaveable {
 		return this.relationships;
 	}
 
-	public void putRelationship(Clan clan, Amicability amicability) {
+	public void putRelationship(final Clan clan, final Amicability amicability) {
 		this.relationships.put(clan, amicability);
 	}
 
-	public Amicability getRelationship(Clan clan) {
-		Amicability amicability = this.relationships.get(clan);
+	public Amicability getRelationship(final Clan clan) {
+		final Amicability amicability = this.relationships.get(clan);
 
 		if (amicability == null) {
 			return this.defaultAmicability;
@@ -112,7 +112,7 @@ public class Clan implements ISaveable {
 		return this.defaultAmicability;
 	}
 
-	public void setDefaultAmicability(Amicability defaultAmicability) {
+	public void setDefaultAmicability(final Amicability defaultAmicability) {
 		this.defaultAmicability = defaultAmicability;
 	}
 

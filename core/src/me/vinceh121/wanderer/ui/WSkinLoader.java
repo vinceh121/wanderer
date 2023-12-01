@@ -13,14 +13,14 @@ import me.vinceh121.wanderer.ui.WSkinLoader.WSkinParameters;
 
 public class WSkinLoader extends AsynchronousAssetLoader<WSkin, WSkinParameters> {
 
-	public WSkinLoader(FileHandleResolver resolver) {
+	public WSkinLoader(final FileHandleResolver resolver) {
 		super(resolver);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, WSkinParameters parameter) {
-		Array<AssetDescriptor> deps = new Array();
+	public Array<AssetDescriptor> getDependencies(final String fileName, final FileHandle file, final WSkinParameters parameter) {
+		final Array<AssetDescriptor> deps = new Array();
 
 		deps.add(new AssetDescriptor(file.pathWithoutExtension() + ".atlas", TextureAtlas.class));
 
@@ -28,15 +28,15 @@ public class WSkinLoader extends AsynchronousAssetLoader<WSkin, WSkinParameters>
 	}
 
 	@Override
-	public void loadAsync(AssetManager manager, String fileName, FileHandle file, WSkinParameters parameter) {
+	public void loadAsync(final AssetManager manager, final String fileName, final FileHandle file, final WSkinParameters parameter) {
 	}
 
 	@Override
-	public WSkin loadSync(AssetManager manager, String fileName, FileHandle file, WSkinParameters parameter) {
-		String textureAtlasPath = file.pathWithoutExtension() + ".atlas";
+	public WSkin loadSync(final AssetManager manager, final String fileName, final FileHandle file, final WSkinParameters parameter) {
+		final String textureAtlasPath = file.pathWithoutExtension() + ".atlas";
 
-		TextureAtlas atlas = manager.get(textureAtlasPath, TextureAtlas.class);
-		WSkin skin = newSkin(atlas);
+		final TextureAtlas atlas = manager.get(textureAtlasPath, TextureAtlas.class);
+		final WSkin skin = this.newSkin(atlas);
 
 		skin.load(file);
 		return skin;
@@ -45,12 +45,12 @@ public class WSkinLoader extends AsynchronousAssetLoader<WSkin, WSkinParameters>
 	/**
 	 * Override to allow subclasses of Skin to be loaded or the skin instance to be
 	 * configured.
-	 * 
+	 *
 	 * @param atlas The TextureAtlas that the skin will use.
 	 * @return A new Skin (or subclass of Skin) instance based on the provided
 	 *         TextureAtlas.
 	 */
-	protected WSkin newSkin(TextureAtlas atlas) {
+	protected WSkin newSkin(final TextureAtlas atlas) {
 		return new WSkin(atlas);
 	}
 

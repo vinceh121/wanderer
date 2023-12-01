@@ -105,7 +105,7 @@ public class Wanderer extends ApplicationDelegate {
 	private float timeOfDay, elapsedTimeOfDay, dayDuration = 15800f;
 	private float cameraShakeIntensity, cameraShakeTime, cameraShakeRevolutionTime;
 
-	public Wanderer(ApplicationMultiplexer applicationMultiplexer) {
+	public Wanderer(final ApplicationMultiplexer applicationMultiplexer) {
 		super(applicationMultiplexer);
 	}
 
@@ -325,7 +325,7 @@ public class Wanderer extends ApplicationDelegate {
 		}
 
 		this.flushEntityQueue();
-		
+
 		this.controlledDeathTest();
 
 		for (int i = 0; i < this.entities.size; i++) {
@@ -420,29 +420,29 @@ public class Wanderer extends ApplicationDelegate {
 	protected void controlledDeathTest() {
 		if (this.controlledEntity instanceof ILivingEntity && ((ILivingEntity) this.controlledEntity).isDead()) {
 			final Optional<CharacterW> optChar =
-					findEntitiesByClass(CharacterW.class).filter(c -> c.getClan() == this.getPlayerClan()).findFirst();
+					this.findEntitiesByClass(CharacterW.class).filter(c -> c.getClan() == this.getPlayerClan()).findFirst();
 
 			if (optChar.isPresent()) {
 				this.controlEntity(optChar.get());
 			} else {
-				LOG.error("No player character to control back after death of controlled vehicle");
+				Wanderer.LOG.error("No player character to control back after death of controlled vehicle");
 			}
 		}
 	}
 
-	public void shakeCamera(float intensity, float time) {
+	public void shakeCamera(final float intensity, final float time) {
 		this.shakeCamera(intensity, time, 0.25f);
 	}
 
-	public void shakeCamera(float intensity, float time, float revolutionTime) {
+	public void shakeCamera(final float intensity, final float time, final float revolutionTime) {
 		this.cameraShakeIntensity = intensity;
 		this.cameraShakeTime = time;
 		this.cameraShakeRevolutionTime = revolutionTime;
 	}
 
-	private void processCameraShake(float delta) {
+	private void processCameraShake(final float delta) {
 		// should be a percentage
-		float cameraShakeModifier = Preferences.getPreferences().getOrElse("a11y.cameraShake", 1.0).floatValue();
+		final float cameraShakeModifier = Preferences.getPreferences().getOrElse("a11y.cameraShake", 1.0).floatValue();
 
 		if (cameraShakeModifier == 0 || this.cameraShakeTime == 0) {
 			return;
@@ -450,10 +450,10 @@ public class Wanderer extends ApplicationDelegate {
 
 		final PerspectiveCamera cam = this.graphicsManager.getCamera();
 
-		EllipsePath path = new EllipsePath(0f, 0f, 0.5f * this.cameraShakeIntensity, 0.2f * this.cameraShakeIntensity);
+		final EllipsePath path = new EllipsePath(0f, 0f, 0.5f * this.cameraShakeIntensity, 0.2f * this.cameraShakeIntensity);
 		path.y = path.height / 2;
-		Vector2 shakeVec2 = path.valueAt(new Vector2(), this.cameraShakeTime / this.cameraShakeRevolutionTime);
-		Vector3 shakeVec3 = new Vector3(shakeVec2, 0);
+		final Vector2 shakeVec2 = path.valueAt(new Vector2(), this.cameraShakeTime / this.cameraShakeRevolutionTime);
+		final Vector3 shakeVec3 = new Vector3(shakeVec2, 0);
 		shakeVec3.rot(cam.combined);
 		cam.position.add(shakeVec3);
 

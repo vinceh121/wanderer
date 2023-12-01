@@ -22,7 +22,8 @@ public class Matrix4Deserializer extends StdDeserializer<Matrix4> {
 	}
 
 	@Override
-	public Matrix4 deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JacksonException {
+	public Matrix4 deserialize(final JsonParser p, final DeserializationContext ctxt)
+			throws IOException, JacksonException {
 		if (p.isExpectedStartObjectToken()) {
 			return this.deserializeComponents(p, ctxt);
 		} else if (p.isExpectedStartArrayToken()) {

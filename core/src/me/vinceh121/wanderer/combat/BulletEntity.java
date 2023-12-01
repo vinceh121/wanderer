@@ -21,7 +21,8 @@ public class BulletEntity extends AbstractEntity {
 
 		this.setCastShadow(false);
 
-		final DisplayModel model = new DisplayModel("orig/lib/standards/sprite.obj", "orig/lib/explo18/flametipnone.ktx");
+		final DisplayModel model =
+				new DisplayModel("orig/lib/standards/sprite.obj", "orig/lib/explo18/flametipnone.ktx");
 		model.addTextureAttribute(IntAttribute.createCullFace(0));
 		model.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_COLOR, 1f));
 		this.addModel(model);

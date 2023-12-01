@@ -119,20 +119,20 @@ public class ExtractStep extends AbstractWizardStep {
 			outputOrig.mkdirs();
 
 			this.publish("Reading metadata...");
-			final List<AnimationSources> anims = MAPPER.readValue(
-					getClass().getClassLoader().getResourceAsStream("me/vinceh121/wanderer/launcher/animations.json"),
+			final List<AnimationSources> anims = ExtractStep.MAPPER.readValue(
+					this.getClass().getClassLoader().getResourceAsStream("me/vinceh121/wanderer/launcher/animations.json"),
 					new TypeReference<List<AnimationSources>>() {
 					});
 			this.filesToProcessCount += anims.size();
-			final List<ExternalDownload> downs = MAPPER.readValue(
-					getClass().getClassLoader()
+			final List<ExternalDownload> downs = ExtractStep.MAPPER.readValue(
+					this.getClass().getClassLoader()
 						.getResourceAsStream("me/vinceh121/wanderer/launcher/externalDownloads.json"),
 					new TypeReference<List<ExternalDownload>>() {
 					});
 			this.filesToProcessCount += downs.size();
 
-			this.model = MAPPER.readValue(
-					getClass().getClassLoader()
+			this.model = ExtractStep.MAPPER.readValue(
+					this.getClass().getClassLoader()
 						.getResourceAsStream("me/vinceh121/wanderer/launcher/project-nomads.classmodel.cdbed99c.json"),
 					new TypeReference<Map<String, NOBClazz>>() {
 					});
@@ -140,14 +140,14 @@ public class ExtractStep extends AbstractWizardStep {
 			this.publish("Copying feedback, voice lines, and music...");
 			Files.walkFileTree(dataPath.getParent().resolve("book"), new SimpleFileVisitor<Path>() {
 				@Override
-				public FileVisitResult visitFile(Path src, BasicFileAttributes attrs) throws IOException {
+				public FileVisitResult visitFile(final Path src, final BasicFileAttributes attrs) throws IOException {
 					if (!src.getFileName().toString().endsWith(".wav")) {
 						return FileVisitResult.CONTINUE;
 					}
 
-					Path relPath = dataPath.getParent().resolve("book").relativize(src);
-					publish("Copying sound " + relPath);
-					Path dest = origPath.resolve("book").resolve(ctx.getVoice().getLocale()).resolve(relPath);
+					final Path relPath = dataPath.getParent().resolve("book").relativize(src);
+					ExtractWorker.this.publish("Copying sound " + relPath);
+					final Path dest = origPath.resolve("book").resolve(ExtractStep.this.ctx.getVoice().getLocale()).resolve(relPath);
 					Files.createDirectories(dest.getParent());
 					Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
 					return FileVisitResult.CONTINUE;
@@ -156,16 +156,16 @@ public class ExtractStep extends AbstractWizardStep {
 
 			// is this really necessary?
 			try {
-				Files.move(origPath.resolve("book").resolve(ctx.getVoice().getLocale()).resolve("feedback"),
+				Files.move(origPath.resolve("book").resolve(ExtractStep.this.ctx.getVoice().getLocale()).resolve("feedback"),
 						origPath.resolve("feedback"));
-			} catch (FileAlreadyExistsException e) {
-				publish("Refusing to move already existing feedback");
+			} catch (final FileAlreadyExistsException e) {
+				this.publish("Refusing to move already existing feedback");
 			}
 			try {
-				Files.move(origPath.resolve("book").resolve(ctx.getVoice().getLocale()).resolve("music"),
+				Files.move(origPath.resolve("book").resolve(ExtractStep.this.ctx.getVoice().getLocale()).resolve("music"),
 						origPath.resolve("book").resolve("music"));
-			} catch (FileAlreadyExistsException e) {
-				publish("Refusing to move already existing music");
+			} catch (final FileAlreadyExistsException e) {
+				this.publish("Refusing to move already existing music");
 			}
 
 			this.publish("Extracting NPK...");
@@ -183,23 +183,23 @@ public class ExtractStep extends AbstractWizardStep {
 			this.publish("Converting assets...");
 			this.recurse(outputOrig);
 			this.publish("Converting animations...");
-			for (AnimationSources anim : anims) {
+			for (final AnimationSources anim : anims) {
 				this.convertAnimation(anim);
 			}
 			this.publish("Downloading external assets...");
-			for (ExternalDownload down : downs) {
+			for (final ExternalDownload down : downs) {
 				this.downloadExternal(down);
 			}
 			this.publish("Done!");
 		}
 
-		private void downloadExternal(ExternalDownload down) throws IOException {
+		private void downloadExternal(final ExternalDownload down) throws IOException {
 			this.publish("Downloading " + down.getUrl());
-			Path outPath = LauncherMain.getAssetsPath().resolve(down.getOutPath());
+			final Path outPath = LauncherMain.getAssetsPath().resolve(down.getOutPath());
 			// mkdir parent directories
 			Files.createDirectories(outPath.getParent());
 
-			URL url = new URL(down.getUrl());
+			final URL url = new URL(down.getUrl());
 
 			try (OutputStream out = Files.newOutputStream(outPath); InputStream in = url.openStream()) {
 				in.transferTo(out);
@@ -207,7 +207,7 @@ public class ExtractStep extends AbstractWizardStep {
 			this.incProcessedCount();
 		}
 
-		private void convertAnimation(AnimationSources anim) throws IOException, ParseException {
+		private void convertAnimation(final AnimationSources anim) throws IOException, ParseException {
 			this.publish("Converting animation " + anim.getAnimationFile());
 			try (InputStream inMesh = Files.newInputStream(LauncherMain.getAssetsPath().resolve(anim.getMeshFile()));
 					InputStream inAnim =
@@ -217,26 +217,26 @@ public class ExtractStep extends AbstractWizardStep {
 					OutputStream outGltfBuf = Files
 						.newOutputStream(LauncherMain.getAssetsPath().resolve(anim.getOutputPath() + ".bin"))) {
 
-				GLTFGenerator gen = new GLTFGenerator(outGltfBuf);
+				final GLTFGenerator gen = new GLTFGenerator(outGltfBuf);
 
-				IParser parser = new NOBParser();
+				final IParser parser = new NOBParser();
 				parser.setClassModel(this.model);
 				parser.read(inScript);
 				gen.addBones(parser.getCalls());
 
 				gen.buildBasicScene("scene", gen.getGltf().getNodes().size());
 
-				NvxFileReader mesh = new NvxFileReader(inMesh);
+				final NvxFileReader mesh = new NvxFileReader(inMesh);
 				mesh.readAll();
 				gen.addMesh("skin", mesh.getTypes(), mesh.getVertices(), mesh.getTriangles(), 0);
 
-				NaxFileReader nax = new NaxFileReader(inAnim);
-				List<Curve> curves = nax.readAll();
+				final NaxFileReader nax = new NaxFileReader(inAnim);
+				final List<Curve> curves = nax.readAll();
 				gen.addCurves(curves);
 
 				gen.buildBuffer(Path.of(anim.getOutputPath() + ".bin").getFileName().toString());
 
-				MAPPER.writeValue(
+				ExtractStep.MAPPER.writeValue(
 						Files.newOutputStream(LauncherMain.getAssetsPath().resolve(anim.getOutputPath() + ".gltf")),
 						gen.getGltf());
 			}

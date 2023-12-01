@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import me.vinceh121.wanderer.Preferences;
+import me.vinceh121.wanderer.i18n.I18N;
 import me.vinceh121.wanderer.util.GraphicsUtilities;
 
 public class OptionsView extends Table {
@@ -31,39 +32,39 @@ public class OptionsView extends Table {
 	private CheckBox chkVSync;
 	private LangSelect speechSelect;
 
-	public OptionsView(Skin skin) {
+	public OptionsView(final Skin skin) {
 		super(skin);
 
-		Label lblOptions = new Label(gettext("Options"), skin);
+		final Label lblOptions = new Label(I18N.gettext("Options"), skin);
 		lblOptions.setFontScale(2);
 		this.add(lblOptions).padBottom(64).colspan(2);
 		this.row();
 
 		////// GENERAL
-		Label lblGeneral = new Label(gettext("General"), skin);
+		final Label lblGeneral = new Label(I18N.gettext("General"), skin);
 		lblGeneral.setFontScale(1.5f);
 		this.add(lblGeneral).padTop(32);
 		this.row();
 
-		this.add(new Label(gettext("Interface language"), skin));
+		this.add(new Label(I18N.gettext("Interface language"), skin));
 		this.add(new LangSelect(skin, "en", "de", "fr", "it", "ru"));
 		this.row();
 
-		this.add(new Label(gettext("Audio language"), skin));
+		this.add(new Label(I18N.gettext("Audio language"), skin));
 		this.speechSelect = new LangSelect(skin, "en", "de", "ru");
 		this.add(this.speechSelect);
 		this.row();
 
 		///// GRAPHICS
-		this.add(new Label(gettext("Graphics"), skin)).padTop(32);
+		this.add(new Label(I18N.gettext("Graphics"), skin)).padTop(32);
 		this.row();
 
-		chkVSync = new CheckBox(gettext("V-Sync"), skin);
-		chkVSync.setChecked(Preferences.getPreferences().<Boolean>getOrElse("graphics.vsync", false));
-		this.add(chkVSync);
+		this.chkVSync = new CheckBox(I18N.gettext("V-Sync"), skin);
+		this.chkVSync.setChecked(Preferences.getPreferences().<Boolean>getOrElse("graphics.vsync", false));
+		this.add(this.chkVSync);
 		this.row();
 
-		this.add(new Label(gettext("Window mode"), skin));
+		this.add(new Label(I18N.gettext("Window mode"), skin));
 		this.selMon = new MonitorSelect(skin);
 		if (Preferences.getPreferences().get("graphics.monitor") instanceof Integer) {
 			this.selMon.setSelected(Windowed.WINDOWED);
@@ -71,10 +72,10 @@ public class OptionsView extends Table {
 			this.selMon.setSelected(GraphicsUtilities.getMonitor(this.selMon.getItems().toArray(Monitor.class),
 					Preferences.getPreferences().<String>get("graphics.monitor")));
 		}
-		this.add(selMon);
+		this.add(this.selMon);
 		this.row();
 
-		this.add(new Label(gettext("Resolution"), skin));
+		this.add(new Label(I18N.gettext("Resolution"), skin));
 		this.selRes = new ResolutionSelect(skin);
 		if (this.selMon.getSelected() == Windowed.WINDOWED) {
 			this.selRes.setSelected(null);
@@ -82,38 +83,38 @@ public class OptionsView extends Table {
 			this.selRes.setSelected(GraphicsUtilities.getDisplayMode(this.selRes.getItems().toArray(DisplayMode.class),
 					Preferences.getPreferences().<String>get("graphics.resolution")));
 		}
-		this.add(selRes);
+		this.add(this.selRes);
 		this.row();
 
-		TextButton btnCancel = new TextButton(gettext("Cancel"), skin);
+		final TextButton btnCancel = new TextButton(I18N.gettext("Cancel"), skin);
 		btnCancel.addListener(new ClickListener() {
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				onClose.run();
+			public void clicked(final InputEvent event, final float x, final float y) {
+				OptionsView.this.onClose.run();
 			}
 		});
 		this.add(btnCancel);
 
-		TextButton btnApply = new TextButton(gettext("Apply"), skin);
+		final TextButton btnApply = new TextButton(I18N.gettext("Apply"), skin);
 		btnApply.addListener(new ClickListener() {
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				apply();
-				onApply.run();
+			public void clicked(final InputEvent event, final float x, final float y) {
+				OptionsView.this.apply();
+				OptionsView.this.onApply.run();
 			}
 		});
 		this.add(btnApply);
 
 		this.selMon.addListener(new ChangeListener() {
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				Monitor mon = selMon.getSelected();
+			public void changed(final ChangeEvent event, final Actor actor) {
+				final Monitor mon = OptionsView.this.selMon.getSelected();
 				if (mon != Windowed.WINDOWED) {
-					selRes.setDisabled(false);
-					selRes.setItems(Gdx.graphics.getDisplayModes(mon));
+					OptionsView.this.selRes.setDisabled(false);
+					OptionsView.this.selRes.setItems(Gdx.graphics.getDisplayModes(mon));
 				} else {
-					selRes.setDisabled(true);
-					selRes.setSelected(None.NONE);
+					OptionsView.this.selRes.setDisabled(true);
+					OptionsView.this.selRes.setSelected(None.NONE);
 				}
 			}
 		});
@@ -135,51 +136,51 @@ public class OptionsView extends Table {
 	}
 
 	public Runnable getOnClose() {
-		return onClose;
+		return this.onClose;
 	}
 
-	public void setOnClose(Runnable onClose) {
+	public void setOnClose(final Runnable onClose) {
 		this.onClose = onClose;
 	}
 
 	public Runnable getOnApply() {
-		return onApply;
+		return this.onApply;
 	}
 
-	public void setOnApply(Runnable onApply) {
+	public void setOnApply(final Runnable onApply) {
 		this.onApply = onApply;
 	}
 
 	private static class ResolutionSelect extends SelectBox<DisplayMode> {
-		public ResolutionSelect(Skin skin) {
+		public ResolutionSelect(final Skin skin) {
 			super(skin);
 		}
 
 		@Override
-		protected String toString(DisplayMode item) {
+		protected String toString(final DisplayMode item) {
 			if (item == None.NONE) {
-				return gettext("<select fullscreen>");
+				return I18N.gettext("<select fullscreen>");
 			} else {
-				return item.width + "x" + item.height + " " + item.refreshRate + /* Hertz unit */gettext("Hz");
+				return item.width + "x" + item.height + " " + item.refreshRate + /* Hertz unit */I18N.gettext("Hz");
 			}
 		}
 	}
 
 	private static class MonitorSelect extends SelectBox<Monitor> {
-		public MonitorSelect(Skin skin) {
+		public MonitorSelect(final Skin skin) {
 			super(skin);
 
-			Monitor[] mons = new Monitor[Gdx.graphics.getMonitors().length + 1];
+			final Monitor[] mons = new Monitor[Gdx.graphics.getMonitors().length + 1];
 			mons[0] = Windowed.WINDOWED;
 			System.arraycopy(Gdx.graphics.getMonitors(), 0, mons, 1, Gdx.graphics.getMonitors().length);
 
-			setItems(mons);
+			this.setItems(mons);
 		}
 
 		@Override
-		protected String toString(Monitor item) {
+		protected String toString(final Monitor item) {
 			if (item.name.equals(Gdx.graphics.getPrimaryMonitor().name)) {
-				return gettext("(Primary)") + " " + item.name;
+				return I18N.gettext("(Primary)") + " " + item.name;
 			} else {
 				return item.name;
 			}
@@ -187,15 +188,15 @@ public class OptionsView extends Table {
 	}
 
 	private static class LangSelect extends SelectBox<String> {
-		public LangSelect(Skin skin, String... langs) {
+		public LangSelect(final Skin skin, final String... langs) {
 			super(skin);
 
-			setItems(langs);
+			this.setItems(langs);
 		}
 
 		@Override
-		protected String toString(String item) {
-			Locale loc = Locale.forLanguageTag(item);
+		protected String toString(final String item) {
+			final Locale loc = Locale.forLanguageTag(item);
 			return loc.getDisplayLanguage(loc);
 		}
 	}
@@ -212,7 +213,7 @@ public class OptionsView extends Table {
 		public static final Monitor WINDOWED = new Windowed();
 
 		protected Windowed() {
-			super(-1, -1, gettext("Windowed"));
+			super(-1, -1, I18N.gettext("Windowed"));
 		}
 	}
 }

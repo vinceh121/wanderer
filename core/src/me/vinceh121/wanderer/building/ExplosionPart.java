@@ -39,7 +39,7 @@ public class ExplosionPart extends AbstractEntity {
 	}
 
 	@Override
-	public void tick(float delta) {
+	public void tick(final float delta) {
 		super.tick(delta);
 
 		this.lifetime += delta;
@@ -51,18 +51,18 @@ public class ExplosionPart extends AbstractEntity {
 	}
 
 	public float getLifetime() {
-		return lifetime;
+		return this.lifetime;
 	}
 
-	public void setLifetime(float lifetime) {
+	public void setLifetime(final float lifetime) {
 		this.lifetime = lifetime;
 	}
 
 	public float getMaxLifetime() {
-		return maxLifetime;
+		return this.maxLifetime;
 	}
 
-	public void setMaxLifetime(float maxLifetime) {
+	public void setMaxLifetime(final float maxLifetime) {
 		this.maxLifetime = maxLifetime;
 	}
 }

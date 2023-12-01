@@ -35,8 +35,9 @@ public class PreviewBuilding extends AbstractBuilding {
 		super.enterBtWorld(world);
 		final ContactResultCallback cb = new ContactResultCallback() {
 			@Override
-			public float addSingleResult(final btManifoldPoint cp, final btCollisionObjectWrapper colObj0Wrap, final int partId0,
-					final int index0, final btCollisionObjectWrapper colObj1Wrap, final int partId1, final int index1) {
+			public float addSingleResult(final btManifoldPoint cp, final btCollisionObjectWrapper colObj0Wrap,
+					final int partId0, final int index0, final btCollisionObjectWrapper colObj1Wrap, final int partId1,
+					final int index1) {
 				final int idx = colObj1Wrap.getCollisionObject().getUserIndex();
 				if (PreviewBuilding.this.game.getEntity(idx) instanceof IControllableEntity) {
 					PreviewBuilding.this.setBlocked(true);

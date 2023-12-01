@@ -51,7 +51,8 @@ public abstract class KeyFrame<T> {
 			return false;
 		}
 		final KeyFrame<?> other = (KeyFrame<?>) obj;
-		return Float.floatToIntBits(this.time) == Float.floatToIntBits(other.time) && Objects.equals(this.value, other.value);
+		return Float.floatToIntBits(this.time) == Float.floatToIntBits(other.time)
+				&& Objects.equals(this.value, other.value);
 	}
 
 	@Override

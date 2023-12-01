@@ -73,12 +73,12 @@ public class CinematicCommand implements Callable<Integer> {
 		final CinematicData data = new CinematicData();
 		data.setSymbolicName(this.symbolicName);
 
-		for (ICommandCall cmd : parser.getCalls()) {
+		for (final ICommandCall cmd : parser.getCalls()) {
 			if (!(cmd instanceof ClassCommandCall)) {
 				throw new IllegalStateException("Unexpected command type: " + cmd);
 			}
 
-			ClassCommandCall clsCmd = (ClassCommandCall) cmd;
+			final ClassCommandCall clsCmd = (ClassCommandCall) cmd;
 			final Object[] args = clsCmd.getArguments();
 			switch (clsCmd.getPrototype().getName()) {
 			case "addtranslate":
@@ -87,7 +87,7 @@ public class CinematicCommand implements Callable<Integer> {
 							new Vector3((float) args[1], (float) args[2], (float) args[3])));
 				break;
 			case "addquaternion":
-				Quaternion q = new Quaternion((float) args[1], (float) args[2], (float) args[3], (float) args[4]);
+				final Quaternion q = new Quaternion((float) args[1], (float) args[2], (float) args[3], (float) args[4]);
 				data.getRotation().addKeyframe(new QuaternionKeyFrame((float) args[0], q));
 				break;
 			case "addvisual":
@@ -107,7 +107,7 @@ public class CinematicCommand implements Callable<Integer> {
 		return 0;
 	}
 
-	private String convertPath(String path) {
+	private String convertPath(final String path) {
 		if (path.startsWith("data:")) {
 			return "orig/" + path.replace("data:", "").toLowerCase();
 		} else if (path.startsWith("book:")) {
@@ -118,7 +118,7 @@ public class CinematicCommand implements Callable<Integer> {
 		return "orig/" + path.toLowerCase();
 	}
 
-	private void addVisual(Object[] args, CinematicData data) throws IOException, InterruptedException {
+	private void addVisual(final Object[] args, final CinematicData data) throws IOException, InterruptedException {
 		final String visName = (String) args[1];
 
 		// special case for subtitles
@@ -127,9 +127,13 @@ public class CinematicCommand implements Callable<Integer> {
 			if ("book:nix.bmp".equals(visName)) {
 				text = null;
 			} else if (this.tesseract) {
-				Path path = this.input.toPath().getParent().getParent().resolve("subtitle").resolve(Paths.get(this.convertPath(visName)).getFileName());
+				final Path path = this.input.toPath()
+					.getParent()
+					.getParent()
+					.resolve("subtitle")
+					.resolve(Paths.get(this.convertPath(visName)).getFileName());
 				text = this.getSubtitleText(path.toFile()).strip();
-			} else{
+			} else {
 				text = visName;
 			}
 
@@ -153,15 +157,15 @@ public class CinematicCommand implements Callable<Integer> {
 		}
 	}
 
-	private String getSubtitleText(File bmp) throws IOException, InterruptedException {
-		BufferedImage img = ImageIO.read(bmp);
-		File png = File.createTempFile("subTxt", ".png");
+	private String getSubtitleText(final File bmp) throws IOException, InterruptedException {
+		final BufferedImage img = ImageIO.read(bmp);
+		final File png = File.createTempFile("subTxt", ".png");
 		ImageIO.write(img, "png", png);
 
-		Process p = Runtime.getRuntime().exec(new String[] { "tesseract", png.getAbsolutePath(), "-" });
+		final Process p = Runtime.getRuntime().exec(new String[] { "tesseract", png.getAbsolutePath(), "-" });
 		p.waitFor();
 
-		StringWriter str = new StringWriter();
+		final StringWriter str = new StringWriter();
 		new InputStreamReader(p.getInputStream()).transferTo(str);
 		return str.toString();
 	}

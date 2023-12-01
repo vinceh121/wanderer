@@ -56,13 +56,13 @@ public class DisplayModel {
 		this.setCacheDisplayModel(from.getCacheDisplayModel());
 		this.setAnimationChannel(from.getAnimationChannel());
 
-		for (DisplayModel fromChild : from.getChildren()) {
+		for (final DisplayModel fromChild : from.getChildren()) {
 			this.children.add(new DisplayModel(fromChild));
 		}
 	}
 
 	public void render(final ModelBatch batch, final Environment env) {
-		for (DisplayModel child : this.children) {
+		for (final DisplayModel child : this.children) {
 			child.render(batch, env);
 		}
 
@@ -101,7 +101,7 @@ public class DisplayModel {
 		this.setCacheDisplayModel(instance);
 		this.getCacheDisplayModel().transform = this.absoluteTransform;
 
-		for (DisplayModel child : this.children) {
+		for (final DisplayModel child : this.children) {
 			child.loadDisplayModel();
 		}
 	}
@@ -115,7 +115,7 @@ public class DisplayModel {
 			this.cacheDisplayModel.transform = this.absoluteTransform;
 		}
 
-		for (DisplayModel child : this.children) {
+		for (final DisplayModel child : this.children) {
 			child.updateTransform(this.absoluteTransform);
 		}
 	}
@@ -124,7 +124,7 @@ public class DisplayModel {
 		return this.children;
 	}
 
-	public void setChildren(Array<DisplayModel> children) {
+	public void setChildren(final Array<DisplayModel> children) {
 		this.children.clear();
 		this.children.addAll(children);
 	}
@@ -187,7 +187,7 @@ public class DisplayModel {
 
 	public void addTextureAttribute(final Attribute value) {
 		this.textureAttributes.add(value);
-		
+
 		if (this.cacheDisplayModel != null) {
 			this.cacheDisplayModel.materials.get(0).set(value);
 		}
@@ -195,7 +195,7 @@ public class DisplayModel {
 
 	public void removeTextureAttribute(final Attribute value) {
 		this.textureAttributes.remove(value);
-		
+
 		if (this.cacheDisplayModel != null) {
 			this.cacheDisplayModel.materials.get(0).remove(value.type);
 		}
@@ -207,22 +207,22 @@ public class DisplayModel {
 				+ this.absoluteTransform + ", displayModel=" + this.displayModel + ", displayTexture="
 				+ this.displayTexture + ", animationChannel=" + this.animationChannel + "]";
 	}
-	
-	public static LinkedList<DisplayModel> flattenModels(Iterable<DisplayModel> models) {
-		LinkedList<DisplayModel> flatModels = new LinkedList<>();
+
+	public static LinkedList<DisplayModel> flattenModels(final Iterable<DisplayModel> models) {
+		final LinkedList<DisplayModel> flatModels = new LinkedList<>();
 
 		for (final DisplayModel root : models) {
-			flattenModels(flatModels, root);
+			DisplayModel.flattenModels(flatModels, root);
 		}
 
 		return flatModels;
 	}
-	
-	private static void flattenModels(LinkedList<DisplayModel> flatModels, DisplayModel mdl) {
+
+	private static void flattenModels(final LinkedList<DisplayModel> flatModels, final DisplayModel mdl) {
 		flatModels.add(mdl);
 
 		for (final DisplayModel child : mdl.getChildren()) {
-			flattenModels(flatModels, child);
+			DisplayModel.flattenModels(flatModels, child);
 		}
 	}
 }

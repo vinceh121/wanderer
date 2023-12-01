@@ -50,7 +50,8 @@ public final class PrototypeRegistry {
 		this.readPrototypes(Gdx.files.internal("prototypes/islands.json"), IslandPrototype.class);
 		this.readPrototypes(Gdx.files.internal("prototypes/characters.json"), CharacterPrototype.class);
 		this.readPrototypes(Gdx.files.internal("prototypes/props.json"), PropPrototype.class);
-		this.readPrototypes(Gdx.files.internal("prototypes/machinegunGuntowers.json"), MachineGunGuntowerPrototype.class);
+		this.readPrototypes(Gdx.files.internal("prototypes/machinegunGuntowers.json"),
+				MachineGunGuntowerPrototype.class);
 		this.readPrototypes(Gdx.files.internal("prototypes/machinegunPlanes.json"), MachineGunPlanePrototype.class);
 	}
 

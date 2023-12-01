@@ -14,7 +14,7 @@ public class PropPrototype implements IPrototype {
 	private float mass;
 
 	@Override
-	public void getAssetsToLoad(List<AssetDescriptor<?>> descriptors) {
+	public void getAssetsToLoad(final List<AssetDescriptor<?>> descriptors) {
 		descriptors.add(new AssetDescriptor<>(this.displayModel, Model.class));
 		descriptors.add(new AssetDescriptor<>(this.texture, Texture.class));
 

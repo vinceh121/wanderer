@@ -13,19 +13,19 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.Hinting;
 public final class FontCache {
 	private static final Map<FontCacheKey, BitmapFont> CACHE = new HashMap<>();
 
-	public static BitmapFont get(FileHandle path, FontParameter parameters) {
-		FontCacheKey key = new FontCacheKey(path, parameters);
-		BitmapFont font = CACHE.get(key);
+	public static BitmapFont get(final FileHandle path, final FontParameter parameters) {
+		final FontCacheKey key = new FontCacheKey(path, parameters);
+		BitmapFont font = FontCache.CACHE.get(key);
 
 		if (font != null) {
 			return font;
 		}
 
-		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(path);
+		final FreeTypeFontGenerator gen = new FreeTypeFontGenerator(path);
 		font = gen.generateFont(parameters);
 		gen.dispose();
 
-		CACHE.put(key, font);
+		FontCache.CACHE.put(key, font);
 
 		return font;
 	}
@@ -34,39 +34,42 @@ public final class FontCache {
 		private final FileHandle path;
 		private final FontParameter parameters;
 
-		public FontCacheKey(FileHandle path, FontParameter parameters) {
+		public FontCacheKey(final FileHandle path, final FontParameter parameters) {
 			this.path = path;
 			this.parameters = parameters;
 		}
 
 		public FileHandle getPath() {
-			return path;
+			return this.path;
 		}
 
 		public FontParameter getParameters() {
-			return parameters;
+			return this.parameters;
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(parameters, path);
+			return Objects.hash(this.parameters, this.path);
 		}
 
 		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
+		public boolean equals(final Object obj) {
+			if (this == obj) {
 				return true;
-			if (obj == null)
+			}
+			if (obj == null) {
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (this.getClass() != obj.getClass()) {
 				return false;
-			FontCacheKey other = (FontCacheKey) obj;
-			return Objects.equals(parameters, other.parameters) && Objects.equals(path, other.path);
+			}
+			final FontCacheKey other = (FontCacheKey) obj;
+			return Objects.equals(this.parameters, other.parameters) && Objects.equals(this.path, other.path);
 		}
 
 		@Override
 		public String toString() {
-			return "FontCacheKey [path=" + path + ", parameters=" + parameters + "]";
+			return "FontCacheKey [path=" + this.path + ", parameters=" + this.parameters + "]";
 		}
 	}
 
@@ -78,57 +81,60 @@ public final class FontCache {
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(borderColor,
-					borderGamma,
-					borderStraight,
-					borderWidth,
-					characters,
-					color,
-					flip,
-					gamma,
-					genMipMaps,
-					hinting,
-					incremental,
-					kerning,
-					magFilter,
-					minFilter,
-					mono,
-					packer,
-					padBottom,
-					padLeft,
-					padRight,
-					padTop,
-					renderCount,
-					shadowColor,
-					shadowOffsetX,
-					shadowOffsetY,
-					size,
-					spaceX,
-					spaceY);
+			return Objects.hash(this.borderColor,
+					this.borderGamma,
+					this.borderStraight,
+					this.borderWidth,
+					this.characters,
+					this.color,
+					this.flip,
+					this.gamma,
+					this.genMipMaps,
+					this.hinting,
+					this.incremental,
+					this.kerning,
+					this.magFilter,
+					this.minFilter,
+					this.mono,
+					this.packer,
+					this.padBottom,
+					this.padLeft,
+					this.padRight,
+					this.padTop,
+					this.renderCount,
+					this.shadowColor,
+					this.shadowOffsetX,
+					this.shadowOffsetY,
+					this.size,
+					this.spaceX,
+					this.spaceY);
 		}
 
 		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
+		public boolean equals(final Object obj) {
+			if (this == obj) {
 				return true;
-			if (obj == null)
+			}
+			if (obj == null) {
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (this.getClass() != obj.getClass()) {
 				return false;
-			FontParameter other = (FontParameter) obj;
-			return Objects.equals(borderColor, other.borderColor)
-					&& Float.floatToIntBits(borderGamma) == Float.floatToIntBits(other.borderGamma)
-					&& borderStraight == other.borderStraight
-					&& Float.floatToIntBits(borderWidth) == Float.floatToIntBits(other.borderWidth)
-					&& Objects.equals(characters, other.characters) && Objects.equals(color, other.color)
-					&& flip == other.flip && Float.floatToIntBits(gamma) == Float.floatToIntBits(other.gamma)
-					&& genMipMaps == other.genMipMaps && hinting == other.hinting && incremental == other.incremental
-					&& kerning == other.kerning && magFilter == other.magFilter && minFilter == other.minFilter
-					&& mono == other.mono && Objects.equals(packer, other.packer) && padBottom == other.padBottom
-					&& padLeft == other.padLeft && padRight == other.padRight && padTop == other.padTop
-					&& renderCount == other.renderCount && Objects.equals(shadowColor, other.shadowColor)
-					&& shadowOffsetX == other.shadowOffsetX && shadowOffsetY == other.shadowOffsetY
-					&& size == other.size && spaceX == other.spaceX && spaceY == other.spaceY;
+			}
+			final FontParameter other = (FontParameter) obj;
+			return Objects.equals(this.borderColor, other.borderColor)
+					&& Float.floatToIntBits(this.borderGamma) == Float.floatToIntBits(other.borderGamma)
+					&& this.borderStraight == other.borderStraight
+					&& Float.floatToIntBits(this.borderWidth) == Float.floatToIntBits(other.borderWidth)
+					&& Objects.equals(this.characters, other.characters) && Objects.equals(this.color, other.color)
+					&& this.flip == other.flip && Float.floatToIntBits(this.gamma) == Float.floatToIntBits(other.gamma)
+					&& this.genMipMaps == other.genMipMaps && this.hinting == other.hinting && this.incremental == other.incremental
+					&& this.kerning == other.kerning && this.magFilter == other.magFilter && this.minFilter == other.minFilter
+					&& this.mono == other.mono && Objects.equals(this.packer, other.packer) && this.padBottom == other.padBottom
+					&& this.padLeft == other.padLeft && this.padRight == other.padRight && this.padTop == other.padTop
+					&& this.renderCount == other.renderCount && Objects.equals(this.shadowColor, other.shadowColor)
+					&& this.shadowOffsetX == other.shadowOffsetX && this.shadowOffsetY == other.shadowOffsetY
+					&& this.size == other.size && this.spaceX == other.spaceX && this.spaceY == other.spaceY;
 		}
 	}
 }

@@ -37,7 +37,7 @@ public class ModManifest {
 
 	@Override
 	public String toString() {
-		return "ModManifest [name=" + this.name + ", version=" + this.version + ", license=" + this.license + ", homepage=" + this.homepage
-				+ "]";
+		return "ModManifest [name=" + this.name + ", version=" + this.version + ", license=" + this.license
+				+ ", homepage=" + this.homepage + "]";
 	}
 }

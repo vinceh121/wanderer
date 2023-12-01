@@ -27,7 +27,8 @@ public class AnimationTrack<T extends KeyFrame<V>, V> {
 	}
 
 	@JsonCreator
-	public AnimationTrack(@JsonProperty("keys") final List<T> list, @JsonProperty("interpolation") final EnumInterpolation inter) {
+	public AnimationTrack(@JsonProperty("keys") final List<T> list,
+			@JsonProperty("interpolation") final EnumInterpolation inter) {
 		for (final T frame : list) {
 			this.addKeyframe(frame);
 		}

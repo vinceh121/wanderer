@@ -22,7 +22,8 @@ public class AttributeSerialiser extends StdSerializer<Attribute> {
 	}
 
 	@Override
-	public void serialize(final Attribute att, final JsonGenerator gen, final SerializerProvider provider) throws IOException {
+	public void serialize(final Attribute att, final JsonGenerator gen, final SerializerProvider provider)
+			throws IOException {
 		final String type = Attribute.getAttributeAlias(att.type);
 		gen.writeStartObject(att);
 		gen.writeStringField("@class", att.getClass().getSimpleName());

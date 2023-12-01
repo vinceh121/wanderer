@@ -10,7 +10,7 @@ public class InputListenerAdapter implements InputListener {
 	 * <li>50 : currently controlled character/gun tower/plane</li>
 	 * <li>-1000 : NOOP</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param priority
 	 */
 	public InputListenerAdapter(final int priority) {

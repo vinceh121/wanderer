@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import me.vinceh121.wanderer.i18n.I18N;
 import me.vinceh121.wanderer.platform.audio.Sound3D;
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 import me.vinceh121.wanderer.ui.OptionsView;
@@ -35,7 +36,7 @@ public class MainMenu extends ApplicationDelegate {
 		this.stage = new Stage(new FitViewport(1024, 1024));
 		Gdx.input.setInputProcessor(this.stage);
 
-		Skin skin = WandererConstants.getUISkin();
+		final Skin skin = WandererConstants.getUISkin();
 
 		this.tblMain = new TblMain(skin);
 		this.setView(this.tblMain);
@@ -43,8 +44,8 @@ public class MainMenu extends ApplicationDelegate {
 		this.tblSingleplayer = new TblSingleplayer(skin);
 
 		this.tblOptions = new OptionsView(skin);
-		this.tblOptions.setOnApply(() -> this.setView(tblMain));
-		this.tblOptions.setOnClose(() -> this.setView(tblMain));
+		this.tblOptions.setOnApply(() -> this.setView(this.tblMain));
+		this.tblOptions.setOnClose(() -> this.setView(this.tblMain));
 
 		final String music = "orig/book/music/danger3.wav";
 		WandererConstants.ASSET_MANAGER.load(music, Sound3D.class);
@@ -53,14 +54,14 @@ public class MainMenu extends ApplicationDelegate {
 		this.musicEmitter = this.music.playGeneral();
 	}
 
-	public void setView(Actor newView) {
+	public void setView(final Actor newView) {
 		this.stage.clear();
 		newView.setBounds(0, 0, 1024, 1024);
 		this.stage.addActor(newView);
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void resize(final int width, final int height) {
 		this.stage.getViewport().update(width, height);
 	}
 
@@ -79,7 +80,7 @@ public class MainMenu extends ApplicationDelegate {
 	}
 
 	private class TblMain extends Table {
-		public TblMain(Skin skin) {
+		public TblMain(final Skin skin) {
 			super(skin);
 
 			final int buttonPadding = 12;
@@ -88,72 +89,72 @@ public class MainMenu extends ApplicationDelegate {
 				.padBottom(64);
 			this.row();
 
-			TextButton btnSingleplayer = new TextButton(gettext("Single player"), this.getSkin());
+			final TextButton btnSingleplayer = new TextButton(I18N.gettext("Single player"), this.getSkin());
 			btnSingleplayer.addListener(new ClickListener() {
 				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					setView(tblSingleplayer);
+				public void clicked(final InputEvent event, final float x, final float y) {
+					MainMenu.this.setView(MainMenu.this.tblSingleplayer);
 				}
 			});
 			this.add(btnSingleplayer).padBottom(buttonPadding);
 			this.row();
 
-			this.add(new TextButton(gettext("Multiplayer"), this.getSkin())).padBottom(buttonPadding);
+			this.add(new TextButton(I18N.gettext("Multiplayer"), this.getSkin())).padBottom(buttonPadding);
 			this.row();
 
-			TextButton btnOptions = new TextButton(gettext("Options"), this.getSkin());
+			final TextButton btnOptions = new TextButton(I18N.gettext("Options"), this.getSkin());
 			btnOptions.addListener(new ClickListener() {
 				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					setView(tblOptions);
+				public void clicked(final InputEvent event, final float x, final float y) {
+					MainMenu.this.setView(MainMenu.this.tblOptions);
 				}
 			});
 			this.add(btnOptions).padBottom(buttonPadding);
 			this.row();
 
-			TextButton btnQuit = new TextButton(gettext("Quit"), this.getSkin());
+			final TextButton btnQuit = new TextButton(I18N.gettext("Quit"), this.getSkin());
 			btnQuit.addListener(new ClickListener() {
 				@Override
-				public void clicked(InputEvent event, float x, float y) {
+				public void clicked(final InputEvent event, final float x, final float y) {
 					Gdx.app.exit();
 				}
 			});
 			this.add(btnQuit).padBottom(buttonPadding);
 			this.row();
 
-			this.add(new TextButton(gettext("Credits"), this.getSkin())).padBottom(buttonPadding);
+			this.add(new TextButton(I18N.gettext("Credits"), this.getSkin())).padBottom(buttonPadding);
 		}
 	}
 
 	private class TblSingleplayer extends Table {
 
-		public TblSingleplayer(Skin skin) {
+		public TblSingleplayer(final Skin skin) {
 			super(skin);
 
 			final int buttonPadding = 12;
 
-			TextButton btnNewGame = new TextButton(gettext("New Game"), this.getSkin());
+			final TextButton btnNewGame = new TextButton(I18N.gettext("New Game"), this.getSkin());
 			btnNewGame.addListener(new ClickListener() {
 				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					StoryWanderer story = new StoryWanderer(applicationMultiplexer);
+				public void clicked(final InputEvent event, final float x, final float y) {
+					final StoryWanderer story = new StoryWanderer(MainMenu.this.applicationMultiplexer);
 					story.create();
 					story.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-					applicationMultiplexer.setDelegate(story);
-					dispose();
+					MainMenu.this.applicationMultiplexer.setDelegate(story);
+					MainMenu.this.dispose();
 				}
 			});
 			this.add(btnNewGame).padBottom(buttonPadding);
 			this.row();
 
-			this.add(new TextButton(gettext("Load Game"), this.getSkin())).padBottom(buttonPadding);
+			this.add(new TextButton(I18N.gettext("Load Game"), this.getSkin())).padBottom(buttonPadding);
 			this.row();
 
-			TextButton btnCancel = new TextButton(gettext("Cancel"), this.getSkin());
+			final TextButton btnCancel = new TextButton(I18N.gettext("Cancel"), this.getSkin());
 			btnCancel.addListener(new ClickListener() {
 				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					setView(tblMain);
+				public void clicked(final InputEvent event, final float x, final float y) {
+					MainMenu.this.setView(MainMenu.this.tblMain);
 				}
 			});
 			this.add(btnCancel).padBottom(buttonPadding);

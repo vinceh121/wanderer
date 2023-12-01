@@ -79,7 +79,7 @@ public class DataSelectStep extends AbstractWizardStep {
 		}
 
 		fc.setMultiSelectionEnabled(false);
-		FileFilter npkFilter = new FileFilter() {
+		final FileFilter npkFilter = new FileFilter() {
 
 			@Override
 			public String getDescription() {
