@@ -29,7 +29,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	private final Array<DisplayModel> explosionParts = new Array<>();
 	private final PlaneSpeedProfile normal, turbo;
 	protected final SoundEmitter3D engineEmitter, turboEmitter;
-	private String explosionSound;;
+	private String explosionSound;
 	private InputListener inputListener;
 	private ColorAttribute colorAttr;
 	private BlendingAttribute blendingAttr;
@@ -113,9 +113,12 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 				this.currentRollTime = Math.max(this.currentRollTime - delta, -profile.getRollTime());
 				this.currentYawTime = Math.max(this.currentYawTime - delta, -profile.getYawSpeed());
 			} else {
-				this.currentRollTime = 0;
-				this.currentYawTime = 0;
-				this.roll = 0;
+				final float signRoll = Math.signum(this.roll);
+
+				this.currentRollTime = this.currentYawTime = 0;
+
+				this.roll = signRoll > 0 ? Math.max(this.roll - profile.getRollTime(), 0)
+						: Math.min(this.roll + profile.getRollTime(), 0);
 			}
 
 			this.yaw += this.currentYawTime;
