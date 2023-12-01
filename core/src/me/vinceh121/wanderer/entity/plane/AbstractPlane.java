@@ -117,6 +117,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 
 				this.currentRollTime = this.currentYawTime = 0;
 
+				// FIXME need to use delta in here somewhere
 				this.roll = signRoll > 0 ? Math.max(this.roll - profile.getRollTime(), 0)
 						: Math.min(this.roll + profile.getRollTime(), 0);
 			}
