@@ -115,12 +115,22 @@ public abstract class AbstractClanLivingEntity extends AbstractEntity implements
 	@Override
 	public void readState(final ObjectNode node) {
 		super.readState(node);
+
 		if (node.hasNonNull("clan")) {
 			this.onJoinClan(this.game.getClan(node.get("clan").asInt()));
 		}
-		this.setMaxHealth(node.get("maxHealth").floatValue());
-		this.setHealth(node.get("health").floatValue());
-		this.setInvincible(node.get("invincible").asBoolean());
+
+		if (node.has("maxHealth")) {
+			this.setMaxHealth(node.get("maxHealth").floatValue());
+		}
+
+		if (node.has("health")) {
+			this.setHealth(node.get("health").floatValue());
+		}
+
+		if (node.has("invincible")) {
+			this.setInvincible(node.get("invincible").asBoolean());
+		}
 	}
 
 	protected void checkDeath() {

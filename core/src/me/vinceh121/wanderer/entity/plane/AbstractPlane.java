@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.building.ExplosionPart;
+import me.vinceh121.wanderer.combat.DamageType;
 import me.vinceh121.wanderer.entity.AbstractClanLivingEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.entity.IControllableEntity;
@@ -160,7 +161,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 			this.setTranslation(startVec);
 
 			if (cb.hasHit()) {
-				this.onDeath();
+				this.damage(Float.POSITIVE_INFINITY, DamageType.COLLISION);
 			}
 
 			cb.dispose();

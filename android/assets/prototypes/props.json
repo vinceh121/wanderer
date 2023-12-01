@@ -63,10 +63,5 @@
 		"displayModel": "orig/flieger01.n/flieger01.obj",
 		"collideModel": "orig/flieger01.n/collide.obj",
 		"texture": "orig/flieger01.n/texturealpha.ktx"
-	},
-	"a_j_scout01": {
-		"displayModel": "orig/j_scout01.n/j_scout01.obj",
-		"collideModel": "orig/j_scout01.n/collide.obj",
-		"texture": "orig/j_scout01.n/texturenone.ktx"
 	}
 }

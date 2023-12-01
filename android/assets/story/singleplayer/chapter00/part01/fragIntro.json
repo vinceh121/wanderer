@@ -1,9 +1,10 @@
 {
 	"entities": [
 		{
-			"@class": "me.vinceh121.wanderer.entity.Prop",
-			"prototype": "a_j_scout01",
-			"symbolicName": "j_scout"
+			"@class": "me.vinceh121.wanderer.entity.plane.MachineGunPlane",
+			"prototype": "j_scout01",
+			"symbolicName": "j_scout",
+			"invincible": true
 		},
 		{
 			"@class": "me.vinceh121.wanderer.entity.Prop",
