@@ -8,9 +8,6 @@ uniform vec3 sunDir;
 
 in vec4 vertPos;
 
-float angle;
-float sunSkyAngle;
-
 float logFrac(float f) {
 	return log2(f * 255 + 1) / 8;
 }
@@ -18,18 +15,18 @@ float logFrac(float f) {
 void main() {
 	vec3 normVert = normalize(vertPos.xyz);
 	// [-1; 1]
-	angle = dot(normVert, vec3(0, 1, 0));
+	float angle = dot(normVert, vec3(0, 1, 0));
 
 	if (angle > 0) { // top half
 		angle = 1 - angle;
-		sunSkyAngle = dot(normVert, sunDir);
+		float sunSkyAngle = dot(normVert, sunDir);
 		sunSkyAngle = 1 - sunSkyAngle;
 
 		gl_FragColor = mix(skyTop, skyMiddle, logFrac(angle));
 	} else { // bottom half
 		angle += 1;
 		// need to invert one of those dirs
-		sunSkyAngle = dot(-1 * normVert, sunDir);
+		float sunSkyAngle = dot(-1 * normVert, sunDir);
 		sunSkyAngle += 1;
 
 		gl_FragColor = mix(skyMiddle, skyBottom, logFrac(angle));
