@@ -1,9 +1,10 @@
 package me.vinceh121.wanderer.glx;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.NavigableMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -88,18 +89,19 @@ public class SkyboxRenderer {
 		final float delta = time - this.previous;
 		this.previous = time;
 
-		if (this.shader != null) {
-			this.shader.setTimeOfDay(time);
-		}
-
 		this.stars.transform.rotateRad(Vector3.Y, 0.02f * delta / 0.016666668f);
 
 		this.move(this.sun, MathUtils.PI * 0.65f, time * MathUtils.PI2, 0.6f, 0);
 		this.sunDir.setFromSpherical(MathUtils.PI * 0.65f, time * MathUtils.PI2);
+
 		if (this.shader != null) {
 			// shader needs sunDir to NOT be inverted
 			this.shader.setSunDir(this.sunDir);
+			this.shader.setSkyTop(this.interpolatedColor(time, this.skyProperties.getSkyTopColor()));
+			this.shader.setSkyMiddle(this.interpolatedColor(time, this.skyProperties.getSkyMiddleColor()));
+			this.shader.setSkyBottom(this.interpolatedColor(time, this.skyProperties.getSkyBottomColor()));
 		}
+
 		this.sunDir.scl(-1);
 
 		this.move(this.mars, MathUtils.PI2 * time, 0.12f * MathUtils.PI2, 1f, 0);
@@ -118,47 +120,26 @@ public class SkyboxRenderer {
 		this.ambiantLight.color.set(this.interpolatedColor(time, this.skyProperties.getAmbLightColor()));
 	}
 
-	private Color interpolatedColor(final float time, final Map<TimeRange, Color> colors) {
-		final TimeRange range = this.currentTimeRange(time, colors.keySet());
-		if (range == null) {
-			return new Color();
+	private Color interpolatedColor(final float time, final NavigableMap<Float, Color> colors) {
+		// only way left is null is that time is negative, which shouldn't happen
+		final Entry<Float, Color> left = colors.floorEntry(time);
+
+		Entry<Float, Color> right = colors.ceilingEntry(time);
+
+		if (right == null) { // wrap around
+			right = colors.firstEntry();
 		}
 
-		final TimeRange nextRange = this.nextTimeRange(range.ordinal(), colors.keySet());
-		if (nextRange == null) {
-			return new Color();
+		if (right == null || left == null) {
+			return Color.BLACK;
 		}
 
-		final float alpha = (time - range.getRangeStart()) / (range.getRangeEnd() - range.getRangeStart());
+		final float alpha = (time - left.getKey()) / (right.getKey() - left.getKey());
 
-		final Color c = colors.get(range).cpy();
-		c.lerp(colors.get(nextRange), alpha);
+		final Color c = left.getValue().cpy();
+		c.lerp(right.getValue(), alpha);
 
 		return c;
-	}
-
-	private TimeRange currentTimeRange(final float time, final Collection<TimeRange> ranges) {
-		final TimeRange range = SkyboxRenderer.getTimeRange(time);
-		if (ranges.contains(range)) {
-			return range;
-		}
-		for (int i = range.ordinal() - 1; i >= 0; i--) {
-			final TimeRange t = TimeRange.values()[i];
-			if (ranges.contains(t)) {
-				return t;
-			}
-		}
-		return null;
-	}
-
-	private TimeRange nextTimeRange(final int start, final Collection<TimeRange> ranges) {
-		for (int i = start + 1; i < TimeRange.values().length + 1; i++) {
-			final TimeRange r = TimeRange.values()[i % TimeRange.values().length];
-			if (ranges.contains(r)) {
-				return r;
-			}
-		}
-		return null;
 	}
 
 	public void setSkycapTexture(final String tex) {
@@ -208,7 +189,6 @@ public class SkyboxRenderer {
 						final SkyShader s = new SkyShader(renderable,
 								new Config(Gdx.files.internal("shaders/sky.vert").readString(),
 										Gdx.files.internal("shaders/sky.frag").readString()));
-						s.setTimeOfDay(SkyboxRenderer.this.previous);
 						s.setSunDir(SkyboxRenderer.this.sunDir);
 						SkyboxRenderer.this.shader = s;
 						return s;
@@ -351,41 +331,5 @@ public class SkyboxRenderer {
 
 	public DirectionalLight getMoonLight() {
 		return this.moonLight;
-	}
-
-	public static TimeRange getTimeRange(final float time) {
-		for (final TimeRange r : TimeRange.values()) {
-			if (time <= r.getRangeEnd()) {
-				return r;
-			}
-		}
-		return null;
-	}
-
-	public enum TimeRange {
-		MORNING(0, 0.25f),
-		NOON(0.25f, 0.375f),
-		EVENING_START(0.375f, 0.4375f),
-		EVENING_MID(0.4375f, 0.5f),
-		EVENING_END(0.5f, 0.625f),
-		MIDNIGHT_START(0.625f, 0.75f),
-		MIDNIGHT(0.75f, 0.875f),
-		/// ....
-		NIGHT_END(0.875f, 1f);
-
-		private final float rangeStart, rangeEnd;
-
-		TimeRange(final float rangeStart, final float rangeEnd) {
-			this.rangeStart = rangeStart;
-			this.rangeEnd = rangeEnd;
-		}
-
-		public float getRangeStart() {
-			return this.rangeStart;
-		}
-
-		public float getRangeEnd() {
-			return this.rangeEnd;
-		}
 	}
 }

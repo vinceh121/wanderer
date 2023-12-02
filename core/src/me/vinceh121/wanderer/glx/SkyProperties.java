@@ -1,41 +1,68 @@
 package me.vinceh121.wanderer.glx;
 
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Objects;
+import java.util.TreeMap;
 
 import com.badlogic.gdx.graphics.Color;
 
-import me.vinceh121.wanderer.glx.SkyboxRenderer.TimeRange;
-
 public class SkyProperties {
-	private final Map<TimeRange, Color> sunColor = new EnumMap<>(TimeRange.class);
-	private final Map<TimeRange, Color> sunLightColor = new EnumMap<>(TimeRange.class);
-	private final Map<TimeRange, Color> ambLightColor = new EnumMap<>(TimeRange.class);
-	private final Map<TimeRange, Color> skyTopColor = new EnumMap<>(TimeRange.class);
-	private final Map<TimeRange, Color> skyMiddleColor = new EnumMap<>(TimeRange.class);
-	private final Map<TimeRange, Color> skyBottomColor = new EnumMap<>(TimeRange.class);
+	private final NavigableMap<Float, Color> sunColor = new TreeMap<>();
+	private final NavigableMap<Float, Color> sunLightColor = new TreeMap<>();
+	private final NavigableMap<Float, Color> ambLightColor = new TreeMap<>();
+	private final NavigableMap<Float, Color> skyTopColor = new TreeMap<>();
+	private final NavigableMap<Float, Color> skyMiddleColor = new TreeMap<>();
+	private final NavigableMap<Float, Color> skyBottomColor = new TreeMap<>();
 
-	public Map<TimeRange, Color> getSunColor() {
-		return this.sunColor;
+	public NavigableMap<Float, Color> getSunColor() {
+		return sunColor;
 	}
 
-	public Map<TimeRange, Color> getSunLightColor() {
-		return this.sunLightColor;
+	public NavigableMap<Float, Color> getSunLightColor() {
+		return sunLightColor;
 	}
 
-	public Map<TimeRange, Color> getAmbLightColor() {
-		return this.ambLightColor;
+	public NavigableMap<Float, Color> getAmbLightColor() {
+		return ambLightColor;
 	}
 
-	public Map<TimeRange, Color> getSkyTopColor() {
-		return this.skyTopColor;
+	public NavigableMap<Float, Color> getSkyTopColor() {
+		return skyTopColor;
 	}
 
-	public Map<TimeRange, Color> getSkyMiddleColor() {
-		return this.skyMiddleColor;
+	public NavigableMap<Float, Color> getSkyMiddleColor() {
+		return skyMiddleColor;
 	}
 
-	public Map<TimeRange, Color> getSkyBottomColor() {
-		return this.skyBottomColor;
+	public NavigableMap<Float, Color> getSkyBottomColor() {
+		return skyBottomColor;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(ambLightColor, skyBottomColor, skyMiddleColor, skyTopColor, sunColor, sunLightColor);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SkyProperties other = (SkyProperties) obj;
+		return Objects.equals(ambLightColor, other.ambLightColor)
+				&& Objects.equals(skyBottomColor, other.skyBottomColor)
+				&& Objects.equals(skyMiddleColor, other.skyMiddleColor)
+				&& Objects.equals(skyTopColor, other.skyTopColor) && Objects.equals(sunColor, other.sunColor)
+				&& Objects.equals(sunLightColor, other.sunLightColor);
+	}
+
+	@Override
+	public String toString() {
+		return "SkyProperties [sunColor=" + sunColor + ", sunLightColor=" + sunLightColor + ", ambLightColor="
+				+ ambLightColor + ", skyTopColor=" + skyTopColor + ", skyMiddleColor=" + skyMiddleColor
+				+ ", skyBottomColor=" + skyBottomColor + "]";
 	}
 }

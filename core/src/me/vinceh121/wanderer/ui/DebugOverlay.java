@@ -11,7 +11,6 @@ import me.vinceh121.wanderer.StoryWanderer;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.entity.AbstractEntity;
-import me.vinceh121.wanderer.glx.SkyboxRenderer;
 
 public class DebugOverlay extends Table {
 	private final Wanderer game;
@@ -38,6 +37,7 @@ public class DebugOverlay extends Table {
 	public void act(final float delta) {
 		this.lblFps.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
 		this.lblEntities.setText("Entities: " + this.game.getEntities().size);
+
 		if (this.game.getControlledEntity() instanceof AbstractEntity) {// doubles as null-check
 			this.lblCoords.setText("Coords (controlled): "
 					+ ((AbstractEntity) this.game.getControlledEntity()).getTransform().getTranslation(new Vector3())
@@ -45,9 +45,8 @@ public class DebugOverlay extends Table {
 		} else {
 			this.lblCoords.setText("Coords (camera): " + this.game.getCamera().position);
 		}
-		this.lblTime.setText(String.format("Time: %.2f%%    %s",
-				this.game.getTimeOfDay() * 100,
-				SkyboxRenderer.getTimeRange(this.game.getTimeOfDay()).name()));
+
+		this.lblTime.setText(String.format("Time: %.2f%%", this.game.getTimeOfDay() * 100));
 
 		if (this.game instanceof StoryWanderer) {
 			try {
