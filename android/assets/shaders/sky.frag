@@ -31,7 +31,7 @@ void main() {
 		sunSkyAngle = dot(-1 * normVert, sunDir);
 		sunSkyAngle += 1;
 
-		gl_FragColor = mix(skyMiddle, skyBottom, logFrac(angle));
+		gl_FragColor = mix(skyMiddle, skyBottom, 1 - logFrac(angle));
 	}
 
 	gl_FragColor = mix(gl_FragColor, sunShine,

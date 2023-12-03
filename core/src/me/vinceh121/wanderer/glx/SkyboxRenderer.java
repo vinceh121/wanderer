@@ -101,8 +101,6 @@ public class SkyboxRenderer {
 			this.shader.setSkyMiddle(this.interpolatedColor(time, this.skyProperties.getSkyMiddleColor()));
 			this.shader.setSkyBottom(this.interpolatedColor(time, this.skyProperties.getSkyBottomColor()));
 			this.shader.setSunShine(this.interpolatedColor(time, this.skyProperties.getSunShineColor()));
-
-			System.out.println(this.shader.getSunShine());
 		}
 
 		this.sunDir.scl(-1);
