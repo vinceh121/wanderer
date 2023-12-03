@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -70,7 +71,7 @@ public class SkyboxRenderer {
 
 		this.skyring = this.makeRingAlpha("orig/skybox02.n/texture2wow3.ktx");
 
-		this.stars = this.makeStarsOneOne("orig/lib/stars/texturenone.ktx");
+		this.stars = this.makeStarsOneMinusSrcAlphaOne("orig/lib/stars/texturenone.ktx");
 
 		final int shadowQuality = Preferences.getPreferences().getIntOrElse("graphics.shadowQuality", 8);
 		final int shadowDistance = Preferences.getPreferences().getIntOrElse("graphics.shadowDistance", 4);
@@ -90,6 +91,8 @@ public class SkyboxRenderer {
 		this.previous = time;
 
 		this.stars.transform.rotateRad(Vector3.Y, 0.02f * delta / 0.016666668f);
+		((BlendingAttribute) this.stars.materials.get(0).get(BlendingAttribute.Type)).opacity =
+				1 - this.interpolatedFloat(time, this.skyProperties.getStarsOpacity());
 
 		this.move(this.sun, MathUtils.PI * 0.65f, time * MathUtils.PI2, 0.6f, 0);
 		this.sunDir.setFromSpherical(MathUtils.PI * 0.65f, time * MathUtils.PI2);
@@ -121,9 +124,31 @@ public class SkyboxRenderer {
 		this.ambiantLight.color.set(this.interpolatedColor(time, this.skyProperties.getAmbLightColor()));
 	}
 
+	private float interpolatedFloat(final float time, final NavigableMap<Float, Float> floats) {
+		Entry<Float, Float> left = floats.floorEntry(time);
+
+		if (left == null) { // wrap around
+			left = floats.lastEntry();
+		}
+
+		Entry<Float, Float> right = floats.ceilingEntry(time);
+
+		if (right == null) { // wrap around
+			right = floats.firstEntry();
+		}
+
+		if (right == null || left == null) {
+			return 0;
+		}
+
+		final float alpha = (time - left.getKey()) / (right.getKey() - left.getKey());
+
+		return MathUtils.lerp(left.getValue(), right.getValue(), alpha);
+	}
+
 	private Color interpolatedColor(final float time, final NavigableMap<Float, Color> colors) {
 		Entry<Float, Color> left = colors.floorEntry(time);
-		
+
 		if (left == null) { // wrap around
 			left = colors.lastEntry();
 		}
@@ -230,9 +255,9 @@ public class SkyboxRenderer {
 		return ins;
 	}
 
-	private ModelInstance makeStarsOneOne(final String tex) {
+	private ModelInstance makeStarsOneMinusSrcAlphaOne(final String tex) {
 		final ModelInstance ins = this.makeStars(tex);
-		ins.materials.get(0).set(new BlendingAttribute(GL20.GL_ONE, GL20.GL_ONE, 0.5f));
+		ins.materials.get(0).set(new BlendingAttribute(GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_ONE, 0.5f));
 		return ins;
 	}
 
@@ -302,10 +327,9 @@ public class SkyboxRenderer {
 		final Model model = WandererConstants.ASSET_MANAGER.get("orig/lib/stars/stars.obj", Model.class);
 		final ModelInstance ins = new ModelInstance(model);
 		ins.materials.get(0)
-			.set(new DepthTestAttribute(false),
-					IntAttribute.createCullFace(0),
-					TextureAttribute.createDiffuse(tex),
-					new NoLightningAttribute());
+			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex)
+//							,new NoLightningAttribute()
+			);
 		return ins;
 	}
 
