@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.math.Vector3;
 
 public class SkyShader extends WandererShader {
-	public final int u_sunDir, u_skyTop, u_skyMiddle, u_skyBottom;
+	public final int u_sunDir, u_skyTop, u_skyMiddle, u_skyBottom, u_sunShine;
 	private final Vector3 sunDir = new Vector3(0, 1, 0);
 	private final Color skyTop = new Color();
 	private final Color skyMiddle = new Color();
 	private final Color skyBottom = new Color();
+	private final Color sunShine = new Color();
 
 	public SkyShader(final Renderable renderable, final Config config) {
 		super(renderable, config);
@@ -20,6 +21,7 @@ public class SkyShader extends WandererShader {
 		this.u_skyTop = this.register("skyTop");
 		this.u_skyMiddle = this.register("skyMiddle");
 		this.u_skyBottom = this.register("skyBottom");
+		this.u_sunShine = this.register("sunShine");
 	}
 
 	@Override
@@ -28,6 +30,7 @@ public class SkyShader extends WandererShader {
 		this.set(this.u_skyTop, this.skyTop);
 		this.set(this.u_skyMiddle, this.skyMiddle);
 		this.set(this.u_skyBottom, this.skyBottom);
+		this.set(this.u_sunShine, this.sunShine);
 		
 		super.render(renderable, combinedAttributes);
 	}
@@ -70,7 +73,15 @@ public class SkyShader extends WandererShader {
 		return skyBottom;
 	}
 
-	public void setSkyBottom(Color skyBottm) {
+	public void setSkyBottom(Color skyBottom) {
 		this.skyBottom.set(skyBottom);
+	}
+	
+	public Color getSunShine() {
+		return sunShine;
+	}
+	
+	public void setSunShine(Color sunShine) {
+		this.sunShine.set(sunShine);
 	}
 }

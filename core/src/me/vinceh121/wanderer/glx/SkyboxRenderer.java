@@ -100,6 +100,9 @@ public class SkyboxRenderer {
 			this.shader.setSkyTop(this.interpolatedColor(time, this.skyProperties.getSkyTopColor()));
 			this.shader.setSkyMiddle(this.interpolatedColor(time, this.skyProperties.getSkyMiddleColor()));
 			this.shader.setSkyBottom(this.interpolatedColor(time, this.skyProperties.getSkyBottomColor()));
+			this.shader.setSunShine(this.interpolatedColor(time, this.skyProperties.getSunShineColor()));
+
+			System.out.println(this.shader.getSunShine());
 		}
 
 		this.sunDir.scl(-1);
@@ -121,8 +124,11 @@ public class SkyboxRenderer {
 	}
 
 	private Color interpolatedColor(final float time, final NavigableMap<Float, Color> colors) {
-		// only way left is null is that time is negative, which shouldn't happen
-		final Entry<Float, Color> left = colors.floorEntry(time);
+		Entry<Float, Color> left = colors.floorEntry(time);
+		
+		if (left == null) { // wrap around
+			left = colors.lastEntry();
+		}
 
 		Entry<Float, Color> right = colors.ceilingEntry(time);
 

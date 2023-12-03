@@ -13,6 +13,7 @@ public class SkyProperties {
 	private final NavigableMap<Float, Color> skyTopColor = new TreeMap<>();
 	private final NavigableMap<Float, Color> skyMiddleColor = new TreeMap<>();
 	private final NavigableMap<Float, Color> skyBottomColor = new TreeMap<>();
+	private final NavigableMap<Float, Color> sunShineColor = new TreeMap<>();
 
 	public NavigableMap<Float, Color> getSunColor() {
 		return sunColor;
@@ -38,9 +39,14 @@ public class SkyProperties {
 		return skyBottomColor;
 	}
 
+	public NavigableMap<Float, Color> getSunShineColor() {
+		return sunShineColor;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(ambLightColor, skyBottomColor, skyMiddleColor, skyTopColor, sunColor, sunLightColor);
+		return Objects
+			.hash(ambLightColor, skyBottomColor, skyMiddleColor, skyTopColor, sunColor, sunLightColor, sunShineColor);
 	}
 
 	@Override
@@ -56,13 +62,14 @@ public class SkyProperties {
 				&& Objects.equals(skyBottomColor, other.skyBottomColor)
 				&& Objects.equals(skyMiddleColor, other.skyMiddleColor)
 				&& Objects.equals(skyTopColor, other.skyTopColor) && Objects.equals(sunColor, other.sunColor)
-				&& Objects.equals(sunLightColor, other.sunLightColor);
+				&& Objects.equals(sunLightColor, other.sunLightColor)
+				&& Objects.equals(sunShineColor, other.sunShineColor);
 	}
 
 	@Override
 	public String toString() {
 		return "SkyProperties [sunColor=" + sunColor + ", sunLightColor=" + sunLightColor + ", ambLightColor="
 				+ ambLightColor + ", skyTopColor=" + skyTopColor + ", skyMiddleColor=" + skyMiddleColor
-				+ ", skyBottomColor=" + skyBottomColor + "]";
+				+ ", skyBottomColor=" + skyBottomColor + ", sunShineColor=" + sunShineColor + "]";
 	}
 }
