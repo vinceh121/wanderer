@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-28 19:24+0200\n"
+"POT-Creation-Date: 2023-12-03 06:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,80 +17,80 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:158
+#: core/src/me/vinceh121/wanderer/Wanderer.java:160
 msgid "Quick saved!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:166
+#: core/src/me/vinceh121/wanderer/Wanderer.java:168
 msgid "Quick loaded!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:524
+#: core/src/me/vinceh121/wanderer/Wanderer.java:540
 msgid "Taking control..."
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/Wanderer.java:530
+#: core/src/me/vinceh121/wanderer/Wanderer.java:546
 msgid "Nothing to control"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:37
-#: core/src/me/vinceh121/wanderer/MainMenu.java:104
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:38
+#: core/src/me/vinceh121/wanderer/MainMenu.java:105
 msgid "Options"
 msgstr ""
 
 #. //// GENERAL
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:43
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:44
 msgid "General"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:48
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:49
 msgid "Interface language"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:52
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:53
 msgid "Audio language"
 msgstr ""
 
 #. /// GRAPHICS
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:58
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:59
 msgid "Graphics"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:61
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:62
 msgid "V-Sync"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:66
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:67
 msgid "Window mode"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:77
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:78
 msgid "Resolution"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:88
-#: core/src/me/vinceh121/wanderer/MainMenu.java:152
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:89
+#: core/src/me/vinceh121/wanderer/MainMenu.java:153
 msgid "Cancel"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:97
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:98
 msgid "Apply"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:161
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:162
 msgid "<select fullscreen>"
 msgstr ""
 
 #. Hertz unit
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:163
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:164
 msgid "Hz"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:182
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:183
 msgid "(Primary)"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:215
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:216
 msgid "Windowed"
 msgstr ""
 
@@ -104,40 +104,40 @@ msgstr ""
 msgid "Belt full!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:91
+#: core/src/me/vinceh121/wanderer/MainMenu.java:92
 msgid "Single player"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:101
+#: core/src/me/vinceh121/wanderer/MainMenu.java:102
 msgid "Multiplayer"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:114
+#: core/src/me/vinceh121/wanderer/MainMenu.java:115
 msgid "Quit"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:124
+#: core/src/me/vinceh121/wanderer/MainMenu.java:125
 msgid "Credits"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:135
+#: core/src/me/vinceh121/wanderer/MainMenu.java:136
 msgid "New Game"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/MainMenu.java:149
+#: core/src/me/vinceh121/wanderer/MainMenu.java:150
 msgid "Load Game"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:354
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:396
 msgid "Not enough energy!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:362
 msgid "Slot blocked!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:402
 msgid "No free slot!"
 msgstr ""
 
