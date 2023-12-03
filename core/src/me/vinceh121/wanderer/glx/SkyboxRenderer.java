@@ -22,7 +22,6 @@ import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -64,7 +63,7 @@ public class SkyboxRenderer {
 
 		this.sun = this.makePlaneOneOne("orig/lib/sun1/texturenone.ktx");
 		this.mars = this.makePlaneAlpha("orig/lib/mars/texturealpha.ktx");
-		this.galaxy = this.makePlaneOneOne("orig/lib/galaxy/texturenone.ktx");
+		this.galaxy = this.makePlaneOneMinusSrcAlphaOne("orig/lib/galaxy/texturenone.ktx");
 
 		this.skycap = this.makeCapAlpha("orig/skybox02.n/texturealpha.ktx");
 		this.skycap.transform.translate(0, -1, 0);
@@ -109,7 +108,10 @@ public class SkyboxRenderer {
 		this.sunDir.scl(-1);
 
 		this.move(this.mars, MathUtils.PI2 * time, 0.12f * MathUtils.PI2, 1f, 0);
+
 		this.move(this.galaxy, MathUtils.sin(time * MathUtils.PI2) / 5 + MathUtils.PI * 0.1f, MathUtils.HALF_PI, 1f, 0);
+		((BlendingAttribute) this.galaxy.materials.get(0).get(BlendingAttribute.Type)).opacity =
+				1 - this.interpolatedFloat(time, this.skyProperties.getGalaxyOpacity());
 
 		// skycap rotates counter clock-wise
 		this.skycap.transform.rotateRad(Vector3.Y, 0.2f * delta / 0.016666668f);
@@ -240,6 +242,12 @@ public class SkyboxRenderer {
 	private ModelInstance makePlaneOneOne(final String tex) {
 		final ModelInstance ins = this.makePlane(tex);
 		ins.materials.get(0).set(new BlendingAttribute(GL20.GL_ONE, GL20.GL_ONE, 0.5f));
+		return ins;
+	}
+
+	private ModelInstance makePlaneOneMinusSrcAlphaOne(final String tex) {
+		final ModelInstance ins = this.makePlane(tex);
+		ins.materials.get(0).set(new BlendingAttribute(GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_ONE, 0.5f));
 		return ins;
 	}
 
