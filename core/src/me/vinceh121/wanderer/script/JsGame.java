@@ -23,6 +23,7 @@ import me.vinceh121.wanderer.building.AbstractBuildingPrototype;
 import me.vinceh121.wanderer.building.BuildingArtifactEntity;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
+import me.vinceh121.wanderer.glx.SkyboxRenderer;
 
 public class JsGame {
 	private static final Logger LOG = LogManager.getLogger(JsGame.class);
@@ -126,7 +127,7 @@ public class JsGame {
 	}
 
 	private void setDayTime(final Number hours, final Number mins) {
-		this.game.setElapsedTimeOfDay(hours.floatValue() * 3600 + mins.floatValue() * 60);
+		this.game.setTimeOfDay(SkyboxRenderer.toDayProgress(hours.intValue(), mins.intValue()));
 	}
 
 	private Object playCinematic(final Context cx, final Scriptable scope, final Scriptable thisObj,

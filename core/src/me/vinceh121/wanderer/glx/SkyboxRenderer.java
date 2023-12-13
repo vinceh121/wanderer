@@ -368,4 +368,12 @@ public class SkyboxRenderer {
 	public DirectionalLight getMoonLight() {
 		return this.moonLight;
 	}
+
+	public static float toDayProgress(int hour, int minutes) {
+		return toDayProgress(hour * 60 + minutes);
+	}
+
+	public static float toDayProgress(int dayMinutes) {
+		return (dayMinutes / 1440f - 0.25f + 1) % 1f;
+	}
 }
