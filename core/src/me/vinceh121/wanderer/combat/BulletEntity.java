@@ -10,6 +10,7 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.entity.ParticleEmitter;
 
+// FIXME this is bound to cause some performance issues, should make a proper one-pass renderer
 public class BulletEntity extends AbstractEntity {
 	private final Vector3 direction = new Vector3();
 	private float speed = 200, distance, progress;
