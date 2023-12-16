@@ -30,6 +30,8 @@ public class I18N {
 		if ("en_UK".equals(locale)) {
 			I18N.passthrough = true;
 			return;
+		} else {
+			I18N.passthrough = false;
 		}
 
 		try (final InputStream in = I18N.class.getClassLoader().getResourceAsStream("i18n/" + locale + ".properties")) {
