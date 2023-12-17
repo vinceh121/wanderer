@@ -14,13 +14,16 @@ import me.vinceh121.wanderer.entity.AbstractEntity;
 
 public class DebugOverlay extends Table {
 	private final Wanderer game;
-	private final Label lblFps = new Label("FPS", this.getSkin()), lblEntities = new Label("Entities", this.getSkin()),
-			lblCoords = new Label("Coords", this.getSkin()), lblTime = new Label("Time", this.getSkin());
+	private final Label lblGpuInfo = new Label("Gpu Info", this.getSkin()), lblFps = new Label("FPS", this.getSkin()),
+			lblEntities = new Label("Entities", this.getSkin()), lblCoords = new Label("Coords", this.getSkin()),
+			lblTime = new Label("Time", this.getSkin());
 	private final Label txtPartState = new Label("Part state", this.getSkin());
 
 	public DebugOverlay(final Wanderer game) {
 		super(WandererConstants.getDevSkin());
 		this.game = game;
+		this.add(this.lblGpuInfo).align(Align.left);
+		this.row();
 		this.add(this.lblFps).align(Align.left);
 		this.row();
 		this.add(this.lblEntities).align(Align.left);
@@ -35,6 +38,7 @@ public class DebugOverlay extends Table {
 
 	@Override
 	public void act(final float delta) {
+		this.lblGpuInfo.setText(Gdx.graphics.getGLVersion().getDebugVersionString());
 		this.lblFps.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
 		this.lblEntities.setText("Entities: " + this.game.getEntities().size);
 
