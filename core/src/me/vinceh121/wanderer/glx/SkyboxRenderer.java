@@ -36,6 +36,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import me.vinceh121.wanderer.Preferences;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.util.MathUtilsW;
 
 public class SkyboxRenderer {
 	private final Vector3 sunDir = new Vector3(), moonDir = new Vector3();
@@ -94,7 +95,7 @@ public class SkyboxRenderer {
 				1 - this.interpolatedFloat(time, this.skyProperties.getStarsOpacity());
 
 		this.move(this.sun, MathUtils.PI * 0.65f, time * MathUtils.PI2, 0.6f, 0);
-		this.sunDir.setFromSpherical(MathUtils.PI * 0.65f, time * MathUtils.PI2);
+		MathUtilsW.preciseSetFromSpherical(this.sunDir, MathUtils.PI * 0.65f, time * MathUtils.PI2);
 
 		if (this.shader != null) {
 			// shader needs sunDir to NOT be inverted

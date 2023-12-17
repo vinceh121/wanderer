@@ -7,6 +7,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public final class MathUtilsW {
+	public static Vector3 preciseSetFromSpherical(final Vector3 v, float azimuthalAngle, float polarAngle) {
+		double cosPolar = Math.cos(polarAngle);
+		double sinPolar = Math.sin(polarAngle);
+
+		double cosAzim = Math.cos(azimuthalAngle);
+		double sinAzim = Math.sin(azimuthalAngle);
+
+		return v.set((float) (cosAzim * sinPolar), (float) (sinAzim * sinPolar), (float) cosPolar);
+	}
+
 	public static Vector3 randomDirectionAround(final Vector3 orig, final float maxDeviation) {
 		final Vector3 deviation = new Vector3();
 		deviation.setFromSpherical(MathUtils.random(MathUtils.PI2), MathUtils.random(MathUtils.PI));
