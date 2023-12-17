@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.bullet.collision.ClosestNotMeConvexResultCallbac
 import com.badlogic.gdx.physics.bullet.collision.btConvexShape;
 import com.badlogic.gdx.utils.Array;
 
+import me.vinceh121.wanderer.Preferences;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.building.ExplosionPart;
@@ -99,10 +100,16 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		final float speed = MathUtils.lerp(profile.getMinSpeed(), profile.getMaxSpeed(), speedUpProgress);
 
 		if (this.controlled) {
+			final int mouseSensX = Preferences.getPreferences().getIntOrElse("input.flight.xSens", 20);
+			final int mouseSensY = Preferences.getPreferences().getIntOrElse("input.flight.ySens", 20);
+
 			if (this.game.getInputManager().isPressed(Input.FLY_UP)) {
 				this.currentPitchTime = Math.min(this.currentPitchTime + delta, profile.getPitchSpeed());
 			} else if (this.game.getInputManager().isPressed(Input.FLY_DOWN)) {
 				this.currentPitchTime = Math.max(this.currentPitchTime - delta, -profile.getPitchSpeed());
+			} else if (this.game.getInputManager().getLastMouseX() != 0) {
+				this.currentPitchTime = MathUtils
+					.map(0, mouseSensY, 0, profile.getPitchSpeed(), this.game.getInputManager().getLastMouseY());
 			} else {
 				this.currentPitchTime = 0;
 			}
@@ -113,6 +120,11 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 			} else if (this.game.getInputManager().isPressed(Input.FLY_RIGHT)) {
 				this.currentRollTime = Math.max(this.currentRollTime - delta, -profile.getRollTime());
 				this.currentYawTime = Math.max(this.currentYawTime - delta, -profile.getYawSpeed());
+			} else if (this.game.getInputManager().getLastMouseY() != 0) {
+				this.currentYawTime = MathUtils
+					.map(0, mouseSensX, 0, profile.getYawSpeed(), this.game.getInputManager().getLastMouseX());
+				this.currentRollTime = MathUtils
+					.map(0, mouseSensX, 0, profile.getRollTime(), this.game.getInputManager().getLastMouseX());
 			} else {
 				final float signRoll = Math.signum(this.roll);
 
@@ -128,7 +140,8 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 					MathUtils.clamp(this.currentPitchTime + this.pitch, -profile.getMaxPitch(), profile.getMaxPitch());
 			this.roll = MathUtils.clamp(this.currentRollTime + this.roll, -profile.getMaxRoll(), profile.getMaxRoll());
 
-			MathUtilsW.setRotation(this.getTransform(), new Quaternion().setEulerAngles(this.yaw, this.pitch, this.roll));
+			MathUtilsW.setRotation(this.getTransform(),
+					new Quaternion().setEulerAngles(this.yaw, this.pitch, this.roll));
 		}
 
 		this.advance(speed * delta);
@@ -244,12 +257,13 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		this.controlled = false;
 	}
 
-	public InputListener createInputProcessor() {
+	protected InputListener createInputProcessor() {
 		return new InputListenerAdapter(50) {
 			@Override
 			public boolean inputDown(final Input in) {
 				if (in == Input.FLY_BOOST) {
-					if (System.currentTimeMillis() - AbstractPlane.this.turboPressTime < AbstractPlane.DOUBLE_TAP_SENSITIVITY) {
+					if (System.currentTimeMillis()
+							- AbstractPlane.this.turboPressTime < AbstractPlane.DOUBLE_TAP_SENSITIVITY) {
 						AbstractPlane.this.turbo();
 					}
 

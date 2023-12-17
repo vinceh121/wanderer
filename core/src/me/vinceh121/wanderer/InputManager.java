@@ -36,6 +36,7 @@ public class InputManager extends ApplicationAdapter {
 	private final PriorityQueue<InputListener> listeners =
 			new PriorityQueue<>((o1, o2) -> Integer.compare(o2.getPriority(), o1.getPriority())); // reverse sort order
 	private boolean controllersReady;
+	private int lastMouseX, lastMouseY;
 
 	public void loadOrDefaults() throws JsonProcessingException {
 		this.load();
@@ -348,11 +349,15 @@ public class InputManager extends ApplicationAdapter {
 	}
 
 	private boolean fireMouseMoved(final int x, final int y) {
+		this.lastMouseX = x;
+		this.lastMouseY = y;
+
 		for (final InputListener l : this.listeners) {
 			if (l.mouseMoved(x, y)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -362,6 +367,22 @@ public class InputManager extends ApplicationAdapter {
 
 	public void removeListener(final InputListener listener) {
 		this.listeners.remove(listener);
+	}
+
+	public int getLastMouseX() {
+		if (Gdx.input.getDeltaX() == 0) {
+			return 0;
+		}
+
+		return this.lastMouseX;
+	}
+
+	public int getLastMouseY() {
+		if (Gdx.input.getDeltaY() == 0) {
+			return 0;
+		}
+
+		return this.lastMouseY;
 	}
 
 	public static String nameForControllerButton(final ControllerMapping m, final int b) {
