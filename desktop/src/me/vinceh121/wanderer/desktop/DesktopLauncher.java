@@ -12,6 +12,7 @@ import org.lwjgl.system.Configuration;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.GLEmulation;
 import com.electronwill.nightconfig.core.CommentedConfig;
 
 import me.vinceh121.wanderer.ApplicationMultiplexer;
@@ -50,7 +51,10 @@ public class DesktopLauncher {
 
 		final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		Configuration.DEBUG.set(debug);
+
+		config.setOpenGLEmulation(GLEmulation.GL30, 4, 3);
 		config.setTitle("Wanderer");
+
 		if (debug) {
 			config.enableGLDebugOutput(debug, System.err);
 		}
@@ -76,8 +80,9 @@ public class DesktopLauncher {
 			.orElse(null);
 	}
 
-	private static DisplayMode getDisplayMode(final Monitor monitor, final String displayMode) { // FIXME duplicate code with
-																						// GraphicsUtilities
+	private static DisplayMode getDisplayMode(final Monitor monitor, final String displayMode) { // FIXME duplicate code
+																									// with
+		// GraphicsUtilities
 		return Arrays.stream(Lwjgl3ApplicationConfiguration.getDisplayModes(monitor))
 			.filter(d -> displayMode.equals(d.toString()))
 			.findFirst()

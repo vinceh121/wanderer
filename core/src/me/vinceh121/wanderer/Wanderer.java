@@ -346,7 +346,6 @@ public class Wanderer extends ApplicationDelegate {
 		this.processCameraShake(delta);
 
 		this.graphicsManager.clear();
-		this.graphicsManager.renderSkybox(this.timeOfDay);
 
 		final Vector3 sunCenter;
 
@@ -370,6 +369,9 @@ public class Wanderer extends ApplicationDelegate {
 		this.graphicsManager.getShadowBatch().end();
 		this.graphicsManager.getSkybox().getSunLight().end();
 
+		this.graphicsManager.beginPostProcess();
+		this.graphicsManager.renderSkybox(this.timeOfDay);
+
 		this.graphicsManager.begin();
 		for (int i = 0; i < this.entities.size; i++) {
 			final AbstractEntity entity = this.entities.get(i);
@@ -386,6 +388,8 @@ public class Wanderer extends ApplicationDelegate {
 			this.physicsManager.getBtWorld().debugDrawWorld();
 			this.physicsManager.getDebugDrawer().end();
 		}
+
+		this.graphicsManager.endPostProcess();
 
 		this.scriptManager.update();
 
@@ -419,8 +423,9 @@ public class Wanderer extends ApplicationDelegate {
 
 	protected void controlledDeathTest() {
 		if (this.controlledEntity instanceof ILivingEntity && ((ILivingEntity) this.controlledEntity).isDead()) {
-			final Optional<CharacterW> optChar =
-					this.findEntitiesByClass(CharacterW.class).filter(c -> c.getClan() == this.getPlayerClan()).findFirst();
+			final Optional<CharacterW> optChar = this.findEntitiesByClass(CharacterW.class)
+				.filter(c -> c.getClan() == this.getPlayerClan())
+				.findFirst();
 
 			if (optChar.isPresent()) {
 				this.controlEntity(optChar.get());
@@ -450,7 +455,8 @@ public class Wanderer extends ApplicationDelegate {
 
 		final PerspectiveCamera cam = this.graphicsManager.getCamera();
 
-		final EllipsePath path = new EllipsePath(0f, 0f, 0.5f * this.cameraShakeIntensity, 0.2f * this.cameraShakeIntensity);
+		final EllipsePath path =
+				new EllipsePath(0f, 0f, 0.5f * this.cameraShakeIntensity, 0.2f * this.cameraShakeIntensity);
 		path.y = path.height / 2;
 		final Vector2 shakeVec2 = path.valueAt(new Vector2(), this.cameraShakeTime / this.cameraShakeRevolutionTime);
 		final Vector3 shakeVec3 = new Vector3(shakeVec2, 0);

@@ -34,6 +34,7 @@ import me.vinceh121.wanderer.glx.ShaderAttribute;
 import me.vinceh121.wanderer.glx.SkyboxRenderer;
 import me.vinceh121.wanderer.glx.WandererParticleShader;
 import me.vinceh121.wanderer.glx.WandererShader;
+import me.vinceh121.wanderer.glx.post.PostProcessManager;
 
 public class GraphicsManager extends ApplicationAdapter {
 	private ScreenViewport viewportUi;
@@ -44,6 +45,7 @@ public class GraphicsManager extends ApplicationAdapter {
 	private Stage stage;
 	private ParticleSystem particleSystem;
 	private BillboardParticleBatch particleBatch;
+	private PostProcessManager postProcessManager;
 
 	private SkyboxRenderer skybox;
 
@@ -97,6 +99,8 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.env.set(this.skybox.getAmbiantLight());
 		this.env.add(this.skybox.getSunLight());
 		this.env.shadowMap = this.skybox.getSunLight();
+
+		this.postProcessManager = new PostProcessManager(this);
 	}
 
 	public void apply() {
@@ -113,6 +117,12 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.modelBatch.begin(this.cam);
 	}
 
+	public void beginPostProcess() {
+		if (this.isPostProcessing()) {
+			this.postProcessManager.begin();
+		}
+	}
+
 	public void renderParticles(final float delta) {
 		this.particleSystem.update(Gdx.graphics.getDeltaTime());
 		this.particleSystem.begin();
@@ -123,6 +133,12 @@ public class GraphicsManager extends ApplicationAdapter {
 
 	public void end() {
 		this.modelBatch.end();
+	}
+
+	public void endPostProcess() {
+		if (this.isPostProcessing()) {
+			this.postProcessManager.end();
+		}
 	}
 
 	public void renderUI() {
@@ -164,6 +180,10 @@ public class GraphicsManager extends ApplicationAdapter {
 
 	public void removeParticle(final ParticleEmitter effect) {
 		this.particleSystem.remove(effect.getDelegate());
+	}
+
+	public boolean isPostProcessing() {
+		return false; // FIXME post pro and FXAA
 	}
 
 	/**
