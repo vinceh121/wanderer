@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.GLFrameBuffer;
 
 import me.vinceh121.wanderer.GraphicsManager;
 import me.vinceh121.wanderer.platform.glx.IComputeShaderProvider;
@@ -34,7 +35,11 @@ public class PostProcessManager {
 	public void begin() {
 		assert this.fbo == null;
 
-		this.fbo = new FrameBuffer(Format.RGB888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+		this.fbo = new GLFrameBuffer.FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())
+			.addBasicColorTextureAttachment(Format.RGB888)
+			.addDepthRenderBuffer(GL30.GL_DEPTH_COMPONENT24)
+			.build();
+
 		this.fbo.begin();
 	}
 

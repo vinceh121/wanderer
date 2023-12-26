@@ -389,11 +389,11 @@ public class Wanderer extends ApplicationDelegate {
 			this.physicsManager.getDebugDrawer().end();
 		}
 
-		this.graphicsManager.endPostProcess();
-
 		this.scriptManager.update();
 
 		this.graphicsManager.renderUI();
+
+		this.graphicsManager.endPostProcess();
 	}
 
 	protected void flushEntityQueue() {
