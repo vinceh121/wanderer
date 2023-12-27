@@ -16,4 +16,9 @@ public class FxaaPostProcessEffect implements IPostProcessEffect {
 	public Texture process(GraphicsManager glx, Texture tex) {
 		return this.shader.run(glx.getModelBatch().getRenderContext(), tex);
 	}
+
+	@Override
+	public boolean isInPlace() {
+		return false;
+	}
 }
