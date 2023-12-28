@@ -13,8 +13,8 @@ public class SkyProperties {
 	private final NavigableMap<Float, Color> skyMiddleColor = new TreeMap<>();
 	private final NavigableMap<Float, Color> skyBottomColor = new TreeMap<>();
 	private final NavigableMap<Float, Color> sunShineColor = new TreeMap<>();
-	private final NavigableMap<Float, Float> starsOpacity = new TreeMap<>();
-	private final NavigableMap<Float, Float> galaxyOpacity = new TreeMap<>();
+	private final NavigableMap<Float, Color> starsColor = new TreeMap<>();
+	private final NavigableMap<Float, Color> galaxyColor = new TreeMap<>();
 
 	public NavigableMap<Float, Color> getSunColor() {
 		return sunColor;
@@ -44,19 +44,19 @@ public class SkyProperties {
 		return sunShineColor;
 	}
 
-	public NavigableMap<Float, Float> getStarsOpacity() {
-		return starsOpacity;
+	public NavigableMap<Float, Color> getStarsColor() {
+		return starsColor;
 	}
 
-	public NavigableMap<Float, Float> getGalaxyOpacity() {
-		return galaxyOpacity;
+	public NavigableMap<Float, Color> getGalaxyColor() {
+		return galaxyColor;
 	}
 
 	@Override
 	public String toString() {
 		return "SkyProperties [sunColor=" + sunColor + ", sunLightColor=" + sunLightColor + ", ambLightColor="
 				+ ambLightColor + ", skyTopColor=" + skyTopColor + ", skyMiddleColor=" + skyMiddleColor
-				+ ", skyBottomColor=" + skyBottomColor + ", sunShineColor=" + sunShineColor + ", starsOpacity="
-				+ starsOpacity + ", galaxyOpacity=" + galaxyOpacity + "]";
+				+ ", skyBottomColor=" + skyBottomColor + ", sunShineColor=" + sunShineColor + ", starsColor="
+				+ starsColor + ", galaxyColor=" + galaxyColor + "]";
 	}
 }

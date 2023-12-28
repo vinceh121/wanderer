@@ -91,10 +91,12 @@ public class SkyboxRenderer {
 		this.previous = time;
 
 		this.stars.transform.rotateRad(Vector3.Y, 0.02f * delta / 0.016666668f);
-		((BlendingAttribute) this.stars.materials.get(0).get(BlendingAttribute.Type)).opacity =
-				1 - this.interpolatedFloat(time, this.skyProperties.getStarsOpacity());
+		((ColorAttribute) this.stars.materials.get(0).get(ColorAttribute.Diffuse)).color
+			.set(this.interpolatedColor(time, this.skyProperties.getStarsColor()));
 
 		this.move(this.sun, MathUtils.PI * 0.65f, time * MathUtils.PI2, 0.6f, 0);
+		((ColorAttribute) this.sun.materials.get(0).get(ColorAttribute.Diffuse)).color
+			.set(this.interpolatedColor(time, this.skyProperties.getSunColor()));
 		MathUtilsW.preciseSetFromSpherical(this.sunDir, MathUtils.PI * 0.65f, time * MathUtils.PI2);
 
 		if (this.shader != null) {
@@ -111,8 +113,8 @@ public class SkyboxRenderer {
 		this.move(this.mars, MathUtils.PI2 * time, 0.12f * MathUtils.PI2, 1f, 0);
 
 		this.move(this.galaxy, MathUtils.sin(time * MathUtils.PI2) / 5 + MathUtils.PI * 0.1f, MathUtils.HALF_PI, 1f, 0);
-		((BlendingAttribute) this.galaxy.materials.get(0).get(BlendingAttribute.Type)).opacity =
-				1 - this.interpolatedFloat(time, this.skyProperties.getGalaxyOpacity());
+		((ColorAttribute) this.galaxy.materials.get(0).get(ColorAttribute.Diffuse)).color
+			.set(this.interpolatedColor(time, this.skyProperties.getGalaxyColor()));
 
 		// skycap rotates counter clock-wise
 		this.skycap.transform.rotateRad(Vector3.Y, 0.2f * delta / 0.016666668f);
@@ -336,9 +338,11 @@ public class SkyboxRenderer {
 		final Model model = WandererConstants.ASSET_MANAGER.get("orig/lib/stars/stars.obj", Model.class);
 		final ModelInstance ins = new ModelInstance(model);
 		ins.materials.get(0)
-			.set(new DepthTestAttribute(false), IntAttribute.createCullFace(0), TextureAttribute.createDiffuse(tex)
-//							,new NoLightningAttribute()
-			);
+			.set(new DepthTestAttribute(false),
+					IntAttribute.createCullFace(0),
+					TextureAttribute.createDiffuse(tex),
+					new NoLightningAttribute(),
+					ColorAttribute.createDiffuse(Color.CLEAR));
 		return ins;
 	}
 
@@ -374,7 +378,7 @@ public class SkyboxRenderer {
 		return toDayProgress(hour * 60 + minutes);
 	}
 
-	public static float toDayProgress(int dayMinutes) {
+	public static float toDayProgress(float dayMinutes) {
 		return (dayMinutes / 1440f - 0.25f + 1) % 1f;
 	}
 }
