@@ -4,9 +4,12 @@ import static java.util.Map.entry;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -30,13 +33,17 @@ import me.vinceh121.n2ae.script.ClassCommandCall;
 import me.vinceh121.n2ae.script.ICommandCall;
 import me.vinceh121.n2ae.script.NOBClazz;
 import me.vinceh121.n2ae.script.NewCommandCall;
+import me.vinceh121.n2ae.script.ParseException;
 import me.vinceh121.n2ae.script.tcl.TCLParser;
 import me.vinceh121.wanderer.glx.SkyboxRenderer;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.Spec;
 
 @Command(name = "weather", description = { "Converts a weather object to a sky configuration" })
 public class WeatherCommand implements Callable<Integer> {
+	private static final ObjectMapper MAPPER = new ObjectMapper();
 	private static final Map<String, String> IPOL_NAMES = Map.ofEntries(entry("amb_color", "ambLightColor"),
 			entry("sun1_em", "sunColor"),
 			entry("fog_color", "fogColor"),
@@ -44,12 +51,14 @@ public class WeatherCommand implements Callable<Integer> {
 			entry("galaxy_diff", "galaxyColor"),
 			entry("licht1_color", "sunLightColor"),
 			entry("licht2_color", "moonLightColor"));
-	private static final float DAY_LENGTH = 86400f;
 
-	@Option(names = { "-i", "--input" })
-	private File input;
+	@Spec
+	private CommandSpec spec;
 
-	@Option(names = { "-m", "--model" })
+	@Option(names = { "-i", "--input" }, required = true)
+	private List<File> inputs;
+
+	@Option(names = { "-m", "--model" }, required = true)
 	private File model;
 
 	@Option(names = { "--skies" })
@@ -57,20 +66,53 @@ public class WeatherCommand implements Callable<Integer> {
 
 	@Override
 	public Integer call() throws Exception {
-		final ObjectMapper mapper = new ObjectMapper();
-
-		final Map<String, NOBClazz> model = mapper.readValue(this.model, new TypeReference<Map<String, NOBClazz>>() {
+		final Map<String, NOBClazz> model = MAPPER.readValue(this.model, new TypeReference<Map<String, NOBClazz>>() {
 		});
 
+		if (inputs.size() == 1) {
+			ObjectNode doc = this.buildSkyProp(this.inputs.get(0), model);
+
+			System.out.println(doc.toPrettyString());
+		} else {
+			ObjectNode doc = MAPPER.createObjectNode();
+
+			for (File input : this.inputs) {
+				Iterator<Path> elems = input.toPath().iterator();
+				String weatherName = null;
+
+				while (elems.hasNext()) {
+					String el = elems.next().toString();
+
+					if (el.startsWith("weather_") && el.endsWith(".n")) {
+						weatherName = el.substring("weather_".length(), el.length() - ".n".length());
+						break;
+					}
+				}
+
+				if (weatherName == null) {
+					throw new RuntimeException("Couldn't find weather name in " + input);
+				}
+
+				ObjectNode skyProp = this.buildSkyProp(input, model);
+				doc.set(weatherName, skyProp);
+			}
+
+			System.out.println(doc.toPrettyString());
+		}
+
+		return 0;
+	}
+
+	private ObjectNode buildSkyProp(File input, Map<String, NOBClazz> model) throws IOException, ParseException {
 		final TCLParser parser = new TCLParser();
 
 		parser.setClassModel(model);
 
-		try (final InputStream in = new FileInputStream(this.input)) {
+		try (final InputStream in = new FileInputStream(input)) {
 			parser.read(in);
 		}
 
-		final ObjectNode doc = mapper.createObjectNode();
+		final ObjectNode doc = MAPPER.createObjectNode();
 
 		for (int i = 0; i < parser.getCalls().size(); i++) {
 			ICommandCall call = parser.getCalls().get(i);
@@ -84,7 +126,7 @@ public class WeatherCommand implements Callable<Integer> {
 					continue;
 				}
 
-				final ObjectNode ipol = mapper.createObjectNode();
+				final ObjectNode ipol = MAPPER.createObjectNode();
 				doc.set(ipolName, ipol);
 
 				call = parser.getCalls().get(i++);
@@ -107,7 +149,7 @@ public class WeatherCommand implements Callable<Integer> {
 					JsonNode keyFrame;
 
 					if (cmd.equals("setkey4f")) {
-						keyFrame = mapper.createObjectNode()
+						keyFrame = MAPPER.createObjectNode()
 							.put("r", (float) arguments[2])
 							.put("g", (float) arguments[3])
 							.put("b", (float) arguments[4])
@@ -115,9 +157,9 @@ public class WeatherCommand implements Callable<Integer> {
 					} else if (cmd.equals("setkey1f")) {
 						keyFrame = new FloatNode((float) arguments[2]);
 					} else if (cmd.equals("setkey2f")) {
-						keyFrame = mapper.createArrayNode().add((float) arguments[2]).add((float) arguments[3]);
+						keyFrame = MAPPER.createArrayNode().add((float) arguments[2]).add((float) arguments[3]);
 					} else if (cmd.equals("setkey3f")) {
-						keyFrame = mapper.createArrayNode()
+						keyFrame = MAPPER.createArrayNode()
 							.add((float) arguments[2])
 							.add((float) arguments[3])
 							.add((float) arguments[4]);
@@ -136,7 +178,7 @@ public class WeatherCommand implements Callable<Integer> {
 			ObjectNode skyTopColor = doc.putObject("skyTopColor");
 			ObjectNode skyMiddleColor = doc.putObject("skyMiddleColor");
 			ObjectNode skyBottomColor = doc.putObject("skyBottomColor");
-			
+
 			NavigableMap<Float, SkyPoint> points = new TreeMap<>();
 
 			for (ICommandCall call : parser.getCalls()) {
@@ -155,7 +197,7 @@ public class WeatherCommand implements Callable<Integer> {
 				final float time = SkyboxRenderer.toDayProgress(((float) clsCall.getArguments()[1]) / 60f);
 
 				try (FileInputStream in =
-						new FileInputStream(this.input.toPath().resolveSibling("himmel" + i + ".nvx").toFile())) {
+						new FileInputStream(input.toPath().resolveSibling("himmel" + i + ".nvx").toFile())) {
 					NvxFileReader r = new NvxFileReader(in);
 					r.readAll();
 
@@ -171,9 +213,7 @@ public class WeatherCommand implements Callable<Integer> {
 
 		}
 
-		System.out.println(doc.toPrettyString());
-
-		return 0;
+		return doc;
 	}
 
 	private SkyPoint recognizeColors(List<Vertex> vertices) {
