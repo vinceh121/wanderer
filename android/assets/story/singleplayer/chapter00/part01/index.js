@@ -8,6 +8,7 @@ part.state.collectedBuildings = 0;
 
 part.setPartStart(() => {
 	setDayTime(1, 15);
+	setSky(require("./skyIntro").skyIntro);
 
 	const backpack = findFirstEntityByClass(BackpackArtifact);
 	backpack.addEventListener("pickedUp", e => {

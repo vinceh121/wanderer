@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Undefined;
 import org.mozilla.javascript.commonjs.module.ModuleScope;
@@ -19,10 +20,12 @@ import com.badlogic.gdx.math.Vector3;
 import me.vinceh121.wanderer.IPrototype;
 import me.vinceh121.wanderer.PrototypeRegistry;
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.building.AbstractBuildingPrototype;
 import me.vinceh121.wanderer.building.BuildingArtifactEntity;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
+import me.vinceh121.wanderer.glx.SkyProperties;
 import me.vinceh121.wanderer.glx.SkyboxRenderer;
 
 public class JsGame {
@@ -57,6 +60,7 @@ public class JsGame {
 		JsUtils.install(scope, "playCinematic", this::playCinematic);
 		JsUtils.install(scope, "spawn", this::spawn);
 		JsUtils.install(scope, "newv", this::newv);
+		JsUtils.install(scope, "setSky", this::setSky);
 
 		JsUtils.install(scope, "debugAudio", this::debugAudio);
 	}
@@ -69,6 +73,11 @@ public class JsGame {
 	private void debugAudio() {
 		this.game.setAudioEmittersDebug(!this.game.isAudioEmittersDebug());
 		JsGame.LOG.info("Audio debug now {}", this.game.isAudioEmittersDebug());
+	}
+	
+	private void setSky(final NativeObject skyRaw) {
+		final SkyProperties sky = WandererConstants.MAPPER.convertValue(skyRaw, SkyProperties.class);
+		this.game.getGraphicsManager().getSkybox().setSkyProperties(sky);
 	}
 
 	private Object newv(final String prototypeName, Integer count) {

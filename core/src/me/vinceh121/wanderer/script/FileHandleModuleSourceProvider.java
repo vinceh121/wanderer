@@ -33,7 +33,7 @@ public class FileHandleModuleSourceProvider implements ModuleSourceProvider {
 	public ModuleSource loadSource(final URI uri, final URI baseUri, final Object validator)
 			throws IOException, URISyntaxException {
 		FileHandle fh = FileHandleModuleSourceProvider.fromURI(uri);
-		if (!fh.path().endsWith(".js")) {
+		if (!fh.path().endsWith(".js") && !fh.exists()) {
 			fh = fh.sibling(fh.name() + ".js");
 		}
 		final ModuleSource src = new ModuleSource(fh.reader(), null, uri, baseUri, validator);
