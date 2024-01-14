@@ -56,7 +56,7 @@ public class WeatherCommand implements Callable<Integer> {
 					entry("galaxy_diff", new ConversionEntry("galaxyColor")),
 					entry("licht1_color", new ConversionEntry("sunLightColor")),
 					entry("licht2_color", new ConversionEntry("moonLightColor")),
-					entry("sun3_em", new ConversionEntry("sunShineColor").setAlphaFromScale("sun3_s")));
+					entry("sun2_em", new ConversionEntry("sunShineColor").setAlphaFromScale("sun2_s")));
 
 	@Spec
 	private CommandSpec spec;
