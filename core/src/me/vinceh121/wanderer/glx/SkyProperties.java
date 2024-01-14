@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 public class SkyProperties {
 	private final NavigableMap<Float, Color> sunColor = new TreeMap<>();
 	private final NavigableMap<Float, Color> sunLightColor = new TreeMap<>();
+	private final NavigableMap<Float, Color> moonLightColor = new TreeMap<>();
 	private final NavigableMap<Float, Color> ambLightColor = new TreeMap<>();
 	private final NavigableMap<Float, Color> skyTopColor = new TreeMap<>();
 	private final NavigableMap<Float, Color> skyMiddleColor = new TreeMap<>();
@@ -22,6 +23,10 @@ public class SkyProperties {
 
 	public NavigableMap<Float, Color> getSunLightColor() {
 		return sunLightColor;
+	}
+
+	public NavigableMap<Float, Color> getMoonLightColor() {
+		return moonLightColor;
 	}
 
 	public NavigableMap<Float, Color> getAmbLightColor() {

@@ -9,18 +9,22 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.DoubleSummaryStatistics;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.Vector;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.collections4.ListValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,13 +48,15 @@ import picocli.CommandLine.Spec;
 @Command(name = "weather", description = { "Converts a weather object to a sky configuration" })
 public class WeatherCommand implements Callable<Integer> {
 	private static final ObjectMapper MAPPER = new ObjectMapper();
-	private static final Map<String, String> IPOL_NAMES = Map.ofEntries(entry("amb_color", "ambLightColor"),
-			entry("sun1_em", "sunColor"),
-			entry("fog_color", "fogColor"),
-			entry("stars_em", "starsColor"),
-			entry("galaxy_diff", "galaxyColor"),
-			entry("licht1_color", "sunLightColor"),
-			entry("licht2_color", "moonLightColor"));
+	private static final Map<String, ConversionEntry> IPOL_NAMES =
+			Map.ofEntries(entry("amb_color", new ConversionEntry("ambLightColor")),
+					entry("sun1_em", new ConversionEntry("sunColor")),
+					entry("fog_color", new ConversionEntry("fogColor")),
+					entry("stars_em", new ConversionEntry("starsColor")),
+					entry("galaxy_diff", new ConversionEntry("galaxyColor")),
+					entry("licht1_color", new ConversionEntry("sunLightColor")),
+					entry("licht2_color", new ConversionEntry("moonLightColor")),
+					entry("sun3_em", new ConversionEntry("sunShineColor").setAlphaFromScale("sun3_s")));
 
 	@Spec
 	private CommandSpec spec;
@@ -119,12 +125,14 @@ public class WeatherCommand implements Callable<Integer> {
 
 			if (call instanceof NewCommandCall && ((NewCommandCall) call).getClazz().getName().equals("nipol")) {
 				final String pnIpolName = ((NewCommandCall) call).getVarName();
-				final String ipolName = IPOL_NAMES.get(pnIpolName);
+				final ConversionEntry entry = IPOL_NAMES.get(pnIpolName);
 
-				if (ipolName == null) {
+				if (entry == null) {
 					System.err.println("Unknown ipol " + pnIpolName);
 					continue;
 				}
+
+				final String ipolName = entry.getName();
 
 				final ObjectNode ipol = MAPPER.createObjectNode();
 				doc.set(ipolName, ipol);
@@ -154,6 +162,11 @@ public class WeatherCommand implements Callable<Integer> {
 							.put("g", (float) arguments[3])
 							.put("b", (float) arguments[4])
 							.put("a", (float) arguments[5]);
+
+						if (entry.getAlphaFromScale() != null) {
+							((ObjectNode) keyFrame).put("a",
+									this.getAlphaForScale(parser.getCalls(), entry.getAlphaFromScale(), time));
+						}
 					} else if (cmd.equals("setkey1f")) {
 						keyFrame = new FloatNode((float) arguments[2]);
 					} else if (cmd.equals("setkey2f")) {
@@ -216,6 +229,56 @@ public class WeatherCommand implements Callable<Integer> {
 		return doc;
 	}
 
+	private Float getAlphaForScale(LinkedList<ICommandCall> calls, String scaleIpolName, float time) {
+		for (int i = 0; i < calls.size(); i++) {
+			ICommandCall call = calls.get(i);
+
+			if (call instanceof NewCommandCall && ((NewCommandCall) call).getClazz().getName().equals("nipol")
+					&& ((NewCommandCall) call).getVarName().equals(scaleIpolName)) {
+
+				call = calls.get(i++);
+
+				while (!(call instanceof ClassCommandCall)
+						|| !((ClassCommandCall) call).getPrototype().getName().equals("beginkeys")) {
+					call = calls.get(i++);
+				}
+
+				List<ICommandCall> sizeCalls = new Vector<>();
+				ICommandCall exactTimeCall = null;
+
+				int keys = (int) ((ClassCommandCall) call).getArguments()[0];
+
+				for (int j = 0; j < keys; j++) {
+					call = calls.get(i + j);
+
+					sizeCalls.add(call);
+
+					if (SkyboxRenderer
+						.toDayProgress(((Float) ((ClassCommandCall) call).getArguments()[1]) / 60f) == time) {
+						exactTimeCall = call;
+					}
+				}
+
+				if (exactTimeCall == null) {
+					return null;
+				}
+
+				DoubleSummaryStatistics stats = sizeCalls.stream()
+					.map(c -> (ClassCommandCall) c)
+					.mapToDouble(c -> (Float) c.getArguments()[2])
+					.summaryStatistics();
+
+				return MathUtils.map((float) stats.getMin(),
+						(float) stats.getMax(),
+						0,
+						1,
+						(Float) ((ClassCommandCall) exactTimeCall).getArguments()[2]);
+			}
+		}
+
+		return null;
+	}
+
 	private SkyPoint recognizeColors(List<Vertex> vertices) {
 		ListValuedMap<Float, Color> grouped = new ArrayListValuedHashMap<>();
 
@@ -273,6 +336,33 @@ public class WeatherCommand implements Callable<Integer> {
 		a /= colors.size();
 
 		return new Color(r, g, b, a);
+	}
+
+	private static class ConversionEntry {
+		private final String name;
+		private String alphaFromScale;
+
+		public ConversionEntry(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getAlphaFromScale() {
+			return alphaFromScale;
+		}
+
+		public ConversionEntry setAlphaFromScale(String alphaFromScale) {
+			this.alphaFromScale = alphaFromScale;
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return this.getName();
+		}
 	}
 
 	private static class SkyPoint {

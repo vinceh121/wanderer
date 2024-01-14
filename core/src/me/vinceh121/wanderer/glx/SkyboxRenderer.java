@@ -105,7 +105,10 @@ public class SkyboxRenderer {
 			this.shader.setSkyTop(this.interpolatedColor(time, this.skyProperties.getSkyTopColor()));
 			this.shader.setSkyMiddle(this.interpolatedColor(time, this.skyProperties.getSkyMiddleColor()));
 			this.shader.setSkyBottom(this.interpolatedColor(time, this.skyProperties.getSkyBottomColor()));
-			this.shader.setSunShine(this.interpolatedColor(time, this.skyProperties.getSunShineColor()));
+
+			// FIXME missing proper alpha
+			final Color sunShine = this.interpolatedColor(time, this.skyProperties.getSunShineColor());
+			this.shader.setSunShine(sunShine);
 		}
 
 		this.sunDir.scl(-1);
