@@ -94,7 +94,11 @@ public class SkyboxRenderer {
 		((ColorAttribute) this.stars.materials.get(0).get(ColorAttribute.Diffuse)).color
 			.set(this.interpolatedColor(time, this.skyProperties.getStarsColor()));
 
-		this.move(this.sun, MathUtils.PI * 0.65f, time * MathUtils.PI2, 0.6f, 0);
+		this.move(this.sun,
+				MathUtils.PI * 0.65f,
+				time * MathUtils.PI2,
+				0.6f * this.interpolatedFloat(time, this.skyProperties.getSunSize()),
+				0);
 		((ColorAttribute) this.sun.materials.get(0).get(ColorAttribute.Diffuse)).color
 			.set(this.interpolatedColor(time, this.skyProperties.getSunColor()));
 		MathUtilsW.preciseSetFromSpherical(this.sunDir, MathUtils.PI * 0.65f, time * MathUtils.PI2);

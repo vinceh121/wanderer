@@ -56,7 +56,8 @@ public class WeatherCommand implements Callable<Integer> {
 					entry("galaxy_diff", new ConversionEntry("galaxyColor")),
 					entry("licht1_color", new ConversionEntry("sunLightColor")),
 					entry("licht2_color", new ConversionEntry("moonLightColor")),
-					entry("sun2_em", new ConversionEntry("sunShineColor").setAlphaFromScale("sun2_s")));
+					entry("sun2_em", new ConversionEntry("sunShineColor").setAlphaFromScale("sun2_s")),
+					entry("sun1_s", new ConversionEntry("sunSize").setNormalize(50)));
 
 	@Spec
 	private CommandSpec spec;
@@ -172,10 +173,15 @@ public class WeatherCommand implements Callable<Integer> {
 					} else if (cmd.equals("setkey2f")) {
 						keyFrame = MAPPER.createArrayNode().add((float) arguments[2]).add((float) arguments[3]);
 					} else if (cmd.equals("setkey3f")) {
-						keyFrame = MAPPER.createArrayNode()
-							.add((float) arguments[2])
-							.add((float) arguments[3])
-							.add((float) arguments[4]);
+						if (entry.isNormalize()) {
+							keyFrame =
+									FloatNode.valueOf(MathUtils.norm(0, entry.getNormalizeMax(), (float) arguments[2]));
+						} else {
+							keyFrame = MAPPER.createArrayNode()
+								.add((float) arguments[2])
+								.add((float) arguments[3])
+								.add((float) arguments[4]);
+						}
 					} else {
 						throw new UnsupportedOperationException(cmd);
 					}
@@ -341,6 +347,7 @@ public class WeatherCommand implements Callable<Integer> {
 	private static class ConversionEntry {
 		private final String name;
 		private String alphaFromScale;
+		private Float normalizeMax;
 
 		public ConversionEntry(String name) {
 			this.name = name;
@@ -356,6 +363,19 @@ public class WeatherCommand implements Callable<Integer> {
 
 		public ConversionEntry setAlphaFromScale(String alphaFromScale) {
 			this.alphaFromScale = alphaFromScale;
+			return this;
+		}
+
+		public boolean isNormalize() {
+			return normalizeMax != null;
+		}
+
+		public Float getNormalizeMax() {
+			return normalizeMax;
+		}
+
+		public ConversionEntry setNormalize(float max) {
+			this.normalizeMax = max;
 			return this;
 		}
 
