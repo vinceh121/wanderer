@@ -20,7 +20,7 @@ In Wanderer, the part definition script goes into the `story/<storyline name>/ch
 
 > For clarity sake, JS method definitions will be written in TS
 
-###### daytime / setDayTime
+##### daytime / setDayTime
 
 ```typescript
 setDayTime(hours: number, minutes: number): void
