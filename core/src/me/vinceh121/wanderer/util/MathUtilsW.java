@@ -105,4 +105,8 @@ public final class MathUtilsW {
 		trans.set(pos, rot, scale);
 		return trans;
 	}
+
+	public static String toString(final Vector3 vec3) {
+		return "( " + vec3.x + ",\t" + vec3.y + ",\t" + vec3.z + " )";
+	}
 }

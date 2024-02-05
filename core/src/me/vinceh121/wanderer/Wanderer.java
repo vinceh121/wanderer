@@ -499,6 +499,10 @@ public class Wanderer extends ApplicationDelegate {
 		return null;
 	}
 
+	public void addClan(final Clan clan) {
+		this.clans.add(clan);
+	}
+
 	public Clan getClanForMember(final IClanMember member) {
 		for (final Clan c : this.clans) {
 			if (c.getMembers().contains(member.getId(), false)) {
@@ -519,6 +523,14 @@ public class Wanderer extends ApplicationDelegate {
 			}
 		}
 		return null;
+	}
+
+	public Stream<Clan> getClansByName(String name) {
+		return this.streamClans().filter(c -> name.equals(c.getName()));
+	}
+
+	public Stream<Clan> streamClans() {
+		return Stream.of((Object[]) this.clans.items).map(c -> (Clan) c).limit(this.clans.size);
 	}
 
 	public Clan getPlayerClan() {
@@ -813,13 +825,17 @@ public class Wanderer extends ApplicationDelegate {
 
 	@SuppressWarnings("unchecked")
 	public <T extends AbstractEntity> Stream<T> findEntitiesByClass(final Class<T> cls) {
+		return this.streamEntities().filter(e -> cls.isInstance(e)).map(e -> (T) e);
+	}
+
+	public Stream<AbstractEntity> streamEntities() {
 		// This game of casts looks redundant but it's not!
 		// Using Stream.of(this.entities.items) causes a ClassCastException
 		// This is due to an implicit (AbtractEntity[]) this.entities.items added by the
 		// compiler that will always fail!
 		// GDX's Array<T>#items has a T[] type, which the compiler will always compile
 		// as Object[]
-		return Stream.of((Object[]) this.entities.items).filter(e -> cls.isInstance(e)).map(e -> (T) e);
+		return Stream.of((Object[]) this.entities.items).map(e -> (AbstractEntity) e);
 	}
 
 	public void showMessage(final String message) {

@@ -16,7 +16,7 @@ public abstract class AbstractPlanePrototype implements IPrototype {
 	private Array<DisplayModel> explosionParts = new Array<>();
 	private String collisionModel, engineSound, turboSound, explosionSound;
 	private final PlaneSpeedProfile normal = new PlaneSpeedProfile(), turbo = new PlaneSpeedProfile();
-	private float maxTurboTime;
+	private float maxTurboTime, targetSearchDistance;
 
 	@Override
 	public void getAssetsToLoad(final List<AssetDescriptor<?>> descriptors) {
@@ -99,5 +99,13 @@ public abstract class AbstractPlanePrototype implements IPrototype {
 
 	public void setMaxTurboTime(final float maxTurboTime) {
 		this.maxTurboTime = maxTurboTime;
+	}
+
+	public float getTargetSearchDistance() {
+		return targetSearchDistance;
+	}
+
+	public void setTargetSearchDistance(float targetSearchDistance) {
+		this.targetSearchDistance = targetSearchDistance;
 	}
 }

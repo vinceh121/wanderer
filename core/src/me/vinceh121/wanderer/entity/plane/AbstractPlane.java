@@ -1,5 +1,7 @@
 package me.vinceh121.wanderer.entity.plane;
 
+import java.util.Optional;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -14,7 +16,11 @@ import com.badlogic.gdx.utils.Array;
 import me.vinceh121.wanderer.Preferences;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
+import me.vinceh121.wanderer.ai.AIController;
+import me.vinceh121.wanderer.ai.Task;
+import me.vinceh121.wanderer.ai.TaskAIController;
 import me.vinceh121.wanderer.building.ExplosionPart;
+import me.vinceh121.wanderer.clan.Amicability;
 import me.vinceh121.wanderer.combat.DamageType;
 import me.vinceh121.wanderer.entity.AbstractClanLivingEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
@@ -31,13 +37,15 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	private final Array<DisplayModel> explosionParts = new Array<>();
 	private final PlaneSpeedProfile normal, turbo;
 	protected final SoundEmitter3D engineEmitter, turboEmitter;
+	private AIController<? extends AbstractPlane> aiController;
 	private String explosionSound;
 	private InputListener inputListener;
 	private ColorAttribute colorAttr;
 	private BlendingAttribute blendingAttr;
+	private Garage garage;
 	private boolean controlled, isTurbo;
 	private float speedUpTime, maxTurboTime, turboTime, yaw, pitch, roll, currentYawTime, currentPitchTime,
-			currentRollTime;
+			currentRollTime, targetSearchDistance;
 	private long turboPressTime;
 
 	public AbstractPlane(final Wanderer game, final AbstractPlanePrototype prototype) {
@@ -62,6 +70,8 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 
 		this.explosionSound = prototype.getExplosionSound();
 
+		this.targetSearchDistance = prototype.getTargetSearchDistance();
+
 		this.engineEmitter =
 				WandererConstants.getAssetOrHotload(prototype.getEngineSound(), Sound3D.class).playSource3D();
 		this.engineEmitter.setLooping(true);
@@ -72,6 +82,13 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		this.turboEmitter.stop();
 		this.addSoundEmitter(this.turboEmitter);
 
+		this.setupAi();
+	}
+
+	protected void setupAi() {
+		final TaskAIController<AbstractPlane> cont = new TaskAIController<>(game, this);
+		cont.setCurrentTask(new TaskTargetSearch<AbstractPlane>());
+		this.aiController = cont;
 	}
 
 	@Override
@@ -86,7 +103,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 			}
 		}
 
-		final PlaneSpeedProfile profile = this.isTurbo ? this.turbo : this.normal;
+		final PlaneSpeedProfile profile = this.getCurrentProfile();
 
 		if (this.controlled) {
 			if (this.game.getInputManager().isPressed(Input.FLY_BOOST)) {
@@ -135,14 +152,15 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 						: Math.min(this.roll + profile.getRollTime(), 0);
 			}
 
-			this.yaw += this.currentYawTime;
-			this.pitch =
-					MathUtils.clamp(this.currentPitchTime + this.pitch, -profile.getMaxPitch(), profile.getMaxPitch());
-			this.roll = MathUtils.clamp(this.currentRollTime + this.roll, -profile.getMaxRoll(), profile.getMaxRoll());
-
-			MathUtilsW.setRotation(this.getTransform(),
-					new Quaternion().setEulerAngles(this.yaw, this.pitch, this.roll));
+		} else if (this.aiController != null) {
+			this.aiController.tick(delta);
 		}
+
+		this.yaw = (this.yaw + this.currentYawTime) % 360;
+		this.pitch = MathUtils.clamp(this.currentPitchTime + this.pitch, -profile.getMaxPitch(), profile.getMaxPitch());
+		this.roll = MathUtils.clamp(this.currentRollTime + this.roll, -profile.getMaxRoll(), profile.getMaxRoll());
+
+		MathUtilsW.setRotation(this.getTransform(), new Quaternion().setEulerAngles(this.yaw, this.pitch, this.roll));
 
 		this.advance(speed * delta);
 
@@ -153,6 +171,25 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 				this.fire();
 			}
 		}
+	}
+
+	public PlaneSpeedProfile getCurrentProfile() {
+		return this.isTurbo ? this.turbo : this.normal;
+	}
+
+	public void turnTowards(final Vector3 pos, final float delta) {
+		final Vector3 myDir = new Vector3(0, 1, 0).mul(this.getRotation());
+		final Vector3 dif = this.getTranslation().sub(pos).nor();
+
+		float toYaw = Math.abs(MathUtils.atan2(myDir.z, myDir.x) * MathUtils.radiansToDegrees
+				- MathUtils.atan2(dif.z, dif.x) * MathUtils.radiansToDegrees) - 90;
+//		final float toPitch = MathUtils.asin(dir.z);
+
+		final PlaneSpeedProfile profile = this.getCurrentProfile();
+
+		this.currentRollTime = Math.max(this.currentRollTime - delta, Math.signum(toYaw) * profile.getRollTime());
+		this.currentYawTime = Math.max(this.currentYawTime - delta, Math.signum(toYaw) * profile.getYawSpeed());
+//		this.currentPitchTime = Math.max(this.currentPitchTime - delta, -profile.getYawSpeed());
 	}
 
 	protected void advance(final float dist) {
@@ -284,4 +321,66 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 
 		return this.inputListener;
 	}
+
+	public float getTargetSearchDistance() {
+		return targetSearchDistance;
+	}
+
+	public void setTargetSearchDistance(float targetSearchDistance) {
+		this.targetSearchDistance = targetSearchDistance;
+	}
+
+	public Garage getGarage() {
+		return garage;
+	}
+
+	public void setGarage(Garage garage) {
+		this.garage = garage;
+	}
+
+	public static class TaskTargetSearch<T extends AbstractPlane> extends Task<T> {
+		@Override
+		public Task<T> process(final float delta, final Wanderer game, final T controlled) {
+			if (controlled.getClan() == null) {
+				return null;
+			}
+
+			final Vector3 pos = controlled.getTranslation();
+
+			final Optional<AbstractClanLivingEntity> newTarget = game.streamEntities()
+				.filter(e -> e instanceof AbstractClanLivingEntity) // XXX should I only compare this to interfaces?
+				.map(e -> (AbstractClanLivingEntity) e)
+				.filter(e -> controlled.getClan() != e.getClan()
+						&& controlled.getClan().getRelationship(e.getClan()) == Amicability.HOSTILE)
+				.filter(e -> pos.dst(e.getTranslation()) < controlled.getTargetSearchDistance())
+				.sorted((o1, o2) -> Float.compare(pos.dst(o1.getTranslation()), pos.dst(o2.getTranslation())))
+				.findFirst();
+
+			if (newTarget.isPresent()) {
+				return new TaskGotoTarget<T>(newTarget.get());
+			}
+
+			return null;
+		}
+	}
+
+	public static class TaskGotoTarget<T extends AbstractPlane> extends Task<T> {
+		private final AbstractClanLivingEntity target;
+
+		public TaskGotoTarget(AbstractClanLivingEntity target) {
+			this.target = target;
+		}
+
+		@Override
+		public Task<T> process(float delta, Wanderer game, T controlled) {
+			if (target.isDisposed() || target.isDead()) {
+				return new TaskTargetSearch<T>();
+			}
+
+			controlled.turnTowards(this.target.getTranslation(), delta);
+
+			return null;
+		}
+	}
+
 }

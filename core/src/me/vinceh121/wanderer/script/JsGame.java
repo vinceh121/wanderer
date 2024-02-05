@@ -15,6 +15,7 @@ import org.mozilla.javascript.commonjs.module.ModuleScope;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 
 import me.vinceh121.wanderer.IPrototype;
@@ -23,6 +24,8 @@ import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.building.AbstractBuildingPrototype;
 import me.vinceh121.wanderer.building.BuildingArtifactEntity;
+import me.vinceh121.wanderer.clan.Amicability;
+import me.vinceh121.wanderer.clan.Clan;
 import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.glx.SkyProperties;
@@ -60,6 +63,7 @@ public class JsGame {
 		JsUtils.install(scope, "playCinematic", this::playCinematic);
 		JsUtils.install(scope, "spawn", this::spawn);
 		JsUtils.install(scope, "newv", this::newv);
+		JsUtils.install(scope, "newvEnemy", this::newvEnemy);
 		JsUtils.install(scope, "setSky", this::setSky);
 
 		JsUtils.install(scope, "debugAudio", this::debugAudio);
@@ -74,7 +78,7 @@ public class JsGame {
 		this.game.setAudioEmittersDebug(!this.game.isAudioEmittersDebug());
 		JsGame.LOG.info("Audio debug now {}", this.game.isAudioEmittersDebug());
 	}
-	
+
 	private void setSky(final NativeObject skyRaw) {
 		final SkyProperties sky = WandererConstants.MAPPER.convertValue(skyRaw, SkyProperties.class);
 		this.game.getGraphicsManager().getSkybox().setSkyProperties(sky);
@@ -122,6 +126,54 @@ public class JsGame {
 			return entities.get(0);
 		} else {
 			return entities;
+		}
+	}
+
+	private Object newvEnemy(final String prototypeName) {
+		if (this.game.getControlledEntity() == null) {
+			JsGame.LOG.error("Cannot use newv when no entity is being controlled");
+			return null;
+		}
+
+		final IPrototype prototype = PrototypeRegistry.getInstance().get(prototypeName);
+
+		if (prototype == null) {
+			JsGame.LOG.error("Unknown prototype {}", prototypeName);
+			return null;
+		}
+
+		final AbstractEntity controlled = (AbstractEntity) this.game.getControlledEntity();
+
+		final AbstractEntity entity;
+
+		if (prototype instanceof AbstractBuildingPrototype) {
+			entity = new BuildingArtifactEntity(this.game, (AbstractBuildingPrototype) prototype);
+		} else {
+			entity = prototype.create(this.game);
+		}
+
+		entity.setTranslation(new Vector3(0, 10, 4).mul(controlled.getRotation()).add(controlled.getTranslation()));
+
+		if (entity instanceof IClanMember) {
+			Clan enemyClan = this.game.getClansByName("newvEnemy").findFirst().orElse(null);
+
+			if (enemyClan == null) {
+				enemyClan = new Clan();
+				enemyClan.setName("newvEnemy");
+				enemyClan.setColor(new Color(1, 0, 0, 0));
+				enemyClan.setDefaultAmicability(Amicability.HOSTILE);
+				this.game.addClan(enemyClan);
+			}
+
+			enemyClan.addMember((IClanMember) entity);
+
+			this.game.addEntity(entity);
+
+			return entity;
+		} else {
+			LOG.error("Requested entity {} isn't a clan member. Won't spawn as enemy.", prototypeName);
+			entity.dispose();
+			return null;
 		}
 	}
 

@@ -43,6 +43,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	private final Matrix4 transform = new Matrix4();
 	// note: ID can't be final to be able to set explicit values when loading a save
 	private ID id = new ID();
+	private boolean disposed;
 	private String collideModel, symbolicName;
 	private btRigidBody collideObject;
 	private float mass;
@@ -532,12 +533,18 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		}
 	}
 
+	public boolean isDisposed() {
+		return this.disposed;
+	}
+
 	public ID getId() {
 		return this.id;
 	}
 
 	@Override
 	public void dispose() {
+		this.disposed = true;
+
 		for (final ParticleEmitter e : this.particles) {
 			this.game.getGraphicsManager().removeParticle(e);
 			e.dispose();
