@@ -1,6 +1,6 @@
 # How to contribute
 
-This document well help you getting started on contributing to the Wanderer project!
+This document will help you getting started on contributing to the Wanderer project!
 
 ## Translations
 
