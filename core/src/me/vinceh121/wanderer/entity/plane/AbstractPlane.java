@@ -181,14 +181,26 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		final Vector3 myDir = new Vector3(0, 1, 0).mul(this.getRotation());
 		final Vector3 dif = this.getTranslation().sub(pos).nor();
 
-		float toYaw = Math.abs(MathUtils.atan2(myDir.z, myDir.x) * MathUtils.radiansToDegrees
-				- MathUtils.atan2(dif.z, dif.x) * MathUtils.radiansToDegrees) - 90;
+		final float toYaw = Math.abs(this.yaw - MathUtils.atan2(dif.z, dif.x) * MathUtils.radiansToDegrees) - 90;
 //		final float toPitch = MathUtils.asin(dir.z);
 
-		final PlaneSpeedProfile profile = this.getCurrentProfile();
+		System.out.println(toYaw);
 
-		this.currentRollTime = Math.max(this.currentRollTime - delta, Math.signum(toYaw) * profile.getRollTime());
-		this.currentYawTime = Math.max(this.currentYawTime - delta, Math.signum(toYaw) * profile.getYawSpeed());
+		if (!MathUtils.isEqual(0, toYaw)) {
+			final PlaneSpeedProfile profile = this.getCurrentProfile();
+
+			this.currentRollTime = MathUtils.clamp(Math.signum(toYaw) * delta + this.currentRollTime,
+					-profile.getRollTime(),
+					profile.getRollTime());
+			this.currentYawTime = MathUtils
+				.clamp(Math.signum(toYaw) * delta + this.currentYawTime, -profile.getYawSpeed(), profile.getYawSpeed());
+		} else {
+			this.currentYawTime = this.currentRollTime = 0;
+		}
+
+		System.out.println(this.currentYawTime);
+		System.out.println();
+
 //		this.currentPitchTime = Math.max(this.currentPitchTime - delta, -profile.getYawSpeed());
 	}
 
