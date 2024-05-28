@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-03 06:53+0100\n"
+"POT-Creation-Date: 2024-05-28 02:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,22 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: core/src/me/vinceh121/wanderer/Wanderer.java:160
-msgid "Quick saved!"
-msgstr ""
-
-#: core/src/me/vinceh121/wanderer/Wanderer.java:168
-msgid "Quick loaded!"
-msgstr ""
-
-#: core/src/me/vinceh121/wanderer/Wanderer.java:540
-msgid "Taking control..."
-msgstr ""
-
-#: core/src/me/vinceh121/wanderer/Wanderer.java:546
-msgid "Nothing to control"
-msgstr ""
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:38
 #: core/src/me/vinceh121/wanderer/MainMenu.java:105
@@ -100,10 +84,6 @@ msgstr ""
 msgid "Gun tower"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
-msgid "Belt full!"
-msgstr ""
-
 #: core/src/me/vinceh121/wanderer/MainMenu.java:92
 msgid "Single player"
 msgstr ""
@@ -128,17 +108,51 @@ msgstr ""
 msgid "Load Game"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:354
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:396
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:353
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:395
 msgid "Not enough energy!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:362
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:361
 msgid "Slot blocked!"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/character/CharacterW.java:402
+#: core/src/me/vinceh121/wanderer/character/CharacterW.java:401
 msgid "No free slot!"
+msgstr ""
+
+#. Popup message when close to building
+#: core/src/me/vinceh121/wanderer/building/Lighthouse.java:11
+msgid "Lighthouse"
+msgstr ""
+
+#: core/src/me/vinceh121/wanderer/Wanderer.java:161
+msgid "Quick saved!"
+msgstr ""
+
+#: core/src/me/vinceh121/wanderer/Wanderer.java:169
+msgid "Quick loaded!"
+msgstr ""
+
+#: core/src/me/vinceh121/wanderer/Wanderer.java:565
+msgid "Taking control..."
+msgstr ""
+
+#: core/src/me/vinceh121/wanderer/Wanderer.java:571
+msgid "Nothing to control"
+msgstr ""
+
+#: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
+msgid "Belt full!"
+msgstr ""
+
+#. Popup when getting close to navtower
+#: core/src/me/vinceh121/wanderer/building/NavigationTower.java:24
+msgid "Navigation Tower"
+msgstr ""
+
+#: core/src/me/vinceh121/wanderer/building/NavigationTower.java:57
+msgid "No waypoint available"
 msgstr ""
 
 #: android/assets/story/singleplayer/chapter00/part01/index.js:2
@@ -152,11 +166,6 @@ msgstr ""
 #. "Explore the island",
 #: android/assets/story/singleplayer/chapter00/part01/index.js:4
 msgid "Collect all lighthouses"
-msgstr ""
-
-#. Popup message when close to building
-#: core/src/me/vinceh121/wanderer/building/Lighthouse.java:11
-msgid "Lighthouse"
 msgstr ""
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
