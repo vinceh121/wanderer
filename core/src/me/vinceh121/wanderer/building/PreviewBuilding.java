@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.bullet.collision.btManifoldPoint;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
 import me.vinceh121.wanderer.entity.IControllableEntity;
 
@@ -39,7 +40,8 @@ public class PreviewBuilding extends AbstractBuilding {
 					final int partId0, final int index0, final btCollisionObjectWrapper colObj1Wrap, final int partId1,
 					final int index1) {
 				final int idx = colObj1Wrap.getCollisionObject().getUserIndex();
-				if (PreviewBuilding.this.game.getEntity(idx) instanceof IControllableEntity) {
+				final AbstractEntity entity = PreviewBuilding.this.game.getEntity(idx);
+				if (entity instanceof IControllableEntity && !(entity instanceof Island)) {
 					PreviewBuilding.this.setBlocked(true);
 				}
 				return 0;

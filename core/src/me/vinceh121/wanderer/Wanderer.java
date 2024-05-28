@@ -45,6 +45,7 @@ import me.vinceh121.wanderer.clan.IClanMember;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.entity.ILivingEntity;
+import me.vinceh121.wanderer.entity.NavigationWaypoint;
 import me.vinceh121.wanderer.entity.Prop;
 import me.vinceh121.wanderer.i18n.I18N;
 import me.vinceh121.wanderer.input.Input;
@@ -295,6 +296,12 @@ public class Wanderer extends ApplicationDelegate {
 		this.setPlayerClan(this.playerClan);
 
 		this.controlEntity(john);
+
+		final NavigationWaypoint way = new NavigationWaypoint(this);
+		way.setTranslation(island.getTranslation().cpy().add(50, 0, 50));
+		way.setEnabled(true);
+		way.setLabel("1");
+		this.addEntity(way);
 	}
 
 	@Override

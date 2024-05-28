@@ -32,6 +32,7 @@ import me.vinceh121.wanderer.event.Event;
 import me.vinceh121.wanderer.event.EventDispatcher;
 import me.vinceh121.wanderer.event.IEventListener;
 import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
+import me.vinceh121.wanderer.util.MathUtilsW;
 
 public abstract class AbstractEntity implements Disposable, ISaveable {
 	protected final Wanderer game;
@@ -390,6 +391,11 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		this.updateTransform();
 	}
 
+	public void rotateRad(final Vector3 axis, final float radians) {
+		this.transform.rotateRad(axis, radians);
+		this.updateTransform();
+	}
+
 	/**
 	 * @param rotation
 	 * @return
@@ -421,6 +427,19 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 	 */
 	public void scale(final float scaleX, final float scaleY, final float scaleZ) {
 		this.transform.scale(scaleX, scaleY, scaleZ);
+		this.updateTransform();
+	}
+
+	/**
+	 * @param yaw The Euler yaw in radians
+	 */
+	public void setYaw(float yaw) {
+		Quaternion rotation = this.getRotation();
+		float pitch = rotation.getPitchRad();
+		float roll = rotation.getRollRad();
+
+		Quaternion newRot = new Quaternion().setEulerAnglesRad(yaw, pitch, roll);
+		MathUtilsW.setRotation(transform, newRot);
 		this.updateTransform();
 	}
 

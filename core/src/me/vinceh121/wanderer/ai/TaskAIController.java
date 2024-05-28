@@ -1,9 +1,9 @@
 package me.vinceh121.wanderer.ai;
 
 import me.vinceh121.wanderer.Wanderer;
-import me.vinceh121.wanderer.entity.IControllableEntity;
+import me.vinceh121.wanderer.entity.AbstractEntity;
 
-public class TaskAIController<T extends IControllableEntity> extends AIController<T> {
+public class TaskAIController<T extends AbstractEntity> extends AIController<T> {
 	private Task<T> currentTask;
 
 	public TaskAIController(Wanderer game, T target) {

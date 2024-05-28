@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import me.vinceh121.wanderer.building.IslandPrototype;
 import me.vinceh121.wanderer.building.LighthousePrototype;
+import me.vinceh121.wanderer.building.NavigationTowerPrototype;
 import me.vinceh121.wanderer.character.CharacterPrototype;
 import me.vinceh121.wanderer.entity.PropPrototype;
 import me.vinceh121.wanderer.entity.guntower.MachineGunGuntowerPrototype;
@@ -53,6 +54,7 @@ public final class PrototypeRegistry {
 		this.readPrototypes(Gdx.files.internal("prototypes/machinegunGuntowers.json"),
 				MachineGunGuntowerPrototype.class);
 		this.readPrototypes(Gdx.files.internal("prototypes/machinegunPlanes.json"), MachineGunPlanePrototype.class);
+		this.readPrototypes(Gdx.files.internal("prototypes/navtowers.json"), NavigationTowerPrototype.class);
 	}
 
 	public void clear() {

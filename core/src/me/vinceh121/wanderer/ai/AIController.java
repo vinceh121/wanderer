@@ -1,9 +1,9 @@
 package me.vinceh121.wanderer.ai;
 
 import me.vinceh121.wanderer.Wanderer;
-import me.vinceh121.wanderer.entity.IControllableEntity;
+import me.vinceh121.wanderer.entity.AbstractEntity;
 
-public abstract class AIController<T extends IControllableEntity> {
+public abstract class AIController<T extends AbstractEntity> {
 	protected final Wanderer game;
 	protected final T target;
 

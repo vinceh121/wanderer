@@ -219,7 +219,6 @@ public class CharacterW extends AbstractLivingControllableEntity {
 	@Override
 	public void onDeath() {
 		// TODO
-		CharacterW.LOG.debug("Dead!");
 	}
 
 	public void processInput() {

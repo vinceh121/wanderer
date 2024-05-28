@@ -1,7 +1,10 @@
 package me.vinceh121.wanderer.building;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
@@ -13,10 +16,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import me.vinceh121.wanderer.PrototypeRegistry;
 import me.vinceh121.wanderer.Wanderer;
+import me.vinceh121.wanderer.ai.Task;
+import me.vinceh121.wanderer.ai.TaskAIController;
 import me.vinceh121.wanderer.character.CharacterW;
 import me.vinceh121.wanderer.entity.AbstractClanLivingEntity;
 import me.vinceh121.wanderer.entity.AbstractEntity;
 import me.vinceh121.wanderer.entity.DisplayModel;
+import me.vinceh121.wanderer.entity.NavigationWaypoint;
 import me.vinceh121.wanderer.phys.ContactListenerAdapter;
 import me.vinceh121.wanderer.phys.IContactListener;
 
@@ -28,6 +34,7 @@ public class Island extends AbstractClanLivingEntity {
 	private final Vector3 velocity = new Vector3(), placeCameraPosition = new Vector3(),
 			placeCameraDirection = new Vector3();
 	private final IContactListener characterContactListener;
+	private TaskAIController<Island> aiController;
 
 	public Island(final Wanderer game, final IslandPrototype prototype) {
 		super(game);
@@ -85,11 +92,22 @@ public class Island extends AbstractClanLivingEntity {
 			}
 		};
 		game.getPhysicsManager().addContactListener(this.characterContactListener);
+
+		this.aiController = new TaskAIController<Island>(game, this);
 	}
 
 	@Override
 	public void onDeath() {
 		// TODO
+	}
+
+	@Override
+	public void tick(float delta) {
+		super.tick(delta);
+
+		if (this.aiController != null) {
+			this.aiController.tick(delta);
+		}
 	}
 
 	/**
@@ -255,5 +273,39 @@ public class Island extends AbstractClanLivingEntity {
 	public void dispose() {
 		this.game.getPhysicsManager().removeContactListener(this.characterContactListener);
 		super.dispose();
+	}
+
+	public TaskAIController<Island> getAiController() {
+		return this.aiController;
+	}
+
+	public static class NavigationGoto extends Task<Island> {
+		private final NavigationWaypoint waypoint;
+		private float angleProgress, targetAngle = Float.NaN, initialAngle = Float.NaN;
+
+		public NavigationGoto(NavigationWaypoint waypoint) {
+			this.waypoint = waypoint;
+		}
+
+		@Override
+		public Task<Island> process(float delta, Wanderer game, Island controlled) {
+			final Quaternion dirDiff = new Quaternion()
+				.setFromCross(waypoint.getTranslation().sub(controlled.getTranslation()), new Vector3(0, 1, 0));
+
+			if (Float.isNaN(this.targetAngle)) {
+				this.targetAngle = dirDiff.getYawRad();
+			}
+			if (Float.isNaN(this.initialAngle)) {
+				this.initialAngle = (controlled.getRotation().getYawRad() - MathUtils.PI * 1.5f) % MathUtils.PI2;
+			}
+
+			this.angleProgress += MathUtils.PI / 8 * delta;
+			this.angleProgress = Math.min(this.angleProgress, 1);
+			controlled.setYaw(Interpolation.smooth.apply(this.initialAngle, this.targetAngle, this.angleProgress) - MathUtils.HALF_PI);
+
+			controlled.updateBuildings();
+
+			return null;
+		}
 	}
 }

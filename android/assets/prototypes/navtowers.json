@@ -1,0 +1,53 @@
+{
+	"j_navtower01": {
+		"artifactModel": "orig/j_navigationtower01.n/j_navigationtower01.obj",
+		"artifactTexture": "orig/j_navigationtower01.n/texturealpha.ktx",
+		"artifactColor": {
+			"r": 1.0,
+			"g": 0.1,
+			"b": 0.0,
+			"a": 0.0
+		},
+		"rotate": true,
+		"pickupZoneRadius": 2.0,
+		"displayModels": [
+			{
+				"relativeTransform": {
+					"translation": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"rotation": [
+						0.0,
+						0.0,
+						0.0,
+						1.0
+					],
+					"scale": [
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				"textureAttributes": [
+				],
+				"displayModel": "orig/j_navigationtower01.n/machine.obj",
+				"displayTexture": "orig/j_navigationtower01.n/texturealpha.ktx"
+			}
+		],
+		"collisionModel": "orig/j_navigationtower01.n/collide.obj",
+		"buildTime": 10,
+		"red": false,
+		"artefactScale": 0.05,
+		"interactZoneRadius": 11.0,
+		"interactZoneHeight": 20.0,
+		"energyRequired": 25,
+		"slotType": "NAVTOWER",
+		"cameraOffset": [
+			0,
+			16,
+			-6.5
+		]
+	}
+}

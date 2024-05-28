@@ -1,9 +1,9 @@
 package me.vinceh121.wanderer.ai;
 
 import me.vinceh121.wanderer.Wanderer;
-import me.vinceh121.wanderer.entity.IControllableEntity;
+import me.vinceh121.wanderer.entity.AbstractEntity;
 
-public abstract class Task<T extends IControllableEntity> {
+public abstract class Task<T extends AbstractEntity> {
 	/**
 	 * @param delta  Delta time in seconds
 	 * @param game TODO
