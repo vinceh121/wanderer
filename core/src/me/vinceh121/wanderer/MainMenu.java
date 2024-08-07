@@ -1,7 +1,5 @@
 package me.vinceh121.wanderer;
 
-import static me.vinceh121.wanderer.i18n.I18N.gettext;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;

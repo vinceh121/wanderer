@@ -1,7 +1,7 @@
 package me.vinceh121.wanderer.desktop.audio;
 
-import static org.lwjgl.openal.AL10.*;
-import static org.lwjgl.openal.ALC10.*;
+import static org.lwjgl.openal.AL10.AL_PLAYING;
+import static org.lwjgl.openal.AL10.AL_STOPPED;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +10,7 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,6 +19,9 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.ALUtil;
+import org.lwjgl.openal.EnumerateAllExt;
+import org.lwjgl.openal.SOFTReopenDevice;
 
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.AudioRecorder;
@@ -252,6 +256,22 @@ public class OpenAL3DAudio implements Lwjgl3Audio, AudioSystem3D {
 		default:
 			return "uhoh " + srcState;
 		}
+	}
+
+	@Override
+	public boolean switchOutputDevice(String deviceIdentifier) {
+		return SOFTReopenDevice.alcReopenDeviceSOFT(this.device, deviceIdentifier, (IntBuffer) null);
+	}
+
+	@Override
+	public String[] getAvailableOutputDevices() {
+		final List<String> devices = ALUtil.getStringList(0, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER);
+
+		if (devices == null) {
+			return new String[0];
+		}
+
+		return devices.toArray(l -> new String[l]);
 	}
 
 	static {
