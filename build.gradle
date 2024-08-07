@@ -149,7 +149,7 @@ project(":desktop") {
     }
 }
 
-project(":android") {
+/*project(":android") {
     apply plugin: "com.android.application"
 
     configurations { natives }
@@ -170,7 +170,7 @@ project(":android") {
         api "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
         
     }
-}
+}*/
 
 project(":tools") {
     apply plugin: "java-library"
@@ -210,7 +210,7 @@ project(":core") {
         api "org.jline:jline:$jlineVersion"
         api "org.jline:jline-reader:$jlineVersion"
         api "org.jline:jline-terminal:$jlineVersion"
-        api "com.github.mgsx-dev.gdx-gltf:gltf:227214de89923c7754406c68c1504e75ba087823"
+        api "com.github.mgsx-dev.gdx-gltf:gltf:4220b1020bad4c681fff8caf23f27cd152aa115a"
         api "org.reflections:reflections:0.10.2"
         api "org.apache.logging.log4j:log4j-core:$log4jVersion"
         api "org.apache.logging.log4j:log4j-slf4j2-impl:$log4jVersion"
