@@ -47,6 +47,8 @@ import me.vinceh121.wanderer.entity.IControllableEntity;
 import me.vinceh121.wanderer.entity.ILivingEntity;
 import me.vinceh121.wanderer.entity.NavigationWaypoint;
 import me.vinceh121.wanderer.entity.Prop;
+import me.vinceh121.wanderer.event.Event;
+import me.vinceh121.wanderer.event.EventDispatcher;
 import me.vinceh121.wanderer.i18n.I18N;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
@@ -70,6 +72,8 @@ public class Wanderer extends ApplicationDelegate {
 	private final ScriptManager scriptManager = new ScriptManager();
 	private final ModManager modManager = new ModManager();
 
+	protected final EventDispatcher eventDispatcher = new EventDispatcher();
+	
 	private ConsoleHandler consoleHandler;
 
 	private Array<AbstractEntity> entities;
@@ -908,6 +912,10 @@ public class Wanderer extends ApplicationDelegate {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void dispatchEvent(final Event e) {
+		this.eventDispatcher.dispatchEvent(e);
 	}
 
 	public ConsoleHandler getConsoleHandler() {

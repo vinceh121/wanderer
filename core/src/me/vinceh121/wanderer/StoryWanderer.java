@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Align;
 
+import me.vinceh121.wanderer.character.CharacterDeadEvent;
 import me.vinceh121.wanderer.event.Event;
 import me.vinceh121.wanderer.input.Input;
 import me.vinceh121.wanderer.input.InputListenerAdapter;
@@ -42,6 +43,7 @@ public class StoryWanderer extends Wanderer {
 					StoryWanderer.this.objectivesView.setVisible(true);
 					return true;
 				}
+
 				return false;
 			}
 
@@ -51,8 +53,13 @@ public class StoryWanderer extends Wanderer {
 					StoryWanderer.this.objectivesView.setVisible(false);
 					return true;
 				}
+
 				return false;
 			}
+		});
+
+		this.eventDispatcher.addEventListener(CharacterDeadEvent.TYPE, e -> {
+			// TODO display lose screen
 		});
 
 		// BY CALLER

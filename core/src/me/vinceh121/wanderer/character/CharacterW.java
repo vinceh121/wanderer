@@ -218,7 +218,7 @@ public class CharacterW extends AbstractLivingControllableEntity {
 
 	@Override
 	public void onDeath() {
-		// TODO
+		this.game.dispatchEvent(new CharacterDeadEvent(this));
 	}
 
 	public void processInput() {
