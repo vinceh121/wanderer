@@ -39,14 +39,6 @@ public final class FontCache {
 			this.parameters = parameters;
 		}
 
-		public FileHandle getPath() {
-			return this.path;
-		}
-
-		public FontParameter getParameters() {
-			return this.parameters;
-		}
-
 		@Override
 		public int hashCode() {
 			return Objects.hash(this.parameters, this.path);

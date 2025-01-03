@@ -1,7 +1,5 @@
 package me.vinceh121.wanderer.ui;
 
-import static me.vinceh121.wanderer.i18n.I18N.gettext;
-
 import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;

@@ -104,7 +104,7 @@ public abstract class AbstractEntity implements Disposable, ISaveable {
 		final Mesh mesh = model.meshes.get(0);
 		this.setCollideObject(new btRigidBody(this.mass,
 				this.createMotionState(),
-				new btConvexHullShape(mesh.getVerticesBuffer(), mesh.getNumVertices(), mesh.getVertexSize())));
+				new btConvexHullShape(mesh.getVerticesBuffer(false), mesh.getNumVertices(), mesh.getVertexSize())));
 	}
 
 	public void enterBtWorld(final btDiscreteDynamicsWorld world) {

@@ -1,8 +1,5 @@
 package me.vinceh121.wanderer.character;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,8 +15,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import me.vinceh121.wanderer.PrototypeRegistry;
 import me.vinceh121.wanderer.Preferences;
+import me.vinceh121.wanderer.PrototypeRegistry;
 import me.vinceh121.wanderer.Wanderer;
 import me.vinceh121.wanderer.WandererConstants;
 import me.vinceh121.wanderer.animation.MultiplexedSkinAnimationController;
@@ -47,7 +44,6 @@ import me.vinceh121.wanderer.ui.BeltSelection;
  * Named like that to differentiate with java.lang.Character
  */
 public class CharacterW extends AbstractLivingControllableEntity {
-	private static final Logger LOG = LogManager.getLogger(CharacterW.class);
 	public static final String EVENT_START_FALL = "START_FALL", EVENT_END_FALL = "END_FALL",
 			EVENT_JUMP_END = "JUMP_END";
 	private final CharacterPrototype prototype;

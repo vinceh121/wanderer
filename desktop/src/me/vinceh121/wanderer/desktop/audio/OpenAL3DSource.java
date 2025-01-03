@@ -1,14 +1,11 @@
 package me.vinceh121.wanderer.desktop.audio;
 
-import static org.lwjgl.openal.AL10.*;
-
 import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.ALC11;
 
 import com.badlogic.gdx.math.Vector3;
 
