@@ -113,7 +113,7 @@ public class LauncherFrame extends JFrame {
 					}
 				}).start();
 
-				proc.waitFor();
+				final int status = proc.waitFor(); // TODO error code handling
 			} catch (final Throwable t) {
 				LauncherFrame.LOG.error("Unexpected error", t);
 				JOptionPane.showMessageDialog(null, "Unexpected error in Wanderer: " + t);

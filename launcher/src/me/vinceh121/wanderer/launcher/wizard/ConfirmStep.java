@@ -102,16 +102,17 @@ public class ConfirmStep extends AbstractWizardStep {
 			} else {
 				final StringBuilder txt = new StringBuilder();
 				txt.append("<html>Cannot install assets from this Project Nomads installation because:<ul>");
+
 				if (ConfirmStep.this.ctx.getData() == null) {
 					txt.append("<li>The data.npk is not recognized</li>");
-				} else {
-					if (ConfirmStep.this.ctx.getData().isDemo()) {
-						txt.append("<li>The demo version does not contain all assets</li>");
-					}
+				} else if (ConfirmStep.this.ctx.getData().isDemo()) {
+					txt.append("<li>The demo version does not contain all assets</li>");
 				}
+
 				if (ConfirmStep.this.ctx.getVoice() == null) {
 					txt.append("<li>Unrecognized language</li>");
 				}
+
 				txt.append("</ul></html>");
 				ConfirmStep.this.lbl.setText(txt.toString());
 			}

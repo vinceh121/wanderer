@@ -103,6 +103,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.4'
+        classpath 'com.gradleup.shadow:shadow-gradle-plugin:9.3.0'
     }
 }
 
@@ -133,6 +134,13 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java-library"
+    apply plugin: "com.gradleup.shadow"
+
+    jar {
+        manifest {
+            attributes "Main-Class": "me.vinceh121.wanderer.desktop.DesktopLauncher"
+        }
+    }
 
 
     dependencies {
@@ -182,7 +190,14 @@ project(":tools") {
 
 project(":launcher") {
     apply plugin: "java-library"
-    apply plugin: "application"
+    apply plugin: "com.gradleup.shadow"
+
+    jar {
+        manifest {
+            attributes "Main-Class": "me.vinceh121.wanderer.launcher.LauncherMain"
+        }
+    }
+
 
     dependencies {
         api "me.vinceh121.wanderer:nebula2-assets-extractor:0.5.0-SNAPSHOT"

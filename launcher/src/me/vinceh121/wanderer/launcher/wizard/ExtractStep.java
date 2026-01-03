@@ -150,6 +150,23 @@ public class ExtractStep extends AbstractWizardStep {
 					final Path dest = origPath.resolve("book").resolve(ExtractStep.this.ctx.getVoice().getLocale()).resolve(relPath);
 					Files.createDirectories(dest.getParent());
 					Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
+
+					return FileVisitResult.CONTINUE;
+				}
+			});
+
+			this.publish("Copying localized images...");
+			Files.walkFileTree(dataPath.getParent().resolve("locale"), new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(final Path src, final BasicFileAttributes attrs) throws IOException {
+					if (!src.getFileName().toString().endsWith(".bmp")) {
+						return FileVisitResult.CONTINUE;
+					}
+					
+					final Path dest = origPath.resolve("locale").resolve(src.getFileName());
+					Files.createDirectories(dest.getParent());
+					Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
+
 					return FileVisitResult.CONTINUE;
 				}
 			});
