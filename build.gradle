@@ -79,6 +79,24 @@ abstract class MsguniqTask extends DefaultTask {
 }
 def msguniq = tasks.register("msguniq", MsguniqTask)
 
+abstract class CompleteBuildTask extends DefaultTask {
+    @TaskAction
+    void execute() {
+        project.copy {
+			into "build/dist"
+			from("launcher/build/libs/launcher-uber.jar") {
+				rename { "launcher.jar" }
+			}
+			from("desktop/build/libs/desktop-uber.jar") {
+				rename { "desktop.jar" }
+			}
+		}
+    }
+}
+def completeBuild = tasks.register("dist", CompleteBuildTask) {
+    dependsOn ":launcher:shadowJar", ":desktop:shadowJar"
+}
+
 abstract class MsgmergeTask extends DefaultTask {
     @TaskAction
     void execute() {
@@ -141,7 +159,10 @@ project(":desktop") {
             attributes "Main-Class": "me.vinceh121.wanderer.desktop.DesktopLauncher"
         }
     }
-
+	
+	shadowJar {
+		archiveFileName = "desktop-uber.jar"
+	}
 
     dependencies {
         api project(":core")
@@ -197,6 +218,10 @@ project(":launcher") {
             attributes "Main-Class": "me.vinceh121.wanderer.launcher.LauncherMain"
         }
     }
+	
+	shadowJar {
+		archiveFileName = "launcher-uber.jar"
+	}
 
 
     dependencies {
@@ -208,6 +233,11 @@ project(":launcher") {
 
 project(":core") {
     apply plugin: "java-library"
+
+	// HACK: should be a general task instead of specific to a sub-project
+	clean.doFirst {
+		delete "${rootDir}/build"
+	}
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
