@@ -1,6 +1,7 @@
 package me.vinceh121.wanderer;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +14,9 @@ import org.jline.terminal.TerminalBuilder;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.EcmaError;
+import org.mozilla.javascript.LambdaFunction;
 import org.mozilla.javascript.ScriptRuntime;
+import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 import com.badlogic.gdx.Gdx;
@@ -87,9 +90,22 @@ public class ConsoleHandler implements AutoCloseable {
 
 		JsUtils.install(scope, "exit", () -> Gdx.app.postRunnable(() -> this.game.dispose()));
 		JsUtils.install(scope, "forceexit", () -> System.exit(-1));
+		JsUtils.install(scope, "help", ConsoleHandler::help);
 	}
 
 	public ScriptableObject getScope() {
 		return this.scope;
+	}
+
+	private static Object help(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+		final StringBuilder sb = new StringBuilder();
+
+		for (final Object id : thisObj.getIds()) {
+			final Object value = thisObj.get((String) id, thisObj);
+
+			sb.append("%-30s %-30s\n".formatted(id, value.getClass().getName()));
+		}
+
+		return sb.toString();
 	}
 }
