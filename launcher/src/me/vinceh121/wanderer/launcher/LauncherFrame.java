@@ -2,8 +2,10 @@ package me.vinceh121.wanderer.launcher;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -81,9 +83,21 @@ public class LauncherFrame extends JFrame {
 
 	public void start() {
 		this.setVisible(false);
-		new Thread(() -> {
-			this.started = true;
-			try {
+		new Thread(this::start0, "MainGameThread").start();
+	}
+
+	private void start0() {
+		this.started = true;
+		try {
+			final ProcessBuilder processBuilder;
+
+			if ("package".equals(System.getProperty("wanderer.launcher"))) {
+				final Path launcherPath = Path.of(System.getProperty("jpackage.app-path"));
+				final Path desktopPath =
+						launcherPath.getParent().resolve(SystemUtils.IS_OS_WINDOWS ? "Desktop.exe" : "Desktop");
+
+				processBuilder = new ProcessBuilder(desktopPath.toString());
+			} else {
 				final Path home = Path.of(System.getProperty("java.home"));
 				final Path java;
 
@@ -95,32 +109,24 @@ public class LauncherFrame extends JFrame {
 					throw new IllegalStateException("Don't know how to fetch Java execultable for your OS");
 				}
 
-				final Process proc = Runtime.getRuntime()
-					.exec(new String[] { java.toAbsolutePath().toString(), "-jar", "desktop.jar" });
-
-				new Thread(() -> {
-					try {
-						proc.getInputStream().transferTo(System.out);
-					} catch (final IOException e) {
-						e.printStackTrace();
-					}
-				}).start();
-				new Thread(() -> {
-					try {
-						proc.getErrorStream().transferTo(System.err);
-					} catch (final IOException e) {
-						e.printStackTrace();
-					}
-				}).start();
-
-				final int status = proc.waitFor(); // TODO error code handling
-			} catch (final Throwable t) {
-				LauncherFrame.LOG.error("Unexpected error", t);
-				JOptionPane.showMessageDialog(null, "Unexpected error in Wanderer: " + t);
+				processBuilder = new ProcessBuilder(java.toAbsolutePath().toString(), "-jar", "desktop.jar");
 			}
-			this.started = false;
-			this.setVisible(true);
-			LauncherFrame.LOG.info("Wanderer terminated");
-		}, "MainGameThread").start();
+
+			processBuilder.inheritIO();
+			processBuilder.directory(new File(System.getProperty("user.dir")));
+			processBuilder.environment().remove("_JPACKAGE_LAUNCHER");
+
+			final Process process = processBuilder.start();
+
+			LauncherFrame.LOG.info("Executing {}", process.info().commandLine().orElse(null));
+
+			final int status = process.waitFor(); // TODO error code handling
+			LauncherFrame.LOG.info("Wanderer exited with status {}", status);
+		} catch (final Throwable t) {
+			LauncherFrame.LOG.error("Unexpected error", t);
+			JOptionPane.showMessageDialog(null, "Unexpected error in Wanderer: " + t);
+		}
+		this.started = false;
+		this.setVisible(true);
 	}
 }

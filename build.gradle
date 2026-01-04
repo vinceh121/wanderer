@@ -1,5 +1,6 @@
 import groovy.json.JsonSlurper
 import java.nio.file.Paths
+import org.apache.tools.ant.taskdefs.condition.Os
 
 abstract class XGettextTask extends DefaultTask {
     @TaskAction
@@ -91,6 +92,34 @@ abstract class CompleteBuildTask extends DefaultTask {
 				rename { "desktop.jar" }
 			}
 		}
+
+		def arguments = [
+			'jpackage',
+			'-n',
+			'Wanderer',
+			'--app-version',
+			project.version,
+			'--copyright',
+			'This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.',
+			'--description',
+			'A reimplementation of the 2002 video game Project Nomads by Radon Labs',
+			'--input',
+			'build/dist',
+			'--dest',
+			'build/package',
+			'-t',
+			'app-image',
+			'--main-jar',
+			'launcher.jar',
+			'--main-class',
+			'me.vinceh121.wanderer.launcher.LauncherMain',
+			'--add-launcher',
+			'Desktop=jpackage-desktop.properties',
+			'--java-options',
+			'"-Dwanderer.launcher=package"'
+		]
+
+		project.exec { commandLine arguments }
     }
 }
 def completeBuild = tasks.register("dist", CompleteBuildTask) {
