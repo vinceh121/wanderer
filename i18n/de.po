@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: wanderer.weblate@vinceh121.me\n"
 "POT-Creation-Date: 2023-08-27 02:41+0200\n"
-"PO-Revision-Date: 2023-07-29 02:36+0000\n"
-"Last-Translator: vinceh121 <contact@vinceh121.me>\n"
+"PO-Revision-Date: 2026-01-05 22:11+0000\n"
+"Last-Translator: sheafify <sheafify@users.noreply.weblate.vinceh121.me>\n"
 "Language-Team: German <https://weblate.vinceh121.me/projects/wanderer/game/"
 "de/>\n"
 "Language: de\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.15\n"
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:155
 msgid "Quick saved!"
-msgstr ""
+msgstr "Schnellspeichern!"
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:163
 msgid "Quick loaded!"
@@ -29,11 +29,11 @@ msgstr ""
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:482
 msgid "Taking control..."
-msgstr ""
+msgstr "Übernehme Kontrolle..."
 
 #: core/src/me/vinceh121/wanderer/Wanderer.java:488
 msgid "Nothing to control"
-msgstr ""
+msgstr "Nichts zu Kontrollieren"
 
 #. Popup message when close to building
 #: core/src/me/vinceh121/wanderer/guntower/AbstractGuntower.java:32
@@ -44,7 +44,7 @@ msgstr "Geschützturm"
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:37
 #: core/src/me/vinceh121/wanderer/MainMenu.java:104
 msgid "Options"
-msgstr ""
+msgstr "Einstellungen"
 
 #. //// GENERAL
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:43
@@ -53,37 +53,37 @@ msgstr ""
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:48
 msgid "Interface language"
-msgstr ""
+msgstr "Visuelle Sprache"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:52
 msgid "Audio language"
-msgstr ""
+msgstr "Audio Sprache"
 
 #. /// GRAPHICS
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:58
 msgid "Graphics"
-msgstr ""
+msgstr "Graphik"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:61
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:66
 msgid "Window mode"
-msgstr ""
+msgstr "Fenstermodus"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:77
 msgid "Resolution"
-msgstr ""
+msgstr "Auflösung"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:88
 #: core/src/me/vinceh121/wanderer/MainMenu.java:152
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:97
 msgid "Apply"
-msgstr ""
+msgstr "Übernehmen"
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:161
 msgid "<select fullscreen>"
@@ -100,72 +100,74 @@ msgstr ""
 
 #: core/src/me/vinceh121/wanderer/ui/OptionsView.java:215
 msgid "Windowed"
-msgstr ""
+msgstr "Fenstermodus"
 
 #: core/src/me/vinceh121/wanderer/building/BuildingArtifactEntity.java:28
 msgid "Belt full!"
-msgstr ""
+msgstr "Gürtel voll!"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:91
 msgid "Single player"
-msgstr ""
+msgstr "Einzelspieler"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:101
 msgid "Multiplayer"
-msgstr ""
+msgstr "Mehrspieler"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:114
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:124
 msgid "Credits"
-msgstr ""
+msgstr "Credits"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:135
 msgid "New Game"
-msgstr ""
+msgstr "Neues Spiel"
 
 #: core/src/me/vinceh121/wanderer/MainMenu.java:149
 msgid "Load Game"
-msgstr ""
+msgstr "Lade Spiel"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:352
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:394
 msgid "Not enough energy!"
-msgstr ""
+msgstr "Nicht genug Energie!"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:360
 msgid "Slot blocked!"
-msgstr ""
+msgstr "Slot blockiert!"
 
 #: core/src/me/vinceh121/wanderer/character/CharacterW.java:400
 msgid "No free slot!"
-msgstr ""
+msgstr "Kein freier Slot!"
 
 #: android/assets/story/singleplayer/chapter00/part01/index.js:2
 msgid "The Old Master Builder"
-msgstr ""
+msgstr "Der alter Baumeister"
 
 #: android/assets/story/singleplayer/chapter00/part01/index.js:3
 msgid "Find a backpack"
-msgstr ""
+msgstr "Finde einen Rucksack"
 
 #. "Explore the island",
 #: android/assets/story/singleplayer/chapter00/part01/index.js:4
 msgid "Collect all lighthouses"
-msgstr ""
+msgstr "Sammle alle Leuchttürme"
 
 #. Popup message when close to building
 #: core/src/me/vinceh121/wanderer/building/Lighthouse.java:11
 msgid "Lighthouse"
-msgstr ""
+msgstr "Leuchtturm"
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid ""
 "In the chaos of war, the world was split asunder and the ancient "
 "civilization of the master builders came to an end."
 msgstr ""
+"Im Chaos des Krieges, zerbrach die Welt und beendete die antike Zivilisation "
+"der Baumeister."
 
 #: android/assets/story/singleplayer/chapter00/part01/cinIntro.json
 msgid "Today, long after the catastrophe, the old world is but a legend."
