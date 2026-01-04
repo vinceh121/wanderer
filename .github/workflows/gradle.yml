@@ -30,6 +30,10 @@ jobs:
       run: ./gradlew dist
     - working-directory: build/package
       run: zip -r Wanderer.zip Wanderer
+      if: ${{ !startsWith(matrix.os, 'windows') }}
+    - working-directory: build/package
+      run: Compress-Archive Wanderer Wanderer.zip
+      if: ${{ startsWith(matrix.os, 'windows') }}
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v6
       with:
