@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build:
-    startegy:
+    strategy:
       matrix:
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
 
