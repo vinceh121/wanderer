@@ -1,5 +1,6 @@
 package me.vinceh121.wanderer.desktop.audio;
 
+import java.lang.ref.Cleaner;
 import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +14,7 @@ import me.vinceh121.wanderer.platform.audio.SoundEmitter3D;
 
 public class OpenAL3DSource implements SoundEmitter3D {
 	private static final Logger LOG = LogManager.getLogger(OpenAL3DAudio.class);
+	private static final Cleaner CLEANER = Cleaner.create();
 	private final OpenAL3DAudio audio;
 	private final int source;
 	private final long context;
@@ -27,6 +29,15 @@ public class OpenAL3DSource implements SoundEmitter3D {
 		this.source = AL10.alGenSources();
 		this.audio.registerSource(this);
 		OpenAL3DAudio.checkOpenALError();
+
+		CLEANER.register(this, () -> {
+			if (this.disposed) {
+				return;
+			}
+
+			OpenAL3DSource.LOG.error("Garbaging {}", this.source);
+			this.dispose();
+		});
 	}
 
 	@Override
@@ -224,15 +235,6 @@ public class OpenAL3DSource implements SoundEmitter3D {
 	@Override
 	public boolean isDisposed() {
 		return this.disposed || AL10.alIsSource(this.source);
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		if (this.disposed) {
-			return;
-		}
-		OpenAL3DSource.LOG.error("Garbaging {}", this.source);
-		this.dispose();
 	}
 
 	private void setContext() {
