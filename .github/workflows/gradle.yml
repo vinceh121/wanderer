@@ -21,11 +21,13 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@v3.5.0
-      with:
-        arguments: launcher:build
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v5
+    - name: Build
+      run: ./gradlew dist
+    - working-directory: build/package
+      run: zip -r Wanderer.zip Wanderer
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v6
       with:
-        path: launcher/build/distributions/launcher-*.zip
+        path: build/package/Wanderer
