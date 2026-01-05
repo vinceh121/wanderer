@@ -123,7 +123,14 @@ public class OptionsView extends Table {
 			Preferences.getPreferences().set("graphics.monitor", -1);
 		} else {
 			Preferences.getPreferences().set("graphics.monitor", this.selMon.getSelected().name);
-			Preferences.getPreferences().set("graphics.resolution", this.selRes.getSelected().toString());
+			
+			final DisplayMode mode = this.selRes.getSelected();
+			
+			if (mode != null) {
+				Preferences.getPreferences().set("graphics.resolution", mode.toString());
+			} else {
+				Preferences.getPreferences().remove("graphics.resolution");
+			}
 		}
 
 		Preferences.getPreferences().set("graphics.vsync", this.chkVSync.isChecked());

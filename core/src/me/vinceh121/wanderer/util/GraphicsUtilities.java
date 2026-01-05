@@ -16,10 +16,14 @@ public class GraphicsUtilities {
 		if (!(p.get("graphics.monitor") instanceof Object)) {
 			Gdx.graphics.setWindowedMode(512, 512);
 		} else {
-			final Monitor m =
-					GraphicsUtilities.getMonitor(Gdx.graphics.getMonitors(), p.<String>get("graphics.monitor"));
-			Gdx.graphics.setFullscreenMode(GraphicsUtilities.getDisplayMode(Gdx.graphics.getDisplayModes(m),
-					p.<String>get("graphics.resolution")));
+			final Monitor m = GraphicsUtilities.getMonitor(Gdx.graphics.getMonitors(),
+					p.<String>get("graphics.monitor"));
+			final DisplayMode displayMode = GraphicsUtilities.getDisplayMode(Gdx.graphics.getDisplayModes(m),
+					p.<String>get("graphics.resolution"));
+
+			if (displayMode != null) {
+				Gdx.graphics.setFullscreenMode(displayMode);
+			}
 		}
 
 		Gdx.graphics.setVSync(p.<Boolean>get("graphics.vsync"));
@@ -30,6 +34,6 @@ public class GraphicsUtilities {
 	}
 
 	public static DisplayMode getDisplayMode(final DisplayMode[] modes, final String displayMode) {
-		return Arrays.stream(modes).filter(d -> displayMode.equals(d.toString())).findFirst().orElse(null);
+		return Arrays.stream(modes).filter(d -> d == null && displayMode.equals(d.toString())).findFirst().orElse(null);
 	}
 }
