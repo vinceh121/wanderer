@@ -5,10 +5,16 @@
 			<PatternLayout
 				pattern="%style{%d{yyyy-MM-dd HH:mm:ss}}{Magenta} %style{%highlight{%-5level}}{Bright}: %style{[%t]}{Bright} %style{[%logger{2.}]}{Cyan} - %msg%n" />
 		</Console>
+		<RollingFile name="File" filePattern="logs/wanderer-desktop-%d{yyyy-MM-dd}.log">
+			<OnStartupTriggeringPolicy />
+			<PatternLayout
+				pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level: [%t] [%logger{2.}] - %msg%n" />
+		</RollingFile>
 	</Appenders>
 	<Loggers>
 		<Root level="DEBUG">
 			<AppenderRef ref="Console" />
+			<AppenderRef ref="File" />
 		</Root>
 	</Loggers>
 </Configuration>
