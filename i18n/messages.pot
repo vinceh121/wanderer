@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-04 18:26+0100\n"
+"POT-Creation-Date: 2026-01-19 21:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,20 +61,20 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:160
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:167
 msgid "<select fullscreen>"
 msgstr ""
 
 #. Hertz unit
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:162
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:169
 msgid "Hz"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:181
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:188
 msgid "(Primary)"
 msgstr ""
 
-#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:214
+#: core/src/me/vinceh121/wanderer/ui/OptionsView.java:221
 msgid "Windowed"
 msgstr ""
 
