@@ -84,6 +84,10 @@ public class DesktopLauncher {
 	private static DisplayMode getDisplayMode(final Monitor monitor, final String displayMode) { // FIXME duplicate code
 																									// with
 		// GraphicsUtilities
+		if (displayMode == null) {
+			return null;
+		}
+		
 		return Arrays.stream(Lwjgl3ApplicationConfiguration.getDisplayModes(monitor))
 			.filter(d -> displayMode.equals(d.toString()))
 			.findFirst()
