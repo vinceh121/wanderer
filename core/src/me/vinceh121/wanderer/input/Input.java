@@ -3,8 +3,8 @@ package me.vinceh121.wanderer.input;
 public enum Input {
 	WALK_FORWARDS("Walk Forwards"),
 	WALK_BACKWARDS("Walk Backwards"),
-	WALK_LEFT("Walk Left"),
-	WALK_RIGHT("Walk Right"),
+	TURN_LEFT("Turn Left"),
+	TURN_RIGHT("Turn Right"),
 
 	FLY_UP("Flying Up"),
 	FLY_DOWN("Flying Down"),

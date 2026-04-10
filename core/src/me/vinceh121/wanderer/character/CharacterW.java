@@ -222,13 +222,13 @@ public class CharacterW extends AbstractLivingControllableEntity {
 			return;
 		}
 
-		if (this.game.getInputManager().isPressed(Input.WALK_LEFT)) {
+		if (this.game.getInputManager().isPressed(Input.TURN_LEFT)) {
 			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, 3f));
 			this.justTurnedLeft = true;
 		} else {
 			this.justTurnedLeft = false;
 		}
-		if (this.game.getInputManager().isPressed(Input.WALK_RIGHT)) {
+		if (this.game.getInputManager().isPressed(Input.TURN_RIGHT)) {
 			this.controller.setWorldTransform(this.controller.getWorldTransform().rotate(0, 1, 0, -3f));
 			this.justTurnedRight = true;
 		} else {
