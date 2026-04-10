@@ -23,11 +23,11 @@ public class Subtitle extends Label {
 		for (final GlyphLayout layout : this.getBitmapFontCache().getLayouts()) {
 			for (final GlyphRun run : layout.runs) {
 				final float lineHeight = this.getBitmapFontCache().getFont().getLineHeight();
-				// i don't understand why this is right
-				final float y = this.getY(Align.bottomLeft) - run.y + lineHeight * 2 - margin;
+				final float y = run.y + lineHeight * 2 - this.getY(Align.bottomLeft) + margin * (layout.runs.size - 1);
+				final float x = this.getWidth() / 2 - run.width / 2 - margin;
 
 				batch.draw(WandererConstants.BLACK_PIXEL,
-						run.x - margin,
+						x,
 						y,
 						run.width + margin * 2,
 						lineHeight + margin * 2);
