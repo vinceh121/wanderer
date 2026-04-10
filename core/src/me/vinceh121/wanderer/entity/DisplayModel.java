@@ -31,6 +31,7 @@ public class DisplayModel {
 	private final Matrix4 absoluteTransform = new Matrix4();
 	private final List<Attribute> textureAttributes = new ArrayList<>();
 	private String displayModel, displayTexture, animationChannel;
+	private long textureType = TextureAttribute.Diffuse;
 	@JsonIgnore
 	private ModelInstance cacheDisplayModel;
 
@@ -94,7 +95,7 @@ public class DisplayModel {
 			final Texture texture = WandererConstants.ASSET_MANAGER.get(this.displayTexture, Texture.class);
 			texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.Linear);
 
-			instance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
+			instance.materials.get(0).set(new TextureAttribute(this.textureType, texture));
 			instance.materials.get(0).set(this.textureAttributes); // this is called set but it's more like add
 		}
 
@@ -199,6 +200,14 @@ public class DisplayModel {
 		if (this.cacheDisplayModel != null) {
 			this.cacheDisplayModel.materials.get(0).remove(value.type);
 		}
+	}
+
+	public long getTextureType() {
+		return textureType;
+	}
+
+	public void setTextureType(long textureType) {
+		this.textureType = textureType;
 	}
 
 	@Override

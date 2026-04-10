@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.physics.bullet.collision.ContactResultCallback;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObjectWrapper;
@@ -24,10 +25,12 @@ public class PreviewBuilding extends AbstractBuilding {
 		super(game, prototype);
 
 		this.setCollideModel(null);
+		this.setCastShadow(false);
 
-		for (final DisplayModel m : this.getModels()) {
+		for (final DisplayModel m : DisplayModel.flattenModels(this.getModels())) {
+			m.setTextureType(TextureAttribute.Emissive);
 			m.addTextureAttribute(ColorAttribute.createEmissive(PreviewBuilding.BLUE));
-			m.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_DST_COLOR, 0.5f));
+			m.addTextureAttribute(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_DST_COLOR, 0.75f));
 		}
 	}
 
