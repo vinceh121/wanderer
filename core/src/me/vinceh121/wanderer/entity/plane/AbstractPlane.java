@@ -3,8 +3,12 @@ package me.vinceh121.wanderer.entity.plane;
 import java.util.Optional;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
@@ -176,30 +180,49 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	public PlaneSpeedProfile getCurrentProfile() {
 		return this.isTurbo ? this.turbo : this.normal;
 	}
+	
+	@Override
+	public void render(ModelBatch batch, Environment env) {
+		super.render(batch, env);
+
+		final ShapeRenderer shape = new ShapeRenderer();
+		shape.setProjectionMatrix(this.game.getCamera().combined);
+		shape.begin(ShapeType.Filled);
+		shape.setColor(Color.RED);
+		shape.point(debugStart.x, debugStart.y, debugStart.z);
+		shape.setColor(Color.GREEN);
+		shape.point(debugEnd.x, debugEnd.y, debugEnd.z);
+		shape.line(debugStart, debugEnd);
+		shape.end();
+	}
+
+	Vector3 debugStart = new Vector3(), debugEnd = new Vector3();
 
 	public void turnTowards(final Vector3 pos, final float delta) {
 		final Vector3 myDir = new Vector3(0, 1, 0).mul(this.getRotation());
 		final Vector3 dif = this.getTranslation().sub(pos).nor();
+		
+		debugStart = this.getTranslation();
+		debugEnd = myDir;
 
-		final float toYaw = Math.abs(this.yaw - MathUtils.atan2(dif.z, dif.x) * MathUtils.radiansToDegrees) - 90;
+		float toYaw = MathUtils.atan2(dif.z, dif.x) * MathUtils.radiansToDegrees;
 //		final float toPitch = MathUtils.asin(dir.z);
 
-		System.out.println(toYaw);
+//		System.out.println(toYaw);
+//		toYaw = 90;
 
 		if (!MathUtils.isEqual(0, toYaw)) {
-			final PlaneSpeedProfile profile = this.getCurrentProfile();
+			final PlaneSpeedProfile profile = new PlaneSpeedProfile(this.getCurrentProfile());
 
 			this.currentRollTime = MathUtils.clamp(Math.signum(toYaw) * delta + this.currentRollTime,
 					-profile.getRollTime(),
 					profile.getRollTime());
+			this.roll = 0;
 			this.currentYawTime = MathUtils
 				.clamp(Math.signum(toYaw) * delta + this.currentYawTime, -profile.getYawSpeed(), profile.getYawSpeed());
 		} else {
 			this.currentYawTime = this.currentRollTime = 0;
 		}
-
-		System.out.println(this.currentYawTime);
-		System.out.println();
 
 //		this.currentPitchTime = Math.max(this.currentPitchTime - delta, -profile.getYawSpeed());
 	}
@@ -377,7 +400,7 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	}
 
 	public static class TaskGotoTarget<T extends AbstractPlane> extends Task<T> {
-		private final AbstractClanLivingEntity target;
+		private final AbstractClanLivingEntity target; // TODO maybe use a WeakRef
 
 		public TaskGotoTarget(AbstractClanLivingEntity target) {
 			this.target = target;
