@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
@@ -185,15 +184,15 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	public void render(ModelBatch batch, Environment env) {
 		super.render(batch, env);
 
-		final ShapeRenderer shape = new ShapeRenderer();
-		shape.setProjectionMatrix(this.game.getCamera().combined);
-		shape.begin(ShapeType.Filled);
-		shape.setColor(Color.RED);
-		shape.point(debugStart.x, debugStart.y, debugStart.z);
-		shape.setColor(Color.GREEN);
-		shape.point(debugEnd.x, debugEnd.y, debugEnd.z);
-		shape.line(debugStart, debugEnd);
-		shape.end();
+		final ShapeRenderer shape = this.game.getGraphicsManager().getDebugShapeRenderer();
+
+		if (shape.isDrawing()) {
+			shape.setColor(Color.RED);
+			shape.point(debugStart.x, debugStart.y, debugStart.z);
+			shape.setColor(Color.GREEN);
+			shape.point(debugEnd.x, debugEnd.y, debugEnd.z);
+			shape.line(debugStart, debugEnd);
+		}
 	}
 
 	Vector3 debugStart = new Vector3(), debugEnd = new Vector3();

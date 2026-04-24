@@ -23,6 +23,8 @@ import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
 import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.DepthShaderProvider;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -46,6 +48,7 @@ public class GraphicsManager extends ApplicationAdapter {
 	private ParticleSystem particleSystem;
 	private BillboardParticleBatch particleBatch;
 	private PostProcessManager postProcessManager;
+	private ShapeRenderer debugShapeRenderer;
 
 	private SkyboxRenderer skybox;
 
@@ -101,6 +104,8 @@ public class GraphicsManager extends ApplicationAdapter {
 		this.env.shadowMap = this.skybox.getSunLight();
 
 		this.postProcessManager = new PostProcessManager(this);
+		
+		this.debugShapeRenderer = new ShapeRenderer();
 	}
 
 	public void apply() {
@@ -115,6 +120,8 @@ public class GraphicsManager extends ApplicationAdapter {
 
 	public void begin() {
 		this.modelBatch.begin(this.cam);
+		this.debugShapeRenderer.setProjectionMatrix(this.cam.combined);
+		this.debugShapeRenderer.begin(ShapeType.Filled);
 	}
 
 	public void beginPostProcess() {
@@ -133,6 +140,7 @@ public class GraphicsManager extends ApplicationAdapter {
 
 	public void end() {
 		this.modelBatch.end();
+		this.debugShapeRenderer.end();
 	}
 
 	public void endPostProcess() {
@@ -259,6 +267,10 @@ public class GraphicsManager extends ApplicationAdapter {
 
 	public ParticleSystem getParticleSystem() {
 		return this.particleSystem;
+	}
+
+	public ShapeRenderer getDebugShapeRenderer() {
+		return this.debugShapeRenderer;
 	}
 
 	private static class WandererShaderProvider extends DefaultShaderProvider {
