@@ -189,22 +189,27 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 		if (shape.isDrawing()) {
 			shape.setColor(Color.RED);
 			shape.point(debugStart.x, debugStart.y, debugStart.z);
-			shape.setColor(Color.GREEN);
-			shape.point(debugEnd.x, debugEnd.y, debugEnd.z);
+			shape.setColor(Color.ORANGE);
 			shape.line(debugStart, debugEnd);
+			
+			shape.setColor(Color.CYAN);
+			shape.line(debugYawStart, debugYawEnd);
 		}
 	}
 
-	Vector3 debugStart = new Vector3(), debugEnd = new Vector3();
+	Vector3 debugStart = new Vector3(), debugEnd = new Vector3(), debugYawStart = new Vector3(), debugYawEnd = new Vector3();
 
 	public void turnTowards(final Vector3 pos, final float delta) {
 		final Vector3 myDir = new Vector3(0, 1, 0).mul(this.getRotation());
-		final Vector3 dif = this.getTranslation().sub(pos).nor();
-		
-		debugStart = this.getTranslation();
-		debugEnd = myDir;
+		final Vector3 dif = pos.cpy().sub(this.getTranslation()).nor();
 
-		float toYaw = MathUtils.atan2(dif.z, dif.x) * MathUtils.radiansToDegrees;
+		debugStart = this.getTranslation();
+		debugEnd = this.getTranslation().lerp(this.getTranslation().add(dif), 1000);
+
+		float toYaw = MathUtils.atan2(dif.x, dif.z) * MathUtils.radiansToDegrees;
+		debugYawStart = pos;
+		debugYawEnd = new Vector3(1, 0, 0).mul(new Quaternion().setEulerAngles(toYaw, 0, 0)).scl(100).add(pos);
+		System.out.println(toYaw);
 //		final float toPitch = MathUtils.asin(dir.z);
 
 //		System.out.println(toYaw);

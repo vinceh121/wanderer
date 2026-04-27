@@ -121,7 +121,7 @@ public class GraphicsManager extends ApplicationAdapter {
 	public void begin() {
 		this.modelBatch.begin(this.cam);
 		this.debugShapeRenderer.setProjectionMatrix(this.cam.combined);
-		this.debugShapeRenderer.begin(ShapeType.Filled);
+		this.debugShapeRenderer.begin(ShapeType.Line);
 	}
 
 	public void beginPostProcess() {
