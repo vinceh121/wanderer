@@ -167,7 +167,7 @@ allprojects {
 	version = '1.0'
 	ext {
 		appName = "wanderer"
-		gdxVersion = '1.12.1'
+		gdxVersion = '1.14.2'
 		aiVersion = '1.8.2'
 		gdxControllersVersion = '2.2.3'
 		jlineVersion = '3.26.3'
