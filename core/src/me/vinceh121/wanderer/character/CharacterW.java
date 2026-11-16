@@ -1,7 +1,11 @@
 package me.vinceh121.wanderer.character;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
@@ -147,6 +151,22 @@ public class CharacterW extends AbstractLivingControllableEntity {
 		if (this.isControlled()) {
 			this.processInput();
 			this.moveCamera();
+		}
+	}
+	
+	@Override
+	public void render(ModelBatch batch, Environment env) {
+		super.render(batch, env);
+		
+		final ShapeRenderer shape = this.game.getGraphicsManager().getDebugShapeRenderer();
+
+		if (shape.isDrawing()) {
+			shape.setColor(Color.GREEN);
+			shape.line(this.getTranslation(), this.getTranslation().add(1, 0, 0));
+			shape.setColor(Color.RED);
+			shape.line(this.getTranslation(), this.getTranslation().add(0, 1, 0));
+			shape.setColor(Color.BLUE);
+			shape.line(this.getTranslation(), this.getTranslation().add(0, 0, 1));
 		}
 	}
 

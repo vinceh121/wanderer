@@ -67,6 +67,8 @@ public class JsGame {
 		JsUtils.install(scope, "setSky", this::setSky);
 
 		JsUtils.install(scope, "debugAudio", this::debugAudio);
+
+		JsUtils.install(scope, "gc", () -> System.gc());
 	}
 
 	@SuppressWarnings("unchecked")
