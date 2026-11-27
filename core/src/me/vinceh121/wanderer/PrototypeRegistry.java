@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -15,6 +16,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import me.vinceh121.wanderer.building.IslandPrototype;
@@ -33,6 +36,7 @@ public final class PrototypeRegistry {
 	private PrototypeRegistry() {
 		try {
 			this.loadDefaults();
+			this.loadAliases();
 		} catch (final IOException e) {
 			PrototypeRegistry.LOG.error("Error while loading prototype defaults", e);
 			throw new RuntimeException(e);
@@ -46,7 +50,7 @@ public final class PrototypeRegistry {
 		this.putAll(read);
 	}
 
-	public void loadDefaults() throws StreamReadException, DatabindException, IOException {
+	private void loadDefaults() throws StreamReadException, DatabindException, IOException {
 		this.readPrototypes(Gdx.files.internal("prototypes/lighthouses.json"), LighthousePrototype.class);
 		this.readPrototypes(Gdx.files.internal("prototypes/islands.json"), IslandPrototype.class);
 		this.readPrototypes(Gdx.files.internal("prototypes/characters.json"), CharacterPrototype.class);
@@ -55,6 +59,32 @@ public final class PrototypeRegistry {
 				MachineGunGuntowerPrototype.class);
 		this.readPrototypes(Gdx.files.internal("prototypes/machinegunPlanes.json"), MachineGunPlanePrototype.class);
 		this.readPrototypes(Gdx.files.internal("prototypes/navtowers.json"), NavigationTowerPrototype.class);
+	}
+
+	private void loadAliases() throws IOException {
+		final ObjectNode aliasesNode =
+				(ObjectNode) WandererConstants.MAPPER.readTree(Gdx.files.internal("prototypes/aliases.json").read());
+		final Iterator<Entry<String, JsonNode>> aliasesNodeIterator = aliasesNode.fields();
+
+		Entry<String, JsonNode> e;
+
+		while (aliasesNodeIterator.hasNext()) {
+			e = aliasesNodeIterator.next();
+			final String alias = e.getKey();
+			final String proto = e.getValue().asText();
+
+			if (!this.prototypeMap.containsKey(proto)) {
+				PrototypeRegistry.LOG.warn("Could not map alias {} to unknown prototype {}", alias, proto);
+				continue;
+			}
+
+			if (this.prototypeMap.containsKey(alias)) {
+				PrototypeRegistry.LOG.warn("Could not map alias {}, name conflicts with existing prototype", alias);
+				continue;
+			}
+
+			this.prototypeMap.put(alias, this.prototypeMap.get(proto));
+		}
 	}
 
 	public void clear() {
