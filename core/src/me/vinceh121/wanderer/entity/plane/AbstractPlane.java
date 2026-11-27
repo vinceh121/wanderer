@@ -200,16 +200,19 @@ public abstract class AbstractPlane extends AbstractClanLivingEntity implements 
 	Vector3 debugStart = new Vector3(), debugEnd = new Vector3(), debugYawStart = new Vector3(), debugYawEnd = new Vector3();
 
 	public void turnTowards(final Vector3 pos, final float delta) {
-		final Vector3 myDir = new Vector3(0, 1, 0).mul(this.getRotation());
+		final Quaternion myRot = this.getRotation();
+		final Vector3 myDir = new Vector3(0, 1, 0).mul(myRot);
 		final Vector3 dif = pos.cpy().sub(this.getTranslation()).nor();
+		final Quaternion target = new Quaternion();
 
 		debugStart = this.getTranslation();
-		debugEnd = this.getTranslation().lerp(this.getTranslation().add(dif), 1000);
+		debugEnd = this.getTranslation().lerp(this.getTranslation().add(dif).mul(target), 1000);
 
-		float toYaw = MathUtils.atan2(dif.x, dif.z) * MathUtils.radiansToDegrees;
+		float toYaw = new Quaternion().dot(this.getRotation());
+		System.out.println(toYaw);
 		debugYawStart = pos;
 		debugYawEnd = new Vector3(1, 0, 0).mul(new Quaternion().setEulerAngles(toYaw, 0, 0)).scl(100).add(pos);
-		System.out.println(toYaw);
+//		System.out.println(toYaw);
 //		final float toPitch = MathUtils.asin(dir.z);
 
 //		System.out.println(toYaw);
